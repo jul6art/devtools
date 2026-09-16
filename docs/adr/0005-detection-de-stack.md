@@ -64,14 +64,14 @@ sont hors MVP, la voie Claude les couvre — ADR-0013).
 
 ## Critères d'acceptation
 
-- [ ] Projets-fixtures créés : `symfony-minimal`, `plain-php`, `node-express`, `angular-minimal`,
+- [x] Projets-fixtures créés : `symfony-minimal`, `plain-php`, `node-express`, `angular-minimal`,
       `monorepo` — avec leur `stack.xml` attendu, comparé en snapshot
-- [ ] La version Symfony vient du `composer.lock` quand il existe, de la contrainte sinon (deux tests)
-- [ ] Un élément `locked="true"` survit à une nouvelle détection qui le contredit
-- [ ] Un projet sans manifeste reconnu produit un `stack.xml` valide, langage `unknown`, adaptateur
+- [x] La version Symfony vient du `composer.lock` quand il existe, de la contrainte sinon (deux tests)
+- [x] Un élément `locked="true"` survit à une nouvelle détection qui le contredit
+- [x] Un projet sans manifeste reconnu produit un `stack.xml` valide, langage `unknown`, adaptateur
       `claude`
-- [ ] Un manifeste JSON malformé produit une erreur qui nomme le fichier, pas une exception PHP brute
-- [ ] Deux exécutions consécutives : `stack.xml` inchangé à l'octet
+- [x] Un manifeste JSON malformé produit une erreur qui nomme le fichier, pas une exception PHP brute
+- [x] Deux exécutions consécutives : `stack.xml` inchangé à l'octet
 
 ## Conséquences
 

@@ -80,16 +80,16 @@ profondeur variable par type de fichier.
 
 ## Critères d'acceptation
 
-- [ ] Sur `symfony-minimal`, le workflow d'une route liste exactement contrôleur, formulaire,
+- [x] Sur `symfony-minimal`, le workflow d'une route liste exactement contrôleur, formulaire,
       service, repository, entité, template et templates parents attendus — ni plus, ni moins
-- [ ] Profondeur 1, 2, 3 : trois snapshots distincts et justifiés sur la même route
-- [ ] Une classe de `vendor/` apparaît en `PackageRef` avec la version du lock, jamais en `FileRef`
-- [ ] Un cycle (A use B, B use A) termine
-- [ ] Deux routes vers la même méthode forment un workflow ; un groupe déclaré rattache un satellite ;
+- [x] Profondeur 1, 2, 3 : trois snapshots distincts et justifiés sur la même route
+- [x] Une classe de `vendor/` apparaît en `PackageRef` avec la version du lock, jamais en `FileRef`
+- [x] Un cycle (A use B, B use A) termine
+- [x] Deux routes vers la même méthode forment un workflow ; un groupe déclaré rattache un satellite ;
       un groupe vers un point d'entrée inconnu échoue avec son nom
-- [ ] Un fichier source que rien ne référence apparaît dans `uncovered`
-- [ ] Un fichier PHP syntaxiquement invalide produit un avertissement nommé et n'arrête pas le scan
-- [ ] Un fichier partagé par 50 workflows est analysé une fois (compteur de l'extracteur)
+- [x] Un fichier source que rien ne référence apparaît dans `uncovered`
+- [x] Un fichier PHP syntaxiquement invalide produit un avertissement nommé et n'arrête pas le scan
+- [x] Un fichier partagé par 50 workflows est analysé une fois (compteur de l'extracteur)
 
 ## Conséquences
 

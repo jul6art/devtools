@@ -121,6 +121,16 @@ Fixture projects will live in `tests/Fixtures/projects/`, each with the `.devtoo
 to produce. They are real mini-projects in their own languages: php-cs-fixer, Rector and PHPStan must
 never rewrite or analyse them.
 
+**Snapshots.** Output that must stay byte-stable — serialised models, pages, tracking files — is
+compared with a versioned snapshot through `Tests\Support\AssertsSnapshots`. To update them:
+
+```bash
+DEVTOOLS_UPDATE_SNAPSHOTS=1 composer test
+git diff tests/          # read every changed snapshot before committing it
+```
+
+A snapshot updated without reading its diff is a test that approves whatever the code does.
+
 A bug fix comes with the test that fails without it — and the test is checked by mutation: disable
 the fix, watch it go red, put the fix back.
 

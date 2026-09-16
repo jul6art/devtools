@@ -63,18 +63,18 @@ pour d'autres langages ; relier les appels HTTP d'un front aux routes d'un back 
 
 Avec des brouillons enregistrés :
 
-- [ ] `node-express` : `stack.xml` → brief `discovery` et brief `knowledge` (ADR-0012) ; brouillons
+- [x] `node-express` : `stack.xml` → brief `discovery` et brief `knowledge` (ADR-0012) ; brouillons
       appliqués → `.devtools/` complet, conforme au snapshot, confiance `medium` au menu
-- [ ] `angular-minimal` : routes et composants documentés de la même façon
-- [ ] Brouillon avec un fichier inexistant, un chemin hors racine, un identifiant invalide, une
+- [x] `angular-minimal` : routes et composants documentés de la même façon
+- [x] Brouillon avec un fichier inexistant, un chemin hors racine, un identifiant invalide, une
       collision : quatre refus nommés, rien d'écrit
-- [ ] Brouillon qui déclare `confidence=high` : ramené à `medium`
-- [ ] Ajout d'un fichier route dans `node-express` (dépôt git temporaire) → brief `discovery`
+- [x] Brouillon qui déclare `confidence=high` : ramené à `medium`
+- [x] Ajout d'un fichier route dans `node-express` (dépôt git temporaire) → brief `discovery`
       limité à ce fichier ; modification d'un fichier déjà couvert → aucun brief `discovery`,
       fraîcheur normale
-- [ ] `monorepo` (Symfony + Angular) : un seul `.devtools/`, deux stacks, identifiants uniques
-- [ ] Session réelle vérifiée une fois à la main sur `angular-minimal` avec Claude Code
-- [ ] README : section « Projets non Symfony »
+- [x] `monorepo` (Symfony + Angular) : un seul `.devtools/`, deux stacks, identifiants uniques
+- [x] Session réelle vérifiée une fois à la main sur `angular-minimal` avec Claude Code
+- [x] README : section « Projets non Symfony »
 
 ## Conséquences
 

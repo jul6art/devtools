@@ -77,19 +77,19 @@ rédactionnelle (au-delà des gardes mécaniques) ; glossaire métier (§ 4.8).
 
 Avec des brouillons enregistrés (« réponses de Claude » versionnées dans les fixtures) :
 
-- [ ] `inspect` sans `--no-ai` écrit un brief valide par workflow à rédiger, et aucun pour un
+- [x] `inspect` sans `--no-ai` écrit un brief valide par workflow à rédiger, et aucun pour un
       workflow `keep` déjà rédigé
-- [ ] Brouillon conforme → page conforme au gabarit (tests de l'ADR-0008), sections DevTools
+- [x] Brouillon conforme → page conforme au gabarit (tests de l'ADR-0008), sections DevTools
       identiques au rendu factuel, XML `mode="ai"`, ligne d'historique ajoutée, pending nettoyé
-- [ ] Un refus par règle : section en trop, section manquante, Parcours sans Mermaid, chemin inventé,
+- [x] Un refus par règle : section en trop, section manquante, Parcours sans Mermaid, chemin inventé,
       brouillon `outdated` — chacun avec un message qui nomme la règle et la ligne
-- [ ] Un brouillon qui tente de réécrire « Composants impliqués » est refusé ; la page n'est pas
+- [x] Un brouillon qui tente de réécrire « Composants impliqués » est refusé ; la page n'est pas
       modifiée
-- [ ] Une réécriture factuelle ultérieure (`--no-ai`) conserve les sections rédigées
-- [ ] `claude:install` : installation, refus d'écraser un skill modifié, `--force`
-- [ ] Session réelle vérifiée une fois à la main sur `symfony-minimal` avec Claude Code, et le
+- [x] Une réécriture factuelle ultérieure (`--no-ai`) conserve les sections rédigées
+- [x] `claude:install` : installation, refus d'écraser un skill modifié, `--force`
+- [x] Session réelle vérifiée une fois à la main sur `symfony-minimal` avec Claude Code, et le
       résultat (pages rédigées) consigné en fixture de démonstration
-- [ ] README : section « Rédaction avec Claude Code » (install, boucle inspect → skill → apply, coût)
+- [x] README : section « Rédaction avec Claude Code » (install, boucle inspect → skill → apply, coût)
 
 ## Conséquences
 

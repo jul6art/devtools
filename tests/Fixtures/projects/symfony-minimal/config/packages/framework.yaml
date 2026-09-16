@@ -1,0 +1,33 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    http_method_override: false
+    handle_all_throwables: true
+    php_errors:
+        log: true
+    router:
+        utf8: true
+    messenger:
+        transports:
+            sync: 'sync://'
+        routing:
+            App\Message\OrderCreated: sync
+    workflows:
+        order:
+            type: state_machine
+            marking_store:
+                type: method
+                property: status
+            supports:
+                - App\Entity\Order
+            initial_marking: draft
+            places:
+                - draft
+                - validated
+                - shipped
+            transitions:
+                validate:
+                    from: draft
+                    to: validated
+                ship:
+                    from: validated
+                    to: shipped

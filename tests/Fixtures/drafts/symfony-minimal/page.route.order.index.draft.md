@@ -1,0 +1,45 @@
+---
+model: claude-opus-5
+revision: 2026-09-16T15:00:00+02:00
+---
+
+## Résumé
+
+Liste les commandes existantes. La page affiche le résumé du panier (composant live `CartSummary`), un lien de
+création et, pour chaque commande, un lien vers sa fiche.
+
+## Préconditions
+
+Utilisateur authentifié (ROLE_USER, imposé par access_control sur ^/orders).
+
+## Parcours
+
+```mermaid
+sequenceDiagram
+  participant U as Utilisateur
+  participant C as OrderController::index
+  participant R as OrderRepository
+  participant T as order/index.html.twig
+  U->>C: GET /orders
+  C->>R: all()
+  R-->>C: list<Order>
+  C->>T: render(orders)
+  T-->>U: liste, liens app_order_new et app_order_show
+```
+
+## Données
+
+Lit toutes les `Order` du dépôt en mémoire `src/Repository/OrderRepository.php`. N'écrit rien.
+
+## Mécanismes transverses
+
+`LocaleListener` sur `kernel.request` ; access_control ROLE_USER sur `^/orders`.
+
+## Points d'attention
+
+Pas de pagination : le dépôt renvoie toutes les commandes. Le composant `CartSummary` rendu dans la page a son
+propre workflow (`ui.cart-summary`).
+
+## Changement
+
+rédaction initiale

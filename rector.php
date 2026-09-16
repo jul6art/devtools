@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 use Rector\Config\RectorConfig;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
@@ -28,12 +29,20 @@ return RectorConfig::configure()
     ->withAttributesSets(symfony: true, doctrine: true, phpunit: true)
     ->withComposerBased(doctrine: true, symfony: true, phpunit: true)
     ->withSkip([
+        // Real mini-projects DevTools analyses: rewriting them would change what the tests observe.
+        __DIR__.'/tests/Fixtures/projects',
         // Ce déplacement de namespace vise `Symfony\Component\DependencyInjection\Kernel\BundleInterface`,
         // qui n'existe pas en Symfony 8.1 — et le bundle déclare `^7.4 || ^8.0`, donc il ne peut
         // pas s'appuyer sur une classe présente d'un seul côté. `HttpKernel\Bundle\BundleInterface`
         // existe sur les deux branches : c'est celle-là qu'on garde.
         RenameClassRector::class => [
             __DIR__.'/tests/Fixtures/TestKernel.php',
+        ],
+        // Class names of analysed projects are data here — what DevTools looks for — not references: turned
+        // into ::class they import classes DevTools does not depend on.
+        StringClassNameToClassConstantRector::class => [
+            __DIR__.'/src/Inspection',
+            __DIR__.'/tests',
         ],
         // Pure helpers are deliberately static: it documents that they touch no state.
         LocallyCalledStaticMethodToNonStaticRector::class,

@@ -104,19 +104,19 @@ mécanismes transverses (la rédaction IA peut les citer, ADR-0011) ; routes API
 
 ## Critères d'acceptation
 
-- [ ] `symfony-minimal` (routes, commande, handler, listener, formulaire, Twig, composant Live,
+- [x] `symfony-minimal` (routes, commande, handler, listener, formulaire, Twig, composant Live,
       machine à états, migration) : liste des workflows extraits = liste attendue, 100 % (§ 8)
-- [ ] `symfony-legacy-yaml` (routes YAML, services XML) : mêmes workflows qu'en attributs, via la
+- [x] `symfony-legacy-yaml` (routes YAML, services XML) : mêmes workflows qu'en attributs, via la
       console
-- [ ] Les sorties console sont des fixtures enregistrées pour les tests unitaires ; un test de bout
+- [x] Les sorties console sont des fixtures enregistrées pour les tests unitaires ; un test de bout
       en bout lance la vraie console de `symfony-minimal` (dépendances installées par le test)
-- [ ] Sécurité extraite : `#[IsGranted]` de classe, de méthode, `access_control` seul, route publique
-- [ ] Console absente ou en erreur : repli statique, `confidence=medium`, cause affichée en tête du
-      rapport
-- [ ] Une sortie console polluée par une déprécation avant le JSON échoue avec les lignes fautives
-- [ ] La commande console configurée avec un préfixe Docker est découpée en arguments, jamais passée
+- [x] Sécurité extraite : `#[IsGranted]` de classe, de méthode, `access_control` seul, route publique
+- [x] Console absente ou en erreur : repli statique, `confidence=medium`, cause affichée en tête du
+      rapport *(affichage en tête du rapport livré et testé avec l'ADR-0009)*
+- [x] Une sortie console polluée par une déprécation avant le JSON échoue avec les lignes fautives
+- [x] La commande console configurée avec un préfixe Docker est découpée en arguments, jamais passée
       à un shell
-- [ ] Au plus 6 processus console lancés (compteur), sur un projet de 10 comme de 300 routes
+- [x] Au plus 6 processus console lancés (compteur), sur un projet de 10 comme de 300 routes
 
 ## Conséquences
 

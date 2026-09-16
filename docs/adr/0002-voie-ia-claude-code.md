@@ -65,12 +65,12 @@ sous-agents ; serveur MCP (qui pourra servir les briefs plus tard).
 
 ## Critères d'acceptation
 
-- [ ] Le format des trois briefs est défini par un XSD dans `resources/schemas/` (livré par les
-      ADR-0011, 0012, 0013)
-- [ ] Aucune classe du cœur n'ouvre de connexion réseau (test d'architecture)
-- [ ] `devtools claude:install` écrit le skill, et ne l'écrase pas s'il a été modifié sans
+- [x] Le format des trois briefs est défini par un XSD dans `resources/schemas/` (livré par les
+      ADR-0011, 0012, 0013) *(`page-brief.xsd`, `knowledge-brief.xsd`, `discovery-brief.xsd`)*
+- [x] Aucune classe du cœur n'ouvre de connexion réseau (test d'architecture)
+- [x] `devtools claude:install` écrit le skill, et ne l'écrase pas s'il a été modifié sans
       `--force`
-- [ ] Un brouillon invalide ne modifie aucun fichier hors de `.devtools/pending/`
+- [x] Un brouillon invalide ne modifie aucun fichier hors de `.devtools/pending/`
 
 ## Conséquences
 

@@ -16,3 +16,10 @@
 # (`/bin/`, `/config/`, `/src/`…) can appear — and two of those directories are real sources here.
 # If `symfony/flex` ever lands in require-dev, its recipes will write `src/Kernel.php` into the
 # core's own namespace: remove it rather than extend this file.
+
+# Fixture projects install their own dependencies for the end-to-end tests; only their sources and
+# lock files are committed.
+/tests/Fixtures/projects/*/vendor/
+/tests/Fixtures/projects/*/var/
+/tests/Fixtures/projects/*/.devtools/
+/tests/Fixtures/projects/*/config/reference.php

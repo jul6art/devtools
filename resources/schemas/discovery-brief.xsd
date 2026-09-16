@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to find the workflows of a stack without a native adapter:
+    .devtools/pending/discovery.<stack>.brief.xml (ADR-0002, ADR-0013).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/discovery-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/discovery-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="discovery-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="schema">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="knowledge" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:path" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="source" type="t:path" maxOccurs="unbounded"/>
+                <xs:element name="exclude" type="t:path" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="type" type="t:nonEmpty" maxOccurs="unbounded"/>
+                <xs:element name="limited-to" type="t:path" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="draft">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:path" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="stack" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[a-z0-9][a-z0-9\-]*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="root" type="t:path" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Relative to the project root: neither "/..." nor "C:...". -->
+    <xs:simpleType name="path">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

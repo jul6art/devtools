@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="symfony-7">
+  <workflows>
+    <workflow id="command.app.import-catalog" type="commands" confidence="medium" source="claude">
+      <title>Catalog import</title>
+      <main kind="command" name="app:import-catalog">
+        <declared-in path="src/Command/ImportCatalogCommand.php" role="other"/>
+      </main>
+    </workflow>
+    <workflow id="route.order.new" type="routes" confidence="high" source="native:symfony">
+      <title>Order creation</title>
+      <main kind="route" name="app_order_new">
+        <declared-in path="src/Controller/OrderController.php" role="controller"/>
+        <attribute name="methods" value="GET|POST"/>
+        <attribute name="path" value="/orders/new"/>
+        <attribute name="security" value="ROLE_OPERATOR"/>
+      </main>
+      <satellites>
+        <entrypoint kind="route" name="app_order_new_localized">
+          <declared-in path="src/Controller/OrderController.php" role="controller"/>
+          <attribute name="methods" value="GET|POST"/>
+          <attribute name="path" value="/orders/new"/>
+          <attribute name="security" value="ROLE_OPERATOR"/>
+        </entrypoint>
+      </satellites>
+      <files>
+        <file path="src/Controller/OrderController.php" role="controller"/>
+        <file path="src/Form/OrderType.php" role="form"/>
+        <file path="templates/order/new.html.twig" role="template"/>
+      </files>
+      <packages>
+        <package name="doctrine/orm" version="3.5.2"/>
+        <package name="symfony/form" version="7.4.3"/>
+      </packages>
+      <depends-on>
+        <workflow ref="event.locale-listener"/>
+        <workflow ref="route.order.index"/>
+      </depends-on>
+      <tests>
+        <file path="tests/Controller/OrderControllerTest.php" role="test"/>
+      </tests>
+      <navigation>
+        <edge target="app_order_index" label="link"/>
+        <edge target="app_order_show" label="redirect"/>
+      </navigation>
+      <states name="order">
+        <place name="draft"/>
+        <place name="validated"/>
+        <place name="shipped"/>
+        <transition name="validate">
+          <from place="draft"/>
+          <to place="validated"/>
+        </transition>
+        <transition name="ship">
+          <from place="validated"/>
+          <to place="shipped"/>
+        </transition>
+      </states>
+    </workflow>
+  </workflows>
+  <uncovered>
+    <file path="src/Util/StringHelper.php" role="other"/>
+  </uncovered>
+</inspection>

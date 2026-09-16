@@ -104,16 +104,16 @@ pages Markdown (ADR-0008).
 
 ## Critères d'acceptation
 
-- [ ] `devtools init` crée l'arborescence et le `.gitignore` ; relancé, il ne modifie rien
-- [ ] Round-trip pour chaque type de document : écrire → lire → écrire produit les mêmes octets
-- [ ] Chaque XSD rejette un document invalide (élément manquant, statut inconnu, chemin absolu)
-- [ ] Un XML avec `<!DOCTYPE>` ou entité externe est refusé sans tentative de résolution (test avec
+- [x] `devtools init` crée l'arborescence et le `.gitignore` ; relancé, il ne modifie rien
+- [x] Round-trip pour chaque type de document : écrire → lire → écrire produit les mêmes octets
+- [x] Chaque XSD rejette un document invalide (élément manquant, statut inconnu, chemin absolu)
+- [x] Un XML avec `<!DOCTYPE>` ou entité externe est refusé sans tentative de résolution (test avec
       une entité pointant vers un fichier local : son contenu n'apparaît nulle part)
-- [ ] Une écriture interrompue (exception simulée après le fichier temporaire) laisse l'ancien
+- [x] Une écriture interrompue (exception simulée après le fichier temporaire) laisse l'ancien
       document intact
-- [ ] Un document de `schema-version` future est refusé avec le message de mise à jour
-- [ ] `files-to-workflows.xml` distingue `relation="file"` et `relation="test"`
-- [ ] `ProjectRoot` refuse `../`, un chemin absolu hors racine et un lien symbolique qui en sort
+- [x] Un document de `schema-version` future est refusé avec le message de mise à jour
+- [x] `files-to-workflows.xml` distingue `relation="file"` et `relation="test"`
+- [x] `ProjectRoot` refuse `../`, un chemin absolu hors racine et un lien symbolique qui en sort
 
 ## Conséquences
 

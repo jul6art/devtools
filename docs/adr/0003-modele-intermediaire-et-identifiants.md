@@ -94,14 +94,14 @@ fixe), migration de `schema-version` (aucune version antérieure n'existe), `wor
 
 ## Critères d'acceptation
 
-- [ ] Chaque invariant (chemin hors racine, identifiant mal formé, doublon de fichier, type inconnu)
+- [x] Chaque invariant (chemin hors racine, identifiant mal formé, doublon de fichier, type inconnu)
       a son test qui prouve le rejet à la construction
-- [ ] Table de dérivation des identifiants couverte cas par cas, y compris les caractères à
+- [x] Table de dérivation des identifiants couverte cas par cas, y compris les caractères à
       normaliser (majuscules, accents, `__`, segments vides)
-- [ ] Deux points d'entrée en collision lèvent une erreur qui nomme les deux sources ; un alias de
+- [x] Deux points d'entrée en collision lèvent une erreur qui nomme les deux sources ; un alias de
       configuration la résout
-- [ ] Round-trip XML : modèle → XML → modèle identique ; XML invalide rejeté avec la ligne fautive
-- [ ] Deux modèles construits à partir des mêmes données dans un ordre différent sérialisent à
+- [x] Round-trip XML : modèle → XML → modèle identique ; XML invalide rejeté avec la ligne fautive
+- [x] Deux modèles construits à partir des mêmes données dans un ordre différent sérialisent à
       l'octet près
 
 ## Conséquences

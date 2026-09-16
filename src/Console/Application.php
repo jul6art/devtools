@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Console;
 
-use Composer\InstalledVersions;
+use Jul6Art\DevTools\Command\ClaudeInstallCommand;
+use Jul6Art\DevTools\Command\InitCommand;
+use Jul6Art\DevTools\Command\StackDetectCommand;
+use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
+use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
+use Jul6Art\DevTools\Version;
 use Symfony\Component\Console\Application as BaseApplication;
 
 /**
@@ -20,20 +25,14 @@ final class Application extends BaseApplication
 
     public function __construct()
     {
-        parent::__construct(self::NAME, self::version());
-    }
+        parent::__construct(self::NAME, Version::current());
 
-    /**
-     * The installed version as Composer resolved it, so `devtools --version` and the `tool`
-     * attribute written into the tracking XML can never disagree with the lock file.
-     */
-    private static function version(): string
-    {
-        if (!class_exists(InstalledVersions::class)
-            || !InstalledVersions::isInstalled('jul6art/devtools')) {
-            return 'dev';
-        }
-
-        return InstalledVersions::getPrettyVersion('jul6art/devtools') ?? 'dev';
+        $this->addCommands([
+            new InitCommand(),
+            new StackDetectCommand(),
+            new WorkflowsInspectCommand(),
+            new WorkflowsApplyCommand(),
+            new ClaudeInstallCommand(),
+        ]);
     }
 }

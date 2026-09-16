@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="src/Command/ImportCatalogCommand.php">
+    <workflow ref="command.app.import-catalog" relation="file"/>
+  </file>
+  <file path="src/Controller/OrderController.php">
+    <workflow ref="command.app.import-catalog" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="templates/order/new.html.twig">
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="tests/Controller/OrderControllerTest.php">
+    <workflow ref="command.app.import-catalog" relation="test"/>
+    <workflow ref="route.order.new" relation="test"/>
+  </file>
+</files-to-workflows>

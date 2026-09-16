@@ -8,6 +8,9 @@ parameters:
         - src
         - tests
         - rector.php
+    excludePaths:
+        # Real mini-projects in their own conventions and languages, analysed by DevTools, never by us.
+        - tests/Fixtures/projects/*
     treatPhpDocTypesAsCertain: false
 
     # Le niveau max dès le premier jour, et sans baseline : une brique extraite avec une

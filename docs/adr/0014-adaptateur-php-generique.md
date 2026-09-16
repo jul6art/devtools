@@ -20,7 +20,7 @@ PHP sans framework reconnu :
 
 | Type | Point d'entrée | Identifiant |
 |---|---|---|
-| routes | chaque fichier `.php` d'un dossier web (`public/`, `web/`, `www/`, ou `<web-root>` de `config.xml`) | `route.<chemin sans extension, / → .>` (`public/orders/new.php` → `route.orders.new`) |
+| routes | chaque fichier `.php` d'un dossier web (`public/`, `web/`, `www/`, ou `<php web-root>` de `config.xml`) | `route.<chemin sans extension, / → .>` (`public/orders/new.php` → `route.orders.new`) |
 | commands | chaque classe `#[AsCommand]` ou sous-classe de `Symfony\Component\Console\Command\Command` du projet quand `symfony/console` est une dépendance (application console sans framework) ; sinon chaque entrée `bin` de `composer.json`, chaque `scripts` qui appelle un fichier PHP du projet, chaque fichier de `bin/` avec shebang PHP | `command.<nom de commande ou de script>` |
 | data | `migrations/` s'il existe | `data.migrations` |
 
@@ -42,13 +42,13 @@ Claude en forçant `adapter="claude"` dans `stack.xml`. Laravel, Slim, WordPress
 
 ## Critères d'acceptation
 
-- [ ] `plain-php` : pages web, script CLI, script composer et migrations extraits = liste attendue
-- [ ] Une application `symfony/console` sans framework : un workflow par commande `#[AsCommand]`, et
+- [x] `plain-php` : pages web, script CLI, script composer et migrations extraits = liste attendue
+- [x] Une application `symfony/console` sans framework : un workflow par commande `#[AsCommand]`, et
       le binaire lui-même n'est pas un workflow en double
-- [ ] `require __DIR__.'/../lib/db.php'` apparaît dans les fichiers impliqués
-- [ ] `bin/devtools workflows:inspect tests/Fixtures/projects/plain-php` : snapshot complet, puis
+- [x] `require __DIR__.'/../lib/db.php'` apparaît dans les fichiers impliqués
+- [x] `bin/devtools workflows:inspect tests/Fixtures/projects/plain-php` : snapshot complet, puis
       idempotence (ADR-0010)
-- [ ] Forcer `adapter="claude"` dans `stack.xml` fait passer le projet par la voie Claude
+- [x] Forcer `adapter="claude"` dans `stack.xml` fait passer le projet par la voie Claude
 
 ## Conséquences
 

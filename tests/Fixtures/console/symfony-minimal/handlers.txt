@@ -1,0 +1,96 @@
+{
+    "definitions": {
+        "App\\MessageHandler\\OrderCreatedHandler": {
+            "class": "App\\MessageHandler\\OrderCreatedHandler",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": true,
+            "autoconfigure": true,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "App\\Repository\\OrderRepository"
+                }
+            ],
+            "file": null,
+            "tags": [
+                {
+                    "name": "messenger.message_handler",
+                    "parameters": {
+                        "bus": null,
+                        "handles": null,
+                        "method": null,
+                        "priority": 0,
+                        "sign": false,
+                        "from_transport": null
+                    }
+                }
+            ],
+            "usages": [
+                ".messenger.handler_descriptor.LLiL8h8"
+            ]
+        },
+        "console.messenger.execute_command_handler": {
+            "class": "Symfony\\Component\\Console\\Messenger\\RunCommandMessageHandler",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "console.messenger.application"
+                }
+            ],
+            "file": null,
+            "tags": [
+                {
+                    "name": "messenger.message_handler",
+                    "parameters": {
+                        "sign": true
+                    }
+                }
+            ],
+            "usages": [
+                ".messenger.handler_descriptor.NumTeF8"
+            ]
+        },
+        "messenger.redispatch_message_handler": {
+            "class": "Symfony\\Component\\Messenger\\Handler\\RedispatchMessageHandler",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "messenger.bus.default"
+                }
+            ],
+            "file": null,
+            "tags": [
+                {
+                    "name": "messenger.message_handler",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".messenger.handler_descriptor.jyyWvHw"
+            ]
+        }
+    },
+    "aliases": [],
+    "services": []
+}

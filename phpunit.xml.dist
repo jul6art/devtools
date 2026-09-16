@@ -18,6 +18,8 @@
     <testsuites>
         <testsuite name="DevTools test suite">
             <directory suffix="Test.php">tests</directory>
+            <!-- Real mini-projects with test suites of their own: never part of this one. -->
+            <exclude>tests/Fixtures/projects</exclude>
         </testsuite>
     </testsuites>
 

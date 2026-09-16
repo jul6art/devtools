@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.post-orders" type="routes" schema-version="1">
+  <title>POST /orders</title>
+  <generated at="2026-09-16T15:00:00+02:00" tool="devtools" mode="no-ai"/>
+  <source vcs="none"/>
+  <entrypoints>
+    <entrypoint kind="route" name="POST /orders" role="main">
+      <declared-in path="src/routes/orders.js" role="controller"/>
+      <attribute name="methods" value="POST"/>
+      <attribute name="path" value="/orders"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/app.js" role="config" sha256="3b2b9637a42ffa810f2f3ad0e5bdc7e332a012605eba65b35465bf19260927fa"/>
+    <file path="src/routes/orders.js" role="controller" sha256="4355c77044dd06c6ae19bc71c8f0033a392037ee0048ccb34f289cfe74102b95"/>
+    <file path="src/services/orderService.js" role="service" sha256="2f37701d3ebf96e6858a8963068db8fd42ea6f2a387142353b31617a0dcb7c74"/>
+  </files>
+  <confidence>medium</confidence>
+  <producer>claude</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T15:00:00+02:00" reason="initial"/>
+  </history>
+</workflow>

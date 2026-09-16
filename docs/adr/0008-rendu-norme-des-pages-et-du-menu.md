@@ -71,17 +71,17 @@ section autre que le français du § 4.5.
 
 ## Critères d'acceptation
 
-- [ ] Snapshot de page factuelle pour chaque type de workflow, à partir de modèles écrits à la main
-- [ ] Test de conformité : toute page produite contient le titre, la ligne d'en-tête et les
+- [x] Snapshot de page factuelle pour chaque type de workflow, à partir de modèles écrits à la main
+- [x] Test de conformité : toute page produite contient le titre, la ligne d'en-tête et les
       11 sections `##` du § 4.5, dans l'ordre, et aucune autre ; une section vide contient `—`
-- [ ] `PageParser(PageRenderer(x))` restitue chaque section ; une page modifiée à la main dans une
+- [x] `PageParser(PageRenderer(x))` restitue chaque section ; une page modifiée à la main dans une
       section DevTools est détectée
-- [ ] Une réécriture factuelle d'une page rédigée conserve les sections rédigées par Claude :
+- [x] Une réécriture factuelle d'une page rédigée conserve les sections rédigées par Claude :
       Résumé, Parcours, Données, Mécanismes transverses, Points d'attention
-- [ ] Libellés Mermaid piégeux (`App\Controller\X::new`, `/orders/{id}`, `[`, `"`) : échappés
+- [x] Libellés Mermaid piégeux (`App\Controller\X::new`, `/orders/{id}`, `[`, `"`) : échappés
       (cas par cas)
-- [ ] Menu : compteurs exacts, sous-menu à 0 présent, ordre stable, « Non couvert » trié
-- [ ] Deux rendus du même modèle : mêmes octets
+- [x] Menu : compteurs exacts, sous-menu à 0 présent, ordre stable, « Non couvert » trié
+- [x] Deux rendus du même modèle : mêmes octets
 
 ## Conséquences
 

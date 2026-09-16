@@ -1,0 +1,448 @@
+{
+    "Symfony\\Component\\Messenger\\Event\\WorkerMessageFailedEvent": [
+        {
+            "type": "function",
+            "name": "onMessageFailed",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\AddErrorDetailsStampListener",
+            "priority": 200
+        },
+        {
+            "type": "function",
+            "name": "onMessageFailed",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\SendFailedMessageForRetryListener",
+            "priority": 100
+        },
+        {
+            "type": "function",
+            "name": "onMessageFailed",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\StopWorkerOnCustomStopExceptionListener",
+            "priority": 0
+        }
+    ],
+    "Symfony\\Component\\Messenger\\Event\\WorkerMessageReceivedEvent": [
+        {
+            "type": "function",
+            "name": "resetBefore",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\ResetMemoryUsageListener",
+            "priority": -1024
+        }
+    ],
+    "Symfony\\Component\\Messenger\\Event\\WorkerRunningEvent": [
+        {
+            "type": "function",
+            "name": "onWorkerRunning",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\DispatchPcntlSignalListener",
+            "priority": 100
+        },
+        {
+            "type": "function",
+            "name": "onWorkerRunning",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\StopWorkerOnRestartSignalListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onWorkerRunning",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\StopWorkerOnCustomStopExceptionListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "collectAfter",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\ResetMemoryUsageListener",
+            "priority": -1024
+        }
+    ],
+    "Symfony\\Component\\Messenger\\Event\\WorkerStartedEvent": [
+        {
+            "type": "function",
+            "name": "onWorkerStarted",
+            "class": "Symfony\\Component\\Messenger\\EventListener\\StopWorkerOnRestartSignalListener",
+            "priority": 0
+        }
+    ],
+    "Symfony\\Component\\Security\\Http\\Event\\CheckPassportEvent": [
+        {
+            "type": "function",
+            "name": "checkPassport",
+            "class": "Symfony\\Component\\Security\\Http\\EventListener\\UserProviderListener",
+            "priority": 1024
+        },
+        {
+            "type": "function",
+            "name": "checkPassport",
+            "class": "Symfony\\Component\\Security\\Http\\EventListener\\CheckCredentialsListener",
+            "priority": 0
+        }
+    ],
+    "Symfony\\Component\\Security\\Http\\Event\\LoginSuccessEvent": [
+        {
+            "type": "function",
+            "name": "onLoginSuccess",
+            "class": "Symfony\\Component\\Security\\Http\\EventListener\\PasswordMigratingListener",
+            "priority": 0
+        }
+    ],
+    "Symfony\\UX\\TwigComponent\\Event\\PostMountEvent": [
+        {
+            "type": "function",
+            "name": "onPostMount",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\RequestInitializeSubscriber",
+            "priority": 256
+        },
+        {
+            "type": "function",
+            "name": "onPostMount",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\DeferLiveComponentSubscriber",
+            "priority": 0
+        }
+    ],
+    "Symfony\\UX\\TwigComponent\\Event\\PostRenderEvent": [
+        {
+            "type": "function",
+            "name": "onPostRender",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\ResetDeterministicIdSubscriber",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onPostRender",
+            "class": "Symfony\\UX\\TwigComponent\\EventListener\\TwigComponentLoggerListener",
+            "priority": -255
+        }
+    ],
+    "Symfony\\UX\\TwigComponent\\Event\\PreCreateForRenderEvent": [
+        {
+            "type": "function",
+            "name": "preComponentCreated",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\InterceptChildComponentRenderSubscriber",
+            "priority": 0
+        }
+    ],
+    "Symfony\\UX\\TwigComponent\\Event\\PreMountEvent": [
+        {
+            "type": "function",
+            "name": "onPreMount",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\DataModelPropsSubscriber",
+            "priority": 0
+        }
+    ],
+    "Symfony\\UX\\TwigComponent\\Event\\PreRenderEvent": [
+        {
+            "type": "function",
+            "name": "onPreRender",
+            "class": "Symfony\\UX\\TwigComponent\\EventListener\\TwigComponentLoggerListener",
+            "priority": 255
+        },
+        {
+            "type": "function",
+            "name": "onPreRender",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\AddLiveAttributesSubscriber",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onPreRender",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\DeferLiveComponentSubscriber",
+            "priority": 0
+        }
+    ],
+    "console.command": [
+        {
+            "type": "function",
+            "name": "configure",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener",
+            "priority": 2048
+        }
+    ],
+    "console.error": [
+        {
+            "type": "function",
+            "name": "onConsoleError",
+            "class": "Symfony\\Bundle\\FrameworkBundle\\EventListener\\SuggestMissingPackageSubscriber",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onConsoleError",
+            "class": "Symfony\\Component\\Console\\EventListener\\ErrorListener",
+            "priority": -128
+        }
+    ],
+    "console.terminate": [
+        {
+            "type": "function",
+            "name": "onConsoleTerminate",
+            "class": "Symfony\\Component\\Console\\EventListener\\ErrorListener",
+            "priority": -128
+        }
+    ],
+    "debug.security.authorization.vote": [
+        {
+            "type": "function",
+            "name": "onVoterVote",
+            "class": "Symfony\\Bundle\\SecurityBundle\\EventListener\\VoteListener",
+            "priority": 0
+        }
+    ],
+    "kernel.controller": [
+        {
+            "type": "function",
+            "name": "onKernelController",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveComponentSubscriber",
+            "priority": 10
+        },
+        {
+            "type": "function",
+            "name": "beforeController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": -10000
+        }
+    ],
+    "kernel.controller_arguments": [
+        {
+            "type": "function",
+            "name": "onControllerArguments",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ErrorListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "beforeController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": -10000
+        }
+    ],
+    "kernel.controller_arguments.Symfony\\Component\\HttpKernel\\Attribute\\Cache": [
+        {
+            "type": "function",
+            "name": "onKernelControllerAttribute",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\CacheAttributeListener",
+            "priority": 0
+        }
+    ],
+    "kernel.controller_arguments.Symfony\\Component\\HttpKernel\\Attribute\\IsSignatureValid": [
+        {
+            "type": "function",
+            "name": "onKernelControllerAttribute",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\IsSignatureValidAttributeListener",
+            "priority": 0
+        }
+    ],
+    "kernel.controller_arguments.Symfony\\Component\\Security\\Http\\Attribute\\IsGranted": [
+        {
+            "type": "function",
+            "name": "onKernelControllerAttribute",
+            "class": "Symfony\\Component\\Security\\Http\\EventListener\\IsGrantedAttributeListener",
+            "priority": 0
+        }
+    ],
+    "kernel.exception": [
+        {
+            "type": "function",
+            "name": "afterController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": 10000
+        },
+        {
+            "type": "function",
+            "name": "onKernelException",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveComponentSubscriber",
+            "priority": 20
+        },
+        {
+            "type": "function",
+            "name": "logKernelException",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ErrorListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelException",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\RouterListener",
+            "priority": -64
+        },
+        {
+            "type": "function",
+            "name": "onKernelException",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ErrorListener",
+            "priority": -128
+        }
+    ],
+    "kernel.finish_request": [
+        {
+            "type": "function",
+            "name": "afterController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": 10000
+        },
+        {
+            "type": "function",
+            "name": "onKernelFinishRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelFinishRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\RouterListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelFinishRequest",
+            "class": "Symfony\\Bundle\\SecurityBundle\\Debug\\TraceableFirewallListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelFinishRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\LocaleAwareListener",
+            "priority": -15
+        }
+    ],
+    "kernel.request": [
+        {
+            "type": "function",
+            "name": "configure",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\DebugHandlersListener",
+            "priority": 2048
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ValidateRequestListener",
+            "priority": 256
+        },
+        {
+            "type": "function",
+            "name": "setDefaultLocale",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener",
+            "priority": 100
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\RouterListener",
+            "priority": 32
+        },
+        {
+            "type": "function",
+            "name": "__invoke",
+            "class": "App\\EventListener\\LocaleListener",
+            "priority": 20
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener",
+            "priority": 16
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\LocaleAwareListener",
+            "priority": 15
+        },
+        {
+            "type": "function",
+            "name": "configureLogoutUrlGenerator",
+            "class": "Symfony\\Bundle\\SecurityBundle\\Debug\\TraceableFirewallListener",
+            "priority": 8
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\Bundle\\SecurityBundle\\Debug\\TraceableFirewallListener",
+            "priority": 8
+        },
+        {
+            "type": "function",
+            "name": "onKernelRequest",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveComponentSubscriber",
+            "priority": 0
+        }
+    ],
+    "kernel.response": [
+        {
+            "type": "function",
+            "name": "afterController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": 10000
+        },
+        {
+            "type": "function",
+            "name": "onKernelResponse",
+            "class": "Symfony\\Component\\Security\\Http\\Firewall\\ContextListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelResponse",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelResponse",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveComponentSubscriber",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "onKernelResponse",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveUrlSubscriber",
+            "priority": 0
+        },
+        {
+            "type": "function",
+            "name": "removeCspHeader",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ErrorListener",
+            "priority": -128
+        },
+        {
+            "type": "function",
+            "name": "onResponse",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\DisallowRobotsIndexingListener",
+            "priority": -255
+        }
+    ],
+    "kernel.response.Symfony\\Component\\HttpKernel\\Attribute\\Cache": [
+        {
+            "type": "function",
+            "name": "onKernelControllerAttribute",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\CacheAttributeListener",
+            "priority": 0
+        }
+    ],
+    "kernel.view": [
+        {
+            "type": "function",
+            "name": "afterController",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\ControllerAttributesListener",
+            "priority": 10000
+        },
+        {
+            "type": "function",
+            "name": "onKernelView",
+            "class": "Symfony\\UX\\LiveComponent\\EventListener\\LiveComponentSubscriber",
+            "priority": 0
+        }
+    ],
+    "kernel.view.Symfony\\Bridge\\Twig\\Attribute\\Template": [
+        {
+            "type": "function",
+            "name": "onKernelControllerAttribute",
+            "class": "Symfony\\Bridge\\Twig\\EventListener\\TemplateAttributeListener",
+            "priority": 0
+        }
+    ],
+    "kernel.view.Symfony\\Component\\HttpKernel\\Attribute\\Serialize": [
+        {
+            "type": "function",
+            "name": "onView",
+            "class": "Symfony\\Component\\HttpKernel\\EventListener\\SerializeControllerResultAttributeListener",
+            "priority": 0
+        }
+    ]
+}

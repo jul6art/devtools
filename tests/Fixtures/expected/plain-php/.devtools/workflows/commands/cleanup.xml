@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.cleanup" type="commands" schema-version="1">
+  <title>cleanup</title>
+  <generated at="2026-09-16T15:00:00+02:00" tool="devtools" mode="no-ai"/>
+  <source vcs="none"/>
+  <entrypoints>
+    <entrypoint kind="command" name="cleanup" role="main">
+      <declared-in path="bin/cleanup" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="bin/cleanup" role="other" sha256="452c138127b7430f83e6b9ade63e3c8ef3ed7d49b68e648469985608f94d6f96"/>
+    <file path="composer.json" role="config" sha256="2716ad34085c6cc1af77e3000d0b534a7ac734d861c951c60e4e81fd7e8d023d"/>
+    <file path="lib/db.php" role="other" sha256="0b4f4ae85545e94c08776522b2bb9e4598a1bd85076aab2b16b85e65f61268a0"/>
+  </files>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T15:00:00+02:00" reason="initial"/>
+  </history>
+</workflow>

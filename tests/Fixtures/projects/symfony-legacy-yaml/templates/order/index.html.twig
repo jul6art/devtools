@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ component('CartSummary') }}
+    <a href="{{ path('app_order_new') }}">New order</a>
+    {% for order in orders %}
+        <a href="{{ path('app_order_show', {id: order.id}) }}">{{ order.customer }}</a>
+    {% endfor %}
+{% endblock %}

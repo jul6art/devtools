@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="src/app.js">
+    <workflow ref="route.get-health" relation="file"/>
+    <workflow ref="route.get-orders" relation="file"/>
+    <workflow ref="route.post-orders" relation="file"/>
+  </file>
+  <file path="src/routes/orders.js">
+    <workflow ref="route.get-orders" relation="file"/>
+    <workflow ref="route.post-orders" relation="file"/>
+  </file>
+  <file path="src/services/orderService.js">
+    <workflow ref="route.get-orders" relation="file"/>
+    <workflow ref="route.post-orders" relation="file"/>
+  </file>
+  <file path="test/orders.test.js">
+    <workflow ref="route.get-orders" relation="test"/>
+  </file>
+</files-to-workflows>

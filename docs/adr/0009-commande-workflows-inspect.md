@@ -70,17 +70,17 @@ et `--no-ai` comme option (ADR-0011 ; ici tout est factuel) ; stacks sans adapta
 
 ## Critères d'acceptation
 
-- [ ] `bin/devtools workflows:inspect tests/Fixtures/projects/symfony-minimal` en processus séparé :
+- [x] `bin/devtools workflows:inspect tests/Fixtures/projects/symfony-minimal` en processus séparé :
       `.devtools/` égal au snapshot attendu (pages, XML, index, graphe, menu, stack)
-- [ ] Même résultat via `bin/console devtools:workflows:inspect` du projet-fixture (bridge installé)
-- [ ] Chaque XML produit est valide ; chaque page est conforme au gabarit (tests de l'ADR-0008
+- [x] Même résultat via `bin/console devtools:workflows:inspect` du projet-fixture (bridge installé)
+- [x] Chaque XML produit est valide ; chaque page est conforme au gabarit (tests de l'ADR-0008
       rejoués sur la sortie réelle)
-- [ ] `--dry-run` n'écrit aucun fichier (arborescence comparée avant/après)
-- [ ] `--only=commands` n'écrit que les pages de commandes ; le menu reste complet
-- [ ] Une route supprimée du fixture entre deux exécutions → workflow `orphaned`, page conservée
-- [ ] Deux exécutions concurrentes : la seconde échoue avec le message de verrou
-- [ ] Codes de sortie 0, 1, 2 couverts chacun par un test
-- [ ] README : section Usage de `workflows:inspect` écrite
+- [x] `--dry-run` n'écrit aucun fichier (arborescence comparée avant/après)
+- [x] `--only=commands` n'écrit que les pages de commandes ; le menu reste complet
+- [x] Une route supprimée du fixture entre deux exécutions → workflow `orphaned`, page conservée
+- [x] Deux exécutions concurrentes : la seconde échoue avec le message de verrou
+- [x] Codes de sortie 0, 1, 2 couverts chacun par un test
+- [x] README : section Usage de `workflows:inspect` écrite
 
 ## Conséquences
 

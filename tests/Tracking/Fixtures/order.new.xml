@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.new" type="routes" schema-version="1">
+  <title>Order creation</title>
+  <generated at="2026-09-16T14:22:31+02:00" tool="devtools 0.1.0" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <source vcs="git" commit="a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0" branch="main" dirty="false"/>
+  <entrypoints>
+    <entrypoint kind="route" name="app_order_new" role="main">
+      <declared-in path="src/Controller/OrderController.php" role="controller"/>
+      <attribute name="methods" value="GET|POST"/>
+      <attribute name="path" value="/orders/new"/>
+      <attribute name="security" value="ROLE_OPERATOR"/>
+    </entrypoint>
+    <entrypoint kind="route" name="app_order_new_localized" role="satellite">
+      <declared-in path="src/Controller/OrderController.php" role="controller"/>
+      <attribute name="methods" value="GET|POST"/>
+      <attribute name="path" value="/orders/new"/>
+      <attribute name="security" value="ROLE_OPERATOR"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/Controller/OrderController.php" role="controller" sha256="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"/>
+    <file path="templates/order/new.html.twig" role="template" sha256="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"/>
+  </files>
+  <tests>
+    <file path="tests/Controller/OrderControllerTest.php" role="test"/>
+  </tests>
+  <packages>
+    <package name="symfony/form" version="7.4.3"/>
+  </packages>
+  <depends-on>
+    <workflow ref="route.order.show"/>
+  </depends-on>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-08-02T10:01:00+02:00" commit="9f8e7d6c5b4a39281706f5e4d3c2b1a098765432" reason="initial"/>
+    <revision at="2026-09-16T14:22:31+02:00" commit="a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0" reason="files changed: src/Service/OrderPricing.php"/>
+  </history>
+</workflow>

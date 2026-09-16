@@ -20,18 +20,18 @@
 | [0000](0000-processus-adr.md) | Processus ADR et définition d'un lot | méta | Accepted | — |
 | [0001](0001-architecture-et-perimetre-du-mvp.md) | Architecture du cœur et périmètre du MVP | méta | Accepted | — |
 | [0002](0002-voie-ia-claude-code.md) | Voie IA du MVP : Claude Code rédige, DevTools reste déterministe | MVP 1 — Socle | Accepted | — |
-| [0003](0003-modele-intermediaire-et-identifiants.md) | Modèle intermédiaire et identifiants stables | MVP 1 — Socle | Accepted | — |
-| [0004](0004-dossier-devtools-et-suivi-xml.md) | Dossier `.devtools/`, configuration et XML de suivi | MVP 1 — Socle | Accepted | — |
-| [0005](0005-detection-de-stack.md) | Détection de stack et `stack.xml` | MVP 2 — Tranche factuelle | Accepted | — |
-| [0006](0006-graphe-de-dependances-php.md) | Graphe de dépendances PHP et regroupement | MVP 2 — Tranche factuelle | Accepted | — |
-| [0007](0007-adaptateur-symfony.md) | Adaptateur Symfony : la console du projet comme source de vérité | MVP 2 — Tranche factuelle | Accepted | — |
-| [0008](0008-rendu-norme-des-pages-et-du-menu.md) | Rendu normé des pages, du menu et du graphe | MVP 2 — Tranche factuelle | Accepted | — |
-| [0009](0009-commande-workflows-inspect.md) | Commande `workflows:inspect` et pipeline | MVP 2 — Tranche factuelle | Accepted | — |
-| [0010](0010-fraicheur.md) | Fraîcheur : ne réécrire que ce qui a changé | MVP 3 — Fraîcheur | Accepted | — |
-| [0011](0011-redaction-des-pages-par-claude-code.md) | Rédaction des pages par Claude Code | MVP 4 — Rédaction et langages | Accepted | — |
-| [0012](0012-connaissances-de-stack.md) | Connaissances de stack (`knowledge`) | MVP 4 — Rédaction et langages | Accepted | — |
-| [0013](0013-voie-claude-pour-les-stacks-sans-adaptateur.md) | Voie Claude pour les stacks sans adaptateur natif | MVP 4 — Rédaction et langages | Accepted | — |
-| [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | — |
+| [0003](0003-modele-intermediaire-et-identifiants.md) | Modèle intermédiaire et identifiants stables | MVP 1 — Socle | Accepted | 2026-09-16 |
+| [0004](0004-dossier-devtools-et-suivi-xml.md) | Dossier `.devtools/`, configuration et XML de suivi | MVP 1 — Socle | Accepted | 2026-09-16 |
+| [0005](0005-detection-de-stack.md) | Détection de stack et `stack.xml` | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0006](0006-graphe-de-dependances-php.md) | Graphe de dépendances PHP et regroupement | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0007](0007-adaptateur-symfony.md) | Adaptateur Symfony : la console du projet comme source de vérité | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0008](0008-rendu-norme-des-pages-et-du-menu.md) | Rendu normé des pages, du menu et du graphe | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0009](0009-commande-workflows-inspect.md) | Commande `workflows:inspect` et pipeline | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0010](0010-fraicheur.md) | Fraîcheur : ne réécrire que ce qui a changé | MVP 3 — Fraîcheur | Accepted | 2026-09-16 (Infection : CI) |
+| [0011](0011-redaction-des-pages-par-claude-code.md) | Rédaction des pages par Claude Code | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
+| [0012](0012-connaissances-de-stack.md) | Connaissances de stack (`knowledge`) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
+| [0013](0013-voie-claude-pour-les-stacks-sans-adaptateur.md) | Voie Claude pour les stacks sans adaptateur natif | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
+| [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | — |
 | [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Proposed | — |
 | [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Proposed | — |

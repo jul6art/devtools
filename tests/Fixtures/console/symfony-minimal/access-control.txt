@@ -1,0 +1,21 @@
+
+Current configuration for "security.access_control"
+===================================================
+
+[
+    {
+        "path": "^/orders",
+        "roles": [
+            "ROLE_USER"
+        ],
+        "request_matcher": null,
+        "requires_channel": null,
+        "host": null,
+        "port": null,
+        "ips": [],
+        "attributes": [],
+        "route": null,
+        "methods": [],
+        "allow_if": null
+    }
+]

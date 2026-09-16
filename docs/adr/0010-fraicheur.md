@@ -83,24 +83,26 @@ Dépendance de développement ajoutée : `infection/infection` (mutation, § 7.2
 
 Chaque cas du § 7.2 « Fraîcheur » dans un dépôt git temporaire créé par le test :
 
-- [ ] Aucun changement → deux exécutions consécutives, **zéro fichier modifié** hors `reports/`
+- [x] Aucun changement → deux exécutions consécutives, **zéro fichier modifié** hors `reports/`
       (idempotence, § 7.2)
-- [ ] Modification d'un service partagé par deux routes → exactement ces deux workflows réécrits,
+- [x] Modification d'un service partagé par deux routes → exactement ces deux workflows réécrits,
       avec `files-changed` et le chemin
-- [ ] Modification puis annulation (même contenu, nouveau commit) → `keep` (le hash tranche)
-- [ ] Suppression d'un fichier non-entrée → `stale` ; suppression du contrôleur et de la route →
+- [x] Modification puis annulation (même contenu, nouveau commit) → `keep` (le hash tranche)
+- [x] Suppression d'un fichier non-entrée → `stale` ; suppression du contrôleur et de la route →
       `orphan`, page conservée ; `--prune` la supprime
-- [ ] Nouveau fichier injecté dans un service existant → workflows concernés réécrits
-- [ ] Rebase (commit enregistré absent de l'historique) → repli sur le hash, décisions correctes
-- [ ] Working tree sale (modifié non commité, non suivi) → pris en compte
-- [ ] Sans git (copie du projet) → hash de tout, décisions correctes, `vcs="none"`
-- [ ] Changement de version majeure d'un paquet référencé → `rewrite` avec `package-major`
-- [ ] Workflow `manual` périmé → non réécrit, alerte, XML mis à jour
-- [ ] `--force=<id>`, `--since`, `--dry-run` : un test chacun
-- [ ] Compteurs : au plus 4 processus git et un hash par fichier distinct (instrumentés)
+- [x] Nouveau fichier injecté dans un service existant → workflows concernés réécrits
+- [x] Rebase (commit enregistré absent de l'historique) → repli sur le hash, décisions correctes
+- [x] Working tree sale (modifié non commité, non suivi) → pris en compte
+- [x] Sans git (copie du projet) → hash de tout, décisions correctes, `vcs="none"`
+- [x] Changement de version majeure d'un paquet référencé → `rewrite` avec `package-major`
+- [x] Workflow `manual` périmé → non réécrit, alerte, XML mis à jour
+- [x] `--force=<id>`, `--since`, `--dry-run` : un test chacun
+- [x] Compteurs : au plus 4 processus git et un hash par fichier distinct (instrumentés)
 - [ ] Couverture 100 % de `Inspection/Freshness/` et `Tracking/` ; Infection lancé sur ces deux
-      dossiers, mutants survivants justifiés un par un ou tués
-- [ ] Fichier de performance : projet généré de 300 routes, re-scan sans changement < 10 s
+      dossiers, mutants survivants justifiés un par un ou tués *(Infection configuré, job CI « Mutation »
+      avec pcov prêt ; aucun pilote de couverture sur le poste de développement — pcov à installer, ou CI
+      réactivée. Mutations manuelles en attendant : 12 mutants, tous tués)*
+- [x] Fichier de performance : projet généré de 300 routes, re-scan sans changement < 10 s
 
 ## Conséquences
 

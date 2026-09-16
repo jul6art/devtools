@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tests\Bridge\Symfony\Functional;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
+use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 /**
  * The first test to write, and the one that keeps paying: a real container, built with the bundle
@@ -20,6 +21,23 @@ final class ContainerTest extends AbstractFunctionalTestCase
     public function testTheBundleBoots(): void
     {
         self::assertTrue($this->boot()->getParameter('devtools.enabled'));
+    }
+
+    /**
+     * The same commands as vendor/bin/devtools, under the devtools: prefix: a command available through
+     * one mode only is a command the other mode silently lacks.
+     */
+    public function testTheCoreCommandsAreRegisteredUnderTheDevtoolsPrefix(): void
+    {
+        $container = $this->boot();
+
+        self::assertTrue($container->has('console.command_loader'));
+
+        $loader = $container->get('console.command_loader');
+        self::assertInstanceOf(CommandLoaderInterface::class, $loader);
+        $names = array_values(array_filter($loader->getNames(), static fn (string $name): bool => str_starts_with($name, 'devtools:')));
+        sort($names);
+        self::assertSame(['devtools:claude:install', 'devtools:init', 'devtools:stack:detect', 'devtools:workflows:apply', 'devtools:workflows:inspect'], $names);
     }
 
     /**

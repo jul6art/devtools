@@ -1,0 +1,23 @@
+{
+    // Mutation testing of the two directories every later guarantee rests on (ADR-0010): a false
+    // "unchanged" in Freshness, or a tracking file that does not read back, breaks impact and the gate.
+    // It needs a coverage driver (pcov or Xdebug); the CI's "Mutation" job provides pcov.
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src/Inspection/Freshness",
+            "src/Tracking"
+        ]
+    },
+    "phpUnit": {
+        "configDir": "."
+    },
+    "testFrameworkOptions": "--exclude-group=end-to-end,performance",
+    "logs": {
+        "text": "var/infection.log",
+        "summary": "var/infection-summary.log"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

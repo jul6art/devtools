@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The tracking file of one workflow: .devtools/workflows/<type>/<id>.xml (specs § 4.6.1, ADR-0004).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/workflow-tracking/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/workflow-tracking/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="workflow">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="t:nonEmpty"/>
+                <xs:element name="generated">
+                    <xs:complexType>
+                        <xs:attribute name="at" type="xs:dateTime" use="required"/>
+                        <xs:attribute name="tool" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="mode" type="t:mode" use="required"/>
+                        <xs:attribute name="model" type="t:nonEmpty"/>
+                        <xs:attribute name="prompt" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="source" type="t:vcs"/>
+                <xs:element name="entrypoints">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="entrypoint" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="declared-in" type="t:file"/>
+                                        <xs:element name="attribute" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="name" type="t:slug" use="required"/>
+                                                <xs:attribute name="value" type="xs:string" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="kind" type="t:slug" use="required"/>
+                                    <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="role" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="main"/>
+                                                <xs:enumeration value="satellite"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="files">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="file" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="path" type="t:path" use="required"/>
+                                    <xs:attribute name="role" type="t:role" use="required"/>
+                                    <xs:attribute name="sha256" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[0-9a-f]{64}"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="tests" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="file" type="t:file" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="packages" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="package" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="depends-on" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="workflow" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="ref" type="t:workflowId" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="confidence" type="t:confidence"/>
+                <xs:element name="producer">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="native:[a-z][a-z0-9\-]*|claude"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="status" type="t:status"/>
+                <xs:element name="history">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="revision" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="at" type="xs:dateTime" use="required"/>
+                                    <xs:attribute name="commit" type="t:commit"/>
+                                    <xs:attribute name="reason" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="t:workflowId" use="required"/>
+            <xs:attribute name="type" type="t:slug" use="required"/>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="file">
+        <xs:attribute name="path" type="t:path" use="required"/>
+        <xs:attribute name="role" type="t:role" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Relative to the project root: neither "/..." nor "C:...". The model refuses ".." on read. -->
+    <xs:simpleType name="path">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="slug">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9\-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="workflowId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="commit">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-f]{7,64}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="confidence">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="high"/>
+            <xs:enumeration value="medium"/>
+            <xs:enumeration value="low"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="fresh"/>
+            <xs:enumeration value="stale"/>
+            <xs:enumeration value="orphaned"/>
+            <xs:enumeration value="manual"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="mode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ai"/>
+            <xs:enumeration value="no-ai"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="role">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="controller"/>
+            <xs:enumeration value="service"/>
+            <xs:enumeration value="form"/>
+            <xs:enumeration value="template"/>
+            <xs:enumeration value="entity"/>
+            <xs:enumeration value="repository"/>
+            <xs:enumeration value="config"/>
+            <xs:enumeration value="listener"/>
+            <xs:enumeration value="message"/>
+            <xs:enumeration value="handler"/>
+            <xs:enumeration value="component"/>
+            <xs:enumeration value="test"/>
+            <xs:enumeration value="other"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="vcs">
+        <xs:attribute name="vcs" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="git"/>
+                    <xs:enumeration value="none"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="commit" type="t:commit"/>
+        <xs:attribute name="branch" type="t:nonEmpty"/>
+        <xs:attribute name="dirty" type="xs:boolean"/>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,16 @@
+{
+    "name": "acme/plain-php",
+    "require": {
+        "php": ">=8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Acme\\": "lib/"
+        }
+    },
+    "bin": ["bin/cleanup"],
+    "scripts": {
+        "import-orders": "@php bin/import.php",
+        "lint": "php -l public/index.php"
+    }
+}

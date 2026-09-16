@@ -64,14 +64,14 @@ existante lors d'un changement de version mineure.
 
 ## Critères d'acceptation
 
-- [ ] `symfony-7.md` et `symfony-8.md` conformes au canevas (test de conformité sur tout
+- [x] `symfony-7.md` et `symfony-8.md` conformes au canevas (test de conformité sur tout
       `resources/knowledge/`)
-- [ ] Priorité projet > embarqué, et copie à la première utilisation : un test chacun
-- [ ] Stack inconnue → brief `knowledge` valide ; brouillon enregistré conforme → fichier écrit ;
+- [x] Priorité projet > embarqué, et copie à la première utilisation : un test chacun
+- [x] Stack inconnue → brief `knowledge` valide ; brouillon enregistré conforme → fichier écrit ;
       section manquante ou Sources vide → refus nommé
-- [ ] Aucun brief `page` émis pour une stack sans connaissance ; émis au scan suivant une fois la
+- [x] Aucun brief `page` émis pour une stack sans connaissance ; émis au scan suivant une fois la
       connaissance écrite
-- [ ] Le chemin du `knowledge` apparaît dans les briefs `page` et dans l'en-tête de `workflows.md`
+- [x] Le chemin du `knowledge` apparaît dans les briefs `page` et dans l'en-tête de `workflows.md`
 
 ## Conséquences
 

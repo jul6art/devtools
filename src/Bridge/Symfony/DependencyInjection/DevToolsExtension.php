@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Bridge\Symfony\DependencyInjection;
 
+use Jul6Art\DevTools\Command\ClaudeInstallCommand;
+use Jul6Art\DevTools\Command\InitCommand;
+use Jul6Art\DevTools\Command\StackDetectCommand;
+use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
+use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -27,6 +32,17 @@ class DevToolsExtension extends Extension
 {
     public const string ALIAS = 'devtools';
 
+    /**
+     * @var array<class-string, string>
+     */
+    public const array COMMANDS = [
+        InitCommand::class => 'init',
+        StackDetectCommand::class => 'stack:detect',
+        WorkflowsInspectCommand::class => 'workflows:inspect',
+        WorkflowsApplyCommand::class => 'workflows:apply',
+        ClaudeInstallCommand::class => 'claude:install',
+    ];
+
     #[\Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -42,6 +58,14 @@ class DevToolsExtension extends Extension
         // Exposed as a container parameter so an application can branch on it, and so
         // `debug:container --parameter` tells the truth about what is active.
         $container->setParameter(self::ALIAS.'.enabled', true);
+
+        // The core commands, under the devtools: prefix and pointed at the application by default. Nothing
+        // else: whatever a command does, it does identically through vendor/bin/devtools.
+        foreach (self::COMMANDS as $class => $name) {
+            $container->register('devtools.command.'.str_replace(':', '_', $name), $class)
+                ->setArgument('$defaultPath', '%kernel.project_dir%')
+                ->addTag('console.command', ['command' => 'devtools:'.$name]);
+        }
     }
 
     #[\Override]

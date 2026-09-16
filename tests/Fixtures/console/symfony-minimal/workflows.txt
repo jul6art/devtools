@@ -1,0 +1,78 @@
+
+Current configuration for "framework.workflows"
+===============================================
+
+{
+    "enabled": true,
+    "workflows": {
+        "order": {
+            "type": "state_machine",
+            "marking_store": {
+                "type": "method",
+                "property": "status"
+            },
+            "supports": [
+                "App\\Entity\\Order"
+            ],
+            "initial_marking": [
+                "draft"
+            ],
+            "places": [
+                {
+                    "name": "draft",
+                    "metadata": []
+                },
+                {
+                    "name": "validated",
+                    "metadata": []
+                },
+                {
+                    "name": "shipped",
+                    "metadata": []
+                }
+            ],
+            "transitions": {
+                "validate": {
+                    "from": [
+                        {
+                            "place": "draft",
+                            "weight": 1
+                        }
+                    ],
+                    "to": [
+                        {
+                            "place": "validated",
+                            "weight": 1
+                        }
+                    ],
+                    "name": "validate",
+                    "weight": 1,
+                    "metadata": []
+                },
+                "ship": {
+                    "from": [
+                        {
+                            "place": "validated",
+                            "weight": 1
+                        }
+                    ],
+                    "to": [
+                        {
+                            "place": "shipped",
+                            "weight": 1
+                        }
+                    ],
+                    "name": "ship",
+                    "weight": 1,
+                    "metadata": []
+                }
+            },
+            "audit_trail": {
+                "enabled": false
+            },
+            "definition_validators": [],
+            "events_to_dispatch": null,
+            "metadata": []
+        }
+    }
+}

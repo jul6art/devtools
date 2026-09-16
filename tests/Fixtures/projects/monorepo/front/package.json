@@ -1,0 +1,6 @@
+{
+    "name": "acme-front",
+    "dependencies": {
+        "@angular/core": "~22.0.1"
+    }
+}

@@ -1,0 +1,13 @@
+security:
+    providers:
+        users:
+            memory:
+                users:
+                    operator: { password: 'operator', roles: ['ROLE_OPERATOR'] }
+    firewalls:
+        main:
+            lazy: true
+            provider: users
+            http_basic: ~
+    access_control:
+        - { path: ^/orders, roles: ROLE_USER }

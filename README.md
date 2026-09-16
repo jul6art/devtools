@@ -100,15 +100,307 @@ Usage
     nothing when git is absent.
 -->
 
-Nothing yet beyond the console itself:
+### `devtools init [path]`
+
+Creates the `.devtools/` folder of a project — the current directory when no path is given:
 
 ```shell
-vendor/bin/devtools --version
-vendor/bin/devtools list
+vendor/bin/devtools init
 ```
 
-The first commands to land are those of phase 0, in [`docs/specs.md` §9](docs/specs.md#9-feuille-de-route):
-`workflows:inspect [path]` with `--dry-run`, `--force`, `--since`, `--only`, `--no-ai` and `--prune`.
+```
+.devtools/
+├── config.xml     the project's options — yours, DevTools never rewrites it
+├── schemas/       a copy of every XSD, so .devtools/ can be validated without DevTools
+├── workflows/     one page and one tracking file per workflow
+├── knowledge/     how the project's stack works
+├── graph/         the file → workflows index and the overview diagram
+├── pending/       work area for Claude — ignored by git
+└── reports/       one report per run — ignored by git
+```
+
+Commit `.devtools/`. `init` adds the two work areas to the project's `.gitignore` (without duplicating
+a line that already covers them) and changes nothing when run again.
+
+⚠️ **Every XML file in `.devtools/` is validated against its schema, on write and on read.** A file
+edited by hand into an invalid state stops the next run with the file and the line named, rather than
+being silently rewritten. A file written by a newer DevTools asks you to update DevTools.
+
+### `devtools stack:detect [path]`
+
+Reads the project's manifests — `composer.json` and `composer.lock`, `package.json` and its lock,
+`go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml` — without running anything, and writes
+`.devtools/stack.xml`:
+
+```shell
+vendor/bin/devtools stack:detect
+```
+
+```
+ ------ ------------ ------------- --------- ------------ -----------------------------
+  Root   Language     Framework     Adapter   Knowledge    Sources
+ ------ ------------ ------------- --------- ------------ -----------------------------
+  api    php          symfony 7.4   symfony   symfony-7    config, src
+  front  typescript   angular 22.0  claude    angular-22   src/app
+ ------ ------------ ------------- --------- ------------ -----------------------------
+```
+
+A monorepo gets one stack per directory holding a framework. A framework version comes from the lock
+file when there is one, from the constraint otherwise. The adapter says who finds the workflows:
+`symfony` and `generic-php` are native; everything else goes to Claude.
+
+⚠️ **A wrong detection is corrected in `stack.xml`, not with an option.** Mark the element
+`locked="true"` and every later detection keeps it — the correction is committed and shared:
+
+```xml
+<adapter locked="true">claude</adapter>
+<sources locked="true"><dir>src</dir><dir>lib</dir></sources>
+```
+
+### `devtools workflows:inspect [path]`
+
+Documents every workflow of the project in `.devtools/` — `init` and `stack:detect` included:
+
+```shell
+vendor/bin/devtools workflows:inspect            # standalone, current directory
+bin/console devtools:workflows:inspect           # through the bundle, the application's directory
+```
+
+```
+ --------- --------- ----------- ----------
+  Created   Updated   Unchanged   Orphaned
+ --------- --------- ----------- ----------
+  10        0         0           0
+ --------- --------- ----------- ----------
+ Report: .devtools/reports/inspect-2026-09-16-150000.md
+```
+
+It writes one page and one tracking file per workflow, `index.xml`, `graph/`, and `workflows.md`, the
+page to open first. Commit all of it; the report stays out of git.
+
+| Option | |
+| --- | --- |
+| `--dry-run` | show what would be rewritten and why; write nothing |
+| `--force` / `--force=route.order.new` | rewrite every workflow / this one (repeatable) |
+| `--since=<commit>` | compare with this commit, and hash every file |
+| `--prune` | delete the page and tracking file of orphaned workflows |
+| `--only=routes` | write the pages of one type only; the menu and the index stay complete |
+| `--no-ai` | write no brief for Claude: factual pages only |
+
+Exit code `0` when everything was documented, `1` with warnings — a console that did not answer, a stack
+without an adapter, a file that could not be parsed — and `2` when nothing could be (invalid
+configuration, identifier collision, another inspection running on the same project).
+
+**A run only rewrites what changed.** Git points at the files changed since the documentation was
+written — at most four git processes, whatever the size of the project — and the SHA-256 recorded for
+each file decides: a change undone in a later commit is not a change. A file removed from or added to a
+workflow, or a major version of a package it uses, rewrites it too; each rewrite adds a line to the
+page's history saying why (`files changed: src/Service/OrderPricing.php`). Without git — a copy, an
+archive, a rewritten history — every file is hashed and the decisions are the same.
+
+A second run on an unchanged project modifies no file: committing the documentation does not make it
+change again. On a 300-route project, that re-scan takes well under a second.
+
+⚠️ **An entry point that disappeared is marked *orphelin*** and listed under *À vérifier*; its page is
+only deleted with `--prune`. A workflow whose tracking file says `<status>manual</status>` is never
+rewritten: when its code changes, the run warns instead.
+
+⚠️ **Only the files of a workflow are watched.** A new test, or a template's navigation link, shows up on
+the page at the next rewrite caused by a file of the workflow — or with `--force`.
+
+⚠️ **Only stacks with an adapter are documented** in this version — Symfony. A stack left to Claude is
+listed as a warning until [ADR-0013](docs/adr/0013-voie-claude-pour-les-stacks-sans-adaptateur.md).
+
+### `.devtools/config.xml`
+
+Every element is optional; the file `init` writes shows the defaults:
+
+| Element | Default | What it does |
+| --- | --- | --- |
+| `<paths><exclude>public/build</exclude></paths>` | — | directories never scanned, **added** to `.devtools`, `.git`, `build`, `dist`, `node_modules`, `var`, `vendor` |
+| `<graph depth="3"/>` | `3` | how many hops of dependencies a workflow follows |
+| `<identifiers route-prefix="app_"/>` | `app_` | removed from route names when deriving identifiers |
+| `<aliases><alias entrypoint="order_new" id="route.legacy.order.new"/></aliases>` | — | resolves two entry points deriving the same identifier |
+| `<groups><group main="app_order_index"><satellite>app_order_export</satellite></group></groups>` | — | documents an entry point as part of another workflow |
+| `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
+| `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
+| `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
+| `<language pages="fr"/>` | `fr` | language of the pages Claude writes |
+
+What a workflow contains
+------------------------
+
+For a PHP project, the files of a workflow are found by reading the code, never by running it:
+
+- **from the entry point's method**, not its whole file — plus what every method of the class shares
+  (parent class, attributes, properties, constructor). The list route of a controller does not inherit
+  the form of its creation route;
+- **through the classes actually used** — an unused import is not a dependency — located with the
+  project's `composer.json`; a class of `vendor/` becomes a package with the version of `composer.lock`;
+- **through the templates rendered** with a literal name, and their `extends`, `include`, `embed`;
+- **through the files required or included** by a literal path — `require __DIR__.'/../lib/db.php'`;
+- **up to `<graph depth>` hops** (3 by default): controller → service → repository → entity.
+
+Existing tests are the test files that use the entry point or a file of its first hop. Two routes to
+the same method are one workflow; `<groups>` in `config.xml` joins others.
+
+⚠️ **What is wired at runtime is not seen**: a service fetched from the container by name, a template
+whose name is computed, a class built from a string. Such files appear under "Non couvert" in the menu
+— the analysis says what it missed rather than pretending.
+
+The pages
+---------
+
+Every workflow page has the same eleven sections, in the same order — which is what makes pages
+parsable, diffable, and comparable across stacks:
+
+| Section | Written by | Without Claude |
+| --- | --- | --- |
+| Résumé | Claude | — |
+| Déclencheur | DevTools (the *Préconditions* row: Claude) | entry point, satellites, security |
+| Parcours | Claude | a diagram of the entry point and the files it reaches |
+| Navigation / états | DevTools | where the workflow leads, and its state machine |
+| Composants impliqués | DevTools | every file with its role, and the packages |
+| Données | Claude | — |
+| Mécanismes transverses | Claude | the listeners it depends on |
+| Points d'attention | Claude | — |
+| Tests existants | DevTools | the tests found |
+| Workflows liés | DevTools | dependencies and navigation, linked |
+| Historique | DevTools | one line per rewrite, never rewritten |
+
+⚠️ **A section DevTools writes is regenerated from the code on every rewrite** — a fact corrected by hand
+there is lost; fix it where it comes from. What Claude wrote survives factual rewrites. `workflows.md`
+lists every workflow by type with its counter, even at zero, then two sections that are never hidden:
+*À vérifier* (stale, orphaned, waiting for Claude) and *Non couvert* (source files no workflow reaches).
+
+Writing with Claude Code
+------------------------
+
+DevTools never calls Claude. It writes a **brief** for every page Claude has to write — created or
+rewritten by the run, or never written — and validates the **draft** Claude writes back:
+
+```shell
+vendor/bin/devtools claude:install        # once: .claude/skills/devtools-inspect/SKILL.md, commit it
+```
+
+Then ask Claude Code to *document the workflows*. The skill runs the loop:
+
+1. `workflows:inspect` writes `.devtools/pending/page.<id>.brief.xml` — the workflow's model, the current
+   page, why it changed, the language, and the versioned prompt to follow;
+2. Claude reads the files the model lists and writes `.devtools/pending/page.<id>.draft.md`: summary,
+   preconditions, a sequence diagram, data, cross-cutting mechanisms, points of attention, and one line for
+   the history;
+3. `workflows:apply` checks each draft, rebuilds the page — facts from the code, prose from the draft — and
+   records the model and the prompt version in the tracking file;
+4. the skill inspects again until no brief is left.
+
+A draft is **refused**, with the rule and the line, when it adds or drops a section, when its journey is not
+exactly one Mermaid diagram, when it quotes a file the workflow does not traverse, or when the code changed
+after its brief was written. A refused draft changes nothing and stays in `pending/` to be corrected.
+
+`--no-ai` writes no brief: factual pages only, the mode for CI. What Claude wrote survives later factual
+rewrites; a workflow whose files change gets a new brief.
+
+**Knowledge of the stack.** A page is never written without knowing how its framework works.
+`.devtools/knowledge/<stack>-<major>.md` answers that — the request cycle, the extension mechanisms, where
+each kind of entry point is declared, the traps — following a fixed canvas. DevTools ships Symfony 7 and 8
+and copies the one a project uses on its first run; for any other stack, the run writes a knowledge brief,
+Claude consults the framework's official documentation and writes the file, and the page briefs of that
+stack follow on the next run. The file belongs to the project from then on: edit it, it is never
+overwritten.
+
+⚠️ **Briefs live in `.devtools/pending/`, ignored by git**: they are recomputed on every run and quote
+absolute paths of the machine.
+
+`tests/Fixtures/demo/symfony-minimal/.devtools/` is the output of a real session on the fixture
+application.
+
+Symfony projects
+----------------
+
+For a Symfony application, **its own console is the source of truth**: DevTools asks it six questions —
+routes, commands, message handlers, event listeners, state machines, `access_control` — whatever the
+size of the project, and reads what the console does not expose from the attributes: scheduled tasks,
+Twig and Live components, migrations. Standalone or through the bundle, the same questions are asked.
+
+What each workflow gets from it: the route's methods and path; its **security**, from the first matching
+`access_control` rule then `#[IsGranted]`; its **navigation**, from `redirectToRoute()` and the `path()`
+links of the templates it renders (not of their layout, whose links belong to every page); the **state
+machine** it drives, found by Symfony's naming convention (`WorkflowInterface $orderStateMachine` →
+`order`); the tests that request its path literally; and a dependency on every project listener of a
+`kernel.*` event.
+
+⚠️ **The project must boot in its `dev` environment.** In a Docker-first project, tell DevTools how to
+reach the console:
+
+```xml
+<symfony console="docker compose exec -T php bin/console" env="dev"/>
+```
+
+The command is split into arguments and run without a shell. If the console cannot answer — dependencies
+not installed, a kernel that does not boot, a deprecation printed before the JSON — DevTools falls back to
+reading attributes, marks every workflow `medium` confidence, and says why at the top of the report.
+Routes declared in YAML and services wired in configuration are invisible to that fallback.
+
+PHP without a framework
+-----------------------
+
+A PHP project whose `composer.json` names no framework is mapped natively, with `high` confidence and no
+AI for its facts:
+
+| Type | Entry point | Identifier |
+| --- | --- | --- |
+| routes | every `.php` file of the web directory (`public/`, `web/`, `www/`, or `<php web-root>`) | `public/orders/new.php` → `route.orders.new` |
+| commands | with `symfony/console`: every `#[AsCommand]` class, or `Command` subclass naming itself literally; otherwise the `scripts` of `composer.json` running a PHP file, its `bin` entries, the PHP files of `bin/` | `command.import-orders` |
+| data | `migrations/` | `data.migrations` |
+
+A page's **navigation** comes from its literal `href`, `action` and `header('Location: …')` to another page
+of the web directory. The binary of a console application is not a workflow of its own: its commands are.
+
+⚠️ **A home-made router is one route.** A single front controller dispatching a table of routes shows as
+`route.index`, the rest under *Non couvert*. Document it through Claude instead, by pinning the adapter in
+`stack.xml`: `<adapter locked="true">claude</adapter>`.
+
+Projects without a native adapter
+---------------------------------
+
+Express, Angular, Laravel, Django… any stack DevTools has no adapter for is mapped **by Claude Code, from
+files** — never through an API. The first `workflows:inspect` writes a *knowledge* brief (what the stack
+is, how a request flows through it); once `workflows:apply` has accepted it, the next run writes a
+*discovery* brief: read the sources, list the entry points and the files each one traverses, in the same
+XML model a native adapter produces.
+
+`workflows:apply` does not trust that draft: every file must exist inside the stack's root, identifiers are
+derived again and a collision is refused by name, and every workflow is forced to `medium` confidence with
+`source="claude"` — the menu says so. The accepted result is kept in `.devtools/discovery/<stack>.xml`
+(versioned): later runs read it like an adapter's output, so freshness works as for Symfony. A new file
+nobody covers asks for a discovery **limited to that file**; a change to a covered file does not.
+
+A monorepo gets one `.devtools/`: each stack is detected apart (a Symfony `api/` through its console, an
+Angular `front/` through Claude), and identifiers stay unique across both.
+
+Workflow identifiers
+--------------------
+
+Every workflow has a stable, readable identifier that names its page and its tracking file. It is
+derived from the entry point, never numbered, so that it survives re-scans:
+
+| Type | Derived from | Example |
+| --- | --- | --- |
+| routes | the route name, `app_` prefix removed, `_` → `.` | `app_order_new` → `route.order.new` |
+| commands | the command name, `:` → `.` | `app:import-catalog` → `command.app.import-catalog` |
+| async | the message class, short name in kebab-case | `OrderCreated` → `async.order-created` |
+| events | the listener class | `LocaleListener` → `event.locale-listener` |
+| ui | the component class | `CartSummary` → `ui.cart-summary` |
+| integrations | the integration name | `stripe` → `integration.stripe` |
+| data | the family | `data.migrations` |
+
+The page of `route.order.new` is `.devtools/workflows/routes/order.new.md`.
+
+⚠️ **Renaming a route renames its workflow**, and the old page becomes orphaned. Two entry points
+that derive the same identifier stop the scan with both of them named: DevTools never adds a numeric
+suffix, because a suffix would depend on discovery order and change from one scan to the next. The
+collision is resolved by an `<alias>` in `.devtools/config.xml`.
 
 Structure
 ---------
@@ -117,7 +409,23 @@ Structure
 bin/devtools                 standalone entry point
 src/
 ├── Console/                 the console application every command is registered in
+├── Inspection/Model/        the intermediate model every adapter produces, and its XML form
+├── Xml/                     hardened loading and schema validation of every document read
+├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
+├── Config/                  .devtools/config.xml
+├── Project/                 the project root, last guard against a path leaving it
+├── Stack/                   stack detection from manifests, .devtools/stack.xml
+├── Inspection/Graph/        files a PHP entry point traverses, grouping, tests, coverage
+├── Inspection/Adapter/      entry points of a stack: Symfony through its console
+├── Rendering/               pages, workflows.md and the overview diagram
+├── Ai/                      briefs for Claude, validation and application of its drafts
+├── Command/                 the console commands
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else
+resources/schemas/           the XSD of every format DevTools reads or writes
+resources/templates/         the files init writes
+resources/prompts/           the versioned prompts Claude follows
+resources/knowledge/         the embedded knowledge of each stack, and its canvas
+resources/claude/            the Claude Code skill claude:install copies
 tests/
 ├── Console/                 the application, and bin/devtools in a separate process
 ├── Bridge/Symfony/          configuration tree, container boot
@@ -125,9 +433,9 @@ tests/
 docs/specs.md                the functional and technical specification
 ```
 
-The rest of the core — `Stack/`, `Inspection/`, `Rendering/`, `Tracking/`, `Ai/`, `Mcp/`, and
-`resources/` for embedded knowledge, prompts, XSD and templates — is created by the module that
-needs it, not ahead of it.
+The rest of the core — `Stack/`, `Inspection/Adapter/`, `Inspection/Graph/`, `Inspection/Freshness/`,
+`Rendering/`, and `resources/` for embedded knowledge and prompts — is created by the lot that needs
+it, in the order of [`docs/adr/`](docs/adr/README.md), not ahead of it.
 
 **Nothing outside `src/Bridge/Symfony/` may depend on `symfony/http-kernel`.** That is what keeps the
 standalone mode real rather than nominal.

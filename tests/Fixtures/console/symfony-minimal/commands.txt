@@ -1,0 +1,1687 @@
+{
+    "definitions": {
+        "App\\Command\\ImportCatalogCommand": {
+            "class": "App\\Command\\ImportCatalogCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": true,
+            "autoconfigure": true,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "App\\Repository\\ProductRepository"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": {
+                        "command": "app:import-catalog",
+                        "description": "Import the product catalog",
+                        "help": null
+                    }
+                },
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "console.command.service_arguments",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".App\\Command\\ImportCatalogCommand.lazy"
+            ]
+        },
+        "console.command.dotenv_debug": {
+            "class": "Symfony\\Component\\Dotenv\\Command\\DebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command to debug current dotenv files with variables and values.",
+            "arguments": [
+                "dev",
+                "%project%"
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.dotenv_debug.lazy"
+            ]
+        },
+        "console.command.about": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\AboutCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command to display information about the current installation.",
+            "arguments": [],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.about.lazy"
+            ]
+        },
+        "console.command.assets_install": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\AssetsInstallCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Command that places bundle web assets into a given directory.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "filesystem"
+                },
+                "%project%"
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.assets_install.lazy"
+            ]
+        },
+        "console.command.cache_clear": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CacheClearCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Clear and Warmup the cache.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "cache_clearer"
+                },
+                {
+                    "type": "service",
+                    "id": "filesystem"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_clear.lazy"
+            ]
+        },
+        "console.command.cache_pool_clear": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CachePoolClearCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Clear cache pools.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "cache.global_clearer"
+                },
+                [
+                    "cache.controller_expression_language",
+                    "cache.app",
+                    "cache.system",
+                    "cache.validator",
+                    "cache.serializer",
+                    "cache.property_info",
+                    "cache.messenger.restart_workers_signal",
+                    "cache.security_expression_language",
+                    "cache.security_is_granted_attribute_expression_language",
+                    "cache.security_is_csrf_token_valid_attribute_expression_language",
+                    "cache.ux.twig_component"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_pool_clear.lazy"
+            ]
+        },
+        "console.command.cache_pool_prune": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CachePoolPruneCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Cache pool pruner command.",
+            "arguments": [
+                []
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_pool_prune.lazy"
+            ]
+        },
+        "console.command.cache_pool_invalidate_tags": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CachePoolInvalidateTagsCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": ".service_locator.YDYHnos"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_pool_invalidate_tags.lazy"
+            ]
+        },
+        "console.command.cache_pool_delete": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CachePoolDeleteCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Delete an item from a cache pool.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "cache.global_clearer"
+                },
+                [
+                    "cache.controller_expression_language",
+                    "cache.app",
+                    "cache.system",
+                    "cache.validator",
+                    "cache.serializer",
+                    "cache.property_info",
+                    "cache.messenger.restart_workers_signal",
+                    "cache.security_expression_language",
+                    "cache.security_is_granted_attribute_expression_language",
+                    "cache.security_is_csrf_token_valid_attribute_expression_language",
+                    "cache.ux.twig_component"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_pool_delete.lazy"
+            ]
+        },
+        "console.command.cache_pool_list": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CachePoolListCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "List available cache pools.",
+            "arguments": [
+                [
+                    "cache.controller_expression_language",
+                    "cache.app",
+                    "cache.system",
+                    "cache.validator",
+                    "cache.serializer",
+                    "cache.property_info",
+                    "cache.messenger.restart_workers_signal",
+                    "cache.security_expression_language",
+                    "cache.security_is_granted_attribute_expression_language",
+                    "cache.security_is_csrf_token_valid_attribute_expression_language",
+                    "cache.ux.twig_component"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_pool_list.lazy"
+            ]
+        },
+        "console.command.cache_warmup": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\CacheWarmupCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Warmup the cache.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "cache_warmer"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.cache_warmup.lazy"
+            ]
+        },
+        "console.command.config_debug": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\ConfigDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for dumping available configuration reference.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": ".service_locator.ryAvHi4"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.config_debug.lazy"
+            ]
+        },
+        "console.command.config_dump_reference": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\ConfigDumpReferenceCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for dumping available configuration reference.",
+            "arguments": [],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.config_dump_reference.lazy"
+            ]
+        },
+        "console.command.container_debug": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for retrieving information about services.",
+            "arguments": [],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.container_debug.lazy"
+            ]
+        },
+        "console.command.container_lint": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerLintCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.container_lint.lazy"
+            ]
+        },
+        "console.command.debug_autowiring": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\DebugAutowiringCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for autowiring information.",
+            "arguments": [
+                null,
+                {
+                    "type": "service",
+                    "id": "debug.file_link_formatter"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.debug_autowiring.lazy"
+            ]
+        },
+        "console.command.event_dispatcher_debug": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\EventDispatcherDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for retrieving information about event dispatcher.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": ".service_locator.GW5y7PS"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.event_dispatcher_debug.lazy"
+            ]
+        },
+        "console.command.messenger_consume_messages": {
+            "class": "Symfony\\Component\\Messenger\\Command\\ConsumeMessagesCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "messenger.routable_message_bus"
+                },
+                {
+                    "type": "service",
+                    "id": "messenger.receiver_locator"
+                },
+                {
+                    "type": "service",
+                    "id": "debug.event_dispatcher"
+                },
+                {
+                    "type": "service",
+                    "id": "logger"
+                },
+                [],
+                {
+                    "type": "service",
+                    "id": "messenger.listener.reset_services"
+                },
+                [
+                    "messenger.bus.default"
+                ],
+                null,
+                null
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "monolog.logger",
+                    "parameters": {
+                        "channel": "messenger"
+                    }
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.messenger_consume_messages.lazy"
+            ]
+        },
+        "console.command.messenger_setup_transports": {
+            "class": "Symfony\\Component\\Messenger\\Command\\SetupTransportsCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "messenger.receiver_locator"
+                },
+                [
+                    "sync"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.messenger_setup_transports.lazy"
+            ]
+        },
+        "console.command.messenger_debug": {
+            "class": "Symfony\\Component\\Messenger\\Command\\DebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command to debug Messenger information.",
+            "arguments": [
+                {
+                    "messenger.bus.default": {
+                        "App\\Message\\OrderCreated": [
+                            [
+                                "App\\MessageHandler\\OrderCreatedHandler",
+                                []
+                            ]
+                        ],
+                        "Symfony\\Component\\Console\\Messenger\\RunCommandMessage": [
+                            [
+                                "console.messenger.execute_command_handler",
+                                {
+                                    "sign": true
+                                }
+                            ]
+                        ],
+                        "Symfony\\Component\\Messenger\\Message\\RedispatchMessage": [
+                            [
+                                "messenger.redispatch_message_handler",
+                                []
+                            ]
+                        ]
+                    }
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.messenger_debug.lazy"
+            ]
+        },
+        "console.command.messenger_stop_workers": {
+            "class": "Symfony\\Component\\Messenger\\Command\\StopWorkersCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "cache.messenger.restart_workers_signal"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.messenger_stop_workers.lazy"
+            ]
+        },
+        "console.command.messenger_stats": {
+            "class": "Symfony\\Component\\Messenger\\Command\\StatsCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "messenger.receiver_locator"
+                },
+                [
+                    "sync"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.messenger_stats.lazy"
+            ]
+        },
+        "console.command.router_debug": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\RouterDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for retrieving information about routes.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "router.default"
+                },
+                {
+                    "type": "service",
+                    "id": "debug.file_link_formatter"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.router_debug.lazy"
+            ]
+        },
+        "console.command.router_match": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\RouterMatchCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command to test route matching.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "router.default"
+                },
+                []
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.router_match.lazy"
+            ]
+        },
+        "console.command.workflow_dump": {
+            "class": "Symfony\\Component\\Workflow\\Command\\WorkflowDumpCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": ".service_locator.bbtOJIj"
+                },
+                {
+                    "type": "service",
+                    "id": "debug.event_dispatcher"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.workflow_dump.lazy"
+            ]
+        },
+        "console.command.yaml_lint": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\YamlLintCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Validates YAML files syntax and outputs encountered errors.",
+            "arguments": [],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.yaml_lint.lazy"
+            ]
+        },
+        "console.command.form_debug": {
+            "class": "Symfony\\Component\\Form\\Command\\DebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "A console command for retrieving information about form types.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "form.registry"
+                },
+                [
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type",
+                    "App\\Form",
+                    "Symfony\\UX\\LiveComponent\\Form\\Type"
+                ],
+                [
+                    "App\\Form\\OrderType",
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType",
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType",
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType",
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type\\ColorType",
+                    "Symfony\\UX\\LiveComponent\\Form\\Type\\LiveCollectionType"
+                ],
+                [
+                    "Symfony\\Component\\Form\\Extension\\Core\\Type\\TransformationFailureExtension",
+                    "Symfony\\Component\\Form\\Extension\\HttpFoundation\\Type\\FormTypeHttpFoundationExtension",
+                    "Symfony\\Component\\Form\\Extension\\HttpFoundation\\Type\\FormFlowTypeSessionDataStorageExtension",
+                    "Symfony\\Component\\Form\\Extension\\Validator\\Type\\RepeatedTypeValidatorExtension",
+                    "Symfony\\Component\\Form\\Extension\\Validator\\Type\\SubmitTypeValidatorExtension",
+                    "Symfony\\Component\\Form\\Extension\\PasswordHasher\\Type\\FormTypePasswordHasherExtension",
+                    "Symfony\\Component\\Form\\Extension\\PasswordHasher\\Type\\PasswordTypePasswordHasherExtension"
+                ],
+                [
+                    "Symfony\\Component\\Form\\EnumFormTypeGuesser"
+                ],
+                {
+                    "type": "service",
+                    "id": "debug.file_link_formatter"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.form_debug.lazy"
+            ]
+        },
+        "console.command.secrets_set": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsSetCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_set.lazy"
+            ]
+        },
+        "console.command.secrets_remove": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsRemoveCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_remove.lazy"
+            ]
+        },
+        "console.command.secrets_generate_key": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsGenerateKeysCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_generate_key.lazy"
+            ]
+        },
+        "console.command.secrets_list": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsListCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_list.lazy"
+            ]
+        },
+        "console.command.secrets_reveal": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsRevealCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_reveal.lazy"
+            ]
+        },
+        "console.command.secrets_decrypt_to_local": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsDecryptToLocalCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_decrypt_to_local.lazy"
+            ]
+        },
+        "console.command.secrets_encrypt_from_local": {
+            "class": "Symfony\\Bundle\\FrameworkBundle\\Command\\SecretsEncryptFromLocalCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "secrets.vault"
+                },
+                {
+                    "type": "service",
+                    "id": "secrets.local_vault"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.secrets_encrypt_from_local.lazy"
+            ]
+        },
+        "console.command.error_dumper": {
+            "class": "Symfony\\Component\\ErrorHandler\\Command\\ErrorDumpCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Dump error pages to plain HTML files that can be directly served by a web server.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "filesystem"
+                },
+                {
+                    "type": "service",
+                    "id": "twig.error_renderer.html"
+                },
+                null
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".console.command.error_dumper.lazy"
+            ]
+        },
+        "twig.command.debug": {
+            "class": "Symfony\\Bridge\\Twig\\Command\\DebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Lists twig functions, filters, globals and tests present in the current project.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "twig"
+                },
+                "%project%",
+                "%kernel.bundles_metadata%",
+                "%project%\/templates",
+                {
+                    "type": "service",
+                    "id": "debug.file_link_formatter"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".twig.command.debug.lazy"
+            ]
+        },
+        "twig.command.lint": {
+            "class": "Symfony\\Bundle\\TwigBundle\\Command\\LintCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Command that will validate your template syntax and output encountered errors.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "twig"
+                },
+                [
+                    "*.twig"
+                ]
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".twig.command.lint.lazy"
+            ]
+        },
+        "security.command.debug_firewall": {
+            "class": "Symfony\\Bundle\\SecurityBundle\\Command\\DebugFirewallCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                "%security.firewalls%",
+                {
+                    "type": "service",
+                    "id": ".service_locator.MVe1fEg"
+                },
+                {
+                    "type": "service",
+                    "id": ".service_locator.GW5y7PS"
+                },
+                {
+                    "main": [
+                        {
+                            "type": "service",
+                            "id": "debug.security.authenticator.http_basic.main"
+                        }
+                    ]
+                },
+                false
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": {
+                        "command": "debug:firewall"
+                    }
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".security.command.debug_firewall.lazy"
+            ]
+        },
+        "security.command.user_password_hash": {
+            "class": "Symfony\\Component\\PasswordHasher\\Command\\UserPasswordHashCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Hashes a user's password.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "security.password_hasher_factory"
+                },
+                []
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".security.command.user_password_hash.lazy"
+            ]
+        },
+        "security.command.role_hierarchy_dump": {
+            "class": "Symfony\\Bundle\\SecurityBundle\\Command\\SecurityRoleHierarchyDumpCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "description": "Command to dump the role hierarchy as a Mermaid flowchart.",
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "security.role_hierarchy"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".security.command.role_hierarchy_dump.lazy"
+            ]
+        },
+        "ux.twig_component.command.debug": {
+            "class": "Symfony\\UX\\TwigComponent\\Command\\TwigComponentDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {},
+                {
+                    "type": "service",
+                    "id": "ux.twig_component.component_factory"
+                },
+                {
+                    "type": "service",
+                    "id": "twig"
+                },
+                {
+                    "App\\Twig\\Components\\CartSummary": "CartSummary"
+                },
+                "components\/"
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".ux.twig_component.command.debug.lazy"
+            ]
+        },
+        "ux.live_component.command.debug": {
+            "class": "Symfony\\UX\\LiveComponent\\Command\\LiveComponentDebugCommand",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": false,
+            "autoconfigure": false,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "ux.live_component.metadata_factory"
+                },
+                {
+                    "App\\Twig\\Components\\CartSummary": "App\\Twig\\Components\\CartSummary"
+                }
+            ],
+            "file": null,
+            "calls": [
+                "setName",
+                "setDescription"
+            ],
+            "tags": [
+                {
+                    "name": "console.command",
+                    "parameters": []
+                },
+                {
+                    "name": "container.no_preload",
+                    "parameters": []
+                }
+            ],
+            "usages": [
+                ".ux.live_component.command.debug.lazy"
+            ]
+        }
+    },
+    "aliases": [],
+    "services": []
+}

@@ -1,0 +1,32 @@
+app_health:
+    path: /health
+    controller: App\Controller\HealthController
+    methods: [GET]
+
+app_status:
+    path: /status
+    controller: App\Controller\HealthController
+    methods: [GET]
+
+app_order_index:
+    path: /orders
+    controller: App\Controller\OrderController::index
+    methods: [GET]
+
+app_order_new:
+    path: /orders/new
+    controller: App\Controller\OrderController::new
+    methods: [GET, POST]
+
+app_order_validate:
+    path: /orders/{id}/validate
+    controller: App\Controller\OrderController::validate
+    methods: [POST]
+
+app_order_show:
+    path: /orders/{id}
+    controller: App\Controller\OrderController::show
+    methods: [GET]
+
+live_component:
+    resource: '@LiveComponentBundle/config/routes.php'
