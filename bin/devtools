@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Jul6Art\DevTools\Console\Application;
+
+// Two install layouts, one entry point: this repository's own vendor/ when DevTools runs from a
+// clone, the host project's vendor/ when it is installed as a dependency and called through
+// vendor/bin/devtools. Composer's proxy exposes the latter as $_composer_autoload_path.
+$autoloader = $GLOBALS['_composer_autoload_path'] ?? null;
+
+if (!is_string($autoloader)) {
+    $autoloader = __DIR__.'/../vendor/autoload.php';
+}
+
+if (!is_file($autoloader)) {
+    fwrite(\STDERR, "DevTools: dependencies are missing, run `composer install` first.\n");
+
+    exit(1);
+}
+
+require $autoloader;
+
+exit(new Application()->run());

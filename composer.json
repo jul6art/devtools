@@ -1,0 +1,76 @@
+{
+    "name": "jul6art/devtools",
+    "type": "symfony-bundle",
+    "description": "Workflow cartography and feedback loop for projects built with Claude Code",
+    "keywords": ["claude", "claude-code", "documentation", "workflows", "mermaid", "dev"],
+    "homepage": "https://github.com/jul6art/devtools",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jul6Art",
+            "email": "admin@devinthehood.com",
+            "homepage": "https://devinthehood.com/"
+        }
+    ],
+    "require": {
+        "php": "^8.5",
+        "symfony/console": "^7.4 || ^8.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.68",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^13.0",
+        "rector/rector": "^2.0",
+        "symfony/config": "^7.4 || ^8.0",
+        "symfony/dependency-injection": "^7.4 || ^8.0",
+        "symfony/framework-bundle": "^7.4 || ^8.0",
+        "symfony/http-kernel": "^7.4 || ^8.0",
+        "symfony/phpunit-bridge": "^7.4 || ^8.0",
+        "symfony/var-dumper": "^7.4 || ^8.0",
+        "symfony/yaml": "^7.4 || ^8.0"
+    },
+    "suggest": {
+        "symfony/framework-bundle": "To register the commands in bin/console through Jul6Art\\DevTools\\Bridge\\Symfony\\DevToolsBundle"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jul6Art\\DevTools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jul6Art\\DevTools\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/devtools"
+    ],
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "scripts": {
+        "cs": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "rector": "rector process",
+        "rector-check": "rector process --dry-run",
+        "test": "phpunit",
+        "qa": [
+            "@cs-check",
+            "@rector-check",
+            "@phpstan",
+            "@test"
+        ]
+    }
+}

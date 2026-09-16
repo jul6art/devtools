@@ -1,0 +1,88 @@
+name: CI
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+
+permissions:
+    contents: read
+
+# No SYMFONY_REQUIRE, and no global Flex: DevTools is a standalone tool with a src/ layout, and
+# the recipes Flex applies on install would write an application skeleton into src/ — the core's
+# own namespace. The two dependency sets still cover both declared branches: `lowest` resolves
+# Symfony 7.4, `highest` the latest 8.x.
+
+jobs:
+    tests:
+        name: Tests (PHP ${{ matrix.php }}, ${{ matrix.dependencies }} deps)
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['8.5']
+                dependencies: ['highest', 'lowest']
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: intl, mbstring, pdo_sqlite
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+              with:
+                  dependency-versions: ${{ matrix.dependencies }}
+
+            - name: Run the test suite
+              run: vendor/bin/phpunit
+
+    static-analysis:
+        name: Static analysis
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.5'
+                  extensions: intl, mbstring, pdo_sqlite
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: PHPStan
+              run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+    coding-standards:
+        name: Coding standards
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.5'
+                  extensions: intl, mbstring
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: Validate composer.json
+              run: composer validate --strict
+
+            - name: PHP-CS-Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+            - name: Rector
+              run: vendor/bin/rector process --dry-run --no-progress-bar

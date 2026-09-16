@@ -1,0 +1,7 @@
+services:
+    # Services whose dependencies are all guaranteed go here, wired explicitly.
+    #
+    # The core commands are registered here once they exist, under the `devtools:` prefix. Anything
+    # conditional — a brick that needs an optional package, or a service the application may not
+    # have — is registered from the extension or removed by a compiler pass instead.
+    # Cf. src/Bridge/Symfony/DependencyInjection/DevToolsExtension.php.

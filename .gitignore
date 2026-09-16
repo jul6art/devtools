@@ -1,0 +1,18 @@
+/.idea/
+/.php-cs-fixer.cache
+/.phpunit.cache/
+/.phpunit.result.cache
+/composer.lock
+/vendor/
+
+# Claude Code: the shared settings are committed, the personal permissions are not.
+/.claude/settings.local.json
+
+# DevTools documents its own workflows (docs/specs.md §7): `.devtools/` is committed, except the
+# per-run reports, exactly as in any project it analyses.
+/.devtools/reports/
+
+# No Flex in this repository, so none of the application skeleton the other bundles ignore
+# (`/bin/`, `/config/`, `/src/`…) can appear — and two of those directories are real sources here.
+# If `symfony/flex` ever lands in require-dev, its recipes will write `src/Kernel.php` into the
+# core's own namespace: remove it rather than extend this file.

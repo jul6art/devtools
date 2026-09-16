@@ -1,0 +1,53 @@
+name: Feature request
+description: Something DevTools should do, or do differently
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Worth knowing before you write: DevTools exists because the same review
+        comments kept coming back on real projects, and what it writes into
+        `.devtools/` is committed by the projects that use it — its format is a
+        promise. The bar for adding to it is a problem someone actually
+        hit, not a case that might one day come up.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you working around today, on which project and which stack?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: |
+        Be concrete: a command, an option, a section of the page template, an
+        element of a tracking XML, an MCP tool. Show the command line you would
+        like to type and what it should write.
+    validations:
+      required: true
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Does it break projects already using DevTools?
+      description: |
+        A changed page template, a tracking XML the previous XSD rejects, or
+        workflow identifiers derived differently all break every existing
+        `.devtools/` folder on its next scan.
+      options:
+        - 'No: existing .devtools/ folders keep working untouched'
+        - 'Yes: existing projects must re-scan, migrate or change a command line'
+        - I am not sure
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Why it belongs in DevTools rather than in the project
+      description: |
+        This is usually the whole question. DevTools carries what works whatever
+        the stack; anything specific to one project belongs in its own
+        `.devtools/config.xml`, its knowledge file or its Claude Code configuration.
+    validations:
+      required: true

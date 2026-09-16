@@ -1,0 +1,90 @@
+name: Bug report
+description: Something DevTools does is wrong
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The most useful bug report against DevTools is a
+        **failing test** — or, for an inspection problem, the **smallest project**
+        that reproduces it: a handful of files is usually enough, and it becomes the
+        fixture the fix is built on.
+
+        **Do not report a security problem here** — use
+        [private vulnerability reporting](https://github.com/jul6art/devtools/security/advisories/new)
+        instead, as described in [SECURITY.md](https://github.com/jul6art/devtools/blob/master/.github/SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: DevTools version
+      description: The exact version installed — `vendor/bin/devtools --version`.
+      placeholder: DevTools v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - Standalone (vendor/bin/devtools or global install)
+        - Symfony bundle (bin/console devtools:*)
+    validations:
+      required: true
+  - type: input
+    id: stack
+    attributes:
+      label: Analysed project
+      description: Its stack and versions, as DevTools detected them (`.devtools/stack.xml`) or as you know them.
+      placeholder: Symfony 7.4, PHP 8.5 — or Angular 22, Node 24
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact command line, options included.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: |
+        The exception and its stack trace, the wrong page or tracking XML, the
+        workflow rewritten when nothing changed — or left untouched when something did.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: |
+        A failing test against this repository if you can write one; otherwise the
+        smallest project and the steps — commits included, for a freshness problem.
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Your configuration
+      description: The relevant part of `.devtools/config.xml`, and of `config/packages/devtools.yaml` in bundle mode.
+      render: xml
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I am on the latest release of the supported line, and the problem is still there
+          required: true
+        - label: I removed from this report any source code or secret I am not allowed to share
+          required: true
