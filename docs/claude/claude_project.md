@@ -54,6 +54,9 @@ le test qui passe au rouge si on les retire (vérifié par mutation le 2026-09-1
   version brouillon 0.2 « à valider »). ⚠️ Il nomme le paquet `provencale/devtools` et le
   générateur `provencale/symfony-skeleton-generator` : le dépôt réel est **`jul6art/devtools`**,
   c'est lui qui fait foi. Ne pas renommer quoi que ce soit d'après les specs sans décision explicite.
+- `docs/adr/` — les décisions et les lots du MVP ; **un lot ne démarre pas sans son ADR `Accepted`**
+  (ADR-0000). `docs/adr/README.md` donne l'ordre, le graphe de dépendances et les écarts assumés
+  avec les specs. ⚠️ Quand une ADR acceptée contredit `docs/specs.md`, **l'ADR fait foi**.
 - `README.md` — ce qu'un utilisateur fait de l'outil (anglais)
 - `.github/CONTRIBUTING.md` — les règles maison qu'une pull request se voit refuser (anglais)
 
@@ -96,7 +99,8 @@ le test qui passe au rouge si on les retire (vérifié par mutation le 2026-09-1
 
 Toute la logique vit dans le cœur, testable sans Symfony. **Rien hors de `src/Bridge/Symfony/` ne
 référence `Symfony\Component\HttpKernel`, `DependencyInjection` ou `Config`.** Le bridge enregistre
-les commandes du cœur et fournit l'adaptateur Symfony avec accès au kernel compilé — rien d'autre.
+les commandes du cœur — rien d'autre. L'adaptateur Symfony interroge la **console du projet analysé**
+dans les deux modes (ADR-0007, écart avec le § 3.2 des specs).
 
 ⚠️ **Le piège** : une commande écrite d'abord comme service du bundle marche dans `bin/console` et
 **n'existe pas** dans `bin/devtools`, sans erreur. Toute commande s'enregistre d'abord dans
@@ -125,8 +129,9 @@ n'entre qu'avec le module qui s'en sert**, pas par anticipation.
 ## ⚠️ TOP LINE N°3 — IDEMPOTENCE ET FRAÎCHEUR
 
 Deux exécutions consécutives sans changement ⇒ **zéro fichier modifié** hors `.devtools/reports/`.
-Un workflow n'est réécrit que si git **et** les hashes le justifient (specs §4.6.2). Un faux
-« inchangé » est plus grave qu'une réécriture inutile : la gate de la phase 1 se construit dessus.
+**Le hash tranche, git accélère** (ADR-0010) : git désigne les candidats, le `sha256` décide, et
+aucune décision « inchangé » ne se prend sur la foi de git seul. Un faux « inchangé » est plus grave
+qu'une réécriture inutile : la gate de la phase 1 se construit dessus.
 
 Cible de couverture : > 90 % sur le cœur, **100 % sur `Freshness/` et `Tracking/`**, mutation
 (Infection) sur ces deux dossiers.
@@ -151,9 +156,9 @@ Cela a payé dès le premier commit (voir `claude_learning.md`, 2026-09-16).
 
 Le dernier paragraphe de toute réponse qui a produit du travail répond, séparément :
 
-1. **Quel module / quelle phase** de `docs/specs.md` §9 ?
-2. **Terminé ?** Oui ou non — jamais « presque ».
-3. **Sinon, que reste-t-il ?** La liste, pas un résumé.
+1. **Dans quelle ADR sommes-nous ?** Son numéro et son titre.
+2. **Est-elle terminée ?** Oui ou non — jamais « presque » ; ses critères d'acceptation cochés un à un.
+3. **Sinon, que reste-t-il ?** La liste des critères non cochés, pas un résumé.
 4. **`composer qa` est-il vert, et le jeu `lowest` a-t-il été exercé ?**
 
 ---
