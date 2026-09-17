@@ -111,6 +111,15 @@ final class PhpReferenceExtractor
     }
 
     /**
+     * Drops every syntax tree kept for the scan. Called once the model is built: what follows — freshness,
+     * rendering, tracking — reads files, never trees, and a real repository needs that memory back.
+     */
+    public function release(): void
+    {
+        $this->parsed = [];
+    }
+
+    /**
      * How many times a file was actually parsed: a file shared by many workflows is parsed once.
      */
     public function parsedFiles(): int

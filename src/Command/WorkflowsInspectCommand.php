@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Command;
 
+use Jul6Art\DevTools\Console\MemoryLimit;
 use Jul6Art\DevTools\Inspection\Freshness\DecisionKind;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
 use Jul6Art\DevTools\Inspection\InspectionOptions;
@@ -48,6 +49,12 @@ final class WorkflowsInspectCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $raised = MemoryLimit::raiseTo();
+
+        if (null !== $raised) {
+            $io->comment(\sprintf('Memory limit raised to %s for this inspection.', $raised));
+        }
+
         $path = $input->getArgument('path');
         $path = \is_string($path) ? $path : ($this->defaultPath ?? (string) getcwd());
         $only = $input->getOption('only');

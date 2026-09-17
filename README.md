@@ -226,6 +226,10 @@ archive, a rewritten history — every file is hashed and the decisions are the 
 A second run on an unchanged project modifies no file: committing the documentation does not make it
 change again. On a 300-route project, that re-scan takes well under a second.
 
+**Memory.** An inspection raises PHP's limit to 512 MB when it is lower, and says so — documenting a few
+hundred workflows needs it, and through the bundle the booted kernel is already in memory. A limit that is
+higher, or unlimited, is left alone.
+
 `--force` naming a workflow that does not exist is a warning, not a silent no-op.
 
 ⚠️ **An entry point that disappeared is marked *orphelin*** and listed under *À vérifier*; its page is

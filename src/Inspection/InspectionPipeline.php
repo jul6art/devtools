@@ -386,6 +386,10 @@ final readonly class InspectionPipeline
                 $stackOf[$workflow->id->value] = $stack;
             }
             $uncovered = [...$uncovered, ...$stackUncovered];
+
+            // The model of this stack is built: what follows reads files, never syntax trees. On a real
+            // repository they are hundreds of megabytes, and the bundle runs inside a booted kernel.
+            $extractor->release();
         }
 
         if (0 === $inspected) {

@@ -138,6 +138,17 @@ final class PhpReferenceExtractorTest extends TestCase
         self::assertSame(3, $extractor->parsedFiles(), 'Twice without keeping, then once more, kept.');
     }
 
+    public function testReleasingDropsEveryTreeKeptForTheScan(): void
+    {
+        $extractor = new PhpReferenceExtractor();
+
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php');
+        $extractor->release();
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php');
+
+        self::assertSame(2, $extractor->parsedFiles(), 'The model is built: what follows reads files, not trees.');
+    }
+
     public function testTwigReferencesAreReadFromLiteralTags(): void
     {
         $file = $this->temporaryDirectory().'/page.html.twig';
