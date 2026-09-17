@@ -138,6 +138,27 @@ final class FreshnessTest extends TestCase
         self::assertContainsEquals(Reason::filesAdded(['src/Service/Discount.php']), $report->decision('route.order.new')->reasons);
     }
 
+    public function testATestAppearingOrDisappearingRewritesTheWorkflowItIsListedIn(): void
+    {
+        $repository = GitRepository::initialise($this->project);
+        $this->inspect();
+        $repository->commitAll('documentation');
+
+        rename($this->project.'/tests/Service/OrderPricingTest.php', $this->project.'/OrderPricingTest.php.bak');
+        $repository->commitAll('test removed');
+        $removed = $this->inspect();
+
+        self::assertSame(['command.app.import-catalog', 'route.order.new'], $this->rewritten($removed), 'Every workflow listing the test.');
+        self::assertEquals([Reason::filesRemoved(['tests/Service/OrderPricingTest.php'])], $removed->decision('route.order.new')?->reasons);
+
+        rename($this->project.'/OrderPricingTest.php.bak', $this->project.'/tests/Service/OrderPricingTest.php');
+        $repository->commitAll('test back');
+        $added = $this->inspect();
+
+        self::assertSame(['command.app.import-catalog', 'route.order.new'], $this->rewritten($added));
+        self::assertEquals([Reason::filesAdded(['tests/Service/OrderPricingTest.php'])], $added->decision('route.order.new')?->reasons);
+    }
+
     public function testARewrittenHistoryFallsBackOnHashes(): void
     {
         $repository = GitRepository::initialise($this->project);

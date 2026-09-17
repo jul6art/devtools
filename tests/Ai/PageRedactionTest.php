@@ -159,8 +159,17 @@ final class PageRedactionTest extends TestCase
         yield 'missing section' => [static fn (string $draft): string => str_replace("## Données\n\nÉcrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.\n\n", '', $draft), 'section "Données" is missing'];
         yield 'journey without mermaid' => [static fn (string $draft): string => (string) preg_replace('/```mermaid.*?```/s', 'Le contrôleur appelle le service.', $draft), '"Parcours" must hold exactly one Mermaid sequenceDiagram or flowchart (line 15)'];
         yield 'invented path' => [static fn (string $draft): string => str_replace('`src/Repository/OrderRepository.php`', '`src/Repository/InvoiceRepository.php`', $draft), '`src/Repository/InvoiceRepository.php` is not a file of the workflow (line 34)'];
+        yield 'data file' => [static fn (string $draft): string => str_replace('lit le prix des produits.', 'lit le prix des produits et `var/app.sqlite`.', $draft), '`var/app.sqlite` is not a file of the workflow (line 34)'];
         yield 'outdated' => [static fn (string $draft): string => str_replace('revision: 2026-09-16T15:00:00+02:00', 'revision: 2026-09-01T10:00:00+02:00', $draft), 'outdated'];
         yield 'two-line preconditions' => [static fn (string $draft): string => str_replace('Le catalogue de produits est chargé.', "Le catalogue est chargé.\nEt l'opérateur connecté.", $draft), '"Préconditions" must be one line (line 11)'];
+    }
+
+    public function testAUrlInBackticksIsNotAFilePath(): void
+    {
+        $this->inspect();
+        file_put_contents($this->project.'/.devtools/pending/page.route.order.new.draft.md', str_replace('lit le prix des produits.', 'lit le prix des produits, comme `/orders/new.php` le ferait.', (string) file_get_contents(self::DRAFT)));
+
+        self::assertSame(['route.order.new'], $this->apply()->accepted);
     }
 
     public function testAnOutdatedDraftIsRefusedWhenTheCodeChangedAfterTheBrief(): void

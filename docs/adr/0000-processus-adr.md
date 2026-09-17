@@ -63,7 +63,7 @@ commande, une option, un format de fichier généré, une dépendance ou une dé
 
 ## Critères d'acceptation
 
-- [ ] `docs/adr/README.md` liste toutes les ADR, leur étape et leur statut, et reste à jour à chaque
+- [x] `docs/adr/README.md` liste toutes les ADR, leur étape et leur statut, et reste à jour à chaque
       changement de statut
 
 ## Conséquences

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DevTools configuration for this project, read by `vendor/bin/devtools` and by
+    `bin/console devtools:*` alike. Every element is optional: the values below are the defaults.
+
+    This file is yours. DevTools reads it and never rewrites it.
+    Documentation: https://github.com/jul6art/devtools#readme
+-->
+<devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
+
+    <!-- Directories never scanned, added to .devtools, .git, build, dist, node_modules, var, vendor. -->
+    <paths/>
+
+    <!-- How many hops of dependencies a workflow follows from its entry point. -->
+    <graph depth="3"/>
+
+    <!-- Removed from route names when deriving identifiers: app_order_new → route.order.new. -->
+    <identifiers route-prefix="app_"/>
+
+    <!-- When two entry points derive the same identifier, give one of them another:
+         <alias entrypoint="order_new" id="route.legacy.order.new"/> -->
+    <aliases/>
+
+    <!-- Entry points documented as part of another workflow:
+         <group main="app_order_index"><satellite>app_order_export</satellite></group> -->
+    <groups/>
+
+    <!-- Workflow types of your own, next to routes, commands, async, events, ui, integrations, data:
+         <type name="webhooks" prefix="webhook"/> -->
+    <types/>
+
+    <!-- How to run this project's console. In a Docker-first project:
+         <symfony console="docker compose exec -T php bin/console" env="dev"/> -->
+    <symfony console="bin/console" env="dev"/>
+
+    <!-- The web directory of a PHP project without framework, each of its .php files being a route.
+         By default public/, web/ and www/: <php web-root="htdocs"/> -->
+    <php/>
+
+    <!-- Language of the pages Claude writes. -->
+    <language pages="fr"/>
+
+</devtools>

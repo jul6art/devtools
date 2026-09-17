@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.orders.new" type="routes" schema-version="1">
+  <title>/orders/new.php</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="orders.new" role="main">
+      <declared-in path="public/orders/new.php" role="controller"/>
+      <attribute name="path" value="/orders/new.php"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="lib/OrderRepository.php" role="repository" sha256="e462ced6e181f19a1907d73de87daa66801c36b71ccd24e7858af70ea7985cb6"/>
+    <file path="lib/db.php" role="other" sha256="0b4f4ae85545e94c08776522b2bb9e4598a1bd85076aab2b16b85e65f61268a0"/>
+    <file path="public/orders/new.php" role="controller" sha256="0fdec16350829ec0475955a963ecf35adef610fc12d2f504febbfa1c94643e7e"/>
+  </files>
+  <tests>
+    <file path="tests/OrderRepositoryTest.php" role="test"/>
+  </tests>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" reason="initial"/>
+  </history>
+</workflow>

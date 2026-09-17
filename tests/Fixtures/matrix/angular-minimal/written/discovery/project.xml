@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="angular-18">
+  <workflows>
+    <workflow id="integration.orderservice" type="integrations" confidence="medium" source="claude">
+      <title>OrderService → /api/orders</title>
+      <main kind="integration" name="OrderService">
+        <declared-in path="src/app/orders/order.service.ts" role="service"/>
+        <attribute name="calls" value="GET /api/orders, GET /api/orders/{id}"/>
+      </main>
+      <files>
+        <file path="src/app/orders/order.service.ts" role="service"/>
+      </files>
+    </workflow>
+    <workflow id="route.orders" type="routes" confidence="medium" source="claude">
+      <title>/orders — liste des commandes</title>
+      <main kind="route" name="orders">
+        <declared-in path="src/app/app.routes.ts" role="config"/>
+        <attribute name="path" value="/orders"/>
+      </main>
+      <files>
+        <file path="src/app/app.routes.ts" role="config"/>
+        <file path="src/app/orders/order-list.component.ts" role="component"/>
+        <file path="src/app/orders/order.service.ts" role="service"/>
+      </files>
+      <navigation>
+        <edge target="orders/:id" label="link"/>
+      </navigation>
+    </workflow>
+    <workflow id="route.orders-id" type="routes" confidence="medium" source="claude">
+      <title>/orders/:id — fiche d'une commande</title>
+      <main kind="route" name="orders/:id">
+        <declared-in path="src/app/app.routes.ts" role="config"/>
+        <attribute name="path" value="/orders/:id"/>
+      </main>
+      <files>
+        <file path="src/app/app.routes.ts" role="config"/>
+        <file path="src/app/orders/order-detail.component.ts" role="component"/>
+        <file path="src/app/orders/order.service.ts" role="service"/>
+      </files>
+    </workflow>
+  </workflows>
+</inspection>

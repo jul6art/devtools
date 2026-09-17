@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="1" scanned-at="2026-09-16T12:00:00+00:00">
+  <source vcs="git" commit="0ad6cf224a6322e844dd124db9a398b1b2157d34" branch="main" dirty="true"/>
+  <workflow id="route.get-health" type="routes" title="GET /health" status="fresh" confidence="medium" mode="ai" updated="2026-09-16T12:00:00+00:00" page="workflows/routes/get-health.md"/>
+  <workflow id="route.get-orders" type="routes" title="GET /orders" status="fresh" confidence="medium" mode="ai" updated="2026-09-16T12:00:00+00:00" page="workflows/routes/get-orders.md"/>
+  <workflow id="route.post-orders" type="routes" title="POST /orders" status="fresh" confidence="medium" mode="ai" updated="2026-09-16T12:00:00+00:00" page="workflows/routes/post-orders.md"/>
+</index>

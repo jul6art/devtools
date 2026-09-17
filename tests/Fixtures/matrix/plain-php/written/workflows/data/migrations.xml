@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="data.migrations" type="data" schema-version="1">
+  <title>Migrations</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="migration" name="migrations" role="main">
+      <declared-in path="migrations/001_create_orders.sql" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="migrations/001_create_orders.sql" role="other" sha256="082d64a137b6dd5ddff3d4e24582b449b6f4e77128724dfa8fe2601048c1c77a"/>
+  </files>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" reason="rédaction initiale"/>
+  </history>
+</workflow>

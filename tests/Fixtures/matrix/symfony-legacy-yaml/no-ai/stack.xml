@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stacks xmlns="https://github.com/jul6art/devtools/schema/stack/1" schema-version="1">
+  <project name="acme/symfony-legacy-yaml"/>
+  <stack root=".">
+    <language>php</language>
+    <framework version="7.4">symfony</framework>
+    <package-manager>composer</package-manager>
+    <adapter>symfony</adapter>
+    <knowledge>symfony-7</knowledge>
+    <sources>
+      <dir>config</dir>
+      <dir>migrations</dir>
+      <dir>src</dir>
+      <dir>templates</dir>
+    </sources>
+    <tests>
+      <dir>tests</dir>
+    </tests>
+    <excludes>
+      <dir>.devtools</dir>
+      <dir>.git</dir>
+      <dir>build</dir>
+      <dir>dist</dir>
+      <dir>node_modules</dir>
+      <dir>var</dir>
+      <dir>vendor</dir>
+    </excludes>
+  </stack>
+</stacks>

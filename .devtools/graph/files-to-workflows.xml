@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="src/Ai/ApplyResult.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Ai/DraftApplier.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Ai/PageBrief.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Ai/PageDraft.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Ai/PageDraftValidator.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Ai/XmlPageBriefStore.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Clock/Clock.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Clock/SystemClock.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Command/ClaudeInstallCommand.php">
+    <workflow ref="command.claude.install" relation="file"/>
+  </file>
+  <file path="src/Command/InitCommand.php">
+    <workflow ref="command.init" relation="file"/>
+  </file>
+  <file path="src/Command/StackDetectCommand.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+  </file>
+  <file path="src/Command/WorkflowsApplyCommand.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Command/WorkflowsInspectCommand.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Config/Config.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Config/ConfigReaderInterface.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Config/InvalidConfig.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Config/XmlConfigReader.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/AdapterInterface.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/AdapterResult.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Claude/Discovery.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Claude/XmlDiscoveryBriefStore.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/GenericPhp/GenericPhpAdapter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/AdapterResolver.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/DecisionKind.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/FileHasher.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/FreshnessDecision.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/FreshnessResolver.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/GitClient.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/GitState.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/Reason.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Freshness/ReasonKind.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/BuildResult.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/ClassLocator.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/CoverageCalculator.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/DependencyResolver.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/EntryPointCandidate.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/PhpReferenceExtractor.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/PhpReferences.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/TestLocator.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/TwigReferenceExtractor.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/WorkflowBuilder.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/InspectionOptions.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/InspectionPipeline.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/InspectionReport.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Confidence.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Edge.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/EntryPoint.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/FileRef.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/FileRole.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/InspectionResult.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/InvalidModel.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/NonEmpty.php">
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/PackageRef.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Serialization/EntryPointXml.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Serialization/ModelXmlSerializer.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/SortedList.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/StateMachine.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Transition.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Workflow.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowId.php">
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowIdAssigner.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowIdCollision.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowIdDeriver.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowSource.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowType.php">
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/WorkflowTypeRegistry.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Project/PathOutsideProject.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Project/ProjectLock.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Project/ProjectRoot.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/GraphRenderer.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/Labels.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/MarkdownWriter.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/MenuRenderer.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/MermaidWriter.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/PageParser.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/PageRenderer.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/PageSection.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/ParsedPage.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Rendering/RenderingContext.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Resources.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Detector/ComposerDetector.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Detector/LanguageOnlyDetector.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Detector/NodeDetector.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Detector/ReadsManifests.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+  </file>
+  <file path="src/Stack/Detector/StackDetectorInterface.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/KnowledgeBrief.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/KnowledgeCanvas.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/KnowledgeProvider.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/StackDetectionFailed.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/StackDetector.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/StackDocument.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/StackProfile.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/XmlStackStore.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/AtomicFileWriter.php">
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/DevToolsDirectory.php">
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/FileLink.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/FileRelation.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/FilesToWorkflows.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/FilesToWorkflowsReaderInterface.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/FilesToWorkflowsWriterInterface.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/Generation.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/GenerationMode.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/Index.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/IndexEntry.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/IndexReaderInterface.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/IndexWriterInterface.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/Initializer.php">
+    <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/ReadsDocumentFiles.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/Revision.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/TrackedFile.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/TrackingDocument.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/TrackingReaderInterface.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/TrackingStatus.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/TrackingWriterInterface.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/VcsState.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/VcsXml.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/XmlFilesToWorkflowsStore.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/XmlIndexStore.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Tracking/XmlTrackingStore.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Version.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Xml/DomBuilder.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Xml/InvalidXml.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Xml/SafeXmlLoader.php">
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="tests/Ai/ClaudeInstallTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Ai/PageRedactionTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Command/StackDetectCommandTest.php">
+    <workflow ref="command.stack.detect" relation="test"/>
+  </file>
+  <file path="tests/Command/WorkflowsInspectCommandTest.php">
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Config/XmlConfigReaderTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Freshness/FreshnessTest.php">
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Graph/GraphFixture.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Pipeline/FakeAdapter.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Pipeline/InspectionPipelineTest.php">
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Performance/RescanPerformanceTest.php">
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Project/ProjectRootTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Rendering/MenuRendererTest.php">
+    <workflow ref="command.stack.detect" relation="test"/>
+  </file>
+  <file path="tests/Stack/Knowledge/KnowledgeTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Stack/StackDetectorTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Tracking/AtomicFileWriterTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+  </file>
+  <file path="tests/Tracking/InitializerTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+</files-to-workflows>

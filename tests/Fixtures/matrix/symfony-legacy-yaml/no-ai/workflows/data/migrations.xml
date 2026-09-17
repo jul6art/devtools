@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="data.migrations" type="data" schema-version="1">
+  <title>Migrations</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="migration" name="migrations" role="main">
+      <declared-in path="migrations/Version20260901000000.php" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="migrations/Version20260901000000.php" role="other" sha256="69faed6bc54b58adbc289ca2b98fcb48c62fdc941e655e4c154cad04ae91415c"/>
+  </files>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" reason="initial"/>
+  </history>
+</workflow>

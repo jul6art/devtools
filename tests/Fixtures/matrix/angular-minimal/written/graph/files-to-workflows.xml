@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="src/app/app.routes.ts">
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders-id" relation="file"/>
+  </file>
+  <file path="src/app/orders/order-detail.component.ts">
+    <workflow ref="route.orders-id" relation="file"/>
+  </file>
+  <file path="src/app/orders/order-list.component.ts">
+    <workflow ref="route.orders" relation="file"/>
+  </file>
+  <file path="src/app/orders/order.service.ts">
+    <workflow ref="integration.orderservice" relation="file"/>
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders-id" relation="file"/>
+  </file>
+</files-to-workflows>

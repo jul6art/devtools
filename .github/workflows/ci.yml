@@ -61,6 +61,27 @@ jobs:
             - name: PHPStan
               run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
 
+    coverage:
+        name: Coverage floors
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.5'
+                  extensions: intl, mbstring
+                  coverage: pcov
+                  tools: composer:v2
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            # > 90 % of src/ outside the bridge, 100 % of Inspection/Freshness/ and Tracking/ (ADR-0015).
+            - name: Coverage
+              run: composer coverage
+
     mutation:
         name: Mutation (Freshness, Tracking)
         runs-on: ubuntu-latest

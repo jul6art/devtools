@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The stacks of the analysed project: .devtools/stack.xml (specs § 4.3 step 1, ADR-0005).
+
+    Rewritten by every detection, except the elements a human marked locked="true".
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/stack/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/stack/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="stacks">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="project">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="locked" type="xs:boolean"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="stack" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="language" type="t:lockableText"/>
+                            <xs:element name="framework" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="t:slug">
+                                            <xs:attribute name="version">
+                                                <xs:simpleType>
+                                                    <xs:restriction base="xs:string">
+                                                        <xs:pattern value="\d+\.\d+"/>
+                                                    </xs:restriction>
+                                                </xs:simpleType>
+                                            </xs:attribute>
+                                            <xs:attribute name="locked" type="xs:boolean"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="package-manager" type="t:lockableText"/>
+                            <xs:element name="adapter" type="t:lockableText"/>
+                            <xs:element name="knowledge" type="t:lockableText" minOccurs="0"/>
+                            <xs:element name="sources" type="t:directories"/>
+                            <xs:element name="tests" type="t:directories"/>
+                            <xs:element name="excludes" type="t:directories"/>
+                        </xs:sequence>
+                        <xs:attribute name="root" type="t:path" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+        <xs:unique name="one-stack-per-root">
+            <xs:selector xpath="t:stack"/>
+            <xs:field xpath="@root"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="lockableText">
+        <xs:simpleContent>
+            <xs:extension base="t:slug">
+                <xs:attribute name="locked" type="xs:boolean"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="directories">
+        <xs:sequence>
+            <xs:element name="dir" type="t:path" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="locked" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Relative to the project root: neither "/..." nor "C:...". -->
+    <xs:simpleType name="path">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="slug">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9\-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

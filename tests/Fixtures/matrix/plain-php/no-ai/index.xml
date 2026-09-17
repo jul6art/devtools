@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="1" scanned-at="2026-09-16T12:00:00+00:00">
+  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <workflow id="command.cleanup" type="commands" title="cleanup" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="workflows/commands/cleanup.md"/>
+  <workflow id="command.import-orders" type="commands" title="import-orders" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="workflows/commands/import-orders.md"/>
+  <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="workflows/data/migrations.md"/>
+  <workflow id="route.index" type="routes" title="/index.php" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="workflows/routes/index.md"/>
+  <workflow id="route.orders.new" type="routes" title="/orders/new.php" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="workflows/routes/orders.new.md"/>
+</index>

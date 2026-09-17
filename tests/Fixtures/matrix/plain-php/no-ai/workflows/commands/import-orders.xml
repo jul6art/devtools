@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.import-orders" type="commands" schema-version="1">
+  <title>import-orders</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="command" name="import-orders" role="main">
+      <declared-in path="bin/import.php" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="bin/import.php" role="other" sha256="489f1bb14c7135f7629bc301fd4b4cf46f70cfd58895f10855ac399667476c79"/>
+    <file path="composer.json" role="config" sha256="2716ad34085c6cc1af77e3000d0b534a7ac734d861c951c60e4e81fd7e8d023d"/>
+    <file path="lib/OrderRepository.php" role="repository" sha256="e462ced6e181f19a1907d73de87daa66801c36b71ccd24e7858af70ea7985cb6"/>
+    <file path="lib/db.php" role="other" sha256="0b4f4ae85545e94c08776522b2bb9e4598a1bd85076aab2b16b85e65f61268a0"/>
+  </files>
+  <tests>
+    <file path="tests/OrderRepositoryTest.php" role="test"/>
+  </tests>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" reason="initial"/>
+  </history>
+</workflow>

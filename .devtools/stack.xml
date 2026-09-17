@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stacks xmlns="https://github.com/jul6art/devtools/schema/stack/1" schema-version="1">
+  <project name="jul6art/devtools"/>
+  <stack root=".">
+    <language>php</language>
+    <package-manager>composer</package-manager>
+    <adapter>generic-php</adapter>
+    <knowledge>php-8</knowledge>
+    <sources>
+      <dir>bin</dir>
+      <dir>src</dir>
+    </sources>
+    <tests>
+      <dir>tests</dir>
+    </tests>
+    <excludes>
+      <dir>.devtools</dir>
+      <dir>.git</dir>
+      <dir>build</dir>
+      <dir>dist</dir>
+      <dir>node_modules</dir>
+      <dir>var</dir>
+      <dir>vendor</dir>
+    </excludes>
+  </stack>
+</stacks>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="bin/cleanup">
+    <workflow ref="command.cleanup" relation="file"/>
+  </file>
+  <file path="bin/import.php">
+    <workflow ref="command.import-orders" relation="file"/>
+  </file>
+  <file path="composer.json">
+    <workflow ref="command.cleanup" relation="file"/>
+    <workflow ref="command.import-orders" relation="file"/>
+  </file>
+  <file path="lib/OrderRepository.php">
+    <workflow ref="command.import-orders" relation="file"/>
+    <workflow ref="route.index" relation="file"/>
+    <workflow ref="route.orders.new" relation="file"/>
+  </file>
+  <file path="lib/db.php">
+    <workflow ref="command.cleanup" relation="file"/>
+    <workflow ref="command.import-orders" relation="file"/>
+    <workflow ref="route.index" relation="file"/>
+    <workflow ref="route.orders.new" relation="file"/>
+  </file>
+  <file path="lib/views/header.php">
+    <workflow ref="route.index" relation="file"/>
+  </file>
+  <file path="migrations/001_create_orders.sql">
+    <workflow ref="data.migrations" relation="file"/>
+  </file>
+  <file path="public/index.php">
+    <workflow ref="route.index" relation="file"/>
+  </file>
+  <file path="public/orders/new.php">
+    <workflow ref="route.orders.new" relation="file"/>
+  </file>
+  <file path="tests/OrderRepositoryTest.php">
+    <workflow ref="command.import-orders" relation="test"/>
+    <workflow ref="route.index" relation="test"/>
+    <workflow ref="route.orders.new" relation="test"/>
+  </file>
+</files-to-workflows>

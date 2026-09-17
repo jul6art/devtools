@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.index" type="routes" schema-version="1">
+  <title>GET /orders</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <source vcs="git" commit="b0cc0c41e9f9e54c2efa42029b0db5f9a4bfd99d" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="app_order_index" role="main">
+      <declared-in path="src/Controller/OrderController.php" role="controller"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/orders"/>
+      <attribute name="security" value="ROLE_USER"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
+    <file path="config/routes.yaml" role="config" sha256="7a076fce496afa2297a65dbd49c86770a1d0c81c455ea6e77a30452e632e627a"/>
+    <file path="config/routes/ux_live_component.yaml" role="config" sha256="221f0ec3918097d5e57b9585400f7ba3d3563ef64c77cbbddfcdcb61de51e083"/>
+    <file path="config/services.yaml" role="config" sha256="ffb7e71a58d604bb7b7f23356e843fdbfa48beac4a32edbfd16a856ff0856cfb"/>
+    <file path="src/Controller/OrderController.php" role="controller" sha256="1eda5298a39d8498cd30801a81b3dfb5f856540888bf713434cc85417c27b394"/>
+    <file path="src/Entity/Order.php" role="entity" sha256="f2e57ab0209aa9a2ec218a71ec55a2f753fa0fc7d2236fe2b65d8119f56f94dd"/>
+    <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
+    <file path="src/ValueObject/Money.php" role="other" sha256="1379a114fadb49a067c3023379b8ec9b8d68080e574f006c98278df245076b15"/>
+    <file path="templates/base.html.twig" role="template" sha256="bbf1ab566005c20e8671ddfbb568ac563316a33694bcbe45b32f105134343944"/>
+    <file path="templates/order/index.html.twig" role="template" sha256="b00840c503ede3d999bce078fb30022099e1f1ae4234163a62f6113d3fcdd638"/>
+  </files>
+  <tests>
+    <file path="tests/Controller/OrderControllerTest.php" role="test"/>
+  </tests>
+  <packages>
+    <package name="symfony/framework-bundle" version="8.1.7"/>
+    <package name="symfony/http-foundation" version="8.1.7"/>
+    <package name="symfony/routing" version="8.1.6"/>
+  </packages>
+  <depends-on>
+    <workflow ref="event.locale-listener"/>
+  </depends-on>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b0cc0c41e9f9e54c2efa42029b0db5f9a4bfd99d" reason="rédaction initiale"/>
+  </history>
+</workflow>

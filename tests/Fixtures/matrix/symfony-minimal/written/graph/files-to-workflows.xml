@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="config/packages/framework.yaml">
+    <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="config/packages/security.yaml">
+    <workflow ref="route.health" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="config/routes.yaml">
+    <workflow ref="route.health" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="config/routes/ux_live_component.yaml">
+    <workflow ref="route.health" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="config/services.yaml">
+    <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="command.app.import-catalog" relation="file"/>
+    <workflow ref="event.locale-listener" relation="file"/>
+    <workflow ref="route.health" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="migrations/Version20260901000000.php">
+    <workflow ref="data.migrations" relation="file"/>
+  </file>
+  <file path="src/Command/ImportCatalogCommand.php">
+    <workflow ref="command.app.import-catalog" relation="file"/>
+  </file>
+  <file path="src/Controller/HealthController.php">
+    <workflow ref="route.health" relation="file"/>
+  </file>
+  <file path="src/Controller/OrderController.php">
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="src/Entity/Order.php">
+    <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="src/Entity/Product.php">
+    <workflow ref="command.app.import-catalog" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="src/EventListener/LocaleListener.php">
+    <workflow ref="event.locale-listener" relation="file"/>
+  </file>
+  <file path="src/Form/OrderType.php">
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="src/Message/OrderCreated.php">
+    <workflow ref="async.order-created" relation="file"/>
+  </file>
+  <file path="src/MessageHandler/OrderCreatedHandler.php">
+    <workflow ref="async.order-created" relation="file"/>
+  </file>
+  <file path="src/Repository/OrderRepository.php">
+    <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="src/Repository/ProductRepository.php">
+    <workflow ref="command.app.import-catalog" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="src/Service/OrderPricing.php">
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="src/Twig/Components/CartSummary.php">
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="src/ValueObject/Money.php">
+    <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="command.app.import-catalog" relation="file"/>
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+    <workflow ref="route.order.validate" relation="file"/>
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="templates/base.html.twig">
+    <workflow ref="route.order.index" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
+    <workflow ref="route.order.show" relation="file"/>
+  </file>
+  <file path="templates/components/CartSummary.html.twig">
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="templates/order/_form.html.twig">
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="templates/order/index.html.twig">
+    <workflow ref="route.order.index" relation="file"/>
+  </file>
+  <file path="templates/order/new.html.twig">
+    <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="templates/order/show.html.twig">
+    <workflow ref="route.order.show" relation="file"/>
+  </file>
+  <file path="tests/Controller/OrderControllerTest.php">
+    <workflow ref="route.order.index" relation="test"/>
+  </file>
+  <file path="tests/Service/OrderPricingTest.php">
+    <workflow ref="command.app.import-catalog" relation="test"/>
+    <workflow ref="route.order.new" relation="test"/>
+  </file>
+</files-to-workflows>

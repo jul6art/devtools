@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="api/src/Controller/ItemController.php">
+    <workflow ref="route.api.item.list" relation="file"/>
+  </file>
+  <file path="front/src/app/app.routes.ts">
+    <workflow ref="route.items" relation="file"/>
+  </file>
+  <file path="front/src/app/item-list.component.ts">
+    <workflow ref="route.items" relation="file"/>
+  </file>
+</files-to-workflows>

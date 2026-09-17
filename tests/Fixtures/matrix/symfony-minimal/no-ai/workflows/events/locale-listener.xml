@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="event.locale-listener" type="events" schema-version="1">
+  <title>kernel.request → LocaleListener</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="b0cc0c41e9f9e54c2efa42029b0db5f9a4bfd99d" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="listener" name="App\EventListener\LocaleListener" role="main">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+      <attribute name="events" value="kernel.request"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="config/services.yaml" role="config" sha256="ffb7e71a58d604bb7b7f23356e843fdbfa48beac4a32edbfd16a856ff0856cfb"/>
+    <file path="src/EventListener/LocaleListener.php" role="listener" sha256="bffde46418e616f1ad9be3046a31fca961f1a5c3e111d49a0e7a19cf7f5c78d8"/>
+  </files>
+  <packages>
+    <package name="symfony/event-dispatcher" version="8.1.5"/>
+    <package name="symfony/http-kernel" version="8.1.7"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b0cc0c41e9f9e54c2efa42029b0db5f9a4bfd99d" reason="initial"/>
+  </history>
+</workflow>

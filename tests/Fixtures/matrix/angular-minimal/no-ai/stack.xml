@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stacks xmlns="https://github.com/jul6art/devtools/schema/stack/1" schema-version="1">
+  <project name="acme-back-office"/>
+  <stack root=".">
+    <language>typescript</language>
+    <framework version="18.2">angular</framework>
+    <package-manager>yarn</package-manager>
+    <adapter>claude</adapter>
+    <knowledge>angular-18</knowledge>
+    <sources>
+      <dir>src/app</dir>
+    </sources>
+    <tests/>
+    <excludes>
+      <dir>.devtools</dir>
+      <dir>.git</dir>
+      <dir>build</dir>
+      <dir>dist</dir>
+      <dir>node_modules</dir>
+      <dir>var</dir>
+      <dir>vendor</dir>
+    </excludes>
+  </stack>
+</stacks>

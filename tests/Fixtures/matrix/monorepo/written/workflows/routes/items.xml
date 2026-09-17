@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.items" type="routes" schema-version="1">
+  <title>/items</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <source vcs="git" commit="a8278dff041122adbdb2c48628f8051dbe93067e" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="items" role="main">
+      <declared-in path="front/src/app/app.routes.ts" role="config"/>
+      <attribute name="path" value="/items"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="front/src/app/app.routes.ts" role="config" sha256="785c8170ffc6e60a01d655d0c69d2a25d53979f1330d571fb9e0b5bbbae7fb78"/>
+    <file path="front/src/app/item-list.component.ts" role="component" sha256="fae4e4895e460480650dc91cc690687b4e8f15254b7fb643282f6693aed049bc"/>
+  </files>
+  <confidence>medium</confidence>
+  <producer>claude</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8278dff041122adbdb2c48628f8051dbe93067e" reason="rédaction initiale"/>
+  </history>
+</workflow>

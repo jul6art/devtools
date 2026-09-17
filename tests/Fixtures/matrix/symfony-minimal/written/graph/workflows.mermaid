@@ -1,0 +1,28 @@
+flowchart LR
+  subgraph routes["Routes"]
+    w5["route.health"]
+    w6["route.order.index"]
+    w7["route.order.new"]
+    w8["route.order.show"]
+    w9["route.order.validate"]
+  end
+  subgraph commands["Commandes"]
+    w2["command.app.import-catalog"]
+  end
+  subgraph async["Asynchrone"]
+    w1["async.order-created"]
+  end
+  subgraph events["Événements"]
+    w4["event.locale-listener"]
+  end
+  subgraph ui["Interface"]
+    w10["ui.cart-summary"]
+  end
+  subgraph data["Données"]
+    w3["data.migrations"]
+  end
+  w5 --> w4
+  w6 --> w4
+  w7 --> w4
+  w8 --> w4
+  w9 --> w4

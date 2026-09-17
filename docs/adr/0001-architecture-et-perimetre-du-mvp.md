@@ -103,9 +103,9 @@ Intégration à `symfony-skeleton-generator`.
 
 ## Critères d'acceptation
 
-- [ ] Chaque ADR du MVP (0002 à 0015) existe et référence ses dépendances
-- [ ] Les dossiers de `src/` suivent le tableau « pipeline et découpage » ; aucun n'est créé vide
-- [ ] Les conventions de test (fixtures, snapshots, horloge, git temporaire) sont en place dès le
+- [x] Chaque ADR du MVP (0002 à 0015) existe et référence ses dépendances
+- [x] Les dossiers de `src/` suivent le tableau « pipeline et découpage » ; aucun n'est créé vide
+- [x] Les conventions de test (fixtures, snapshots, horloge, git temporaire) sont en place dès le
       premier lot qui en a besoin, et décrites dans `.github/CONTRIBUTING.md`
 
 ## Conséquences

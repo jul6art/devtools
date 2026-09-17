@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="event.locale-listener" type="events" schema-version="1">
+  <title>kernel.request → LocaleListener</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <source vcs="git" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="listener" name="App\EventListener\LocaleListener" role="main">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+      <attribute name="events" value="kernel.request"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/EventListener/LocaleListener.php" role="listener" sha256="2d1ec605f71501c60c5ca8f592208ecce43406dad562dbc80d769efa54dda4dc"/>
+  </files>
+  <packages>
+    <package name="symfony/http-kernel" version="7.4.19"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" reason="rédaction initiale"/>
+  </history>
+</workflow>

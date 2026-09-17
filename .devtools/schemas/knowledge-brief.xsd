@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to write the knowledge of a stack: .devtools/pending/knowledge.<key>.brief.xml
+    (ADR-0002, ADR-0012).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/knowledge-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/knowledge-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="knowledge-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="stack">
+                    <xs:complexType>
+                        <xs:attribute name="language" type="t:slug" use="required"/>
+                        <xs:attribute name="framework" type="t:slug"/>
+                        <xs:attribute name="version">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d+\.\d+"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="canvas">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft">
+                    <xs:complexType>
+                        <xs:attribute name="path" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="[^/\\]([^:].*)?"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="key" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[a-z][a-z0-9\-]*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="slug">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9\-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

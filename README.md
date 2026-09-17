@@ -114,13 +114,16 @@ vendor/bin/devtools init
 ├── schemas/       a copy of every XSD, so .devtools/ can be validated without DevTools
 ├── workflows/     one page and one tracking file per workflow
 ├── knowledge/     how the project's stack works
+├── discovery/     what Claude found in a stack without a native adapter
 ├── graph/         the file → workflows index and the overview diagram
 ├── pending/       work area for Claude — ignored by git
 └── reports/       one report per run — ignored by git
 ```
 
-Commit `.devtools/`. `init` adds the two work areas to the project's `.gitignore` (without duplicating
-a line that already covers them) and changes nothing when run again.
+Commit `.devtools/` — `config.xml`, `stack.xml`, `workflows.md`, `index.xml`, `workflows/`, `knowledge/`,
+`discovery/`, `graph/`, `schemas/` — and `.claude/skills/` once `claude:install` has run: the documentation
+is the team's, reviewed in pull requests like code. `init` adds the two work areas to the project's
+`.gitignore` (without duplicating a line that already covers them) and changes nothing when run again.
 
 ⚠️ **Every XML file in `.devtools/` is validated against its schema, on write and on read.** A file
 edited by hand into an invalid state stops the next run with the file and the line named, rather than
@@ -205,11 +208,13 @@ change again. On a 300-route project, that re-scan takes well under a second.
 only deleted with `--prune`. A workflow whose tracking file says `<status>manual</status>` is never
 rewritten: when its code changes, the run warns instead.
 
-⚠️ **Only the files of a workflow are watched.** A new test, or a template's navigation link, shows up on
-the page at the next rewrite caused by a file of the workflow — or with `--force`.
+⚠️ **Only the files and the tests of a workflow are watched.** A test appearing or disappearing rewrites the
+workflows that list it; a navigation link added to a template shows up at the next rewrite caused by a file
+of the workflow — or with `--force`.
 
-⚠️ **Only stacks with an adapter are documented** in this version — Symfony. A stack left to Claude is
-listed as a warning until [ADR-0013](docs/adr/0013-voie-claude-pour-les-stacks-sans-adaptateur.md).
+⚠️ **Without AI, a stack left to Claude is not documented**: `--no-ai` never asks for a discovery, so an
+Express or Angular project gets its pages only once a discovery has been applied (see *Projects without a
+native adapter*).
 
 ### `.devtools/config.xml`
 
@@ -409,17 +414,20 @@ Structure
 bin/devtools                 standalone entry point
 src/
 ├── Console/                 the console application every command is registered in
-├── Inspection/Model/        the intermediate model every adapter produces, and its XML form
-├── Xml/                     hardened loading and schema validation of every document read
-├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
+├── Command/                 init, stack:detect, workflows:inspect, workflows:apply, claude:install
+├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
-├── Project/                 the project root, last guard against a path leaving it
-├── Stack/                   stack detection from manifests, .devtools/stack.xml
-├── Inspection/Graph/        files a PHP entry point traverses, grouping, tests, coverage
-├── Inspection/Adapter/      entry points of a stack: Symfony through its console
+├── Xml/                     hardened loading and schema validation of every document read
+├── Stack/                   stack detection from manifests, .devtools/stack.xml, knowledge of a stack
+├── Inspection/
+│   ├── Model/               the intermediate model every adapter produces, and its XML form
+│   ├── Adapter/             entry points of a stack: Symfony, PHP without a framework, the Claude path
+│   ├── Graph/               files a PHP entry point traverses, grouping, tests, coverage
+│   ├── Freshness/           what changed since the documentation was written: git, then hashes
+│   └── InspectionPipeline   the whole run of workflows:inspect
+├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
-├── Command/                 the console commands
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else
 resources/schemas/           the XSD of every format DevTools reads or writes
 resources/templates/         the files init writes
@@ -427,15 +435,15 @@ resources/prompts/           the versioned prompts Claude follows
 resources/knowledge/         the embedded knowledge of each stack, and its canvas
 resources/claude/            the Claude Code skill claude:install copies
 tests/
-├── Console/                 the application, and bin/devtools in a separate process
-├── Bridge/Symfony/          configuration tree, container boot
-└── Fixtures/TestKernel.php  a real kernel, for the bridge
+├── Fixtures/projects/       six real projects: Symfony 8.1, Symfony 7.4 with YAML, PHP, Express, Angular, a monorepo
+├── Fixtures/drafts/         what Claude wrote for them, replayed by the tests
+├── Fixtures/matrix/         the .devtools/ each of them must produce, without AI and written
+├── EndToEnd/                the binary in a separate process: the matrix, both installations, the bundle
+└── Performance/             the 300-route re-scan
+.devtools/                   this repository documented by DevTools itself
 docs/specs.md                the functional and technical specification
+docs/adr/                    the decisions, lot by lot
 ```
-
-The rest of the core — `Stack/`, `Inspection/Adapter/`, `Inspection/Graph/`, `Inspection/Freshness/`,
-`Rendering/`, and `resources/` for embedded knowledge and prompts — is created by the lot that needs
-it, in the order of [`docs/adr/`](docs/adr/README.md), not ahead of it.
 
 **Nothing outside `src/Bridge/Symfony/` may depend on `symfony/http-kernel`.** That is what keeps the
 standalone mode real rather than nominal.
@@ -445,7 +453,26 @@ Quality assurance
 
 ```shell
 composer qa            # cs-check + rector-check + phpstan (level max) + phpunit
+composer coverage      # needs pcov or Xdebug: > 90 % of src/, 100 % of Freshness/ and Tracking/
+composer infection     # mutation testing of Freshness/ and Tracking/, needs a coverage driver too
 ```
+
+The suite includes the end-to-end group: every fixture project goes through the binary in a temporary git
+repository — documented without AI, re-inspected without a single change, written from the recorded drafts
+of `tests/Fixtures/drafts/`, then changed and re-inspected with exactly the expected decisions. When an output
+changes on purpose, re-record the snapshots with `DEVTOOLS_UPDATE_SNAPSHOTS=1 vendor/bin/phpunit` and review
+the diff before committing it.
+
+### Measured
+
+What specs § 8 asks of the MVP, as the suite measures it:
+
+| Metric | Target | Measured |
+| --- | --- | --- |
+| Workflows detected / real entry points | 100 % | 100 % on the six fixture projects (expected lists of the matrix) |
+| Re-scan of a 300-route project without change, without AI | < 10 s | 0.7 s (`tests/Performance/`) |
+| Useless rewrites | 0 % | 0 file modified by a second run, on the six projects and on this repository |
+| Pages conforming to the template | 100 % | 100 % — every page of every fixture, written or not |
 
 Run `composer qa`, not the single tool you have in mind: the CI's "Coding standards" job runs Rector
 too, and its `lowest deps` job installs the minimum of every constraint — which is where this ecosystem

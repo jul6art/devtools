@@ -1,0 +1,12 @@
+flowchart LR
+  subgraph routes["Routes"]
+    w4["route.index"]
+    w5["route.orders.new"]
+  end
+  subgraph commands["Commandes"]
+    w1["command.cleanup"]
+    w2["command.import-orders"]
+  end
+  subgraph data["Données"]
+    w3["data.migrations"]
+  end

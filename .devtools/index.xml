@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="1" scanned-at="2026-09-17T02:25:05+00:00">
+  <source vcs="git" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" branch="master" dirty="true"/>
+  <workflow id="command.claude.install" type="commands" title="claude:install" status="fresh" confidence="high" mode="ai" updated="2026-09-17T02:25:05+00:00" page="workflows/commands/claude.install.md"/>
+  <workflow id="command.init" type="commands" title="init" status="fresh" confidence="high" mode="ai" updated="2026-09-17T02:25:05+00:00" page="workflows/commands/init.md"/>
+  <workflow id="command.stack.detect" type="commands" title="stack:detect" status="fresh" confidence="high" mode="ai" updated="2026-09-17T02:25:05+00:00" page="workflows/commands/stack.detect.md"/>
+  <workflow id="command.workflows.apply" type="commands" title="workflows:apply" status="fresh" confidence="high" mode="ai" updated="2026-09-17T02:25:05+00:00" page="workflows/commands/workflows.apply.md"/>
+  <workflow id="command.workflows.inspect" type="commands" title="workflows:inspect" status="fresh" confidence="high" mode="ai" updated="2026-09-17T02:25:05+00:00" page="workflows/commands/workflows.inspect.md"/>
+</index>

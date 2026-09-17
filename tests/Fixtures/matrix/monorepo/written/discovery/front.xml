@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="angular-22">
+  <workflows>
+    <workflow id="route.items" type="routes" confidence="medium" source="claude">
+      <title>/items</title>
+      <main kind="route" name="items">
+        <declared-in path="front/src/app/app.routes.ts" role="config"/>
+        <attribute name="path" value="/items"/>
+      </main>
+      <files>
+        <file path="front/src/app/app.routes.ts" role="config"/>
+        <file path="front/src/app/item-list.component.ts" role="component"/>
+      </files>
+    </workflow>
+  </workflows>
+</inspection>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.health" type="routes" schema-version="1">
+  <title>GET /health</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="app_health" role="main">
+      <declared-in path="src/Controller/HealthController.php" role="controller"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/health"/>
+    </entrypoint>
+    <entrypoint kind="route" name="app_status" role="satellite">
+      <declared-in path="src/Controller/HealthController.php" role="controller"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/status"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
+    <file path="config/routes.yaml" role="config" sha256="877e010ec7cda9c3bb1936514124beaac76c6fe353563303ee79133c52e5810a"/>
+    <file path="src/Controller/HealthController.php" role="controller" sha256="6b81281829200de65a3789bb1e7a20a4c9bd9a8b9068845fc3b160dcac096305"/>
+  </files>
+  <packages>
+    <package name="symfony/http-foundation" version="7.4.19"/>
+  </packages>
+  <depends-on>
+    <workflow ref="event.locale-listener"/>
+  </depends-on>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="978ffc6190098f91525aeaa0e92300cbaa8eb21e" reason="initial"/>
+  </history>
+</workflow>

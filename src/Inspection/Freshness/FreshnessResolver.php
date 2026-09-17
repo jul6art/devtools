@@ -75,8 +75,12 @@ final readonly class FreshnessResolver
         $common = array_values(array_intersect($currentPaths, array_keys($recorded)));
         $worthHashing = null === $candidates ? $common : array_values(array_intersect($common, $candidates));
         $changed = array_values(array_filter($worthHashing, fn (string $path): bool => $this->hasher->hash($root->absolute($path)) !== $recorded[$path]));
-        $removed = array_values(array_diff(array_keys($recorded), $currentPaths));
-        $added = array_values(array_diff($currentPaths, array_keys($recorded)));
+        // Tests are not hashed — a test changing does not change the workflow — but the page lists them: one
+        // appearing or disappearing is a fact of the page going out of date.
+        $recordedTests = array_map(static fn (FileRef $test): string => $test->path, $old->tests);
+        $currentTests = array_map(static fn (FileRef $test): string => $test->path, $workflow->tests);
+        $removed = array_values(array_unique([...array_diff(array_keys($recorded), $currentPaths), ...array_diff($recordedTests, $currentTests)]));
+        $added = array_values(array_unique([...array_diff($currentPaths, array_keys($recorded)), ...array_diff($currentTests, $recordedTests)]));
 
         foreach ([[$changed, Reason::filesChanged(...)], [$removed, Reason::filesRemoved(...)], [$added, Reason::filesAdded(...)]] as [$paths, $reason]) {
             if ([] !== $paths) {

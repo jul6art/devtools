@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stacks xmlns="https://github.com/jul6art/devtools/schema/stack/1" schema-version="1">
+  <project name="monorepo"/>
+  <stack root="api">
+    <language>php</language>
+    <framework version="7.4">symfony</framework>
+    <package-manager>composer</package-manager>
+    <adapter>symfony</adapter>
+    <knowledge>symfony-7</knowledge>
+    <sources>
+      <dir>config</dir>
+      <dir>src</dir>
+    </sources>
+    <tests/>
+    <excludes>
+      <dir>.devtools</dir>
+      <dir>.git</dir>
+      <dir>build</dir>
+      <dir>dist</dir>
+      <dir>node_modules</dir>
+      <dir>var</dir>
+      <dir>vendor</dir>
+    </excludes>
+  </stack>
+  <stack root="front">
+    <language>typescript</language>
+    <framework version="22.0">angular</framework>
+    <package-manager>npm</package-manager>
+    <adapter>claude</adapter>
+    <knowledge>angular-22</knowledge>
+    <sources>
+      <dir>src/app</dir>
+    </sources>
+    <tests/>
+    <excludes>
+      <dir>.devtools</dir>
+      <dir>.git</dir>
+      <dir>build</dir>
+      <dir>dist</dir>
+      <dir>node_modules</dir>
+      <dir>var</dir>
+      <dir>vendor</dir>
+    </excludes>
+  </stack>
+</stacks>

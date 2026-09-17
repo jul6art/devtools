@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.index" type="routes" schema-version="1">
+  <title>/index.php</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="index" role="main">
+      <declared-in path="public/index.php" role="controller"/>
+      <attribute name="path" value="/index.php"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="lib/OrderRepository.php" role="repository" sha256="e462ced6e181f19a1907d73de87daa66801c36b71ccd24e7858af70ea7985cb6"/>
+    <file path="lib/db.php" role="other" sha256="0b4f4ae85545e94c08776522b2bb9e4598a1bd85076aab2b16b85e65f61268a0"/>
+    <file path="lib/views/header.php" role="other" sha256="a494f2d6dfeb065c6fccca1cc2e4bee6c8a6d14a7d5d893d7c5961e3020cfd77"/>
+    <file path="public/index.php" role="controller" sha256="bada6ccc50db99d96e47bd67b0f47b879537615a340761ba6b418bd9c2f93424"/>
+  </files>
+  <tests>
+    <file path="tests/OrderRepositoryTest.php" role="test"/>
+  </tests>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" reason="initial"/>
+  </history>
+</workflow>

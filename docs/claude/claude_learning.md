@@ -340,3 +340,32 @@
 - **Un mutant survit quand deux sources donnent le même nom** : le script et le binaire s'appelaient
   tous deux `import`, si bien que le `??=` ne se voyait pas. **Règle :** les données d'un test de
   priorité doivent différer à l'endroit exact que la priorité départage.
+
+---
+
+### 2026-09-17 — ADR-0015, livraison du MVP
+
+- **La matrice de bout en bout a trouvé deux défauts qu'aucun test unitaire ne voyait** : un test supprimé
+  restait cité par la page (la fraîcheur ne regardait pas `<tests>`), et une URL `/orders/new.php` citée
+  dans un brouillon était refusée comme fichier inconnu. **Règle :** un scénario « un fichier modifié, un
+  supprimé, un ajouté » se joue sur chaque fixture, et chaque décision observée se lit avant d'être
+  inscrite comme attendue.
+
+- **Symfony Process peut lancer deux fois une commande relative** (`vendor/bin/devtools`, puis son chemin
+  résolu) : deux inspections se disputaient le verrou, un échec sur deux. Le verrou était juste. **Règle :**
+  un test qui lance un binaire lui donne un chemin absolu, et un échec intermittent se diagnostique par
+  les PID (qui détient le verrou), pas en relançant.
+
+- **`putenv()` ne suffit pas pour un sous-processus lancé par Symfony Process** : seules les variables aussi
+  présentes dans `$_SERVER` sont transmises. Les dates de commit fixes (hash stables dans les snapshots)
+  passent par les deux.
+
+- **Un `markTestSkipped` sur « Composer indisponible » masquait une option inexistante** (`--no-progress`
+  sur `composer config`). **Règle :** seul ce qui dépend du réseau peut être sauté ; une erreur de
+  commande locale échoue.
+
+- **Le dogfooding a été écrit avec l'horloge réelle**, pas `SOURCE_DATE_EPOCH` : la documentation
+  committée d'un dépôt ne porte pas la date des tests.
+
+- **Les brouillons de `symfony-legacy-yaml` sont ceux de `symfony-minimal`** : même application, seule la
+  configuration diffère ; les pages ne décrivent que le code.

@@ -117,9 +117,16 @@ Tests live in `tests/`, mirroring `src/`. `tests/Fixtures/TestKernel.php` boots 
 the bridge rather than a mock, and `tests/Console/BinaryTest.php` runs `bin/devtools` in a separate
 process — so a broken entry point fails the suite instead of failing a project on install.
 
-Fixture projects will live in `tests/Fixtures/projects/`, each with the `.devtools/` it is expected
-to produce. They are real mini-projects in their own languages: php-cs-fixer, Rector and PHPStan must
-never rewrite or analyse them.
+Fixture projects live in `tests/Fixtures/projects/` — Symfony 8.1, Symfony 7.4 with YAML routes, PHP
+without a framework, Express, Angular, a monorepo. They are real mini-projects in their own languages:
+php-cs-fixer, Rector and PHPStan must never rewrite or analyse them. A test never writes into them: it
+works on a copy (`Tests\Support\CopiesFixtureProjects`). What Claude wrote for them is recorded in
+`tests/Fixtures/drafts/`, and the `.devtools/` each must produce in `tests/Fixtures/matrix/`.
+
+**Time and git.** Nothing in an expected output may depend on when or where the test runs. In-process
+tests take a `FrozenClock`; a separate process gets `SOURCE_DATE_EPOCH`, and `GIT_CEILING_DIRECTORIES`
+so that it never sees the repository around its temporary directory. A test about history builds its own
+repository with `Tests\Support\GitRepository` — fixed commit dates when hashes end up in a snapshot.
 
 **Snapshots.** Output that must stay byte-stable — serialised models, pages, tracking files — is
 compared with a versioned snapshot through `Tests\Support\AssertsSnapshots`. To update them:

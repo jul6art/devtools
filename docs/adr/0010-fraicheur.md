@@ -35,9 +35,12 @@ L'algorithme du § 4.6.2, dans cet ordre :
 3. **Fichiers supprimés** — `<file>` absent du disque → `rewrite` avec statut `stale` ; point d'entrée
    disparu du modèle → `orphan` (page conservée, listée dans « À vérifier » ; suppression seulement
    avec `--prune`).
+   Un test qui disparaît de la liste `<tests>` du modèle → `rewrite` (`files-removed`) : les tests ne
+   sont pas hashés, mais la page les cite *(précisé par l'ADR-0015, étape 4 de la matrice)*.
 4. **Fichiers nouveaux** — liste des fichiers du modèle absents de l'ancien `<files>` → `rewrite`
    (ils ont été découverts par l'adaptateur, qui repasse sur tout ; la « passe de découverte limitée »
-   du § 4.6.2 ne concerne que la voie Claude, ADR-0013).
+   du § 4.6.2 ne concerne que la voie Claude, ADR-0013). De même pour un test nouveau dans `<tests>`
+   (`files-added`).
 5. **Paquets** — changement de **version majeure** d'un `<package>` → `rewrite`.
 6. **`manual`** — jamais réécrit ; son XML est mis à jour, et s'il aurait dû l'être : alerte et
    décision `manual-stale`.

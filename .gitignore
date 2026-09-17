@@ -23,3 +23,6 @@
 /tests/Fixtures/projects/*/var/
 /tests/Fixtures/projects/*/.devtools/
 /tests/Fixtures/projects/*/config/reference.php
+
+# DevTools work areas — https://github.com/jul6art/devtools
+/.devtools/pending/

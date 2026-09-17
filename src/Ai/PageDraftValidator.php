@@ -16,7 +16,11 @@ use Jul6Art\DevTools\Rendering\PageSection;
  */
 final class PageDraftValidator
 {
-    private const string PATH_IN_CODE = '/`([^`\s]*\/[^`\s]*\.[A-Za-z0-9]{1,6})`/';
+    /**
+     * A relative path with an extension, in backticks. A leading slash makes it a URL (`/orders/new.php`): a
+     * file of the model is always relative.
+     */
+    private const string PATH_IN_CODE = '/`([^`\s\/][^`\s]*\/[^`\s]*\.[A-Za-z0-9]{1,6})`/';
 
     /**
      * @return list<string> every broken rule, each naming the line when there is one
