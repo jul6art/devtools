@@ -37,7 +37,8 @@
          By default public/, web/ and www/: <php web-root="htdocs"/> -->
     <php/>
 
-    <!-- Language of the pages Claude writes. -->
-    <language pages="fr"/>
+    <!-- Language of the pages Claude writes, as two lowercase letters. English when nothing says
+         otherwise; the locale option of workflows:inspect wins over this file.
+         <language pages="fr"/> -->
 
 </devtools>

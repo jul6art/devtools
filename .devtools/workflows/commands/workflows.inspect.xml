@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.inspect" type="commands" schema-version="1">
   <title>workflows:inspect</title>
-  <generated at="2026-09-17T18:49:42+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" branch="master" dirty="true"/>
+  <generated at="2026-09-17T19:34:39+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:inspect" role="main">
       <declared-in path="src/Command/WorkflowsInspectCommand.php" role="other"/>
@@ -14,8 +14,8 @@
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="753fdbfc3b605215e6583e09eb3c8306b2b37cd88c0d7eabcf1183c84ebc3101"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
-    <file path="src/Command/WorkflowsInspectCommand.php" role="other" sha256="f0309b08b6ee1322db604c217160694552d4b2dced3d7b8a696bb1b40fba107f"/>
-    <file path="src/Config/Config.php" role="other" sha256="027494ef59f8566398229c96f4a48b982321876540ab76aa87588a98b3762012"/>
+    <file path="src/Command/WorkflowsInspectCommand.php" role="other" sha256="cd14b4168c6b5ee5a840b7489143c5c8cff9e322184bebf82fafafb21a740181"/>
+    <file path="src/Config/Config.php" role="other" sha256="a4eb0563f93254970304cf31b7b03760b2bf35fb7339fc0720cd2f8a24c000a1"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="f788247946e3a89cc26f44424d2519f2bd3eecca9a0c14ab3055bd0928471b43"/>
@@ -46,8 +46,8 @@
     <file path="src/Inspection/Graph/TestLocator.php" role="other" sha256="2e92580063474363d2ae9eb59a015fa8b763d0525ccffc47308dd3117437d174"/>
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="25c52f5c2e26bdba1f39e544dda86a26b696c6aebd0469f313684a57e9d4350d"/>
-    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="b333ef5efa4481bf445fbb19cf34972204cbce89669dc62e574bf4a55c2e36a6"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="bf5f45606a8fb8d3d7ec89a87f050cdf8993f9c90269cd23715b7cfd018a8808"/>
+    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="159dc0891cd549e44bd75f0c154611ccabf3f1ef9bcc8fb8c09e5d3e4d668828"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="4be364fd48ab766808e84182590b520af3220fdce41840242a342576eade8a39"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="41a1a6da729dc1c5f1f3199f3f80138683b78902bf3098b5c8a56f181304da1b"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/Edge.php" role="other" sha256="a472a7e6c0e5bc8a7150b779c909c41eadabb3d658eedaf1b80e6081aecbd35b"/>
@@ -152,5 +152,7 @@
     <revision at="2026-09-17T02:25:05+00:00" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" reason="rédaction initiale"/>
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/Graph/TestLocator.php, src/Inspection/InspectionPipeline.php, src/Inspection/InspectionReport.php; files added: src/Ai/PageDraft.php"/>
     <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Clock/SystemClock.php, src/Inspection/Graph/ClassLocator.php, src/Inspection/Graph/WorkflowBuilder.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Xml/SafeXmlLoader.php"/>
+    <revision at="2026-09-17T19:31:41+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Command/WorkflowsInspectCommand.php, src/Config/Config.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php"/>
+    <revision at="2026-09-17T19:34:39+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Command/WorkflowsInspectCommand.php"/>
   </history>
 </workflow>

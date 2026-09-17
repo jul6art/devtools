@@ -40,6 +40,14 @@ final class ContainerTest extends AbstractFunctionalTestCase
         self::assertSame(['devtools:claude:install', 'devtools:init', 'devtools:stack:detect', 'devtools:workflows:apply', 'devtools:workflows:inspect'], $names);
     }
 
+    public function testTheConfiguredLanguageReachesTheInspectionCommand(): void
+    {
+        $container = $this->boot('test', ['language' => 'fr']);
+
+        self::assertSame('fr', $container->getParameter('devtools.language'));
+        self::assertNull($this->boot()->getParameter('devtools.language'), 'Nothing configured: the pages are written in English.');
+    }
+
     /**
      * `enabled: false` must leave the bundle installed and inert — an application should be able
      * to switch it off without uninstalling it, and without its optional dependencies becoming

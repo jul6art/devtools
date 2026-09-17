@@ -82,11 +82,18 @@ Configuration
 devtools:
     # Leaves the bundle installed and inert when false.
     enabled: true
+
+    # The language the workflow pages are written in, as two lowercase letters. Default: en.
+    language: fr
 ```
 
-`devtools.enabled` is also exposed as a container parameter.
+`devtools.enabled` and `devtools.language` are also exposed as container parameters.
 
-This key is the bridge's only configuration, on purpose. What DevTools inspects, excludes and
+**The language of the pages** is decided in this order: the `--locale` option of `workflows:inspect`, then
+`<language pages="…"/>` of `.devtools/config.xml`, then this key, then English. The option is what a one-off
+run uses; the file is what the team commits.
+
+These two keys are the bridge's only configuration, on purpose. What DevTools inspects, excludes and
 generates is configured in `.devtools/config.xml`, which both modes read — a setting that existed only
 in `config/packages/` would silently not apply to a standalone run.
 
@@ -189,6 +196,7 @@ page to open first. Commit all of it; the report stays out of git.
 | `--prune` | delete the page and tracking file of orphaned workflows (of the `--only` type, when given) |
 | `--only=routes` | write the pages of one type only; the menu and the index stay complete |
 | `--no-ai` | write no brief for Claude: factual pages only |
+| `--locale=fr` | the language Claude writes the pages in, as two lowercase letters |
 
 Exit code `0` when everything was documented, `1` with warnings — a console that did not answer, a stack
 without an adapter, a file that could not be parsed — and `2` when nothing could be (invalid
@@ -232,7 +240,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
-| `<language pages="fr"/>` | `fr` | language of the pages Claude writes |
+| `<language pages="fr"/>` | `en` | language of the pages Claude writes; `--locale` wins over it |
 
 What a workflow contains
 ------------------------

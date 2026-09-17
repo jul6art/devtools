@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Bridge\Symfony\DependencyInjection\Configuration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -26,12 +27,12 @@ final class ConfigurationTest extends TestCase
 
     public function testItAppliesItsDefaults(): void
     {
-        self::assertSame(['enabled' => true], $this->process([]));
+        self::assertSame(['enabled' => true, 'language' => null], $this->process([]), 'No language: the pages are written in English.');
     }
 
     public function testLaterConfigsOverrideEarlierOnes(): void
     {
-        self::assertSame(['enabled' => true], $this->process([['enabled' => false], ['enabled' => true]]));
+        self::assertSame(['enabled' => true, 'language' => 'fr'], $this->process([['enabled' => false, 'language' => 'de'], ['enabled' => true, 'language' => 'fr']]));
     }
 
     /**
@@ -44,6 +45,14 @@ final class ConfigurationTest extends TestCase
         $this->expectException(InvalidTypeException::class);
 
         $this->process([['enabled' => $value]]);
+    }
+
+    public function testALanguageThatIsNotTwoLowercaseLettersIsRefused(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('is not a language');
+
+        $this->process([['language' => 'french']]);
     }
 
     /**

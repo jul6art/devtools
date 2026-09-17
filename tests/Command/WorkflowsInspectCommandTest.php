@@ -49,6 +49,24 @@ final class WorkflowsInspectCommandTest extends TestCase
         self::assertSame(2, $this->tester(new FakeAdapter())->execute(['path' => '/definitely/not/here']));
     }
 
+    public function testALocaleThatIsNotALanguageIsAConfigurationError(): void
+    {
+        $tester = $this->tester(new FakeAdapter());
+
+        self::assertSame(2, $tester->execute(['path' => $this->copyFixtureProject('symfony-minimal'), '--locale' => 'french']));
+        self::assertStringContainsString('is not a language', $tester->getDisplay());
+    }
+
+    public function testTheConfiguredLanguageIsUsedWhenTheProjectSaysNothing(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        $command = new WorkflowsInspectCommand(new InspectionPipeline(new AdapterResolver([new FakeAdapter()]), new FrozenClock(new \DateTimeImmutable('2026-09-16'))), $project, 'fr');
+
+        new CommandTester($command)->execute([]);
+
+        self::assertStringContainsString('<language>fr</language>', (string) file_get_contents($project.'/.devtools/pending/page.route.order.new.brief.xml'));
+    }
+
     public function testWithoutAPathItInspectsTheDefaultOne(): void
     {
         $project = $this->copyFixtureProject('symfony-minimal');

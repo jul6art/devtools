@@ -23,6 +23,7 @@ final class WorkflowsInspectCommand extends Command
     public function __construct(
         private readonly InspectionPipeline $pipeline = new InspectionPipeline(),
         private readonly ?string $defaultPath = null,
+        private readonly ?string $defaultLanguage = null,
     ) {
         parent::__construct();
     }
@@ -37,7 +38,8 @@ final class WorkflowsInspectCommand extends Command
             ->addOption('force', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Rewrite every workflow, or the one named (repeatable): --force=route.order.new')
             ->addOption('since', null, InputOption::VALUE_REQUIRED, 'Compare with this commit, and hash every file')
             ->addOption('prune', null, InputOption::VALUE_NONE, 'Delete the page and tracking file of orphaned workflows')
-            ->addOption('no-ai', null, InputOption::VALUE_NONE, 'Write no brief for Claude: factual pages only (CI)');
+            ->addOption('no-ai', null, InputOption::VALUE_NONE, 'Write no brief for Claude: factual pages only (CI)')
+            ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'The language Claude writes the pages in (two letters); wins over .devtools/config.xml. Default: en');
     }
 
     #[\Override]
@@ -56,18 +58,30 @@ final class WorkflowsInspectCommand extends Command
 
         $force = (array) $input->getOption('force');
         $since = $input->getOption('since');
+        $locale = $input->getOption('locale');
 
-        $report = $this->pipeline->run(new InspectionOptions(
-            path: $path,
-            only: \is_string($only) ? $only : null,
-            dryRun: true === $input->getOption('dry-run'),
-            force: array_values(array_filter($force, \is_string(...))),
-            // `--force` without a value arrives as a null item.
-            forceAll: \in_array(null, $force, true),
-            since: \is_string($since) ? $since : null,
-            prune: true === $input->getOption('prune'),
-            noAi: true === $input->getOption('no-ai'),
-        ));
+        try {
+            $options = new InspectionOptions(
+                path: $path,
+                only: \is_string($only) ? $only : null,
+                dryRun: true === $input->getOption('dry-run'),
+                force: array_values(array_filter($force, \is_string(...))),
+                // `--force` without a value arrives as a null item.
+                forceAll: \in_array(null, $force, true),
+                since: \is_string($since) ? $since : null,
+                prune: true === $input->getOption('prune'),
+                noAi: true === $input->getOption('no-ai'),
+                language: \is_string($locale) ? $locale : null,
+                fallbackLanguage: $this->defaultLanguage,
+            );
+        } catch (\InvalidArgumentException $invalid) {
+            // An option DevTools refuses is a configuration error (exit 2), not a usage error of the console.
+            $io->error($invalid->getMessage());
+
+            return Command::INVALID;
+        }
+
+        $report = $this->pipeline->run($options);
         $this->display($io, $report, true === $input->getOption('dry-run'));
 
         return $report->exitCode();

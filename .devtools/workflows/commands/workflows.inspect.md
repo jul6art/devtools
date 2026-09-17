@@ -1,5 +1,5 @@
 # workflows:inspect
-`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 98d3d2d
+`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : e6f9993
 
 ## Résumé
 
@@ -212,3 +212,5 @@ un repli de console, pas une erreur : un script CI qui exige 0 échoue sur un pr
 | 2026-09-17 | a3b1c1b | rédaction initiale |
 | 2026-09-17 | 8f7ea01 | files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/Graph/TestLocator.php, src/Inspection/InspectionPipeline.php, src/Inspection/InspectionReport.php; files added: src/Ai/PageDraft.php |
 | 2026-09-17 | 98d3d2d | files changed: src/Clock/SystemClock.php, src/Inspection/Graph/ClassLocator.php, src/Inspection/Graph/WorkflowBuilder.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Xml/SafeXmlLoader.php |
+| 2026-09-17 | e6f9993 | files changed: src/Command/WorkflowsInspectCommand.php, src/Config/Config.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php |
+| 2026-09-17 | e6f9993 | files changed: src/Command/WorkflowsInspectCommand.php |

@@ -58,13 +58,18 @@ class DevToolsExtension extends Extension
         // Exposed as a container parameter so an application can branch on it, and so
         // `debug:container --parameter` tells the truth about what is active.
         $container->setParameter(self::ALIAS.'.enabled', true);
+        $container->setParameter(self::ALIAS.'.language', \is_string($config['language'] ?? null) ? $config['language'] : null);
 
         // The core commands, under the devtools: prefix and pointed at the application by default. Nothing
         // else: whatever a command does, it does identically through vendor/bin/devtools.
         foreach (self::COMMANDS as $class => $name) {
-            $container->register('devtools.command.'.str_replace(':', '_', $name), $class)
+            $definition = $container->register('devtools.command.'.str_replace(':', '_', $name), $class)
                 ->setArgument('$defaultPath', '%kernel.project_dir%')
                 ->addTag('console.command', ['command' => 'devtools:'.$name]);
+
+            if (WorkflowsInspectCommand::class === $class) {
+                $definition->setArgument('$defaultLanguage', '%'.self::ALIAS.'.language%');
+            }
         }
     }
 

@@ -22,7 +22,9 @@ la tâche `page`.
 Contenu : le `Workflow` sérialisé (ADR-0003), le chemin du `knowledge` de la stack (ADR-0012, absent
 tant qu'il n'existe pas), la page actuelle, les **raisons** de fraîcheur (ADR-0010), le diff des
 `<files>` depuis la dernière révision, la version du prompt (`resources/prompts/page/v1.md`), la
-langue de rédaction (`config.xml`), et la **liste fermée des sections à rédiger** (`PageSection`
+langue de rédaction (*précision du 2026-09-17 : l'option `--locale` de `workflows:inspect`, sinon
+`<language pages>` de `config.xml`, sinon la clé `devtools.language` du bundle, sinon l'anglais —
+les specs § 4.5 écrivaient les pages en français par défaut, c'est désormais un choix par projet*), et la **liste fermée des sections à rédiger** (`PageSection`
 propriétaire Claude, ADR-0008) plus une ligne d'historique.
 
 ### Brouillon (`.devtools/pending/page.<id>.draft.md`)

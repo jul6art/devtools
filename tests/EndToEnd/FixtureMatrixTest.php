@@ -84,17 +84,17 @@ final class FixtureMatrixTest extends TestCase
 
         // 1. Documented without AI.
         $this->devtools($project, 'init');
-        $this->devtools($project, 'workflows:inspect', '--no-ai');
+        $this->devtools($project, 'workflows:inspect', '--no-ai', '--locale=fr');
         $this->assertSnapshot($project, $fixture.'/no-ai');
 
         // 2. Nothing changed, nothing rewritten.
         $before = self::devtoolsTree($project);
-        $this->devtools($project, 'workflows:inspect', '--no-ai');
+        $this->devtools($project, 'workflows:inspect', '--no-ai', '--locale=fr');
         self::assertSame($before, self::devtoolsTree($project), 'A second inspection without change modifies no file.');
 
         // 3. Written by Claude, from recorded drafts, round after round.
         do {
-            $this->devtools($project, 'workflows:inspect');
+            $this->devtools($project, 'workflows:inspect', '--locale=fr');
             $copied = $this->copyRecordedDrafts($project, $drafts);
 
             if ($copied > 0) {
@@ -110,7 +110,7 @@ final class FixtureMatrixTest extends TestCase
         }
 
         $written = self::devtoolsTree($project);
-        $this->devtools($project, 'workflows:inspect', '--no-ai');
+        $this->devtools($project, 'workflows:inspect', '--no-ai', '--locale=fr');
         self::assertSame($written, self::devtoolsTree($project), 'Written pages are not rewritten by an inspection without change.');
 
         // 4. A file changed, one deleted, one added: exactly the expected decisions.
@@ -127,7 +127,7 @@ final class FixtureMatrixTest extends TestCase
 
         $repository->commitAll('change');
 
-        $this->devtools($project, 'workflows:inspect', '--no-ai');
+        $this->devtools($project, 'workflows:inspect', '--no-ai', '--locale=fr');
 
         self::assertSame($expected, $this->decisions($project));
     }

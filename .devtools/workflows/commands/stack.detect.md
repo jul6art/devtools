@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 98d3d2d
+`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : e6f9993
 
 ## Résumé
 
@@ -113,3 +113,4 @@ n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparat
 | 2026-09-17 | a3b1c1b | rédaction initiale |
 | 2026-09-17 | 8f7ea01 | files changed: src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
 | 2026-09-17 | 98d3d2d | files changed: src/Xml/SafeXmlLoader.php |
+| 2026-09-17 | e6f9993 | files changed: src/Config/Config.php |

@@ -56,7 +56,7 @@ final class PageRedactionTest extends TestCase
         self::assertSame('route.order.new', $brief->workflow->value);
         self::assertSame('page/1', $brief->promptVersion);
         self::assertFileExists($brief->promptPath);
-        self::assertSame('fr', $brief->language);
+        self::assertSame('en', $brief->language, 'English unless the project or the caller says otherwise.');
         self::assertSame('.devtools/pending/page.route.order.new.draft.md', $brief->draftPath);
         self::assertFileExists($this->project.'/'.$brief->modelPath);
         self::assertSame('2026-09-16T15:00:00+02:00', $brief->revision->format(\DATE_ATOM));
@@ -81,6 +81,29 @@ final class PageRedactionTest extends TestCase
             [['path' => 'src/Service/OrderPricing.php', 'change' => 'changed'], ['path' => 'src/Service/Discount.php', 'change' => 'added']],
             new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml')->changes,
         );
+    }
+
+    public function testTheLanguageOfTheBriefsComesFromTheOptionThenTheProjectThenEnglish(): void
+    {
+        $this->inspect(language: 'de', fallbackLanguage: 'es');
+        self::assertSame('de', $this->brief()->language, 'The option wins over everything.');
+
+        $configuration = $this->project.'/.devtools/config.xml';
+        file_put_contents($configuration, str_replace('<types/>', '<types/><language pages="fr"/>', (string) file_get_contents($configuration)));
+        $this->inspect(fallbackLanguage: 'es');
+        self::assertSame('fr', $this->brief()->language, 'The project wins over the configured default.');
+
+        file_put_contents($configuration, str_replace('<language pages="fr"/>', '', (string) file_get_contents($configuration)));
+        $this->inspect(fallbackLanguage: 'es');
+        self::assertSame('es', $this->brief()->language, 'The bundle\'s configuration wins over English.');
+    }
+
+    public function testALanguageThatIsNotTwoLettersIsRefused(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"french" is not a language');
+
+        new InspectionOptions($this->project, language: 'french');
     }
 
     public function testWithoutAiNoBriefIsWritten(): void
@@ -228,12 +251,17 @@ final class PageRedactionTest extends TestCase
         self::assertStringContainsString('the brief was written for revision 2026-09-16T15:00:00+02:00, the workflow is now at revision 2026-09-16T16:00:00+02:00', implode("\n", $this->apply()->refused['route.order.new'] ?? []));
     }
 
-    private function inspect(bool $noAi = false, string $at = '2026-09-16T15:00:00+02:00'): InspectionReport
+    private function inspect(bool $noAi = false, string $at = '2026-09-16T15:00:00+02:00', ?string $language = null, ?string $fallbackLanguage = null): InspectionReport
     {
-        $report = new InspectionPipeline(new AdapterResolver([new FakeAdapter()]), new FrozenClock(new \DateTimeImmutable($at)))->run(new InspectionOptions($this->project, noAi: $noAi));
+        $report = new InspectionPipeline(new AdapterResolver([new FakeAdapter()]), new FrozenClock(new \DateTimeImmutable($at)))->run(new InspectionOptions($this->project, noAi: $noAi, language: $language, fallbackLanguage: $fallbackLanguage));
         self::assertSame([], $report->errors, implode("\n", $report->errors));
 
         return $report;
+    }
+
+    private function brief(): PageBrief
+    {
+        return new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml');
     }
 
     private function apply(): ApplyResult

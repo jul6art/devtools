@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-17T18:49:42+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" branch="master" dirty="true"/>
+  <generated at="2026-09-17T19:31:41+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -18,7 +18,7 @@
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
     <file path="src/Command/WorkflowsApplyCommand.php" role="other" sha256="d55f489b24950714aca2d9dea9817deb9f396a11835a27c8c44ee72deb224894"/>
-    <file path="src/Config/Config.php" role="other" sha256="027494ef59f8566398229c96f4a48b982321876540ab76aa87588a98b3762012"/>
+    <file path="src/Config/Config.php" role="other" sha256="a4eb0563f93254970304cf31b7b03760b2bf35fb7339fc0720cd2f8a24c000a1"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="f788247946e3a89cc26f44424d2519f2bd3eecca9a0c14ab3055bd0928471b43"/>
     <file path="src/Inspection/Adapter/Claude/Discovery.php" role="other" sha256="4679a5bea91159d351aa7612c11ef3dfc30e6b935e55f6e45ce8ff569c726f64"/>
@@ -105,5 +105,6 @@
     <revision at="2026-09-17T02:25:05+00:00" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" reason="rédaction initiale"/>
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
     <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Ai/DraftApplier.php, src/Clock/SystemClock.php, src/Xml/SafeXmlLoader.php"/>
+    <revision at="2026-09-17T19:31:41+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Config/Config.php"/>
   </history>
 </workflow>

@@ -34,6 +34,14 @@ class Configuration implements ConfigurationInterface
                     ->info('Registers the bundle\'s services. false leaves it installed and inert.')
                     ->defaultTrue()
                 ->end()
+                ->scalarNode('language')
+                    ->info('The language the workflow pages are written in, as two lowercase letters. `.devtools/config.xml` and the --locale option win over it. Default: en.')
+                    ->defaultNull()
+                    ->validate()
+                        ->ifTrue(static fn (mixed $language): bool => null !== $language && (!\is_string($language) || 1 !== preg_match('/^[a-z]{2}$/', $language)))
+                        ->thenInvalid('%s is not a language: give two lowercase letters, such as "en" or "fr".')
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

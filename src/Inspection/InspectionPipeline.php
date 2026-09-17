@@ -491,7 +491,7 @@ final readonly class InspectionPipeline
                 amend: GenerationMode::NoAi === $document->generated->mode,
                 promptVersion: 'page/1',
                 promptPath: Resources::path('prompts/page/v1.md'),
-                language: $config->pagesLanguage,
+                language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
                 pagePath: DevToolsDirectory::NAME.'/'.DevToolsDirectory::pageRelativePath($workflow->type, $workflow->id),
                 knowledgePath: $knowledgePath,
