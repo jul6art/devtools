@@ -1,5 +1,5 @@
 # claude:install
-`command.claude.install` · type : commands · dernière mise à jour : 2026-09-17 · commit : a3b1c1b
+`command.claude.install` · type : commands · dernière mise à jour : 2026-09-17 · commit : 8f7ea01
 
 ## Résumé
 
@@ -74,8 +74,6 @@ donc tant que l'équipe ne l'a pas modifié, puis plus jamais sans intervention.
 | XmlConfigReaderTest | `tests/Config/XmlConfigReaderTest.php` | — |
 | ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
 | GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| GraphFixture | `tests/Inspection/Graph/GraphFixture.php` | — |
-| FakeAdapter | `tests/Inspection/Pipeline/FakeAdapter.php` | — |
 | ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
 | KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
 | StackDetectorTest | `tests/Stack/StackDetectorTest.php` | — |
@@ -91,3 +89,4 @@ donc tant que l'équipe ne l'a pas modifié, puis plus jamais sans intervention.
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-17 | a3b1c1b | rédaction initiale |
+| 2026-09-17 | 8f7ea01 | files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |

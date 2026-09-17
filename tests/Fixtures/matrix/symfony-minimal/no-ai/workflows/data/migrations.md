@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : b0cc0c4
+`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : f16c698
 
 ## Résumé
 
@@ -56,4 +56,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | b0cc0c4 | initial |
+| 2026-09-16 | f16c698 | initial |

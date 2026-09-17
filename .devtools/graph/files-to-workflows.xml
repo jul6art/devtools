@@ -12,6 +12,7 @@
   </file>
   <file path="src/Ai/PageDraft.php">
     <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Ai/PageDraftValidator.php">
     <workflow ref="command.workflows.apply" relation="file"/>
@@ -532,18 +533,6 @@
   </file>
   <file path="tests/Inspection/Freshness/FreshnessTest.php">
     <workflow ref="command.workflows.inspect" relation="test"/>
-  </file>
-  <file path="tests/Inspection/Graph/GraphFixture.php">
-    <workflow ref="command.claude.install" relation="test"/>
-    <workflow ref="command.init" relation="test"/>
-    <workflow ref="command.stack.detect" relation="test"/>
-    <workflow ref="command.workflows.apply" relation="test"/>
-  </file>
-  <file path="tests/Inspection/Pipeline/FakeAdapter.php">
-    <workflow ref="command.claude.install" relation="test"/>
-    <workflow ref="command.init" relation="test"/>
-    <workflow ref="command.stack.detect" relation="test"/>
-    <workflow ref="command.workflows.apply" relation="test"/>
   </file>
   <file path="tests/Inspection/Pipeline/InspectionPipelineTest.php">
     <workflow ref="command.workflows.inspect" relation="test"/>

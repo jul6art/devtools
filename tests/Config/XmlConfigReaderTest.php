@@ -40,7 +40,7 @@ final class XmlConfigReaderTest extends TestCase
         file_put_contents($path, <<<'XML'
             <?xml version="1.0" encoding="UTF-8"?>
             <devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
-              <symfony console="docker compose exec -T php bin/console" env="test"/>
+              <symfony console="docker compose exec -T php bin/console" env="test" timeout="120.5"/>
               <php web-root="/htdocs/"/>
               <paths><exclude>public/build</exclude><exclude>vendor</exclude></paths>
               <graph depth="2"/>
@@ -64,6 +64,7 @@ final class XmlConfigReaderTest extends TestCase
         self::assertEquals([WorkflowType::custom('webhooks', 'webhook')], $config->customTypes);
         self::assertSame('docker compose exec -T php bin/console', $config->symfonyConsole);
         self::assertSame('test', $config->symfonyEnv);
+        self::assertSame(120.5, $config->symfonyTimeout);
         self::assertSame('htdocs', $config->phpWebRoot);
         self::assertSame('en', $config->pagesLanguage);
     }
@@ -84,5 +85,13 @@ final class XmlConfigReaderTest extends TestCase
         $this->expectException(InvalidConfig::class);
 
         new Config(aliases: ['order_new' => 'Route.Order']);
+    }
+
+    public function testAConsoleTimeoutOfZeroOrLessIsRejected(): void
+    {
+        $this->expectException(InvalidConfig::class);
+        $this->expectExceptionMessage('timeout');
+
+        new Config(symfonyTimeout: 0.0);
     }
 }

@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : b0cc0c4
+`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : f16c698
 
 ## Résumé
 
@@ -70,4 +70,4 @@ Paquets : `symfony/console` 8.1.7
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | b0cc0c4 | initial |
+| 2026-09-16 | f16c698 | initial |

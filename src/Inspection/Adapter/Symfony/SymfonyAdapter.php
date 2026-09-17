@@ -48,7 +48,7 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $files = new ProjectFiles($root, $stack);
 
         try {
-            $console = ConsoleIntrospection::ask(new SymfonyConsole($this->runner, $root->absolute($stack->root), CommandLine::split($config->symfonyConsole), $config->symfonyEnv));
+            $console = ConsoleIntrospection::ask(new SymfonyConsole($this->runner, $root->absolute($stack->root), CommandLine::split($config->symfonyConsole), $config->symfonyEnv, $config->symfonyTimeout));
             [$confidence, $fallbackCause] = [Confidence::High, null];
         } catch (ConsoleFailed|\InvalidArgumentException $failure) {
             [$console, $confidence, $fallbackCause] = [null, Confidence::Medium, $failure->getMessage()];

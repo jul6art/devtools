@@ -29,7 +29,7 @@ bin/console devtools:workflows:inspect [path] …          (bridge, path par dé
 - Codes de sortie : `0` succès, `1` succès avec avertissements (repli statique, fichiers illisibles),
   `2` erreur (configuration invalide, collision d'identifiants, schéma).
 
-### Pipeline (`Inspection\Pipeline`)
+### Pipeline (`Inspection\InspectionPipeline`)
 
 ```
 StackDetector → AdapterResolver → Adapter::extract() → DependencyResolver + Grouping
@@ -43,7 +43,8 @@ StackDetector → AdapterResolver → Adapter::extract() → DependencyResolver 
   `vcs="none"` hors git) — les données dont la fraîcheur aura besoin sont écrites **dès ce lot**.
 - Un workflow disparu (XML présent, identifiant absent du modèle) est marqué `orphaned` et listé ;
   sa page n'est pas supprimée.
-- **Verrou** : `.devtools/.lock` (`flock`, sans dépendance) ; une seconde exécution concurrente sur
+- **Verrou** : `.devtools/reports/.inspect.lock` (`flock`, sans dépendance ; dans `reports/`, qui est
+  déjà ignoré par git — un verrou n'est pas de la documentation) ; une seconde exécution concurrente sur
   le même projet échoue immédiatement avec un message clair.
 
 ### Rapport (§ 4.3 étape 10)

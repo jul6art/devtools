@@ -21,7 +21,7 @@ Un `StackDetectorInterface` par écosystème, tous exécutés, résultats fusion
 |---|---|---|
 | `ComposerDetector` | `composer.json`, `composer.lock` | PHP (contrainte), `symfony/framework-bundle`, `laravel/framework` — version **résolue** lue dans le lock, sinon contrainte |
 | `NodeDetector` | `package.json`, lock npm/yarn/pnpm | Node, `@angular/core`, `next`, `express` |
-| `GoDetector`, `PythonDetector`, `RustDetector`, `JavaDetector` | `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml` | langage et gestionnaire uniquement |
+| `LanguageOnlyDetector` (un jeu de règles par manifeste) | `go.mod`, `pyproject.toml`, `Cargo.toml`, `pom.xml` | langage et gestionnaire uniquement |
 
 - Un monorepo produit **plusieurs** entrées `<stack>` (§ 7.1 `monorepo`), chacune avec sa racine
   relative.

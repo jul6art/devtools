@@ -114,7 +114,7 @@ final class GenericPhpAdapterTest extends TestCase
 
         $first = $this->inspect($project);
         self::assertSame(5, $first->count('created'));
-        self::assertSame([['stack' => 'Php (.)', 'adapter' => 'generic-php', 'confidence' => 'high']], $first->stacks);
+        self::assertSame([['stack' => 'Php (.)', 'adapter' => 'generic-php', 'confidence' => 'high', 'uncovered' => 1]], $first->stacks, 'lib/Mailer.php is reached by no workflow.');
 
         $tree = self::tree($project.'/.devtools');
         $expected = __DIR__.'/../../../Fixtures/expected/plain-php/.devtools';

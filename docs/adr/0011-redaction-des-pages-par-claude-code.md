@@ -40,7 +40,9 @@ Pour chaque brouillon, `PageDraftValidator` refuse si :
   `flowchart` ;
 - **un chemin de fichier cité n'est pas dans le modèle** : toute chaîne en code inline qui ressemble à
   un chemin (contient `/` et une extension connue) doit appartenir à `Workflow::files` ou
-  `Workflow::tests` — c'est la garde mécanique du « aucun chemin inventé » ;
+  `Workflow::tests` — c'est la garde mécanique du « aucun chemin inventé ». *Précision du 2026-09-17
+  (ADR-0015, matrice `plain-php`) : une chaîne qui commence par `/` est une URL (`/orders/new.php`),
+  pas un chemin de fichier — un fichier du modèle est toujours relatif ;*
 - le brouillon référence une révision plus ancienne que le XML actuel (le code a changé depuis le
   brief) → refus `outdated`, le brief est régénéré au prochain `inspect`.
 

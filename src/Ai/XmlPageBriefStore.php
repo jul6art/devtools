@@ -51,6 +51,14 @@ final readonly class XmlPageBriefStore
             $this->dom->element($root, 'reason', text: $reason);
         }
 
+        foreach ($brief->changes as $change) {
+            $this->dom->element($root, 'change', ['path' => $change['path'], 'kind' => $change['change']]);
+        }
+
+        foreach ($brief->sections as $section) {
+            $this->dom->element($root, 'section', text: $section);
+        }
+
         $this->dom->element($root, 'draft', ['path' => $brief->draftPath]);
 
         return $this->writer->write($path, $this->dom->toXml($xml));
@@ -80,6 +88,8 @@ final readonly class XmlPageBriefStore
             $this->dom->single($root, 'page')->getAttribute('path'),
             $this->dom->optional($root, 'knowledge')?->getAttribute('path'),
             array_map(static fn (\DOMElement $reason): string => $reason->textContent, $this->dom->children($root, 'reason')),
+            array_map(static fn (\DOMElement $section): string => $section->textContent, $this->dom->children($root, 'section')),
+            array_map(static fn (\DOMElement $change): array => ['path' => $change->getAttribute('path'), 'change' => $change->getAttribute('kind')], $this->dom->children($root, 'change')),
             $this->dom->single($root, 'draft')->getAttribute('path'),
         );
     }

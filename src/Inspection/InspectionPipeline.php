@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Inspection;
 
 use Jul6Art\DevTools\Ai\PageBrief;
+use Jul6Art\DevTools\Ai\PageDraft;
 use Jul6Art\DevTools\Ai\XmlPageBriefStore;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
@@ -21,6 +22,7 @@ use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessResolver;
 use Jul6Art\DevTools\Inspection\Freshness\GitClient;
 use Jul6Art\DevTools\Inspection\Freshness\GitState;
+use Jul6Art\DevTools\Inspection\Freshness\ReasonKind;
 use Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor;
 use Jul6Art\DevTools\Inspection\Graph\WorkflowBuilder;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
@@ -297,6 +299,35 @@ final readonly class InspectionPipeline
     }
 
     /**
+     * The files of the workflow that moved since its last revision, from the freshness decision.
+     *
+     * @return list<array{path: string, change: string}>
+     */
+    private static function changedFiles(?FreshnessDecision $decision): array
+    {
+        $changes = [];
+
+        foreach ($decision->reasons ?? [] as $reason) {
+            $kind = match ($reason->kind) {
+                ReasonKind::FilesAdded => 'added',
+                ReasonKind::FilesRemoved => 'removed',
+                ReasonKind::FilesChanged => 'changed',
+                default => null,
+            };
+
+            if (null === $kind) {
+                continue;
+            }
+
+            foreach ($reason->paths as $path) {
+                $changes[] = ['path' => $path, 'change' => $kind];
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
      * @return array{list<Workflow>, list<FileRef>, array<string, StackProfile>, list<array{StackProfile, list<string>}>} workflows, uncovered files, the stack of each workflow, and the discoveries Claude has to make
      */
     private function workflowsOf(ProjectRoot $root, StackDocument $stacks, Config $config, InspectionReport $report): array
@@ -337,7 +368,12 @@ final readonly class InspectionPipeline
                 [$stackWorkflows, $stackUncovered, $buildWarnings] = [$built->result->workflows, $built->result->uncovered, $built->warnings];
             }
 
-            $report->stacks[] = ['stack' => $label, 'adapter' => $adapter->name(), 'confidence' => null === $found->fallbackCause && null === $found->workflows ? 'high' : 'medium'];
+            $report->stacks[] = [
+                'stack' => $label,
+                'adapter' => $adapter->name(),
+                'confidence' => null === $found->fallbackCause && null === $found->workflows ? 'high' : 'medium',
+                'uncovered' => \count($stackUncovered),
+            ];
             $report->warnings = [...$report->warnings, ...$found->warnings, ...$buildWarnings];
             $workflows = [...$workflows, ...$stackWorkflows];
 
@@ -455,6 +491,8 @@ final readonly class InspectionPipeline
                 pagePath: DevToolsDirectory::NAME.'/'.DevToolsDirectory::pageRelativePath($workflow->type, $workflow->id),
                 knowledgePath: $knowledgePath,
                 reasons: [$document->lastRevision()->reason],
+                sections: PageDraft::expectedSections(),
+                changes: self::changedFiles($decisions[$workflow->id->value] ?? null),
                 draftPath: DevToolsDirectory::NAME.'/pending/'.PageBrief::fileName($workflow->id, 'draft.md'),
             ));
             $pending[] = $workflow->id;

@@ -53,7 +53,7 @@ final class WorkflowBuilderTest extends TestCase
 
     public function testTestsReferencingTheWorkflowNearItsEntryPointAreFound(): void
     {
-        self::assertSame(['tests/Service/OrderPricingTest.php'], array_map(static fn (FileRef $file): string => $file->path, $this->workflow($this->build(), 'route.order.new')->tests));
+        self::assertSame(['tests/Service/OrderPricingTest.php'], array_map(static fn (FileRef $file): string => $file->path, $this->workflow($this->build(), 'route.order.new')->tests), 'The helper next to it, tests/Support/OrderFactory.php, is not a test.');
         self::assertSame([], $this->workflow($this->build(), 'route.health')->tests);
     }
 

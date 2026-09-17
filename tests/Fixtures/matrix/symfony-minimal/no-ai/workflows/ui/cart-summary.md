@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : b0cc0c4
+`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : f16c698
 
 ## Résumé
 
@@ -71,4 +71,4 @@ Paquets : `symfony/ux-live-component` 2.36.0
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | b0cc0c4 | initial |
+| 2026-09-16 | f16c698 | initial |

@@ -41,7 +41,8 @@ Workflow          id (WorkflowId), type, title, main (EntryPoint), satellites (l
                   files (list<FileRef>, triés, sans doublon), packages (list<PackageRef>),
                   dependsOn (list<WorkflowId>), tests (list<FileRef>),
                   navigation (list<Edge> : routes/écrans atteints), states (?StateMachine),
-                  confidence (high|medium|low), source (native:<adaptateur>|claude)
+                  confidence (high|medium|low), source (native:<adaptateur>|claude ; élément
+                  <producer> dans le XML de suivi, cf. ADR-0004)
 InspectionResult  stack (référence stack.xml), workflows (list<Workflow>), uncovered (list<FileRef>)
 ```
 

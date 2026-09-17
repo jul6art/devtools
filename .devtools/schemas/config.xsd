@@ -71,6 +71,7 @@
                     <xs:complexType>
                         <xs:attribute name="console" type="t:nonEmpty"/>
                         <xs:attribute name="env" type="t:nonEmpty"/>
+                        <xs:attribute name="timeout" type="xs:decimal"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="php" minOccurs="0">

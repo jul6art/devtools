@@ -1,5 +1,5 @@
 # workflows:inspect
-`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : a3b1c1b
+`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 8f7ea01
 
 ## Résumé
 
@@ -51,6 +51,7 @@ sequenceDiagram
 | Rôle | Fichier | Notes |
 |---|---|---|
 | Autre | `src/Ai/PageBrief.php` |  |
+| Autre | `src/Ai/PageDraft.php` |  |
 | Autre | `src/Ai/XmlPageBriefStore.php` |  |
 | Autre | `src/Clock/Clock.php` |  |
 | Autre | `src/Clock/SystemClock.php` |  |
@@ -209,3 +210,4 @@ un repli de console, pas une erreur : un script CI qui exige 0 échoue sur un pr
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-17 | a3b1c1b | rédaction initiale |
+| 2026-09-17 | 8f7ea01 | files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/Graph/TestLocator.php, src/Inspection/InspectionPipeline.php, src/Inspection/InspectionReport.php; files added: src/Ai/PageDraft.php |

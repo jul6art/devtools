@@ -15,8 +15,10 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 final readonly class PageBrief
 {
     /**
-     * @param list<string> $reasons why the page is being (re)written
-     * @param bool         $amend   the inspection just added the revision this writing completes
+     * @param list<string>                              $reasons  why the page is being (re)written
+     * @param bool                                      $amend    the inspection just added the revision this writing completes
+     * @param list<string>                              $sections the closed list of sections the draft holds, in order
+     * @param list<array{path: string, change: string}> $changes  the files added, removed or changed since the last revision
      */
     public function __construct(
         public WorkflowId $workflow,
@@ -30,6 +32,8 @@ final readonly class PageBrief
         public string $pagePath,
         public ?string $knowledgePath,
         public array $reasons,
+        public array $sections,
+        public array $changes,
         public string $draftPath,
     ) {
     }

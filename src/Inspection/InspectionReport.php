@@ -8,8 +8,9 @@ use Jul6Art\DevTools\Inspection\Freshness\DecisionKind;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
 
 /**
- * What one inspection did (specs § 4.3 step 10): per stack, per type, what was created, updated, left
- * unchanged or orphaned — and everything that went wrong, the fallbacks first.
+ * What one inspection did (specs § 4.3 step 10): per stack, its adapter, its confidence and how many of its
+ * source files no workflow reaches; per type, what was created, updated, left unchanged or orphaned — and
+ * everything that went wrong, the fallbacks first.
  */
 final class InspectionReport
 {
@@ -21,7 +22,7 @@ final class InspectionReport
     private array $counts = [];
 
     /**
-     * @var list<array{stack: string, adapter: string, confidence: string}>
+     * @var list<array{stack: string, adapter: string, confidence: string, uncovered: int}>
      */
     public array $stacks = [];
 
@@ -105,10 +106,10 @@ final class InspectionReport
         }
 
         if ([] !== $this->stacks) {
-            $lines = [...$lines, '| Stack | Adapter | Confidence |', '|---|---|---|'];
+            $lines = [...$lines, '| Stack | Adapter | Confidence | Uncovered files |', '|---|---|---|---|'];
 
             foreach ($this->stacks as $stack) {
-                $lines[] = \sprintf('| %s | %s | %s |', $stack['stack'], $stack['adapter'], $stack['confidence']);
+                $lines[] = \sprintf('| %s | %s | %s | %d |', $stack['stack'], $stack['adapter'], $stack['confidence'], $stack['uncovered']);
             }
 
             $lines[] = '';

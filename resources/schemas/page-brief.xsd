@@ -29,6 +29,23 @@
                 <xs:element name="page" type="t:pathElement"/>
                 <xs:element name="knowledge" type="t:pathElement" minOccurs="0"/>
                 <xs:element name="reason" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                <!-- The files of the workflow that moved since the last revision: what to read first. -->
+                <xs:element name="change" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="kind" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="added"/>
+                                    <xs:enumeration value="removed"/>
+                                    <xs:enumeration value="changed"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The closed list of sections the draft holds, in order: anything else is refused. -->
+                <xs:element name="section" type="t:nonEmpty" maxOccurs="unbounded"/>
                 <xs:element name="draft" type="t:pathElement"/>
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>

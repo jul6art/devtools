@@ -57,8 +57,10 @@ Chaque élément est optionnel ; un `Config` immuable porte les valeurs par déf
 Le format du § 4.6.1, avec trois précisions :
 - `<generated at tool model mode prompt/>` : `mode` = `ai` | `no-ai` ; `model` et `prompt` absents
   en `no-ai` ;
-- `<confidence>high|medium|low</confidence>` et `<source>native:symfony|claude|…</source>` dès la
-  version 1 du schéma (§ 4.8), pour ne pas incrémenter `schema-version` au premier lot qui s'en sert ;
+- `<confidence>high|medium|low</confidence>` et `<producer>native:symfony|claude|…</producer>` dès la
+  version 1 du schéma (§ 4.8), pour ne pas incrémenter `schema-version` au premier lot qui s'en sert —
+  *le nom `<source>` des specs § 4.6.1 est déjà pris par `<source vcs commit branch dirty>` ; le modèle
+  garde `Workflow::source`, le XML écrit `<producer>` (précision du 2026-09-17)* ;
 - `<source vcs commit branch dirty>` accepte `vcs="none"` sans commit (projet hors git, fixtures).
 
 ### `graph/files-to-workflows.xml`

@@ -1,5 +1,5 @@
 # workflows:apply
-`command.workflows.apply` · type : commands · dernière mise à jour : 2026-09-17 · commit : a3b1c1b
+`command.workflows.apply` · type : commands · dernière mise à jour : 2026-09-17 · commit : 8f7ea01
 
 ## Résumé
 
@@ -145,8 +145,6 @@ changé depuis) est refusé comme obsolète, et c'est la prochaine inspection qu
 | PageRedactionTest | `tests/Ai/PageRedactionTest.php` | — |
 | ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
 | GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| GraphFixture | `tests/Inspection/Graph/GraphFixture.php` | — |
-| FakeAdapter | `tests/Inspection/Pipeline/FakeAdapter.php` | — |
 | ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
 | KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
 | StackDetectorTest | `tests/Stack/StackDetectorTest.php` | — |
@@ -161,3 +159,4 @@ changé depuis) est refusé comme obsolète, et c'est la prochaine inspection qu
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-17 | a3b1c1b | rédaction initiale |
+| 2026-09-17 | 8f7ea01 | files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |

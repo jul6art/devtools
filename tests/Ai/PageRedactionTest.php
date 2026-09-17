@@ -61,6 +61,26 @@ final class PageRedactionTest extends TestCase
         self::assertFileExists($this->project.'/'.$brief->modelPath);
         self::assertSame('2026-09-16T15:00:00+02:00', $brief->revision->format(\DATE_ATOM));
         self::assertStringContainsString('rédaction en attente', (string) file_get_contents($this->project.'/.devtools/workflows.md'));
+        self::assertSame(['Résumé', 'Préconditions', 'Parcours', 'Données', 'Mécanismes transverses', "Points d'attention", 'Changement'], $brief->sections, 'The brief carries the closed list of sections, in order.');
+        self::assertSame([], $brief->changes, 'Nothing moved: the page has never been written.');
+    }
+
+    public function testABriefNamesTheFilesThatMovedSinceTheLastRevision(): void
+    {
+        $this->inspect();
+        copy(self::DRAFT, $this->project.'/.devtools/pending/page.route.order.new.draft.md');
+        $this->apply();
+
+        file_put_contents($this->project.'/src/Service/OrderPricing.php', "\n// changed\n", \FILE_APPEND);
+        file_put_contents($this->project.'/src/Service/Discount.php', "<?php\nnamespace App\\Service;\nfinal class Discount {}\n");
+        $pricing = $this->project.'/src/Service/OrderPricing.php';
+        file_put_contents($pricing, str_replace('private ProductRepository $products', 'private ProductRepository $products, private Discount $discount', (string) file_get_contents($pricing)));
+        $this->inspect(at: '2026-09-16T16:00:00+02:00');
+
+        self::assertSame(
+            [['path' => 'src/Service/OrderPricing.php', 'change' => 'changed'], ['path' => 'src/Service/Discount.php', 'change' => 'added']],
+            new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml')->changes,
+        );
     }
 
     public function testWithoutAiNoBriefIsWritten(): void

@@ -53,7 +53,7 @@ Chaque étape du § 4.3 a un propriétaire unique :
 | 9 | Menu `workflows.md` | `Rendering\` | 0008 |
 | 10 | Rapport | `Command\` | 0009 |
 
-`Inspection\Pipeline` orchestre ; les commandes (`Command\`) ne font que lire les options, appeler le
+`Inspection\InspectionPipeline` orchestre ; les commandes (`Command\`) ne font que lire les options, appeler le
 pipeline et afficher. **Rien hors de `Bridge\Symfony\` ne dépend de `symfony/http-kernel`.**
 
 ### Questions ouvertes du § 12 — tranchées pour le MVP
@@ -80,13 +80,13 @@ projet Symfony se lit par sa console, ADR-0007), pas de bibliothèque JSON Schem
 ### Conventions de test communes à tous les lots
 
 - **Projets-fixtures** : `tests/Fixtures/projects/<nom>/` (code source réel, dans son langage) et
-  leur sortie attendue dans `tests/Fixtures/expected/<nom>/.devtools/`. Un test compare
+  leur sortie attendue dans `tests/Fixtures/expected/<nom>/.devtools/` — puis, pour la matrice de bout
+  en bout, dans `tests/Fixtures/matrix/<nom>/{no-ai,written}/` (ADR-0015). Un test compare
   arborescence et contenu ; `DEVTOOLS_UPDATE_SNAPSHOTS=1 composer test` régénère les attendus, et le
   diff se relit avant commit.
 - **Temps figé** : le cœur ne lit jamais l'horloge directement mais une `Clock` injectée ;
   les tests en fixent la valeur.
-- **Git** : un test qui a besoin d'un historique crée un dépôt temporaire (`GitRepositoryFactory`
-  de test) ; les fixtures versionnées dans ce dépôt ne sont pas des dépôts git.
+- **Git** : un test qui a besoin d'un historique crée un dépôt temporaire (`Tests\Support\GitRepository`) ; les fixtures versionnées dans ce dépôt ne sont pas des dépôts git.
 - Les fixtures sont exclues de PHP-CS-Fixer, Rector et PHPStan (à ajouter avec la première).
 
 ## Budget d'exécution

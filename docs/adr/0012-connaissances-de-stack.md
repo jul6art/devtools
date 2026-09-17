@@ -40,8 +40,8 @@ Pour `knowledgeKey` (`symfony-7`, ADR-0005), dans l'ordre :
    utilisation (le projet committe ce qu'il a utilisé, § 4.3) ;
 3. sinon **tâche `knowledge`** (ADR-0002) : brief avec la stack, la version, le canevas, la
    consigne de consulter la documentation officielle (recherche web de Claude Code) ; brouillon validé
-   par `KnowledgeDraftValidator` (sections du canevas présentes et dans l'ordre, section Sources non
-   vide) et écrit dans `.devtools/knowledge/`.
+   par `KnowledgeCanvas` (sections du canevas présentes et dans l'ordre, section Sources non vide,
+   au moins une URL) et écrit dans `.devtools/knowledge/`.
 
 Tant qu'une connaissance manque, les briefs `page` et `discovery` qui en dépendent **ne sont pas
 émis** : on ne rédige pas sans savoir comment la stack fonctionne.

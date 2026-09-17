@@ -42,11 +42,16 @@ final readonly class Config
         public array $customTypes = [],
         public string $symfonyConsole = 'bin/console',
         public string $symfonyEnv = 'dev',
+        public float $symfonyTimeout = 60.0,
         public string $pagesLanguage = 'fr',
         public ?string $phpWebRoot = null,
     ) {
         if ($graphDepth < 0) {
             throw new InvalidConfig('The graph depth cannot be negative.');
+        }
+
+        if ($symfonyTimeout <= 0) {
+            throw new InvalidConfig('The console timeout must be a positive number of seconds.');
         }
 
         foreach ($aliases as $entryPoint => $id) {

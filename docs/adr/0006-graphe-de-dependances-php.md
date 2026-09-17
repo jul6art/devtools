@@ -62,7 +62,10 @@ du menu.
 
 `TestLocator` : fichiers sous les dossiers de test (`tests/`, `autoload-dev`) qui référencent un
 fichier du workflow à profondeur ≤ 1 (même extracteur), plus ce que l'adaptateur ajoute
-(ADR-0007 : chemins d'URL littéraux).
+(ADR-0007 : chemins d'URL littéraux). *Précision du 2026-09-17 (constatée sur le `.devtools/` de ce
+dépôt) : seuls les fichiers **nommés** comme un test comptent (`*Test.php`, `*TestCase.php`,
+`*Spec.php`, `*_test.php`) ; un dossier de tests contient aussi des fabriques et des classes de base,
+et une page listait `GraphFixture.php` comme test d'un workflow qu'il n'exerce pas.*
 
 Dépendance ajoutée : `nikic/php-parser`.
 
@@ -90,6 +93,8 @@ profondeur variable par type de fichier.
 - [x] Un fichier source que rien ne référence apparaît dans `uncovered`
 - [x] Un fichier PHP syntaxiquement invalide produit un avertissement nommé et n'arrête pas le scan
 - [x] Un fichier partagé par 50 workflows est analysé une fois (compteur de l'extracteur)
+- [x] Une classe d'aide d'un dossier de tests (`tests/Support/OrderFactory.php`) n'est pas listée
+      comme test, même quand elle utilise les fichiers du workflow
 
 ## Conséquences
 

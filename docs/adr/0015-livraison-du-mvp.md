@@ -80,7 +80,7 @@ publication d'un site de documentation ; tout module postérieur à P1.
 - [x] Les deux modes produisent un `.devtools/` identique sur `symfony-minimal`
 - [x] Les quatre métriques du § 8 mesurées et tenues, chiffres consignés dans le README
 - [ ] Seuils de couverture et MSI appliqués en CI *(seuils de couverture : job CI « Coverage floors » et `composer coverage` ; MSI minimal à fixer à la valeur du premier passage d'Infection — aucun pilote de couverture sur le poste)*
-- [ ] `.devtools/` de ce dépôt committé, et `inspect --no-ai` sur ce dépôt ne modifie rien *(généré et rédigé, second passage sans modification ; commit : décision humaine)*
+- [x] `.devtools/` de ce dépôt committé, et `inspect --no-ai` sur ce dépôt ne modifie rien
 - [x] Installation `global` et `require-dev` testées
 - [x] README complet : les deux modes, `init`, `inspect`, `apply`, `claude:install`, options, ce qu'on
       committe, pièges (Docker, console qui ne boote pas, `--prune`)

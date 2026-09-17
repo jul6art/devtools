@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.stack.detect" type="commands" schema-version="1">
   <title>stack:detect</title>
-  <generated at="2026-09-17T02:26:10+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/1"/>
-  <source vcs="git" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" branch="master" dirty="true"/>
+  <generated at="2026-09-17T18:02:23+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="stack:detect" role="main">
       <declared-in path="src/Command/StackDetectCommand.php" role="other"/>
@@ -10,10 +10,10 @@
   </entrypoints>
   <files>
     <file path="src/Command/StackDetectCommand.php" role="other" sha256="2380931b32c19d973d120f7e98c16fccc6cb8921640a416a4023d8313a440055"/>
-    <file path="src/Config/Config.php" role="other" sha256="ed56298b2219fde3cfa04226483e87a553cb7e1cb37ef40aee771f379b6baeca"/>
+    <file path="src/Config/Config.php" role="other" sha256="027494ef59f8566398229c96f4a48b982321876540ab76aa87588a98b3762012"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="f75c853c5e64a0b57e1ac6c972151ced4c47c5d5ae55665609054c552633a89e"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="f788247946e3a89cc26f44424d2519f2bd3eecca9a0c14ab3055bd0928471b43"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
     <file path="src/Inspection/Model/InvalidModel.php" role="other" sha256="ea5d752b174d526cd64e79f3c4c3ac2a8f3bdbaaeb77a17934591b2373174e0c"/>
@@ -44,8 +44,6 @@
     <file path="tests/Config/XmlConfigReaderTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
-    <file path="tests/Inspection/Graph/GraphFixture.php" role="test"/>
-    <file path="tests/Inspection/Pipeline/FakeAdapter.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
     <file path="tests/Rendering/MenuRendererTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
@@ -61,5 +59,6 @@
   <status>fresh</status>
   <history>
     <revision at="2026-09-17T02:25:05+00:00" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" reason="rédaction initiale"/>
+    <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
   </history>
 </workflow>

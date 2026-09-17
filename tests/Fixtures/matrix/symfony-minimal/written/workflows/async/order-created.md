@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : b0cc0c4
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : f16c698
 
 ## Résumé
 
@@ -70,4 +70,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | b0cc0c4 | rédaction initiale |
+| 2026-09-16 | f16c698 | rédaction initiale |

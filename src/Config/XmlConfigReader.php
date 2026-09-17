@@ -69,6 +69,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             ),
             symfonyConsole: $symfony?->hasAttribute('console') ? $symfony->getAttribute('console') : $defaults->symfonyConsole,
             symfonyEnv: $symfony?->hasAttribute('env') ? $symfony->getAttribute('env') : $defaults->symfonyEnv,
+            symfonyTimeout: $symfony?->hasAttribute('timeout') ? (float) $symfony->getAttribute('timeout') : $defaults->symfonyTimeout,
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,
         );

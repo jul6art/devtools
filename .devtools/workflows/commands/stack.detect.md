@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : a3b1c1b
+`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 8f7ea01
 
 ## Résumé
 
@@ -96,8 +96,6 @@ n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparat
 | XmlConfigReaderTest | `tests/Config/XmlConfigReaderTest.php` | — |
 | ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
 | GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| GraphFixture | `tests/Inspection/Graph/GraphFixture.php` | — |
-| FakeAdapter | `tests/Inspection/Pipeline/FakeAdapter.php` | — |
 | ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
 | MenuRendererTest | `tests/Rendering/MenuRendererTest.php` | — |
 | KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
@@ -113,3 +111,4 @@ n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparat
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-17 | a3b1c1b | rédaction initiale |
+| 2026-09-17 | 8f7ea01 | files changed: src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |

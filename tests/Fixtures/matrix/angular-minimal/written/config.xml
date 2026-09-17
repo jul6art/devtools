@@ -29,9 +29,9 @@
          <type name="webhooks" prefix="webhook"/> -->
     <types/>
 
-    <!-- How to run this project's console. In a Docker-first project:
-         <symfony console="docker compose exec -T php bin/console" env="dev"/> -->
-    <symfony console="bin/console" env="dev"/>
+    <!-- How to run this project's console, and how long each call may take. In a Docker-first project:
+         <symfony console="docker compose exec -T php bin/console" env="dev" timeout="120"/> -->
+    <symfony console="bin/console" env="dev" timeout="60"/>
 
     <!-- The web directory of a PHP project without framework, each of its .php files being a route.
          By default public/, web/ and www/: <php web-root="htdocs"/> -->
