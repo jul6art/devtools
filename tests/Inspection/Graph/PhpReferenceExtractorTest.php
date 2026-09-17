@@ -122,6 +122,22 @@ final class PhpReferenceExtractorTest extends TestCase
         self::assertSame(2, $extractor->parsedFiles());
     }
 
+    /**
+     * The trees of a few hundred test files, kept for the scan, exhaust the memory of a real repository:
+     * a file read once is dropped (found on a 266-workflow project).
+     */
+    public function testAFileReadWithoutKeepingItIsParsedAgainNextTime(): void
+    {
+        $extractor = new PhpReferenceExtractor();
+
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php', keep: false);
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php', keep: false);
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php');
+        $extractor->extract(GraphFixture::PROJECT.'/src/Entity/Order.php');
+
+        self::assertSame(3, $extractor->parsedFiles(), 'Twice without keeping, then once more, kept.');
+    }
+
     public function testTwigReferencesAreReadFromLiteralTags(): void
     {
         $file = $this->temporaryDirectory().'/page.html.twig';

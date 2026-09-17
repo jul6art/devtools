@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 6753625
 
 ## Résumé
 
@@ -9,7 +9,8 @@ Traite le message `OrderCreated` : le handler recharge la commande désignée pa
 
 | Élément | Valeur |
 |---|---|
-| Point d'entrée | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
+| Point d'entrée | `App\MessageHandler\NotifyOnOrderCreated` (message-handler) |
+| Satellite | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
 | Message | `App\Message\OrderCreated` |
 | Sécurité | — |
 | Préconditions | Un message OrderCreated est distribué sur le bus (transport sync). |
@@ -37,9 +38,13 @@ sequenceDiagram
 | Configuration | `config/packages/framework.yaml` |  |
 | Configuration | `config/services.yaml` |  |
 | Entité | `src/Entity/Order.php` |  |
+| Entité | `src/Entity/Product.php` |  |
 | Message | `src/Message/OrderCreated.php` |  |
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` | point d'entrée |
+| Handler | `src/MessageHandler/NotifyOnOrderCreated.php` | point d'entrée |
+| Handler | `src/MessageHandler/OrderCreatedHandler.php` |  |
 | Repository | `src/Repository/OrderRepository.php` |  |
+| Repository | `src/Repository/ProductRepository.php` |  |
+| Service | `src/Service/OrderPricing.php` |  |
 | Autre | `src/ValueObject/Money.php` |  |
 
 Paquets : `symfony/messenger` 8.1.7
@@ -60,7 +65,9 @@ aujourd'hui jamais déclenché.
 
 ## Tests existants
 
-—
+| Test | Fichier | Couvre |
+|---|---|---|
+| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
 
 ## Workflows liés
 
@@ -70,4 +77,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 7cf26ca | rédaction initiale |
+| 2026-09-16 | 6753625 | rédaction initiale |

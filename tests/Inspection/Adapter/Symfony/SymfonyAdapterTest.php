@@ -49,6 +49,14 @@ final class SymfonyAdapterTest extends TestCase
         self::assertSame(self::EXPECTED_WORKFLOWS, $this->ids($result));
         self::assertNull($adapter->fallbackCause);
         self::assertSame(['app_status'], array_map(static fn (EntryPoint $satellite): string => $satellite->name, $this->workflow($result, 'route.health')->satellites));
+        $async = $this->workflow($result, 'async.order-created');
+
+        self::assertSame('App\MessageHandler\NotifyOnOrderCreated', $async->main->name);
+        self::assertSame(
+            ['App\MessageHandler\OrderCreatedHandler'],
+            array_map(static fn (EntryPoint $satellite): string => $satellite->name, $async->satellites),
+            'Every handler of a message is one workflow: what happens when it is published.',
+        );
 
         foreach ($result->workflows as $workflow) {
             self::assertSame(Confidence::High, $workflow->confidence, (string) $workflow->id);

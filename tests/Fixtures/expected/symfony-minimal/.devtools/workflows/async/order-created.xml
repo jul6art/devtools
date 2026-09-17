@@ -4,7 +4,11 @@
   <generated at="2026-09-16T00:00:00+00:00" tool="devtools" mode="no-ai"/>
   <source vcs="none"/>
   <entrypoints>
-    <entrypoint kind="message-handler" name="App\MessageHandler\OrderCreatedHandler" role="main">
+    <entrypoint kind="message-handler" name="App\MessageHandler\NotifyOnOrderCreated" role="main">
+      <declared-in path="src/MessageHandler/NotifyOnOrderCreated.php" role="handler"/>
+      <attribute name="message" value="App\Message\OrderCreated"/>
+    </entrypoint>
+    <entrypoint kind="message-handler" name="App\MessageHandler\OrderCreatedHandler" role="satellite">
       <declared-in path="src/MessageHandler/OrderCreatedHandler.php" role="handler"/>
       <attribute name="message" value="App\Message\OrderCreated"/>
     </entrypoint>
@@ -13,11 +17,18 @@
     <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
     <file path="config/services.yaml" role="config" sha256="ffb7e71a58d604bb7b7f23356e843fdbfa48beac4a32edbfd16a856ff0856cfb"/>
     <file path="src/Entity/Order.php" role="entity" sha256="f2e57ab0209aa9a2ec218a71ec55a2f753fa0fc7d2236fe2b65d8119f56f94dd"/>
+    <file path="src/Entity/Product.php" role="entity" sha256="328ab809b0f216bd4d9ae7fac57844aae521e822bf7a1fe09ebe35ff04e4b5c7"/>
     <file path="src/Message/OrderCreated.php" role="message" sha256="e836d9619343232809a3b4ec701bd00a981339cfe3db4af44a4c3b393584cc00"/>
+    <file path="src/MessageHandler/NotifyOnOrderCreated.php" role="handler" sha256="48cf85d54886393c590d25e482f0a9c5c3b628c0409f88d2f3788f433295532e"/>
     <file path="src/MessageHandler/OrderCreatedHandler.php" role="handler" sha256="f786d59e001124b6a40511e72a31f73d4f9c898b4ae41484901b5f368bfc563f"/>
     <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
+    <file path="src/Repository/ProductRepository.php" role="repository" sha256="c1c799702f7e44a9859200efbbef65ed5059bce5c594c0669b15afe09e4336fc"/>
+    <file path="src/Service/OrderPricing.php" role="service" sha256="e31d6a527c80c77f4923b499f6b325deb8c2a01b4bb75a71ee404639c7b5ed45"/>
     <file path="src/ValueObject/Money.php" role="other" sha256="1379a114fadb49a067c3023379b8ec9b8d68080e574f006c98278df245076b15"/>
   </files>
+  <tests>
+    <file path="tests/Service/OrderPricingTest.php" role="test"/>
+  </tests>
   <packages>
     <package name="symfony/messenger" version="8.1.7"/>
   </packages>

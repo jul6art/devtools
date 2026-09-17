@@ -1,5 +1,5 @@
 # init
-`command.init` · type : commands · dernière mise à jour : 2026-09-17 · commit : 66f5ede
+`command.init` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
 
 ## Résumé
 
@@ -96,3 +96,4 @@ n'y apparaît pas d'elle-même. Les schémas, eux, sont toujours remis à jour.
 | 2026-09-17 | 8f7ea01 | files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
 | 2026-09-17 | 66f5ede | files changed: src/Tracking/DevToolsDirectory.php |
 | 2026-09-17 | 66f5ede | forced |
+| 2026-09-17 | b334cfb | forced |

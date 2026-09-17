@@ -1,5 +1,5 @@
 # claude:install
-`command.claude.install` · type : commands · dernière mise à jour : 2026-09-17 · commit : 66f5ede
+`command.claude.install` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
 
 ## Résumé
 
@@ -91,3 +91,4 @@ donc tant que l'équipe ne l'a pas modifié, puis plus jamais sans intervention.
 | 2026-09-17 | a3b1c1b | rédaction initiale |
 | 2026-09-17 | 8f7ea01 | files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
 | 2026-09-17 | 66f5ede | forced |
+| 2026-09-17 | b334cfb | forced |

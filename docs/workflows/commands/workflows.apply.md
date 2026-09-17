@@ -1,5 +1,5 @@
 # workflows:apply
-`command.workflows.apply` · type : commands · dernière mise à jour : 2026-09-17 · commit : 66f5ede
+`command.workflows.apply` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
 
 ## Résumé
 
@@ -165,3 +165,4 @@ changé depuis) est refusé comme obsolète, et c'est la prochaine inspection qu
 | 2026-09-17 | 66f5ede | files changed: src/Ai/DraftApplier.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php |
 | 2026-09-17 | 66f5ede | forced |
 | 2026-09-17 | 66f5ede | files changed: src/Tracking/XmlIndexStore.php |
+| 2026-09-17 | b334cfb | forced; files changed: src/Rendering/PageRenderer.php |

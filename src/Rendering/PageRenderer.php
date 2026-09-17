@@ -23,6 +23,11 @@ use Jul6Art\DevTools\Tracking\Revision;
 final class PageRenderer
 {
     /**
+     * Above this many files reached, the journey shows a count per role instead of one box per file.
+     */
+    private const int JOURNEY_FILES = 12;
+
+    /**
      * @param list<Revision>  $history oldest first, at least one
      * @param ParsedPage|null $written the current page, when Claude wrote it
      */
@@ -101,39 +106,54 @@ final class PageRenderer
     /**
      * The factual journey: the entry point, its file, and the files it reaches. The order of calls is not
      * known statically — that is what Claude's sequence diagram adds.
+     *
+     * Past a dozen files the diagram stops being read: a real controller reaches thirty entities and helpers,
+     * and a flat fan of thirty boxes says less than a count per role. The files themselves are all listed,
+     * one by one, under "Composants impliqués".
      */
     private function journey(Workflow $workflow): string
     {
-        $labels = [$workflow->title];
-        $edges = [];
-        $entryIndex = null;
+        // Configuration declares the workflow, it is not traversed by it: listed as a component, not drawn.
+        $files = array_values(array_filter($workflow->files, static fn (FileRef $file): bool => FileRole::Config !== $file->role));
+        $entry = array_values(array_filter($files, static fn (FileRef $file): bool => $file->samePathAs($workflow->main->declaredIn)));
+        $reached = array_values(array_filter($files, static fn (FileRef $file): bool => !$file->samePathAs($workflow->main->declaredIn)));
 
-        foreach ($workflow->files as $file) {
-            // Configuration declares the workflow, it is not traversed by it: listed as a component, not drawn.
-            if (FileRole::Config === $file->role) {
-                continue;
-            }
+        $labels = [$workflow->title, ...array_map(self::fileLabel(...), $entry)];
+        $edges = [] === $entry ? [] : [[0, 1, null]];
+        $from = [] === $entry ? 0 : 1;
 
-            $labels[] = Labels::role($file->role).' · '.$file->path;
-
-            if ($file->samePathAs($workflow->main->declaredIn)) {
-                $entryIndex = \count($labels) - 1;
-            }
-        }
-
-        $entryIndex ??= 0;
-
-        if (0 !== $entryIndex) {
-            $edges[] = [0, $entryIndex, null];
-        }
-
-        foreach (array_keys($labels) as $index) {
-            if (0 !== $index && $entryIndex !== $index) {
-                $edges[] = [$entryIndex, $index, null];
-            }
+        foreach (\count($reached) > self::JOURNEY_FILES ? self::byRole($reached) : array_map(self::fileLabel(...), $reached) as $label) {
+            $labels[] = $label;
+            $edges[] = [$from, \count($labels) - 1, null];
         }
 
         return MermaidWriter::flowchart('TD', $labels, $edges);
+    }
+
+    private static function fileLabel(FileRef $file): string
+    {
+        return Labels::role($file->role).' · '.$file->path;
+    }
+
+    /**
+     * `Entité ×9`, one node per role, roles in a stable order.
+     *
+     * @param list<FileRef> $files
+     *
+     * @return list<string>
+     */
+    private static function byRole(array $files): array
+    {
+        $counts = [];
+
+        foreach ($files as $file) {
+            $role = Labels::role($file->role);
+            $counts[$role] = ($counts[$role] ?? 0) + 1;
+        }
+
+        ksort($counts, \SORT_STRING);
+
+        return array_map(static fn (string $role, int $count): string => \sprintf('%s ×%d', $role, $count), array_keys($counts), array_values($counts));
     }
 
     private function navigation(Workflow $workflow): string

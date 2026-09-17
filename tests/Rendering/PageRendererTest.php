@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Tests\Rendering;
 
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
+use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -48,6 +49,29 @@ final class PageRendererTest extends TestCase
         foreach (array_keys(RenderingFixtures::workflows()) as $type) {
             yield $type => [$type];
         }
+    }
+
+    /**
+     * A real controller reaches thirty files, and thirty boxes in a row say nothing (found on a 266-workflow
+     * project). The files stay listed one by one under "Composants impliqués".
+     */
+    public function testALongJourneyIsDrawnAsACountPerRoleInsteadOfOneBoxPerFile(): void
+    {
+        $many = [];
+
+        for ($i = 0; $i < 9; ++$i) {
+            $many[] = new FileRef(\sprintf('src/Entity/Entity%d.php', $i), FileRole::Entity);
+            $many[] = new FileRef(\sprintf('src/Repository/Repository%d.php', $i), FileRole::Repository);
+        }
+
+        $workflow = RenderingFixtures::withFiles(RenderingFixtures::workflows()['routes'], $many);
+        $journey = (string) new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingFixtures::context()))->section(PageSection::Journey);
+
+        self::assertStringContainsString('"Entité ×9"', $journey);
+        self::assertStringContainsString('"Repository ×9"', $journey);
+        self::assertStringNotContainsString('Entity3.php', $journey);
+        self::assertStringContainsString('src/Controller/OrderController.php', $journey, 'The entry point keeps its own box.');
+        self::assertLessThanOrEqual(12, substr_count($journey, "\n  n"), 'One box per role, not one per file: 24 files reached.');
     }
 
     /**

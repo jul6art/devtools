@@ -25,7 +25,7 @@ Un seul gabarit pour tous les types (§ 12 question 4). Chaque section a **un pr
 | Titre, ligne d'en-tête (`id · type · MAJ · commit`) | DevTools | titre = `Workflow::title` (dérivé du point d'entrée) |
 | Résumé | Claude | `—` |
 | Déclencheur | DevTools, sauf la ligne « Préconditions » (Claude) | table du § 4.5 : point d'entrée et satellites, sécurité (`EntryPoint::attributes['security']`), préconditions (`—`) |
-| Parcours | Claude, avec repli DevTools | `flowchart TD` du graphe de dépendances (Mermaid obligatoire, § 4.5) |
+| Parcours | Claude, avec repli DevTools | `flowchart TD` du graphe de dépendances (Mermaid obligatoire, § 4.5) ; au-delà de douze fichiers atteints, **un nœud par rôle avec son compteur** (`Entité ×9`) — un contrôleur réel en atteint quarante, et quarante boîtes ne se lisent pas *(précisé le 2026-09-17)* |
 | Navigation / états | DevTools | `flowchart LR` de `navigation` ; `stateDiagram-v2` de `states` ; `—` sinon |
 | Composants impliqués | DevTools | table `role · fichier · notes` |
 | Données | Claude | `—` |
@@ -78,6 +78,8 @@ section autre que le français du § 4.5.
       section DevTools est détectée
 - [x] Une réécriture factuelle d'une page rédigée conserve les sections rédigées par Claude :
       Résumé, Parcours, Données, Mécanismes transverses, Points d'attention
+- [x] Un workflow qui atteint plus de douze fichiers est dessiné par rôle, et les fichiers restent listés
+      un par un dans « Composants impliqués »
 - [x] Libellés Mermaid piégeux (`App\Controller\X::new`, `/orders/{id}`, `[`, `"`) : échappés
       (cas par cas)
 - [x] Menu : compteurs exacts, sous-menu à 0 présent, ordre stable, « Non couvert » trié

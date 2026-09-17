@@ -1,5 +1,5 @@
 # kernel.request → LocaleListener
-`event.locale-listener` · type : events · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
+`event.locale-listener` · type : events · dernière mise à jour : 2026-09-16 · commit : 6753625
 
 ## Résumé
 
@@ -60,4 +60,4 @@ Paquets : `symfony/event-dispatcher` 8.1.5, `symfony/http-kernel` 8.1.7
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 7cf26ca | initial |
+| 2026-09-16 | 6753625 | initial |

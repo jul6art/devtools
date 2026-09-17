@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-17T20:03:52+00:00" docs="docs/workflows">
-  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
-  <workflow id="command.claude.install" type="commands" title="claude:install" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:02:40+00:00" page="commands/claude.install.md"/>
-  <workflow id="command.init" type="commands" title="init" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:02:40+00:00" page="commands/init.md"/>
-  <workflow id="command.stack.detect" type="commands" title="stack:detect" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:02:40+00:00" page="commands/stack.detect.md"/>
-  <workflow id="command.workflows.apply" type="commands" title="workflows:apply" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:03:52+00:00" page="commands/workflows.apply.md"/>
-  <workflow id="command.workflows.inspect" type="commands" title="workflows:inspect" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:03:52+00:00" page="commands/workflows.inspect.md"/>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-17T20:47:06+00:00" docs="docs/workflows">
+  <source vcs="git" commit="b334cfb2898595d16b294c299a9a459254abf42f" branch="master" dirty="true"/>
+  <workflow id="command.claude.install" type="commands" title="claude:install" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:47:06+00:00" page="commands/claude.install.md"/>
+  <workflow id="command.init" type="commands" title="init" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:47:06+00:00" page="commands/init.md"/>
+  <workflow id="command.stack.detect" type="commands" title="stack:detect" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:47:06+00:00" page="commands/stack.detect.md"/>
+  <workflow id="command.workflows.apply" type="commands" title="workflows:apply" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:47:06+00:00" page="commands/workflows.apply.md"/>
+  <workflow id="command.workflows.inspect" type="commands" title="workflows:inspect" status="fresh" confidence="high" mode="no-ai" updated="2026-09-17T20:47:06+00:00" page="commands/workflows.inspect.md"/>
 </index>

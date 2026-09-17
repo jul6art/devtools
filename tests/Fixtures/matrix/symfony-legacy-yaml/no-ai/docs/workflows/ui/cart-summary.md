@@ -19,16 +19,16 @@
 ```mermaid
 flowchart TD
   n1["CartSummary"]
-  n2["Entité · src/Entity/Order.php"]
-  n3["Repository · src/Repository/OrderRepository.php"]
-  n4["Composant · src/Twig/Components/CartSummary.php"]
+  n2["Composant · src/Twig/Components/CartSummary.php"]
+  n3["Entité · src/Entity/Order.php"]
+  n4["Repository · src/Repository/OrderRepository.php"]
   n5["Autre · src/ValueObject/Money.php"]
   n6["Template · templates/components/CartSummary.html.twig"]
-  n1 --> n4
-  n4 --> n2
-  n4 --> n3
-  n4 --> n5
-  n4 --> n6
+  n1 --> n2
+  n2 --> n3
+  n2 --> n4
+  n2 --> n5
+  n2 --> n6
 ```
 
 ## Navigation / états

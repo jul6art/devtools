@@ -28,6 +28,10 @@ use PhpParser\ParserFactory;
  * Reads, without executing it, which classes a PHP file uses, which templates it renders and which files it
  * requires.
  *
+ * Every syntax tree is kept for the scan, so a file shared by many workflows is parsed once. A file read
+ * exactly once — every test of the project, when tests are located — is dropped instead: keeping the trees
+ * of a few hundred test files is what exhausts the memory of a real repository.
+ *
  * Only names actually used count, after resolution: an import nothing uses is not a dependency. With a
  * method scope — the method of a route, a handler — the class members every method shares (parents,
  * attributes, properties, constructor) are kept and the other methods are left out, so a list route does
@@ -57,10 +61,15 @@ final class PhpReferenceExtractor
 
     /**
      * @param list<string> $methods empty for the whole file
+     * @param bool         $keep    false for a file read once — its syntax tree is dropped instead of kept
      */
-    public function extract(string $absolutePath, array $methods = []): PhpReferences
+    public function extract(string $absolutePath, array $methods = [], bool $keep = true): PhpReferences
     {
         $statements = $this->statements($absolutePath);
+
+        if (!$keep) {
+            unset($this->parsed[$absolutePath]);
+        }
 
         if (\is_string($statements)) {
             return new PhpReferences(warning: $statements);

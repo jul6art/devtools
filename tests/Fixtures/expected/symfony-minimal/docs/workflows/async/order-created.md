@@ -9,7 +9,8 @@
 
 | Élément | Valeur |
 |---|---|
-| Point d'entrée | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
+| Point d'entrée | `App\MessageHandler\NotifyOnOrderCreated` (message-handler) |
+| Satellite | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
 | Message | `App\Message\OrderCreated` |
 | Sécurité | — |
 | Préconditions | — |
@@ -19,16 +20,24 @@
 ```mermaid
 flowchart TD
   n1["OrderCreated"]
-  n2["Entité · src/Entity/Order.php"]
-  n3["Message · src/Message/OrderCreated.php"]
-  n4["Handler · src/MessageHandler/OrderCreatedHandler.php"]
-  n5["Repository · src/Repository/OrderRepository.php"]
-  n6["Autre · src/ValueObject/Money.php"]
-  n1 --> n4
-  n4 --> n2
-  n4 --> n3
-  n4 --> n5
-  n4 --> n6
+  n2["Handler · src/MessageHandler/NotifyOnOrderCreated.php"]
+  n3["Entité · src/Entity/Order.php"]
+  n4["Entité · src/Entity/Product.php"]
+  n5["Message · src/Message/OrderCreated.php"]
+  n6["Handler · src/MessageHandler/OrderCreatedHandler.php"]
+  n7["Repository · src/Repository/OrderRepository.php"]
+  n8["Repository · src/Repository/ProductRepository.php"]
+  n9["Service · src/Service/OrderPricing.php"]
+  n10["Autre · src/ValueObject/Money.php"]
+  n1 --> n2
+  n2 --> n3
+  n2 --> n4
+  n2 --> n5
+  n2 --> n6
+  n2 --> n7
+  n2 --> n8
+  n2 --> n9
+  n2 --> n10
 ```
 
 ## Navigation / états
@@ -42,9 +51,13 @@ flowchart TD
 | Configuration | `config/packages/framework.yaml` |  |
 | Configuration | `config/services.yaml` |  |
 | Entité | `src/Entity/Order.php` |  |
+| Entité | `src/Entity/Product.php` |  |
 | Message | `src/Message/OrderCreated.php` |  |
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` | point d'entrée |
+| Handler | `src/MessageHandler/NotifyOnOrderCreated.php` | point d'entrée |
+| Handler | `src/MessageHandler/OrderCreatedHandler.php` |  |
 | Repository | `src/Repository/OrderRepository.php` |  |
+| Repository | `src/Repository/ProductRepository.php` |  |
+| Service | `src/Service/OrderPricing.php` |  |
 | Autre | `src/ValueObject/Money.php` |  |
 
 Paquets : `symfony/messenger` 8.1.7
@@ -63,7 +76,9 @@ Paquets : `symfony/messenger` 8.1.7
 
 ## Tests existants
 
-—
+| Test | Fichier | Couvre |
+|---|---|---|
+| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
 
 ## Workflows liés
 

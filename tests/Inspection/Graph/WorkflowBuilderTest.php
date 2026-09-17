@@ -60,7 +60,7 @@ final class WorkflowBuilderTest extends TestCase
     public function testFilesNoWorkflowReferencesAreUncovered(): void
     {
         self::assertSame(
-            ['migrations/Version20260901000000.php', 'src/Kernel.php', 'src/Message/OrderCreated.php', 'src/MessageHandler/OrderCreatedHandler.php', 'src/Twig/Components/CartSummary.php', 'src/Util/StringHelper.php', 'templates/components/CartSummary.html.twig'],
+            ['migrations/Version20260901000000.php', 'src/Kernel.php', 'src/Message/OrderCreated.php', 'src/MessageHandler/NotifyOnOrderCreated.php', 'src/MessageHandler/OrderCreatedHandler.php', 'src/Twig/Components/CartSummary.php', 'src/Util/StringHelper.php', 'templates/components/CartSummary.html.twig'],
             array_map(static fn (FileRef $file): string => $file->path, $this->build()->result->uncovered),
         );
     }

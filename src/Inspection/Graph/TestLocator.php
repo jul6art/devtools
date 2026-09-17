@@ -74,7 +74,7 @@ final class TestLocator
                 continue;
             }
 
-            $located = array_map($this->locator->locate(...), $this->extractor->extract($this->root->absolute($test))->classes);
+            $located = array_map($this->locator->locate(...), $this->extractor->extract($this->root->absolute($test), keep: false)->classes);
             $this->references[$test] = array_values(array_map(static fn (FileRef $file): string => $file->path, array_filter($located, static fn (mixed $file): bool => $file instanceof FileRef)));
         }
 

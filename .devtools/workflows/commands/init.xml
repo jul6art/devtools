@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.init" type="commands" schema-version="1">
   <title>init</title>
-  <generated at="2026-09-17T20:02:40+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:47:06+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="b334cfb2898595d16b294c299a9a459254abf42f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="init" role="main">
       <declared-in path="src/Command/InitCommand.php" role="other"/>
@@ -44,5 +44,6 @@
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
     <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/DevToolsDirectory.php"/>
     <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
+    <revision at="2026-09-17T20:47:06+00:00" commit="b334cfb2898595d16b294c299a9a459254abf42f" reason="forced"/>
   </history>
 </workflow>

@@ -34,6 +34,40 @@
                 ".messenger.handler_descriptor.LLiL8h8"
             ]
         },
+        "App\\MessageHandler\\NotifyOnOrderCreated": {
+            "class": "App\\MessageHandler\\NotifyOnOrderCreated",
+            "public": false,
+            "synthetic": false,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "autowire": true,
+            "autoconfigure": true,
+            "deprecated": false,
+            "arguments": [
+                {
+                    "type": "service",
+                    "id": "App\\Service\\OrderPricing"
+                }
+            ],
+            "file": null,
+            "tags": [
+                {
+                    "name": "messenger.message_handler",
+                    "parameters": {
+                        "bus": null,
+                        "handles": null,
+                        "method": null,
+                        "priority": 0,
+                        "sign": false,
+                        "from_transport": null
+                    }
+                }
+            ],
+            "usages": [
+                ".messenger.handler_descriptor.NotifyOnOrderCreated"
+            ]
+        },
         "console.messenger.execute_command_handler": {
             "class": "Symfony\\Component\\Console\\Messenger\\RunCommandMessageHandler",
             "public": false,

@@ -19,16 +19,16 @@
 ```mermaid
 flowchart TD
   n1["OrderCreated"]
-  n2["Entité · src/Entity/Order.php"]
-  n3["Message · src/Message/OrderCreated.php"]
-  n4["Handler · src/MessageHandler/OrderCreatedHandler.php"]
+  n2["Handler · src/MessageHandler/OrderCreatedHandler.php"]
+  n3["Entité · src/Entity/Order.php"]
+  n4["Message · src/Message/OrderCreated.php"]
   n5["Repository · src/Repository/OrderRepository.php"]
   n6["Autre · src/ValueObject/Money.php"]
-  n1 --> n4
-  n4 --> n2
-  n4 --> n3
-  n4 --> n5
-  n4 --> n6
+  n1 --> n2
+  n2 --> n3
+  n2 --> n4
+  n2 --> n5
+  n2 --> n6
 ```
 
 ## Navigation / états

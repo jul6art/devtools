@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.inspect" type="commands" schema-version="1">
   <title>workflows:inspect</title>
-  <generated at="2026-09-17T20:03:52+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:47:06+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="b334cfb2898595d16b294c299a9a459254abf42f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:inspect" role="main">
       <declared-in path="src/Command/WorkflowsInspectCommand.php" role="other"/>
@@ -41,11 +41,11 @@
     <file path="src/Inspection/Graph/CoverageCalculator.php" role="other" sha256="acbf350d09eb32e4c3a58c93e8eb8c33ad03e4888d0bcae76efd44b91e8dfbc5"/>
     <file path="src/Inspection/Graph/DependencyResolver.php" role="other" sha256="7bec2f271e9e75b7d76d85ee672a4e5044acd1649f85e4148e761315ee563dd0"/>
     <file path="src/Inspection/Graph/EntryPointCandidate.php" role="other" sha256="c2048bf1f1def3fbdbbd8731db346d99b8f0fa529268de7eb234f1229ddbec2c"/>
-    <file path="src/Inspection/Graph/PhpReferenceExtractor.php" role="other" sha256="11ddede6e530a3f3c5b51f5e0f0dffbe3d1e921a9a3036ede998c0725ec80e0c"/>
+    <file path="src/Inspection/Graph/PhpReferenceExtractor.php" role="other" sha256="bb1d33f0a06f65b3a48d29c1f97b0d22f84f510b1fcf03b41694d0f744288a6a"/>
     <file path="src/Inspection/Graph/PhpReferences.php" role="other" sha256="b9b31d3d04242f8b5108d68ace379c4ed8c60996e3c85a6c36690eafb5393fef"/>
-    <file path="src/Inspection/Graph/TestLocator.php" role="other" sha256="2e92580063474363d2ae9eb59a015fa8b763d0525ccffc47308dd3117437d174"/>
+    <file path="src/Inspection/Graph/TestLocator.php" role="other" sha256="896e402ee1039d4eaf970342432c4021ee6fe782b6ec77987cc4526f14880440"/>
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
-    <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="25c52f5c2e26bdba1f39e544dda86a26b696c6aebd0469f313684a57e9d4350d"/>
+    <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="5ec9a4d39f23f1c472fbf2b92e6b20f41544c103f36a78dda6f1ff893e265178"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="ee31a736f31d15cb79d8376540248b2f3f17120fed8cd837c78d8b28419858ca"/>
     <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="bdfb5efc589829219284610a7ea8c86315234150fb20f29fcfd52471f8835f0c"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="41a1a6da729dc1c5f1f3199f3f80138683b78902bf3098b5c8a56f181304da1b"/>
@@ -80,7 +80,7 @@
     <file path="src/Rendering/MenuRenderer.php" role="other" sha256="ae746bdbed95510f9e191da531b569fe679a650a82018b677a985aa0c6c82f21"/>
     <file path="src/Rendering/MermaidWriter.php" role="other" sha256="819c384e9d1075e7e37bdcd7ca2e1722d1ef990c97d0b4a8fa2a0e490d9d3302"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
-    <file path="src/Rendering/PageRenderer.php" role="other" sha256="133c0c306af90897dbcebdffc6ead5ba3d88604688d80c2aadfa3b5371fb81c5"/>
+    <file path="src/Rendering/PageRenderer.php" role="other" sha256="973286bd8d679e8b1dd8b1ec2147ce767077a79bda86e0e107394f334725bb87"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="cf11c86083968f7bb60c22f7f0b1694cd52b7e97502b6c3d21bb10aa8321d641"/>
     <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="80a4f55b3e6470b4b49567b161949b6735efd3b27332c76148fe79590719b611"/>
@@ -157,5 +157,6 @@
     <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Command/WorkflowsInspectCommand.php, src/Inspection/Freshness/GitClient.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Rendering/MenuRenderer.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php"/>
     <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
     <revision at="2026-09-17T20:03:52+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/XmlIndexStore.php"/>
+    <revision at="2026-09-17T20:47:06+00:00" commit="b334cfb2898595d16b294c299a9a459254abf42f" reason="forced; files changed: src/Inspection/Graph/PhpReferenceExtractor.php, src/Inspection/Graph/TestLocator.php, src/Inspection/Graph/WorkflowBuilder.php, src/Rendering/PageRenderer.php"/>
   </history>
 </workflow>

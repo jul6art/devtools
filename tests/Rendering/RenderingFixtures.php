@@ -37,6 +37,30 @@ final class RenderingFixtures
     }
 
     /**
+     * The same workflow, reaching more files.
+     *
+     * @param list<FileRef> $files
+     */
+    public static function withFiles(Workflow $workflow, array $files): Workflow
+    {
+        return new Workflow(
+            $workflow->id,
+            $workflow->type,
+            $workflow->title,
+            $workflow->main,
+            $workflow->satellites,
+            [...$workflow->files, ...$files],
+            $workflow->packages,
+            $workflow->dependsOn,
+            $workflow->tests,
+            $workflow->navigation,
+            $workflow->states,
+            $workflow->confidence,
+            $workflow->source,
+        );
+    }
+
+    /**
      * @param array<string, string> $attributes
      */
     private static function simple(string $id, WorkflowType $type, string $kind, string $name, string $file, FileRole $role, array $attributes = []): Workflow

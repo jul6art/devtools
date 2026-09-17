@@ -1,5 +1,5 @@
 # workflows:inspect
-`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 66f5ede
+`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
 
 ## Résumé
 
@@ -217,3 +217,4 @@ un repli de console, pas une erreur : un script CI qui exige 0 échoue sur un pr
 | 2026-09-17 | 66f5ede | files changed: src/Command/WorkflowsInspectCommand.php, src/Inspection/Freshness/GitClient.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Rendering/MenuRenderer.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php |
 | 2026-09-17 | 66f5ede | forced |
 | 2026-09-17 | 66f5ede | files changed: src/Tracking/XmlIndexStore.php |
+| 2026-09-17 | b334cfb | forced; files changed: src/Inspection/Graph/PhpReferenceExtractor.php, src/Inspection/Graph/TestLocator.php, src/Inspection/Graph/WorkflowBuilder.php, src/Rendering/PageRenderer.php |

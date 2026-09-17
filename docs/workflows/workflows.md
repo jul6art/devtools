@@ -1,6 +1,6 @@
 # Workflows — jul6art/devtools
 
-Stack : Php · 5 workflows · dernier scan : 2026-09-17 (commit 66f5ede)
+Stack : Php · 5 workflows · dernier scan : 2026-09-17 (commit b334cfb)
 
 [Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances php-8](../../.devtools/knowledge/php-8.md)
 

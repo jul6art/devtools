@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
+`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 6753625
 
 ## Résumé
 
@@ -56,4 +56,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 7cf26ca | initial |
+| 2026-09-16 | 6753625 | initial |

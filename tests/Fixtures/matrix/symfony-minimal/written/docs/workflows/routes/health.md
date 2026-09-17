@@ -1,5 +1,5 @@
 # GET /health
-`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
+`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6753625
 
 ## Résumé
 
@@ -66,4 +66,4 @@ fonctionne.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 7cf26ca | rédaction initiale |
+| 2026-09-16 | 6753625 | rédaction initiale |

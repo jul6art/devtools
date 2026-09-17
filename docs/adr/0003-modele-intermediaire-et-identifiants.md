@@ -63,6 +63,7 @@ singulier du type. Dérivation déterministe, **uniquement** à partir du point 
 | routes | `route` | nom de route, préfixe configurable retiré (`app_` par défaut), `_` → `.` | `app_order_new` → `route.order.new` |
 | commands | `command` | nom de commande, `:` → `.` | `app:import-catalog` → `command.app.import-catalog` |
 | async | `async` | classe du message, nom court en kebab-case | `OrderCreated` → `async.order-created` |
+
 | events | `event` | classe du listener, nom court en kebab-case | `LocaleListener` → `event.locale-listener` |
 | ui | `ui` | classe du composant, nom court en kebab-case | `CartSummary` → `ui.cart-summary` |
 | integrations | `integration` | nom du consommateur / de l'intégration | `stripe` → `integration.stripe` |
@@ -70,6 +71,11 @@ singulier du type. Dérivation déterministe, **uniquement** à partir du point 
 
 - La page vit dans `workflows/<type>/<id sans préfixe>.md` (§ 4.4 : `route.order.create` →
   `workflows/routes/order.create.md`).
+*Précision du 2026-09-17 (relevée sur un projet de 266 workflows) : un message a couramment plusieurs
+handlers. Ils ne se disputent pas l'identifiant du message : ils forment **un seul workflow** — « ce qui se
+passe quand ce message est publié » — dont ils sont les satellites (ADR-0006). C'est ce qui garde
+l'identifiant stable quand un handler s'ajoute, au lieu d'exiger un alias par handler.*
+
 - **Collision** (deux points d'entrée → même identifiant) : **erreur**, avec les deux sources, et
   résolution par un alias explicite dans `config.xml` (`<alias entrypoint="…" id="…"/>`). Jamais de
   suffixe numérique automatique : il dépendrait de l'ordre de découverte, et changerait d'un scan à

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-17T20:03:52+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:47:06+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="b334cfb2898595d16b294c299a9a459254abf42f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -51,7 +51,7 @@
     <file path="src/Rendering/Labels.php" role="other" sha256="29395192b815f39a44e78ef7781f218d7f49035362e4d301eeb06f7ded6cfdcc"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
     <file path="src/Rendering/MermaidWriter.php" role="other" sha256="819c384e9d1075e7e37bdcd7ca2e1722d1ef990c97d0b4a8fa2a0e490d9d3302"/>
-    <file path="src/Rendering/PageRenderer.php" role="other" sha256="133c0c306af90897dbcebdffc6ead5ba3d88604688d80c2aadfa3b5371fb81c5"/>
+    <file path="src/Rendering/PageRenderer.php" role="other" sha256="973286bd8d679e8b1dd8b1ec2147ce767077a79bda86e0e107394f334725bb87"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="cf11c86083968f7bb60c22f7f0b1694cd52b7e97502b6c3d21bb10aa8321d641"/>
     <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="80a4f55b3e6470b4b49567b161949b6735efd3b27332c76148fe79590719b611"/>
@@ -109,5 +109,6 @@
     <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Ai/DraftApplier.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php"/>
     <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
     <revision at="2026-09-17T20:03:52+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/XmlIndexStore.php"/>
+    <revision at="2026-09-17T20:47:06+00:00" commit="b334cfb2898595d16b294c299a9a459254abf42f" reason="forced; files changed: src/Rendering/PageRenderer.php"/>
   </history>
 </workflow>

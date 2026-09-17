@@ -141,13 +141,19 @@ final class FixtureMatrixTest extends TestCase
             ['src/Service/OrderPricing.php' => "\n// pricing reviewed\n", 'src/Twig/Components/CartSummary.php' => null, 'src/Util/Slugger.php' => "<?php\n\nnamespace App\\Util;\n\nfinal class Slugger\n{\n}\n"],
             // The new class is used by nothing: it is uncovered, not a decision.
             [
+                // Both handlers of OrderCreated are one workflow, and the second one uses the priced service.
+                'async.order-created' => 'rewrite: files changed: src/Service/OrderPricing.php',
                 'route.order.new' => 'rewrite: files changed: src/Service/OrderPricing.php',
                 'ui.cart-summary' => 'orphan: entry point gone',
             ],
         ];
 
         yield 'symfony-minimal' => ['symfony-minimal', 'symfony-minimal', ...$symfony];
-        yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-minimal', ...$symfony];
+
+        // The legacy fixture has a single handler of OrderCreated, so its async workflow does not move.
+        $legacy = [$symfony[0], array_diff_key($symfony[1], ['async.order-created' => null])];
+
+        yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-minimal', ...$legacy];
         yield 'plain-php' => ['plain-php', 'plain-php', ['lib/db.php' => "\n// connection reviewed\n", 'migrations/001_create_orders.sql' => null, 'public/about.php' => "<?php\n\necho 'Acme';\n"], [
             'command.cleanup' => 'rewrite: files changed: lib/db.php',
             'command.import-orders' => 'rewrite: files changed: lib/db.php',

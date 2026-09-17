@@ -18,14 +18,14 @@
 ```mermaid
 flowchart TD
   n1["/index.php"]
-  n2["Repository · lib/OrderRepository.php"]
-  n3["Autre · lib/db.php"]
-  n4["Autre · lib/views/header.php"]
-  n5["Contrôleur · public/index.php"]
-  n1 --> n5
-  n5 --> n2
-  n5 --> n3
-  n5 --> n4
+  n2["Contrôleur · public/index.php"]
+  n3["Repository · lib/OrderRepository.php"]
+  n4["Autre · lib/db.php"]
+  n5["Autre · lib/views/header.php"]
+  n1 --> n2
+  n2 --> n3
+  n2 --> n4
+  n2 --> n5
 ```
 
 ## Navigation / états

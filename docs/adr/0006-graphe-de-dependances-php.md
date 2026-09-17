@@ -41,7 +41,9 @@ Alternatives écartées :
 - Le rôle (`FileRef::role`) est déduit du chemin et du suffixe (`*Controller`, `*Type`,
   `Repository/`, `.twig`…) ; inconnu → `other`.
 - **Cache d'analyse** en mémoire pour l'exécution : un fichier partagé par N workflows est analysé
-  une fois.
+  une fois — *sauf un fichier lu une seule fois (les tests du projet, lus par `TestLocator`), dont l'arbre
+  est relâché aussitôt : garder ceux de quelques centaines de fichiers de test épuisait les 128 Mo d'un
+  dépôt réel (précision du 2026-09-17)*.
 - **Autoload hors PSR-4** : `classmap`, `psr-0` et `files` ne sont pas résolus. *Précision du
   2026-09-17 (audit du MVP) : ce silence donnait des pages qui paraissent complètes sur un projet
   legacy — exactement le public de l'ADR-0014. `ClassLocator` produit désormais un avertissement qui
@@ -50,8 +52,10 @@ Alternatives écartées :
 ### Regroupement (étape 5)
 
 - Par défaut, **un point d'entrée = un workflow**.
-- Satellites **automatiques** dans un seul cas certain : plusieurs routes vers la **même méthode de
-  contrôleur** (variantes localisées, méthodes HTTP séparées).
+- Satellites **automatiques** dans deux cas certains : plusieurs routes vers la **même méthode de
+  contrôleur** (variantes localisées, méthodes HTTP séparées) ; et, *depuis le 2026-09-17*, plusieurs
+  **handlers du même message** — un projet réel en a quatre pour un seul message, et les documenter
+  séparément demandait un alias par handler (ADR-0003).
 - Satellites **déclarés** : `<groups><group main="app_order_index"><satellite>app_order_export
   </satellite></group></groups>` dans `config.xml`. Un groupe qui référence un point d'entrée
   inconnu est une erreur.
@@ -92,6 +96,7 @@ profondeur variable par type de fichier.
 - [x] Profondeur 1, 2, 3 : trois snapshots distincts et justifiés sur la même route
 - [x] Une classe de `vendor/` apparaît en `PackageRef` avec la version du lock, jamais en `FileRef`
 - [x] Un cycle (A use B, B use A) termine
+- [x] Deux handlers du même message forment un workflow, l'un satellite de l'autre
 - [x] Deux routes vers la même méthode forment un workflow ; un groupe déclaré rattache un satellite ;
       un groupe vers un point d'entrée inconnu échoue avec son nom
 - [x] Un fichier source que rien ne référence apparaît dans `uncovered`

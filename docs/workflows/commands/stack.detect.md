@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : 66f5ede
+`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
 
 ## Résumé
 
@@ -116,3 +116,4 @@ n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparat
 | 2026-09-17 | e6f9993 | files changed: src/Config/Config.php |
 | 2026-09-17 | 66f5ede | files changed: src/Tracking/DevToolsDirectory.php |
 | 2026-09-17 | 66f5ede | forced |
+| 2026-09-17 | b334cfb | forced |

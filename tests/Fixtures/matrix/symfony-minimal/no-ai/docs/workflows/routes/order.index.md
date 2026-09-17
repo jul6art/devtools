@@ -1,5 +1,5 @@
 # GET /orders
-`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
+`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6753625
 
 ## Résumé
 
@@ -88,4 +88,4 @@ Paquets : `symfony/framework-bundle` 8.1.7, `symfony/http-foundation` 8.1.7, `sy
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 7cf26ca | initial |
+| 2026-09-16 | 6753625 | initial |

@@ -146,9 +146,16 @@ final readonly class WorkflowBuilder
                 continue;
             }
 
-            $key = null === $candidate->method
-                ? 'single:'.$candidate->entryPoint->kind.':'.$candidate->entryPoint->name
-                : 'method:'.$candidate->type->name.':'.$candidate->entryPoint->declaredIn->path.'::'.$candidate->method;
+            $message = $candidate->entryPoint->attributes['message'] ?? null;
+
+            $key = match (true) {
+                // Every handler of one message is one workflow: "what happens when this message is
+                // published". A project routinely has several, and their identifier is the message's
+                // (ADR-0003) — without this they would collide and each need an alias by hand.
+                'message-handler' === $candidate->entryPoint->kind && null !== $message => 'message:'.$candidate->type->name.':'.$message,
+                null === $candidate->method => 'single:'.$candidate->entryPoint->kind.':'.$candidate->entryPoint->name,
+                default => 'method:'.$candidate->type->name.':'.$candidate->entryPoint->declaredIn->path.'::'.$candidate->method,
+            };
 
             $groups[$key][] = $candidate;
         }
