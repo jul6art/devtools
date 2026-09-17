@@ -58,6 +58,12 @@ les deux, testés depuis un chemin de dépôt local (`repositories: path`) dans 
 **Tag `v0.1.0`** : décision humaine, après CI verte sur les deux jeux de dépendances. Un tag
 Packagist ne se retire pas.
 
+> **Note (2026-09-17)** — décision de jul6art : le premier tag est **`v1.0.0`** et non `v0.1.0`, posé
+> sur `7c155d9` **avant** la réactivation de la CI. La suite complète (`composer qa`, matrice de bout en
+> bout, installations) était verte en local sur Symfony 8.x ; le jeu `lowest` (Symfony 7.4), les seuils
+> de couverture et Infection n'avaient pas encore tourné en CI. Un défaut qu'ils révéleraient se corrige
+> par une version corrective `v1.0.x`.
+
 ## Budget d'exécution
 
 CI complète (matrice highest/lowest + performance + Infection) : cible < 15 min ; au-delà, la
