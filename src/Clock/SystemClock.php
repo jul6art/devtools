@@ -15,6 +15,6 @@ final class SystemClock implements Clock
     {
         $epoch = getenv('SOURCE_DATE_EPOCH');
 
-        return \is_string($epoch) && ctype_digit($epoch) ? new \DateTimeImmutable('@'.$epoch)->setTimezone(new \DateTimeZone(date_default_timezone_get())) : new \DateTimeImmutable();
+        return \is_string($epoch) && 1 === preg_match('/^\d+$/', $epoch) ? new \DateTimeImmutable('@'.$epoch)->setTimezone(new \DateTimeZone(date_default_timezone_get())) : new \DateTimeImmutable();
     }
 }

@@ -62,9 +62,9 @@ qu'un fichier est inchangé. Un faux « inchangé » est plus grave qu'une réé
 | Option | Effet |
 |---|---|
 | `--dry-run` | affiche chaque décision **et ses raisons**, n'écrit rien |
-| `--force` / `--force=<id>` | décision `rewrite` (raison `forced`) pour tous / un workflow |
-| `--since=<commit>` | candidats git calculés depuis ce commit, puis hash de tout le reste |
-| `--prune` | supprime page et XML des workflows `orphaned` (liste affichée avant) |
+| `--force` / `--force=<id>` | décision `rewrite` (raison `forced`) pour tous / un workflow ; un identifiant inconnu est un avertissement |
+| `--since=<commit>` | candidats git calculés depuis ce commit, puis hash de tout le reste ; la valeur est un commit, jamais une option (refusée si elle commence par `-` : elle finirait dans `git diff`) |
+| `--prune` | supprime page et XML des workflows `orphaned` (liste affichée avant) ; avec `--only`, seulement ceux de ce type |
 
 ## Budget d'exécution
 

@@ -37,7 +37,7 @@ final class SafeXmlLoader
         $document = $this->load($xml, $source);
         $version = $document->documentElement?->getAttribute('schema-version') ?? '';
 
-        if (ctype_digit($version) && (int) $version > $supportedVersion) {
+        if (1 === preg_match('/^\d+$/', $version) && (int) $version > $supportedVersion) {
             throw InvalidXml::refused($source, \sprintf('it was written by a newer version of DevTools (schema-version %s; this version reads up to %d). Update DevTools to read it.', $version, $supportedVersion));
         }
 

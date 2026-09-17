@@ -184,6 +184,18 @@ final class PageRedactionTest extends TestCase
         yield 'two-line preconditions' => [static fn (string $draft): string => str_replace('Le catalogue de produits est chargé.', "Le catalogue est chargé.\nEt l'opérateur connecté.", $draft), '"Préconditions" must be one line (line 11)'];
     }
 
+    public function testAModelEmptiedByHandIsRefusedByName(): void
+    {
+        $this->inspect();
+        copy(self::DRAFT, $this->project.'/.devtools/pending/page.route.order.new.draft.md');
+        file_put_contents(
+            $this->project.'/.devtools/pending/page.route.order.new.model.xml',
+            '<?xml version="1.0" encoding="UTF-8"?><inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="symfony-8"><workflows/></inspection>',
+        );
+
+        self::assertStringContainsString('holds no workflow', implode("\n", $this->apply()->refused['route.order.new'] ?? []));
+    }
+
     public function testAUrlInBackticksIsNotAFilePath(): void
     {
         $this->inspect();

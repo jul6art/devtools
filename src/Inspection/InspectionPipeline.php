@@ -151,6 +151,10 @@ final readonly class InspectionPipeline
         $previous = $this->previousTracking($directory, $tracking);
         [$vcs, $candidates] = $this->changes($directory->root, $previous, $options);
         $report->decisions = $decisions = new FreshnessResolver($this->hasher)->resolve($directory->root, $workflows, $previous, $candidates, $options->force, $options->forceAll);
+
+        foreach (array_diff($options->force, array_map(static fn (Workflow $workflow): string => $workflow->id->value, $workflows)) as $unknown) {
+            $report->warnings[] = \sprintf('--force=%s names no workflow of this project; nothing was forced for it.', $unknown);
+        }
         $context = RenderingContext::of($workflows);
         $documents = [];
         $written = static fn (Workflow|TrackingDocument $workflow): bool => !$options->dryRun && (null === $options->only || $options->only === $workflow->type->name);
@@ -204,7 +208,8 @@ final readonly class InspectionPipeline
 
             $report->record($old->type->name, 'orphaned');
 
-            if ($options->prune) {
+            // --only names the type being written: --prune must not delete the pages of the others.
+            if ($options->prune && (null === $options->only || $options->only === $old->type->name)) {
                 if (!$options->dryRun) {
                     new Filesystem()->remove([$directory->pageFile($old->type, $old->id), $directory->trackingFile($old->type, $old->id)]);
                 }

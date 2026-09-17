@@ -108,7 +108,8 @@ final readonly class DraftApplier
     {
         $brief = new XmlPageBriefStore($types)->read($directory->path('pending/'.basename($draftFile, '.draft.md').'.brief.xml'));
         $document = $documents[$id] ?? throw new InvalidModel(\sprintf('No tracking file documents "%s": run the inspection again.', $id));
-        $workflow = new ModelXmlSerializer($types)->deserialize((string) file_get_contents($directory->root->absolute($brief->modelPath)), $brief->modelPath)->workflows[0];
+        $workflow = new ModelXmlSerializer($types)->deserialize((string) file_get_contents($directory->root->absolute($brief->modelPath)), $brief->modelPath)->workflows[0]
+            ?? throw new InvalidModel(\sprintf('%s holds no workflow: run the inspection again.', $brief->modelPath));
         $draft = PageDraft::parse((string) file_get_contents($draftFile));
 
         $errors = $this->validator->validate($draft, $workflow, $brief->revision);

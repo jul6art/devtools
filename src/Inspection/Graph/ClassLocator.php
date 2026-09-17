@@ -23,7 +23,17 @@ final readonly class ClassLocator
         private ProjectRoot $root,
         private array $projectPrefixes,
         private array $packagePrefixes,
+        private ?string $limitation = null,
     ) {
+    }
+
+    /**
+     * What this project autoloads outside PSR-4, and that the graph will therefore not follow — said once,
+     * rather than leaving pages that look complete (ADR-0006).
+     */
+    public function limitation(): ?string
+    {
+        return $this->limitation;
     }
 
     public static function for(ProjectRoot $root, StackProfile $stack): self
@@ -61,7 +71,19 @@ final readonly class ClassLocator
         uksort($projectPrefixes, static fn (string $a, string $b): int => \strlen($b) <=> \strlen($a));
         uksort($packagePrefixes, static fn (string $a, string $b): int => \strlen($b) <=> \strlen($a));
 
-        return new self($root, $projectPrefixes, $packagePrefixes);
+        $outside = [];
+
+        foreach (['autoload', 'autoload-dev'] as $section) {
+            foreach (['classmap', 'psr-0', 'files'] as $standard) {
+                if ([] !== (\is_array($composer[$section] ?? null) ? $composer[$section][$standard] ?? [] : [])) {
+                    $outside[$standard] = true;
+                }
+            }
+        }
+
+        $limitation = [] === $outside ? null : \sprintf('%s autoloads classes through %s: only PSR-4 namespaces are resolved to files, so those classes are missing from the workflows that use them.', $stack->projectPath('composer.json'), implode(' and ', array_keys($outside)));
+
+        return new self($root, $projectPrefixes, $packagePrefixes, $limitation);
     }
 
     public function locate(string $class): FileRef|PackageRef|null

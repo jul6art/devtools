@@ -40,6 +40,8 @@ final class ConsoleTest extends TestCase
         yield 'quoted' => ['php "my app/bin/console"', ['php', 'my app/bin/console']];
         yield 'single quotes and extra spaces' => ["  symfony   console  'x y' ", ['symfony', 'console', 'x y']];
         yield 'shell metacharacters stay literal' => ['bin/console; rm -rf /', ['bin/console;', 'rm', '-rf', '/']];
+        yield 'tabs and accents' => ["docker\texec\u{00a0}", ['docker', 'exec']];
+        yield 'multibyte path' => ['php bin/cônsole', ['php', 'bin/cônsole']];
     }
 
     public function testAnUnclosedQuoteIsRefused(): void

@@ -12,3 +12,4 @@
 /README.md export-ignore
 /rector.php export-ignore
 /tests export-ignore
+/.devtools export-ignore

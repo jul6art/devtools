@@ -42,6 +42,10 @@ Alternatives écartées :
   `Repository/`, `.twig`…) ; inconnu → `other`.
 - **Cache d'analyse** en mémoire pour l'exécution : un fichier partagé par N workflows est analysé
   une fois.
+- **Autoload hors PSR-4** : `classmap`, `psr-0` et `files` ne sont pas résolus. *Précision du
+  2026-09-17 (audit du MVP) : ce silence donnait des pages qui paraissent complètes sur un projet
+  legacy — exactement le public de l'ADR-0014. `ClassLocator` produit désormais un avertissement qui
+  nomme le `composer.json` et les sections en cause.*
 
 ### Regroupement (étape 5)
 
@@ -93,6 +97,8 @@ profondeur variable par type de fichier.
 - [x] Un fichier source que rien ne référence apparaît dans `uncovered`
 - [x] Un fichier PHP syntaxiquement invalide produit un avertissement nommé et n'arrête pas le scan
 - [x] Un fichier partagé par 50 workflows est analysé une fois (compteur de l'extracteur)
+- [x] Un projet déclarant `classmap`, `psr-0` ou `files` produit un avertissement qui les nomme ;
+      un projet PSR-4 n'en produit aucun
 - [x] Une classe d'aide d'un dossier de tests (`tests/Support/OrderFactory.php`) n'est pas listée
       comme test, même quand elle utilise les fichiers du workflow
 

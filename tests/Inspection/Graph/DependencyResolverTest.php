@@ -146,6 +146,20 @@ final class DependencyResolverTest extends TestCase
         self::assertSame(4, $extractor->parsedFiles(), 'Handler, message, repository and entity: parsed once each, whatever the number of resolutions.');
     }
 
+    public function testAProjectAutoloadingOutsidePsr4IsToldWhatTheGraphCannotSee(): void
+    {
+        $project = $this->temporaryDirectory().'/classmap';
+        new Filesystem()->dumpFile($project.'/composer.json', '{"autoload": {"psr-4": {"App\\\\": "src/"}, "classmap": ["lib/"], "files": ["lib/helpers.php"]}}');
+        new Filesystem()->dumpFile($project.'/src/Kernel.php', "<?php\nnamespace App;\nfinal class Kernel {}\n");
+
+        $locator = ClassLocator::for(GraphFixture::root($project), GraphFixture::stack($project));
+
+        self::assertNotNull($locator->limitation());
+        self::assertStringContainsString('classmap and files', $locator->limitation());
+        self::assertStringContainsString('composer.json', $locator->limitation());
+        self::assertNull(ClassLocator::for(GraphFixture::root(), GraphFixture::stack())->limitation(), 'A PSR-4 project has nothing to warn about.');
+    }
+
     private function resolver(int $depth, string $project = GraphFixture::PROJECT, ?PhpReferenceExtractor $extractor = null): DependencyResolver
     {
         $root = GraphFixture::root($project);

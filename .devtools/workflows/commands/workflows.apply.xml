@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-17T18:02:23+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" branch="master" dirty="true"/>
+  <generated at="2026-09-17T18:49:42+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -10,13 +10,13 @@
   </entrypoints>
   <files>
     <file path="src/Ai/ApplyResult.php" role="other" sha256="5e897a9cd422fa20d410281fc4e74695ebdcf4738880e9fccc2fdfd0bc007df8"/>
-    <file path="src/Ai/DraftApplier.php" role="other" sha256="2646a846f18e8b326f5fb6ba58b9369f67c193c80a4f68f955933b67f7d0b53a"/>
+    <file path="src/Ai/DraftApplier.php" role="other" sha256="27f682cfc1e5c659485895c56edfcf801dac9a04471f9ad4cc9d75d5d7918a89"/>
     <file path="src/Ai/PageBrief.php" role="other" sha256="7d1b36507dc39cf3e09934630515457bec74e8dcf518dc7e52587e2a42e3c75a"/>
     <file path="src/Ai/PageDraft.php" role="other" sha256="da4cda1b963c70cb8098e0240caef513ae39f1266dbc6b8fa49c2c3131b02576"/>
     <file path="src/Ai/PageDraftValidator.php" role="other" sha256="b98b749b2dafc421e30659d5cb61bdb3b440191a03f2a509de6fc2f3da780a34"/>
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="753fdbfc3b605215e6583e09eb3c8306b2b37cd88c0d7eabcf1183c84ebc3101"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
-    <file path="src/Clock/SystemClock.php" role="other" sha256="84355c1a6aa72a91fc390449e0a0758a16f04bf15e157c352f742cba5ddf6a04"/>
+    <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
     <file path="src/Command/WorkflowsApplyCommand.php" role="other" sha256="d55f489b24950714aca2d9dea9817deb9f396a11835a27c8c44ee72deb224894"/>
     <file path="src/Config/Config.php" role="other" sha256="027494ef59f8566398229c96f4a48b982321876540ab76aa87588a98b3762012"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
@@ -82,7 +82,7 @@
     <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
     <file path="src/Xml/DomBuilder.php" role="other" sha256="8c885bf525d746d7acc2420a96705922d6680125f9be2eb330cede798d017b6d"/>
     <file path="src/Xml/InvalidXml.php" role="other" sha256="5e6a85caa327cf77f737c259704f9bb5bfe87474b53fcad0286b483cc53cc966"/>
-    <file path="src/Xml/SafeXmlLoader.php" role="other" sha256="97566a2c65c89b44e2be65ac9652f4ce8466966108856cb0e7c3b99d1aac2ffe"/>
+    <file path="src/Xml/SafeXmlLoader.php" role="other" sha256="51e2eb73f63ffa9f8df23d86d093f70792327debf08c5a1acd3daf7539e4d7d0"/>
   </files>
   <tests>
     <file path="tests/Ai/ClaudeInstallTest.php" role="test"/>
@@ -104,5 +104,6 @@
   <history>
     <revision at="2026-09-17T02:25:05+00:00" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" reason="rédaction initiale"/>
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
+    <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Ai/DraftApplier.php, src/Clock/SystemClock.php, src/Xml/SafeXmlLoader.php"/>
   </history>
 </workflow>

@@ -185,8 +185,8 @@ page to open first. Commit all of it; the report stays out of git.
 | --- | --- |
 | `--dry-run` | show what would be rewritten and why; write nothing |
 | `--force` / `--force=route.order.new` | rewrite every workflow / this one (repeatable) |
-| `--since=<commit>` | compare with this commit, and hash every file |
-| `--prune` | delete the page and tracking file of orphaned workflows |
+| `--since=<commit>` | compare with this commit, and hash every file (a commit, a tag or a branch — never an option) |
+| `--prune` | delete the page and tracking file of orphaned workflows (of the `--only` type, when given) |
 | `--only=routes` | write the pages of one type only; the menu and the index stay complete |
 | `--no-ai` | write no brief for Claude: factual pages only |
 
@@ -203,6 +203,8 @@ archive, a rewritten history — every file is hashed and the decisions are the 
 
 A second run on an unchanged project modifies no file: committing the documentation does not make it
 change again. On a 300-route project, that re-scan takes well under a second.
+
+`--force` naming a workflow that does not exist is a warning, not a silent no-op.
 
 ⚠️ **An entry point that disappeared is marked *orphelin*** and listed under *À vérifier*; its page is
 only deleted with `--prune`. A workflow whose tracking file says `<status>manual</status>` is never
@@ -241,7 +243,9 @@ For a PHP project, the files of a workflow are found by reading the code, never 
   (parent class, attributes, properties, constructor). The list route of a controller does not inherit
   the form of its creation route;
 - **through the classes actually used** — an unused import is not a dependency — located with the
-  project's `composer.json`; a class of `vendor/` becomes a package with the version of `composer.lock`;
+  **PSR-4** map of the project's `composer.json`; a class of `vendor/` becomes a package with the version of
+  `composer.lock`. A project autoloading through `classmap`, `psr-0` or `files` gets a warning saying so:
+  those classes are not resolved to files, so they are missing from the workflows that use them;
 - **through the templates rendered** with a literal name, and their `extends`, `include`, `embed`;
 - **through the files required or included** by a literal path — `require __DIR__.'/../lib/db.php'`;
 - **up to `<graph depth>` hops** (3 by default): controller → service → repository → entity.

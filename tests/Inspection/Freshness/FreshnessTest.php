@@ -121,6 +121,34 @@ final class FreshnessTest extends TestCase
         self::assertStringNotContainsString('route.order.show', (string) file_get_contents($this->project.'/.devtools/index.xml'));
     }
 
+    public function testPruneOnlyDeletesThePagesOfTheTypeBeingWritten(): void
+    {
+        GitRepository::initialise($this->project);
+        $this->inspect();
+
+        $report = new InspectionPipeline(new AdapterResolver([new FakeAdapter(['app_order_show'])]), new FrozenClock(new \DateTimeImmutable('2026-09-16T15:00:00+02:00')))
+            ->run(new InspectionOptions($this->project, only: 'commands', prune: true));
+
+        self::assertSame([], $report->errors, implode("\n", $report->errors));
+        self::assertFileExists($this->project.'/.devtools/workflows/routes/order.show.md', '--only=commands must not delete a route.');
+    }
+
+    public function testAForceThatNamesNoWorkflowIsAWarning(): void
+    {
+        GitRepository::initialise($this->project);
+        $this->inspect();
+
+        self::assertSame(['--force=route.invoice.new names no workflow of this project; nothing was forced for it.'], $this->inspect(force: ['route.invoice.new'])->warnings);
+    }
+
+    public function testASinceThatIsNotACommitIsRefusedBeforeGitSeesIt(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('--since takes a commit');
+
+        new InspectionOptions($this->project, since: '--output=/tmp/devtools-audit');
+    }
+
     public function testANewFileReachedByAWorkflowRewritesIt(): void
     {
         $repository = GitRepository::initialise($this->project);

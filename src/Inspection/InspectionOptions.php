@@ -23,5 +23,10 @@ final readonly class InspectionOptions
         public bool $prune = false,
         public bool $noAi = false,
     ) {
+        // The value ends up in `git diff <since>..HEAD`: one starting with a dash would be read as an
+        // option of git (`--output=…` writes a file), not as a commit.
+        if (null !== $since && (str_starts_with($since, '-') || '' === trim($since))) {
+            throw new \InvalidArgumentException(\sprintf('"%s" is not a commit: --since takes a commit, a tag or a branch.', $since));
+        }
     }
 }

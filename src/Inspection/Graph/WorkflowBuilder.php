@@ -47,7 +47,7 @@ final readonly class WorkflowBuilder
         }
 
         $workflows = [];
-        $warnings = [];
+        $warnings = array_filter([$locator->limitation()]);
 
         foreach ($groups as $key => $group) {
             [$main, $satellites] = [$group[0], \array_slice($group, 1)];
