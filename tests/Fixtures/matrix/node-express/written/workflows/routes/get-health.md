@@ -1,5 +1,5 @@
 # GET /health
-`route.get-health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 0ad6cf2
+`route.get-health` · type : routes · dernière mise à jour : 2026-09-16 · commit : f2bd976
 
 ## Résumé
 
@@ -57,4 +57,4 @@ La réponse ne vérifie aucune dépendance : elle reste « ok » même si le ser
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 0ad6cf2 | rédaction initiale |
+| 2026-09-16 | f2bd976 | rédaction initiale |

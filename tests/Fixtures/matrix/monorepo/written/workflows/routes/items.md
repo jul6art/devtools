@@ -1,5 +1,5 @@
 # /items
-`route.items` · type : routes · dernière mise à jour : 2026-09-16 · commit : a8278df
+`route.items` · type : routes · dernière mise à jour : 2026-09-16 · commit : 3442aca
 
 ## Résumé
 
@@ -60,4 +60,4 @@ Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | a8278df | rédaction initiale |
+| 2026-09-16 | 3442aca | rédaction initiale |

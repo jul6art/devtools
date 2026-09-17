@@ -1,5 +1,5 @@
 # /index.php
-`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -79,4 +79,4 @@ tri, et aucune authentification ne protège la page.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | rédaction initiale |
+| 2026-09-16 | 2620449 | rédaction initiale |

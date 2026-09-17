@@ -1,6 +1,6 @@
 # Workflows — acme-back-office
 
-Stack : Angular 18.2 · 0 workflows · dernier scan : 2026-09-16 (commit 237c2d7)
+Stack : Angular 18.2 · 0 workflows · dernier scan : 2026-09-16 (commit 973d403)
 
 [Vue d'ensemble](graph/workflows.mermaid) · [Stack](stack.xml) · [Connaissances angular-18](knowledge/angular-18.md)
 

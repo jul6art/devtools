@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 978ffc6
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : d3202e4
 
 ## Résumé
 
@@ -70,4 +70,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 978ffc6 | initial |
+| 2026-09-16 | d3202e4 | initial |

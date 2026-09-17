@@ -1,6 +1,6 @@
 # Workflows — acme/symfony-legacy-yaml
 
-Stack : Symfony 7.4 · 10 workflows · dernier scan : 2026-09-16 (commit 978ffc6)
+Stack : Symfony 7.4 · 10 workflows · dernier scan : 2026-09-16 (commit d3202e4)
 
 [Vue d'ensemble](graph/workflows.mermaid) · [Stack](stack.xml) · [Connaissances symfony-7](knowledge/symfony-7.md)
 

@@ -1,5 +1,5 @@
 # GET|POST /orders/new
-`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : f16c698
+`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
 
 ## Résumé
 
@@ -100,4 +100,4 @@ Paquets : `symfony/form` 8.1.7, `symfony/framework-bundle` 8.1.7, `symfony/http-
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | f16c698 | initial |
+| 2026-09-16 | 7cf26ca | initial |

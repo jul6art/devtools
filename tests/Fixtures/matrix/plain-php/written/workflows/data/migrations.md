@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -55,4 +55,4 @@ Rien n'indique quelles migrations ont été jouées sur une base existante.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | rédaction initiale |
+| 2026-09-16 | 2620449 | rédaction initiale |

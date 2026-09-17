@@ -1,5 +1,5 @@
 # kernel.request → LocaleListener
-`event.locale-listener` · type : events · dernière mise à jour : 2026-09-16 · commit : 978ffc6
+`event.locale-listener` · type : events · dernière mise à jour : 2026-09-16 · commit : d3202e4
 
 ## Résumé
 
@@ -63,4 +63,4 @@ dépendent de ce listener.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 978ffc6 | rédaction initiale |
+| 2026-09-16 | d3202e4 | rédaction initiale |

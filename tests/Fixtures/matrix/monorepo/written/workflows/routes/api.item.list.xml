@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.api.item.list" type="routes" schema-version="1">
   <title>GET /api/items</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
-  <source vcs="git" commit="a8278dff041122adbdb2c48628f8051dbe93067e" branch="main" dirty="true"/>
+  <source vcs="git" commit="3442aca21494a3cb140a486b2463d8a50a5ae11c" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="api_item_list" role="main">
       <declared-in path="api/src/Controller/ItemController.php" role="controller"/>
@@ -17,6 +17,6 @@
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="a8278dff041122adbdb2c48628f8051dbe93067e" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="3442aca21494a3cb140a486b2463d8a50a5ae11c" reason="rédaction initiale"/>
   </history>
 </workflow>

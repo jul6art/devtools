@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : f16c698
+`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
 
 ## Résumé
 
@@ -72,4 +72,4 @@ que `refresh` n'a pas été appelé.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | f16c698 | rédaction initiale |
+| 2026-09-16 | 7cf26ca | rédaction initiale |

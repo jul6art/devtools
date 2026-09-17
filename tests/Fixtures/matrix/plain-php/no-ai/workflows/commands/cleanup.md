@@ -1,5 +1,5 @@
 # cleanup
-`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -60,4 +60,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | initial |
+| 2026-09-16 | 2620449 | initial |

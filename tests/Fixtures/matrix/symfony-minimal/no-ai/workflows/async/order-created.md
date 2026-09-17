@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : f16c698
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
 
 ## Résumé
 
@@ -73,4 +73,4 @@ Paquets : `symfony/messenger` 8.1.7
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | f16c698 | initial |
+| 2026-09-16 | 7cf26ca | initial |

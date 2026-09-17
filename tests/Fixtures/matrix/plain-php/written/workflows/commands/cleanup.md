@@ -1,5 +1,5 @@
 # cleanup
-`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -61,4 +61,4 @@ tolérance, d'autres bases y verraient un nom de colonne. Rien n'est affiché ni
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | rédaction initiale |
+| 2026-09-16 | 2620449 | rédaction initiale |

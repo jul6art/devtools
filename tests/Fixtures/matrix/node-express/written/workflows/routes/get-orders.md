@@ -1,5 +1,5 @@
 # GET /orders
-`route.get-orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : 0ad6cf2
+`route.get-orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : f2bd976
 
 ## Résumé
 
@@ -66,4 +66,4 @@ Le stockage est en mémoire : la liste est vide à chaque redémarrage et n'est 
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 0ad6cf2 | rédaction initiale |
+| 2026-09-16 | f2bd976 | rédaction initiale |

@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : f16c698
+`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : 7cf26ca
 
 ## Résumé
 
@@ -88,4 +88,4 @@ Paquets : `symfony/framework-bundle` 8.1.7, `symfony/http-foundation` 8.1.7, `sy
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | f16c698 | initial |
+| 2026-09-16 | 7cf26ca | initial |

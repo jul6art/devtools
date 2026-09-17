@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : 978ffc6
+`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : d3202e4
 
 ## Résumé
 
@@ -67,4 +67,4 @@ Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun e
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 978ffc6 | rédaction initiale |
+| 2026-09-16 | d3202e4 | rédaction initiale |

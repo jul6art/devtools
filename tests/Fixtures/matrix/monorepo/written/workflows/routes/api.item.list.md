@@ -1,5 +1,5 @@
 # GET /api/items
-`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : a8278df
+`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 3442aca
 
 ## Résumé
 
@@ -58,4 +58,4 @@ Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du mono
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | a8278df | rédaction initiale |
+| 2026-09-16 | 3442aca | rédaction initiale |

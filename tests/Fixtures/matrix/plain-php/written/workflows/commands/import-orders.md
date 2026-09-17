@@ -1,5 +1,5 @@
 # import-orders
-`command.import-orders` · type : commands · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`command.import-orders` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -69,4 +69,4 @@ des commandes sans client.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | rédaction initiale |
+| 2026-09-16 | 2620449 | rédaction initiale |

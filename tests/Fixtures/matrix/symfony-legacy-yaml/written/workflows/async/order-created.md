@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 978ffc6
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : d3202e4
 
 ## Résumé
 
@@ -67,4 +67,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 978ffc6 | rédaction initiale |
+| 2026-09-16 | d3202e4 | rédaction initiale |

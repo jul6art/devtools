@@ -1,5 +1,5 @@
 # OrderService → /api/orders
-`integration.orderservice` · type : integrations · dernière mise à jour : 2026-09-16 · commit : 237c2d7
+`integration.orderservice` · type : integrations · dernière mise à jour : 2026-09-16 · commit : 973d403
 
 ## Résumé
 
@@ -62,4 +62,4 @@ Les réponses ne sont pas validées : le typage `Order` est une promesse, pas un
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 237c2d7 | rédaction initiale |
+| 2026-09-16 | 973d403 | rédaction initiale |

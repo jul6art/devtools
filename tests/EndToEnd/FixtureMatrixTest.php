@@ -76,6 +76,9 @@ final class FixtureMatrixTest extends TestCase
             $_SERVER[$name] = $value;
         }
 
+        // Installed dependencies stay out of the repository: a commit hash — which the pages record — must
+        // depend on the fixture's sources only, not on what Composer or npm resolved on this machine.
+        file_put_contents($project.'/.gitignore', "/vendor/\n/var/\n/node_modules/\n");
         $repository = GitRepository::initialise($project);
         $repository->commitAll('fixture');
 

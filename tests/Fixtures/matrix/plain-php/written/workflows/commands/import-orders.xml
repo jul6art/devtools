@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.import-orders" type="commands" schema-version="1">
   <title>import-orders</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
-  <source vcs="git" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" branch="main" dirty="true"/>
+  <source vcs="git" commit="262044940120dce8d30208eaac3ccb2e294a6e99" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="import-orders" role="main">
       <declared-in path="bin/import.php" role="other"/>
@@ -21,6 +21,6 @@
   <producer>native:generic-php</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="84499fa4874960b8f8df2027aacc9d1310cc4386" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="262044940120dce8d30208eaac3ccb2e294a6e99" reason="rédaction initiale"/>
   </history>
 </workflow>

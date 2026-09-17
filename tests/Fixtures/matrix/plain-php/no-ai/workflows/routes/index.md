@@ -1,5 +1,5 @@
 # /index.php
-`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 84499fa
+`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 2620449
 
 ## Résumé
 
@@ -74,4 +74,4 @@ flowchart LR
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 84499fa | initial |
+| 2026-09-16 | 2620449 | initial |
