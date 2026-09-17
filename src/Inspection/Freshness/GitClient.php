@@ -51,14 +51,17 @@ final class GitClient
     }
 
     /**
-     * Files modified, staged or untracked in the working tree, relative to the project root, `.devtools/`
-     * excluded — the documentation DevTools just wrote is not a change of the code.
+     * Files modified, staged or untracked in the working tree, relative to the project root, the directories
+     * DevTools writes excluded — the documentation it just wrote is not a change of the code.
+     *
+     * @param list<string> $excluded project-relative directories
      *
      * @return list<string>
      */
-    public function workingTree(ProjectRoot $root, GitState $state): array
+    public function workingTree(ProjectRoot $root, GitState $state, array $excluded = ['.devtools']): array
     {
-        [$ok, $output] = $this->git($root, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--', '.', ':(exclude).devtools']);
+        $exclusions = array_map(static fn (string $directory): string => ':(exclude)'.trim($directory, '/'), $excluded);
+        [$ok, $output] = $this->git($root, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--', '.', ...$exclusions]);
 
         if (!$ok) {
             return [];

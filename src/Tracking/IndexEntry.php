@@ -27,10 +27,10 @@ final readonly class IndexEntry
     }
 
     /**
-     * The page, relative to `.devtools/`.
+     * The page, relative to the documentation directory.
      */
     public function page(): string
     {
-        return DevToolsDirectory::pageRelativePath($this->type, $this->id);
+        return DevToolsDirectory::pageInDocs($this->type, $this->id);
     }
 }

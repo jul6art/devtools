@@ -36,6 +36,30 @@ trait UsesTemporaryDirectory
     }
 
     /**
+     * Everything an inspection wrote and a project commits: the machinery of `.devtools/` and the pages of
+     * the documentation directory, under their project-relative paths — work areas and schema copies left
+     * out, since they are recomputed and ignored by git.
+     *
+     * @return array<string, string>
+     */
+    protected static function documentedTree(string $project, string $docs = 'docs/workflows'): array
+    {
+        $files = [];
+
+        foreach (['.devtools', $docs] as $directory) {
+            foreach (is_dir($project.'/'.$directory) ? self::tree($project.'/'.$directory) : [] as $path => $content) {
+                if (!preg_match('#^(reports|pending|schemas)/#', $path)) {
+                    $files[$directory.'/'.$path] = $content;
+                }
+            }
+        }
+
+        ksort($files);
+
+        return $files;
+    }
+
+    /**
      * Every file under a directory with its content, to compare a tree before and after an operation.
      *
      * @return array<string, string>

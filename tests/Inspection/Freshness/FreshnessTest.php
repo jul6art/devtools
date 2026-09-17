@@ -77,7 +77,7 @@ final class FreshnessTest extends TestCase
 
         self::assertSame(['command.app.import-catalog', 'route.order.new'], $this->rewritten($report));
         self::assertEquals([Reason::filesChanged(['src/Repository/ProductRepository.php'])], $report->decision('route.order.new')?->reasons);
-        self::assertStringContainsString('| files changed: src/Repository/ProductRepository.php |', (string) file_get_contents($this->project.'/.devtools/workflows/routes/order.new.md'), 'The history gains a line.');
+        self::assertStringContainsString('| files changed: src/Repository/ProductRepository.php |', (string) file_get_contents($this->project.'/docs/workflows/routes/order.new.md'), 'The history gains a line.');
     }
 
     public function testAChangeUndoneInALaterCommitIsNotAChange(): void
@@ -113,10 +113,10 @@ final class FreshnessTest extends TestCase
 
         $orphaned = $this->inspect(adapter: new FakeAdapter(['app_order_show']));
         self::assertSame(DecisionKind::Orphan, $orphaned->decision('route.order.show')?->kind);
-        self::assertFileExists($this->project.'/.devtools/workflows/routes/order.show.md');
+        self::assertFileExists($this->project.'/docs/workflows/routes/order.show.md');
 
         $this->inspect(prune: true, adapter: new FakeAdapter(['app_order_show']));
-        self::assertFileDoesNotExist($this->project.'/.devtools/workflows/routes/order.show.md');
+        self::assertFileDoesNotExist($this->project.'/docs/workflows/routes/order.show.md');
         self::assertFileDoesNotExist($this->project.'/.devtools/workflows/routes/order.show.xml');
         self::assertStringNotContainsString('route.order.show', (string) file_get_contents($this->project.'/.devtools/index.xml'));
     }
@@ -130,7 +130,7 @@ final class FreshnessTest extends TestCase
             ->run(new InspectionOptions($this->project, only: 'commands', prune: true));
 
         self::assertSame([], $report->errors, implode("\n", $report->errors));
-        self::assertFileExists($this->project.'/.devtools/workflows/routes/order.show.md', '--only=commands must not delete a route.');
+        self::assertFileExists($this->project.'/docs/workflows/routes/order.show.md', '--only=commands must not delete a route.');
     }
 
     public function testAForceThatNamesNoWorkflowIsAWarning(): void
@@ -267,7 +267,7 @@ final class FreshnessTest extends TestCase
         $this->inspect();
         $trackingFile = $this->project.'/.devtools/workflows/routes/order.new.xml';
         file_put_contents($trackingFile, str_replace('<status>fresh</status>', '<status>manual</status>', (string) file_get_contents($trackingFile)));
-        $page = $this->project.'/.devtools/workflows/routes/order.new.md';
+        $page = $this->project.'/docs/workflows/routes/order.new.md';
         file_put_contents($page, "# Written by hand\n");
 
         $this->append('src/Service/OrderPricing.php', "\n// changed\n");
@@ -342,7 +342,7 @@ final class FreshnessTest extends TestCase
      */
     private function documentation(): array
     {
-        return array_filter(self::tree($this->project.'/.devtools'), static fn (string $path): bool => !str_starts_with($path, 'reports/'), \ARRAY_FILTER_USE_KEY);
+        return self::documentedTree($this->project);
     }
 
     private function tracking(string $id): TrackingDocument

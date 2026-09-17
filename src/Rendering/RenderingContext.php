@@ -80,6 +80,6 @@ final readonly class RenderingContext
             return null;
         }
 
-        return $type->name === $from->name ? $target->pageName().'.md' : '../'.substr(DevToolsDirectory::pageRelativePath($type, $target), \strlen('workflows/'));
+        return $type->name === $from->name ? $target->pageName().'.md' : '../'.DevToolsDirectory::pageInDocs($type, $target);
     }
 }

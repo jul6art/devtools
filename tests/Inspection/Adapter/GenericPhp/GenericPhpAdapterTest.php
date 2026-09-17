@@ -116,9 +116,9 @@ final class GenericPhpAdapterTest extends TestCase
         self::assertSame(5, $first->count('created'));
         self::assertSame([['stack' => 'Php (.)', 'adapter' => 'generic-php', 'confidence' => 'high', 'uncovered' => 1]], $first->stacks, 'lib/Mailer.php is reached by no workflow.');
 
-        $tree = self::tree($project.'/.devtools');
-        $expected = __DIR__.'/../../../Fixtures/expected/plain-php/.devtools';
-        $actual = array_map(static fn (string $content): string => (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content), array_filter($tree, static fn (string $path): bool => !preg_match('#^(reports|pending|schemas)/#', $path), \ARRAY_FILTER_USE_KEY));
+        $tree = self::documentedTree($project);
+        $expected = __DIR__.'/../../../Fixtures/expected/plain-php';
+        $actual = array_map(static fn (string $content): string => (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content), $tree);
 
         if ('1' === getenv('DEVTOOLS_UPDATE_SNAPSHOTS')) {
             foreach ($actual as $path => $content) {
@@ -126,12 +126,12 @@ final class GenericPhpAdapterTest extends TestCase
             }
         }
 
-        self::assertSame(array_filter(self::tree($expected), static fn (string $path): bool => !preg_match('#^(reports|pending|schemas)/#', $path), \ARRAY_FILTER_USE_KEY), $actual);
+        self::assertSame(self::tree($expected), $actual);
         self::assertContains('lib/db.php', array_map(static fn (TrackedFile $file): string => $file->file->path, new XmlTrackingStore(new WorkflowTypeRegistry())->read($project.'/.devtools/workflows/routes/orders.new.xml')->files), 'require_once __DIR__.\'/../../lib/db.php\' is a traversed file.');
 
         $second = $this->inspect($project);
         self::assertSame(5, $second->count('unchanged'));
-        self::assertSame(array_filter($tree, static fn (string $path): bool => !str_starts_with($path, 'reports/'), \ARRAY_FILTER_USE_KEY), array_filter(self::tree($project.'/.devtools'), static fn (string $path): bool => !str_starts_with($path, 'reports/'), \ARRAY_FILTER_USE_KEY));
+        self::assertSame($tree, self::documentedTree($project));
     }
 
     public function testAnAdapterForcedToClaudeInStackXmlTakesTheClaudePath(): void

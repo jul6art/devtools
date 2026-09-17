@@ -46,7 +46,19 @@ final class XmlIndexStoresTest extends TestCase
     public function testTheIndexListsEntriesByIdentifierWithTheirPage(): void
     {
         self::assertSame(['command.app.import-catalog', 'route.order.new'], array_map(static fn (IndexEntry $entry): string => (string) $entry->id, $this->index()->entries));
-        self::assertSame('workflows/routes/order.new.md', $this->index()->entries[1]->page());
+        self::assertSame('routes/order.new.md', $this->index()->entries[1]->page(), 'Relative to the documentation directory the index names.');
+    }
+
+    public function testAnIndexWrittenBeforeTheDocumentationMovedIsStillRead(): void
+    {
+        $xml = <<<'XML'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="1" scanned-at="2026-09-16T12:00:00+00:00">
+              <source vcs="none"/>
+            </index>
+            XML;
+
+        self::assertSame('docs/workflows', new XmlIndexStore(new WorkflowTypeRegistry())->unserialize($xml, 'index.xml')->docs);
     }
 
     public function testFilesToWorkflowsDistinguishesFilesFromTests(): void

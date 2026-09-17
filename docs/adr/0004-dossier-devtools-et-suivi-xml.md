@@ -15,6 +15,14 @@ fixer avant tout adaptateur évite qu'un format naisse de ce que le premier adap
 
 ### Arborescence (conforme au § 4.4, plus `pending/`)
 
+> **Précision du 2026-09-17** — les **pages** (`workflows/<type>/<id>.md`) et le menu (`workflows.md`) ne
+> vivent plus dans `.devtools/` mais dans un dossier de documentation, `docs/workflows/` par défaut, réglable
+> par `--docs` et par la clé `devtools.docs_dir` du bundle : la documentation se lit, `.devtools/` s'exécute.
+> Les XML de suivi, l'index, le graphe, les connaissances et la configuration restent dans `.devtools/`.
+> `index.xml` enregistre le dossier retenu (`docs`, `schema-version` 2, absent = version antérieure) pour que
+> `workflows:apply` retrouve les pages sans qu'on le lui dise, et la fraîcheur exclut les deux dossiers du
+> working tree git.
+
 ```
 .devtools/
 ├── config.xml          config.xsd

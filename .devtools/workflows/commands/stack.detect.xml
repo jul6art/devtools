@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.stack.detect" type="commands" schema-version="1">
   <title>stack:detect</title>
-  <generated at="2026-09-17T19:31:41+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:02:40+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="stack:detect" role="main">
       <declared-in path="src/Command/StackDetectCommand.php" role="other"/>
@@ -33,7 +33,7 @@
     <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
     <file path="src/Stack/XmlStackStore.php" role="other" sha256="1a95dc09628b613afbb09dc6014350b6450a53dba24695c03f14da26cd4b0878"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="3814cb32e0785da570185c04e627247e5e34a9c043054482e4e1680116c1d4a8"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="c3c3057cf1bde08f9fc1277ca2194efad244d1d74955cffc20987690270f5414"/>
     <file path="src/Xml/DomBuilder.php" role="other" sha256="8c885bf525d746d7acc2420a96705922d6680125f9be2eb330cede798d017b6d"/>
     <file path="src/Xml/InvalidXml.php" role="other" sha256="5e6a85caa327cf77f737c259704f9bb5bfe87474b53fcad0286b483cc53cc966"/>
     <file path="src/Xml/SafeXmlLoader.php" role="other" sha256="51e2eb73f63ffa9f8df23d86d093f70792327debf08c5a1acd3daf7539e4d7d0"/>
@@ -62,5 +62,7 @@
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
     <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Xml/SafeXmlLoader.php"/>
     <revision at="2026-09-17T19:31:41+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Config/Config.php"/>
+    <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/DevToolsDirectory.php"/>
+    <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
   </history>
 </workflow>

@@ -59,6 +59,7 @@ class DevToolsExtension extends Extension
         // `debug:container --parameter` tells the truth about what is active.
         $container->setParameter(self::ALIAS.'.enabled', true);
         $container->setParameter(self::ALIAS.'.language', \is_string($config['language'] ?? null) ? $config['language'] : null);
+        $container->setParameter(self::ALIAS.'.docs_dir', \is_string($config['docs_dir'] ?? null) ? $config['docs_dir'] : null);
 
         // The core commands, under the devtools: prefix and pointed at the application by default. Nothing
         // else: whatever a command does, it does identically through vendor/bin/devtools.
@@ -68,7 +69,9 @@ class DevToolsExtension extends Extension
                 ->addTag('console.command', ['command' => 'devtools:'.$name]);
 
             if (WorkflowsInspectCommand::class === $class) {
-                $definition->setArgument('$defaultLanguage', '%'.self::ALIAS.'.language%');
+                $definition
+                    ->setArgument('$defaultLanguage', '%'.self::ALIAS.'.language%')
+                    ->setArgument('$defaultDocs', '%'.self::ALIAS.'.docs_dir%');
             }
         }
     }

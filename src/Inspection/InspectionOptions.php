@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Inspection;
 
+use Jul6Art\DevTools\Project\ProjectRoot;
+use Jul6Art\DevTools\Tracking\DevToolsDirectory;
+
 final readonly class InspectionOptions
 {
     /**
@@ -14,6 +17,7 @@ final readonly class InspectionOptions
      * @param bool         $noAi             write no brief for Claude: factual pages only
      * @param string|null  $language         the language the pages are written in, from `--locale`: it wins over the project's configuration
      * @param string|null  $fallbackLanguage the language to use when neither the option nor the project says (the Symfony bundle's configuration)
+     * @param string|null  $docs             the directory the pages and the menu are written in, relative to the project; null for docs/workflows
      */
     public function __construct(
         public string $path,
@@ -26,7 +30,14 @@ final readonly class InspectionOptions
         public bool $noAi = false,
         public ?string $language = null,
         public ?string $fallbackLanguage = null,
+        public ?string $docs = null,
     ) {
+        // The documentation directory is checked here rather than at the first write: a bad path must stop
+        // the run before it has created anything.
+        if (null !== $docs) {
+            new DevToolsDirectory(new ProjectRoot($path), $docs);
+        }
+
         foreach (['--locale' => $language, 'the configured language' => $fallbackLanguage] as $origin => $value) {
             if (null !== $value && 1 !== preg_match('/^[a-z]{2}$/', $value)) {
                 throw new \InvalidArgumentException(\sprintf('"%s" is not a language: %s takes two lowercase letters, such as "en" or "fr".', $value, $origin));

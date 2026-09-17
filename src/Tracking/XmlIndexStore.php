@@ -20,7 +20,7 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
 
     public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/index/1';
 
-    private const int SCHEMA_VERSION = 1;
+    private const int SCHEMA_VERSION = 2;
 
     private DomBuilder $dom;
 
@@ -47,7 +47,7 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
     public function serialize(Index $index): string
     {
         $xml = $this->dom->document();
-        $root = $this->dom->element($xml, 'index', ['schema-version' => (string) self::SCHEMA_VERSION, 'scanned-at' => self::date($index->scannedAt)]);
+        $root = $this->dom->element($xml, 'index', ['schema-version' => (string) self::SCHEMA_VERSION, 'scanned-at' => self::date($index->scannedAt), 'docs' => $index->docs]);
         VcsXml::write($this->dom, $root, 'source', $index->vcs);
 
         foreach ($index->entries as $entry) {
@@ -85,6 +85,9 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
                 ),
                 $this->dom->children($root, 'workflow'),
             ),
+            // An index written before schema-version 2 does not say: the documentation moves to the default,
+            // and the pages left in .devtools/workflows/ are the previous version's, to delete by hand.
+            '' === $root->getAttribute('docs') ? DevToolsDirectory::DEFAULT_DOCS : $root->getAttribute('docs'),
         );
     }
 }

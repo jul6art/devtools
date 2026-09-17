@@ -44,7 +44,7 @@ final class MenuRendererTest extends TestCase
     {
         $menu = $this->menu();
 
-        self::assertStringContainsString("## À vérifier\n\n- ⚠ [`command.app.import-catalog`](workflows/commands/app.import-catalog.md) — rédaction en attente\n- ⚠ [`route.order.new`](workflows/routes/order.new.md) — périmé", $menu);
+        self::assertStringContainsString("## À vérifier\n\n- ⚠ [`command.app.import-catalog`](commands/app.import-catalog.md) — rédaction en attente\n- ⚠ [`route.order.new`](routes/order.new.md) — périmé", $menu);
         self::assertStringContainsString("## Non couvert\n\n- `src/A.php` — aucun workflow ne référence ce fichier\n- `src/Util/StringHelper.php`", $menu);
     }
 

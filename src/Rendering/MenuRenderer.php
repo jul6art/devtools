@@ -10,6 +10,7 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 use Jul6Art\DevTools\Stack\StackDocument;
 use Jul6Art\DevTools\Stack\StackProfile;
+use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\Index;
 use Jul6Art\DevTools\Tracking\IndexEntry;
 use Jul6Art\DevTools\Tracking\TrackingStatus;
@@ -27,8 +28,10 @@ final class MenuRenderer
      * @param list<WorkflowId>   $pendingRedaction workflows with a draft waiting for Claude (ADR-0011)
      * @param list<WorkflowType> $customTypes
      */
-    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = []): string
+    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = [], string $docs = DevToolsDirectory::DEFAULT_DOCS): string
     {
+        // The menu lives with the pages; everything it links to outside them lives in .devtools/.
+        $machinery = static fn (string $path): string => DevToolsDirectory::machineryLink($docs, $path);
         $lines = [
             '# Workflows — '.$stacks->projectName,
             '',
@@ -41,9 +44,9 @@ final class MenuRenderer
             ),
             '',
             implode(' · ', [
-                MarkdownWriter::link('Vue d\'ensemble', 'graph/workflows.mermaid'),
-                MarkdownWriter::link('Stack', 'stack.xml'),
-                ...array_map(static fn (StackProfile $stack): string => MarkdownWriter::link('Connaissances '.$stack->knowledgeKey, 'knowledge/'.$stack->knowledgeKey.'.md'), array_values(array_filter($stacks->stacks, static fn (StackProfile $stack): bool => null !== $stack->knowledgeKey))),
+                MarkdownWriter::link('Vue d\'ensemble', $machinery('graph/workflows.mermaid')),
+                MarkdownWriter::link('Stack', $machinery('stack.xml')),
+                ...array_map(static fn (StackProfile $stack): string => MarkdownWriter::link('Connaissances '.$stack->knowledgeKey, $machinery('knowledge/'.$stack->knowledgeKey.'.md')), array_values(array_filter($stacks->stacks, static fn (StackProfile $stack): bool => null !== $stack->knowledgeKey))),
             ]),
         ];
 

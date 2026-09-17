@@ -2,15 +2,15 @@
 
 Stack : Symfony 8.1 · 2 workflows · dernier scan : 2026-09-16 (commit a1b2c3d)
 
-[Vue d'ensemble](graph/workflows.mermaid) · [Stack](stack.xml) · [Connaissances symfony-8](knowledge/symfony-8.md)
+[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-8](../../.devtools/knowledge/symfony-8.md)
 
 ## Routes (1)
 
-- [Order creation](workflows/routes/order.new.md) — `route.order.new` · MAJ 2026-09-16
+- [Order creation](routes/order.new.md) — `route.order.new` · MAJ 2026-09-16
 
 ## Commandes (1)
 
-- [Catalog import](workflows/commands/app.import-catalog.md) — `command.app.import-catalog` · MAJ 2026-09-10 · confiance moyenne
+- [Catalog import](commands/app.import-catalog.md) — `command.app.import-catalog` · MAJ 2026-09-10 · confiance moyenne
 
 ## Asynchrone (0)
 
@@ -34,8 +34,8 @@ Stack : Symfony 8.1 · 2 workflows · dernier scan : 2026-09-16 (commit a1b2c3d)
 
 ## À vérifier
 
-- ⚠ [`command.app.import-catalog`](workflows/commands/app.import-catalog.md) — rédaction en attente
-- ⚠ [`route.order.new`](workflows/routes/order.new.md) — périmé
+- ⚠ [`command.app.import-catalog`](commands/app.import-catalog.md) — rédaction en attente
+- ⚠ [`route.order.new`](routes/order.new.md) — périmé
 
 ## Non couvert
 

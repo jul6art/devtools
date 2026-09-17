@@ -60,7 +60,7 @@ final class PageRedactionTest extends TestCase
         self::assertSame('.devtools/pending/page.route.order.new.draft.md', $brief->draftPath);
         self::assertFileExists($this->project.'/'.$brief->modelPath);
         self::assertSame('2026-09-16T15:00:00+02:00', $brief->revision->format(\DATE_ATOM));
-        self::assertStringContainsString('rédaction en attente', (string) file_get_contents($this->project.'/.devtools/workflows.md'));
+        self::assertStringContainsString('rédaction en attente', (string) file_get_contents($this->project.'/docs/workflows/workflows.md'));
         self::assertSame(['Résumé', 'Préconditions', 'Parcours', 'Données', 'Mécanismes transverses', "Points d'attention", 'Changement'], $brief->sections, 'The brief carries the closed list of sections, in order.');
         self::assertSame([], $brief->changes, 'Nothing moved: the page has never been written.');
     }
@@ -271,6 +271,6 @@ final class PageRedactionTest extends TestCase
 
     private function page(): string
     {
-        return $this->project.'/.devtools/workflows/routes/order.new.md';
+        return $this->project.'/docs/workflows/routes/order.new.md';
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-17T19:31:41+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:03:52+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -10,7 +10,7 @@
   </entrypoints>
   <files>
     <file path="src/Ai/ApplyResult.php" role="other" sha256="5e897a9cd422fa20d410281fc4e74695ebdcf4738880e9fccc2fdfd0bc007df8"/>
-    <file path="src/Ai/DraftApplier.php" role="other" sha256="27f682cfc1e5c659485895c56edfcf801dac9a04471f9ad4cc9d75d5d7918a89"/>
+    <file path="src/Ai/DraftApplier.php" role="other" sha256="cb3a0c941302690f139b22095cd2d5438a50be3a91ee650d44ecf00e6ae7148e"/>
     <file path="src/Ai/PageBrief.php" role="other" sha256="7d1b36507dc39cf3e09934630515457bec74e8dcf518dc7e52587e2a42e3c75a"/>
     <file path="src/Ai/PageDraft.php" role="other" sha256="da4cda1b963c70cb8098e0240caef513ae39f1266dbc6b8fa49c2c3131b02576"/>
     <file path="src/Ai/PageDraftValidator.php" role="other" sha256="b98b749b2dafc421e30659d5cb61bdb3b440191a03f2a509de6fc2f3da780a34"/>
@@ -54,18 +54,18 @@
     <file path="src/Rendering/PageRenderer.php" role="other" sha256="133c0c306af90897dbcebdffc6ead5ba3d88604688d80c2aadfa3b5371fb81c5"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="cf11c86083968f7bb60c22f7f0b1694cd52b7e97502b6c3d21bb10aa8321d641"/>
     <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
-    <file path="src/Rendering/RenderingContext.php" role="other" sha256="dccac6311b647068cbb6986d79b4a37f3b85f9ead21bf761c663a3bcaa7daed9"/>
+    <file path="src/Rendering/RenderingContext.php" role="other" sha256="80a4f55b3e6470b4b49567b161949b6735efd3b27332c76148fe79590719b611"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Stack/Knowledge/KnowledgeBrief.php" role="other" sha256="04e60f81ad1e88dd9485758897148622e014d877682ec1d1094525d763eb578a"/>
     <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="1c6bf65d2aa2f2e01194f730c67877b8e33f5eeaaaebeb7d0fa7fb04983a6c4b"/>
     <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="c576f15a061e0c9c74e4d46fe52a6f0655391d7d9a19a86663b146f6b6c05445"/>
     <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="3814cb32e0785da570185c04e627247e5e34a9c043054482e4e1680116c1d4a8"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="c3c3057cf1bde08f9fc1277ca2194efad244d1d74955cffc20987690270f5414"/>
     <file path="src/Tracking/Generation.php" role="other" sha256="86acaa57b5c6cfdb63dac21331acaf84bbd2b99ee1054b1894d060b17b306e2f"/>
     <file path="src/Tracking/GenerationMode.php" role="other" sha256="ce1e4c7a013fc4fc670365772041282e4b8cc747eda425380059b7458efb1d5c"/>
-    <file path="src/Tracking/Index.php" role="other" sha256="c1356134dbf3fb15442ec81b2b1c1d5c37cf9196ba25e0b78c13041a2acd184f"/>
-    <file path="src/Tracking/IndexEntry.php" role="other" sha256="890a10cb9277d7cc6267f8b2e82ad8bf7d9492a254e41f966f149e35a0223080"/>
+    <file path="src/Tracking/Index.php" role="other" sha256="d3a6553fd5bbe0e23bd56e5fc8d032fadb8c58b02ea74454b581daf447793498"/>
+    <file path="src/Tracking/IndexEntry.php" role="other" sha256="e97f944503df914298a1d7e50608c703ef73fa007cd9bef37fe48821cbdea56f"/>
     <file path="src/Tracking/IndexReaderInterface.php" role="other" sha256="fe956cd087d0078d62123786713982d44b33dbfdc8bdc5f68bf8c5dc212a7de9"/>
     <file path="src/Tracking/IndexWriterInterface.php" role="other" sha256="6543f471d79bc4c608c60a5216a56dc5c0d8c48958eb2ce72659e606fd769a45"/>
     <file path="src/Tracking/ReadsDocumentFiles.php" role="other" sha256="0d14ce20f5da780d18e90b5602033625f8836a5e10d72e2c6f9f1533abad9010"/>
@@ -77,7 +77,7 @@
     <file path="src/Tracking/TrackingWriterInterface.php" role="other" sha256="b3f9705e59a3a2f015413c231b194335982d5ca65699a5bf723e815ed5f3a738"/>
     <file path="src/Tracking/VcsState.php" role="other" sha256="3d3df0f857f296d9633415fb3758711c75698dd206bbf1fd79144dcc122dd459"/>
     <file path="src/Tracking/VcsXml.php" role="other" sha256="d692f042fda2360ec6f42735e8af369041c8819b14defc02fa405e95ca3db17b"/>
-    <file path="src/Tracking/XmlIndexStore.php" role="other" sha256="083fc056d4f6978415e56adf9057999faa1a8e2378de424b9d54abdaf118c8b4"/>
+    <file path="src/Tracking/XmlIndexStore.php" role="other" sha256="11be1cbe9feed1e8a25d2a2148dba66eaccc30e0cd9a3b8fb04f93f417fc956b"/>
     <file path="src/Tracking/XmlTrackingStore.php" role="other" sha256="efcd0be03e797a055a159bc3c2931d4d28fc8c82cd4ad5783df778cae3bda4ee"/>
     <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
     <file path="src/Xml/DomBuilder.php" role="other" sha256="8c885bf525d746d7acc2420a96705922d6680125f9be2eb330cede798d017b6d"/>
@@ -106,5 +106,8 @@
     <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files changed: src/Ai/PageBrief.php, src/Ai/XmlPageBriefStore.php, src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
     <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Ai/DraftApplier.php, src/Clock/SystemClock.php, src/Xml/SafeXmlLoader.php"/>
     <revision at="2026-09-17T19:31:41+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Config/Config.php"/>
+    <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Ai/DraftApplier.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php"/>
+    <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
+    <revision at="2026-09-17T20:03:52+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/XmlIndexStore.php"/>
   </history>
 </workflow>

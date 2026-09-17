@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.inspect" type="commands" schema-version="1">
   <title>workflows:inspect</title>
-  <generated at="2026-09-17T19:34:39+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" branch="master" dirty="true"/>
+  <generated at="2026-09-17T20:03:52+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:inspect" role="main">
       <declared-in path="src/Command/WorkflowsInspectCommand.php" role="other"/>
@@ -14,7 +14,7 @@
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="753fdbfc3b605215e6583e09eb3c8306b2b37cd88c0d7eabcf1183c84ebc3101"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
-    <file path="src/Command/WorkflowsInspectCommand.php" role="other" sha256="cd14b4168c6b5ee5a840b7489143c5c8cff9e322184bebf82fafafb21a740181"/>
+    <file path="src/Command/WorkflowsInspectCommand.php" role="other" sha256="2ba3b155b5f09fd0ae9b24ec1f910ccb81ec6326eeafe2f2c2f39da636473bd2"/>
     <file path="src/Config/Config.php" role="other" sha256="a4eb0563f93254970304cf31b7b03760b2bf35fb7339fc0720cd2f8a24c000a1"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
@@ -32,7 +32,7 @@
     <file path="src/Inspection/Freshness/FileHasher.php" role="other" sha256="b3cc2ae43a3a8aa250da108b7bbd2b1b2619e51d7ea8e77223fb4a2e4d59b235"/>
     <file path="src/Inspection/Freshness/FreshnessDecision.php" role="other" sha256="3756595629166555fb21d574b1dce8a9c151436e8b01f817f054b678b2bb5c23"/>
     <file path="src/Inspection/Freshness/FreshnessResolver.php" role="other" sha256="e0f09d0e7ce559da35e338e6bc859a92764036a876cf118fbdaf1b50b7372a13"/>
-    <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="3f715ceb56f5f21a64ddbb7ec7d4e245ccccd8388d70bab45fd5827efb49ff2f"/>
+    <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="fd0a8401cdfb5e04703e5db5a5ea97dde16489cb3a89378cb82c7648b2782b53"/>
     <file path="src/Inspection/Freshness/GitState.php" role="other" sha256="b5a1afba7c2a33c77172b500fe463171b941127175c233c944a87267d7361069"/>
     <file path="src/Inspection/Freshness/Reason.php" role="other" sha256="6688b438cbfe7da67a55d58fd4707b2e2afc65014ec3c76d69a56c1d30fd7653"/>
     <file path="src/Inspection/Freshness/ReasonKind.php" role="other" sha256="c0047a7b7d364b1cf07cfd734fa1d3d69f7311b56348157a794688957987ceff"/>
@@ -46,8 +46,8 @@
     <file path="src/Inspection/Graph/TestLocator.php" role="other" sha256="2e92580063474363d2ae9eb59a015fa8b763d0525ccffc47308dd3117437d174"/>
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="25c52f5c2e26bdba1f39e544dda86a26b696c6aebd0469f313684a57e9d4350d"/>
-    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="159dc0891cd549e44bd75f0c154611ccabf3f1ef9bcc8fb8c09e5d3e4d668828"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="4be364fd48ab766808e84182590b520af3220fdce41840242a342576eade8a39"/>
+    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="ee31a736f31d15cb79d8376540248b2f3f17120fed8cd837c78d8b28419858ca"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="bdfb5efc589829219284610a7ea8c86315234150fb20f29fcfd52471f8835f0c"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="41a1a6da729dc1c5f1f3199f3f80138683b78902bf3098b5c8a56f181304da1b"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/Edge.php" role="other" sha256="a472a7e6c0e5bc8a7150b779c909c41eadabb3d658eedaf1b80e6081aecbd35b"/>
@@ -77,13 +77,13 @@
     <file path="src/Rendering/GraphRenderer.php" role="other" sha256="29b42321478b49b2b7d8e69d434bab1b4540d488281bf888a6bc3128d4398619"/>
     <file path="src/Rendering/Labels.php" role="other" sha256="29395192b815f39a44e78ef7781f218d7f49035362e4d301eeb06f7ded6cfdcc"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
-    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="bcac31daa61bcdd00f49ed3938f94ff5a48f36260a804f0d8b049ad9a3a6df14"/>
+    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="ae746bdbed95510f9e191da531b569fe679a650a82018b677a985aa0c6c82f21"/>
     <file path="src/Rendering/MermaidWriter.php" role="other" sha256="819c384e9d1075e7e37bdcd7ca2e1722d1ef990c97d0b4a8fa2a0e490d9d3302"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
     <file path="src/Rendering/PageRenderer.php" role="other" sha256="133c0c306af90897dbcebdffc6ead5ba3d88604688d80c2aadfa3b5371fb81c5"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="cf11c86083968f7bb60c22f7f0b1694cd52b7e97502b6c3d21bb10aa8321d641"/>
     <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
-    <file path="src/Rendering/RenderingContext.php" role="other" sha256="dccac6311b647068cbb6986d79b4a37f3b85f9ead21bf761c663a3bcaa7daed9"/>
+    <file path="src/Rendering/RenderingContext.php" role="other" sha256="80a4f55b3e6470b4b49567b161949b6735efd3b27332c76148fe79590719b611"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Stack/Detector/ComposerDetector.php" role="other" sha256="1d60998f43793345c1435f95949ebf724435e42638a6d7b7c9cb0203f9aa9860"/>
     <file path="src/Stack/Detector/LanguageOnlyDetector.php" role="other" sha256="3aeeedd3320992dedbb437d829ee52a0174f6e785cb196e999bc9f03f9727304"/>
@@ -99,7 +99,7 @@
     <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
     <file path="src/Stack/XmlStackStore.php" role="other" sha256="1a95dc09628b613afbb09dc6014350b6450a53dba24695c03f14da26cd4b0878"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="3814cb32e0785da570185c04e627247e5e34a9c043054482e4e1680116c1d4a8"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="c3c3057cf1bde08f9fc1277ca2194efad244d1d74955cffc20987690270f5414"/>
     <file path="src/Tracking/FileLink.php" role="other" sha256="f315905fefbd7a7e59c9107b3cd4f388e7dacd14ed16fc4f84fa4c2b80f8127b"/>
     <file path="src/Tracking/FileRelation.php" role="other" sha256="44a8e8ebda608af7e046223bb8e76ee177d217e40a0b842d8ee3c1275f6ab71b"/>
     <file path="src/Tracking/FilesToWorkflows.php" role="other" sha256="9da44c960e0007397a45df196fffaecab430198b5407d8139a82d699db891f85"/>
@@ -107,8 +107,8 @@
     <file path="src/Tracking/FilesToWorkflowsWriterInterface.php" role="other" sha256="cfcd5d3ee75f252fb2b25539989a06ed033b75b562d577db24c9503387fd82fe"/>
     <file path="src/Tracking/Generation.php" role="other" sha256="86acaa57b5c6cfdb63dac21331acaf84bbd2b99ee1054b1894d060b17b306e2f"/>
     <file path="src/Tracking/GenerationMode.php" role="other" sha256="ce1e4c7a013fc4fc670365772041282e4b8cc747eda425380059b7458efb1d5c"/>
-    <file path="src/Tracking/Index.php" role="other" sha256="c1356134dbf3fb15442ec81b2b1c1d5c37cf9196ba25e0b78c13041a2acd184f"/>
-    <file path="src/Tracking/IndexEntry.php" role="other" sha256="890a10cb9277d7cc6267f8b2e82ad8bf7d9492a254e41f966f149e35a0223080"/>
+    <file path="src/Tracking/Index.php" role="other" sha256="d3a6553fd5bbe0e23bd56e5fc8d032fadb8c58b02ea74454b581daf447793498"/>
+    <file path="src/Tracking/IndexEntry.php" role="other" sha256="e97f944503df914298a1d7e50608c703ef73fa007cd9bef37fe48821cbdea56f"/>
     <file path="src/Tracking/IndexReaderInterface.php" role="other" sha256="fe956cd087d0078d62123786713982d44b33dbfdc8bdc5f68bf8c5dc212a7de9"/>
     <file path="src/Tracking/IndexWriterInterface.php" role="other" sha256="6543f471d79bc4c608c60a5216a56dc5c0d8c48958eb2ce72659e606fd769a45"/>
     <file path="src/Tracking/Initializer.php" role="other" sha256="18941442f9a19f9f7711304160d7015302852e589daa243c053dbeb62995539f"/>
@@ -122,7 +122,7 @@
     <file path="src/Tracking/VcsState.php" role="other" sha256="3d3df0f857f296d9633415fb3758711c75698dd206bbf1fd79144dcc122dd459"/>
     <file path="src/Tracking/VcsXml.php" role="other" sha256="d692f042fda2360ec6f42735e8af369041c8819b14defc02fa405e95ca3db17b"/>
     <file path="src/Tracking/XmlFilesToWorkflowsStore.php" role="other" sha256="8c67144968e1aedd0ea87af3b5ace6d8fe05bd1fac826fceb60848b7f1fd55fc"/>
-    <file path="src/Tracking/XmlIndexStore.php" role="other" sha256="083fc056d4f6978415e56adf9057999faa1a8e2378de424b9d54abdaf118c8b4"/>
+    <file path="src/Tracking/XmlIndexStore.php" role="other" sha256="11be1cbe9feed1e8a25d2a2148dba66eaccc30e0cd9a3b8fb04f93f417fc956b"/>
     <file path="src/Tracking/XmlTrackingStore.php" role="other" sha256="efcd0be03e797a055a159bc3c2931d4d28fc8c82cd4ad5783df778cae3bda4ee"/>
     <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
     <file path="src/Xml/DomBuilder.php" role="other" sha256="8c885bf525d746d7acc2420a96705922d6680125f9be2eb330cede798d017b6d"/>
@@ -154,5 +154,8 @@
     <revision at="2026-09-17T18:49:42+00:00" commit="98d3d2dca941cb73172541eb80a4d86eef0d9028" reason="files changed: src/Clock/SystemClock.php, src/Inspection/Graph/ClassLocator.php, src/Inspection/Graph/WorkflowBuilder.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Xml/SafeXmlLoader.php"/>
     <revision at="2026-09-17T19:31:41+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Command/WorkflowsInspectCommand.php, src/Config/Config.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php"/>
     <revision at="2026-09-17T19:34:39+00:00" commit="e6f999323239e40c085bd8eafda5e14704ae92fc" reason="files changed: src/Command/WorkflowsInspectCommand.php"/>
+    <revision at="2026-09-17T20:02:05+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Command/WorkflowsInspectCommand.php, src/Inspection/Freshness/GitClient.php, src/Inspection/InspectionOptions.php, src/Inspection/InspectionPipeline.php, src/Rendering/MenuRenderer.php, src/Rendering/RenderingContext.php, src/Tracking/DevToolsDirectory.php, src/Tracking/Index.php, src/Tracking/IndexEntry.php, src/Tracking/XmlIndexStore.php"/>
+    <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
+    <revision at="2026-09-17T20:03:52+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="files changed: src/Tracking/XmlIndexStore.php"/>
   </history>
 </workflow>

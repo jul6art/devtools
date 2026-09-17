@@ -24,6 +24,7 @@ final class WorkflowsInspectCommand extends Command
         private readonly InspectionPipeline $pipeline = new InspectionPipeline(),
         private readonly ?string $defaultPath = null,
         private readonly ?string $defaultLanguage = null,
+        private readonly ?string $defaultDocs = null,
     ) {
         parent::__construct();
     }
@@ -39,7 +40,8 @@ final class WorkflowsInspectCommand extends Command
             ->addOption('since', null, InputOption::VALUE_REQUIRED, 'Compare with this commit, and hash every file')
             ->addOption('prune', null, InputOption::VALUE_NONE, 'Delete the page and tracking file of orphaned workflows')
             ->addOption('no-ai', null, InputOption::VALUE_NONE, 'Write no brief for Claude: factual pages only (CI)')
-            ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'The language Claude writes the pages in (two letters); wins over .devtools/config.xml. Default: en');
+            ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'The language Claude writes the pages in (two letters); wins over .devtools/config.xml. Default: en')
+            ->addOption('docs', null, InputOption::VALUE_REQUIRED, 'The directory the pages and the menu are written in, relative to the project. Default: docs/workflows');
     }
 
     #[\Override]
@@ -59,6 +61,7 @@ final class WorkflowsInspectCommand extends Command
         $force = (array) $input->getOption('force');
         $since = $input->getOption('since');
         $locale = $input->getOption('locale');
+        $docs = $input->getOption('docs');
 
         try {
             $options = new InspectionOptions(
@@ -73,6 +76,7 @@ final class WorkflowsInspectCommand extends Command
                 noAi: true === $input->getOption('no-ai'),
                 language: \is_string($locale) ? $locale : null,
                 fallbackLanguage: $this->defaultLanguage,
+                docs: \is_string($docs) ? $docs : $this->defaultDocs,
             );
         } catch (\InvalidArgumentException $invalid) {
             // An option DevTools refuses is a configuration error (exit 2), not a usage error of the console.

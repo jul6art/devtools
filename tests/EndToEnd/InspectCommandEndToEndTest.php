@@ -25,7 +25,7 @@ final class InspectCommandEndToEndTest extends TestCase
 {
     use CopiesFixtureProjects;
 
-    private const string EXPECTED = __DIR__.'/../Fixtures/expected/symfony-minimal/.devtools';
+    private const string EXPECTED = __DIR__.'/../Fixtures/expected/symfony-minimal';
 
     /**
      * A fixed clock (SOURCE_DATE_EPOCH) and no enclosing git repository make two runs comparable.
@@ -40,13 +40,14 @@ final class InspectCommandEndToEndTest extends TestCase
         $run = $this->runInProject([\PHP_BINARY, \dirname(__DIR__, 2).'/bin/devtools', 'workflows:inspect', $project, '--no-ai'], $project);
 
         self::assertSame(0, $run->getExitCode(), $run->getOutput().$run->getErrorOutput());
-        $this->assertTreeMatchesExpected($project.'/.devtools');
+        $this->assertTreeMatchesExpected($project);
 
         $tracking = new XmlTrackingStore(new WorkflowTypeRegistry());
 
         foreach (glob($project.'/.devtools/workflows/*/*.xml') ?: [] as $file) {
             $tracking->read($file);
-            self::assertSame([], new PageParser()->parse((string) file_get_contents(substr($file, 0, -4).'.md'))->conformityProblems(), $file);
+            $page = $project.'/docs/workflows/'.basename(\dirname($file)).'/'.basename($file, '.xml').'.md';
+            self::assertSame([], new PageParser()->parse((string) file_get_contents($page))->conformityProblems(), $page);
         }
     }
 
@@ -73,7 +74,7 @@ final class InspectCommandEndToEndTest extends TestCase
         $run = $this->runInProject([\PHP_BINARY, 'bin/console', 'devtools:workflows:inspect', '--no-ai'], $project);
 
         self::assertSame(0, $run->getExitCode(), $run->getOutput().$run->getErrorOutput());
-        $this->assertTreeMatchesExpected($project.'/.devtools');
+        $this->assertTreeMatchesExpected($project);
     }
 
     /**
@@ -87,9 +88,9 @@ final class InspectCommandEndToEndTest extends TestCase
         return $process;
     }
 
-    private function assertTreeMatchesExpected(string $devtools): void
+    private function assertTreeMatchesExpected(string $project): void
     {
-        $actual = self::normalised(self::tree($devtools));
+        $actual = self::normalised(self::documentedTree($project));
 
         if ('1' === getenv('DEVTOOLS_UPDATE_SNAPSHOTS')) {
             new Filesystem()->remove(array_map(static fn (string $path): string => self::EXPECTED.'/'.$path, array_keys(self::normalised(self::tree(self::EXPECTED)))));
@@ -114,9 +115,7 @@ final class InspectCommandEndToEndTest extends TestCase
         $kept = [];
 
         foreach ($tree as $path => $content) {
-            if (!str_starts_with($path, 'reports/') && !str_starts_with($path, 'schemas/')) {
-                $kept[$path] = (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content);
-            }
+            $kept[$path] = (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content);
         }
 
         return $kept;

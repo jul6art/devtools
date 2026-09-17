@@ -67,6 +67,17 @@ final class WorkflowsInspectCommandTest extends TestCase
         self::assertStringContainsString('<language>fr</language>', (string) file_get_contents($project.'/.devtools/pending/page.route.order.new.brief.xml'));
     }
 
+    public function testTheConfiguredDocumentationDirectoryIsUsedWhenTheOptionIsAbsent(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        $command = new WorkflowsInspectCommand(new InspectionPipeline(new AdapterResolver([new FakeAdapter()]), new FrozenClock(new \DateTimeImmutable('2026-09-16'))), $project, null, 'documentation/flux');
+
+        new CommandTester($command)->execute([]);
+
+        self::assertFileExists($project.'/documentation/flux/workflows.md');
+        self::assertFileDoesNotExist($project.'/docs/workflows/workflows.md');
+    }
+
     public function testWithoutAPathItInspectsTheDefaultOne(): void
     {
         $project = $this->copyFixtureProject('symfony-minimal');

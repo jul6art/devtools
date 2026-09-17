@@ -27,12 +27,12 @@ final class ConfigurationTest extends TestCase
 
     public function testItAppliesItsDefaults(): void
     {
-        self::assertSame(['enabled' => true, 'language' => null], $this->process([]), 'No language: the pages are written in English.');
+        self::assertSame(['enabled' => true, 'docs_dir' => null, 'language' => null], $this->process([]), 'No language: the pages are written in English.');
     }
 
     public function testLaterConfigsOverrideEarlierOnes(): void
     {
-        self::assertSame(['enabled' => true, 'language' => 'fr'], $this->process([['enabled' => false, 'language' => 'de'], ['enabled' => true, 'language' => 'fr']]));
+        self::assertSame(['enabled' => true, 'language' => 'fr', 'docs_dir' => 'docs/flows'], $this->process([['enabled' => false, 'language' => 'de'], ['enabled' => true, 'language' => 'fr', 'docs_dir' => 'docs/flows']]));
     }
 
     /**

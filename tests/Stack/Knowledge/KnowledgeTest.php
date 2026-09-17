@@ -118,7 +118,7 @@ final class KnowledgeTest extends TestCase
 
         self::assertCount(6, glob($project.'/.devtools/pending/page.*.brief.xml') ?: []);
         self::assertSame('.devtools/knowledge/symfony-99.md', new XmlPageBriefStore()->read($project.'/.devtools/pending/page.route.order.new.brief.xml')->knowledgePath);
-        self::assertStringContainsString('[Connaissances symfony-99](knowledge/symfony-99.md)', (string) file_get_contents($project.'/.devtools/workflows.md'));
+        self::assertStringContainsString('[Connaissances symfony-99](../../.devtools/knowledge/symfony-99.md)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }
 
     public function testAKnowledgeDraftBreakingTheCanvasIsRefused(): void

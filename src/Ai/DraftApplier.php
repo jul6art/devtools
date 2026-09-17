@@ -57,7 +57,7 @@ final readonly class DraftApplier
     public function apply(ProjectRoot $root): ApplyResult
     {
         $result = new ApplyResult();
-        $directory = new DevToolsDirectory($root);
+        $directory = new DevToolsDirectory($root, self::documentedIn($root));
 
         // Knowledge first: page briefs of a stack are only written once its knowledge exists.
         foreach (glob($directory->path('pending/knowledge.*.draft.md')) ?: [] as $draftFile) {
@@ -99,6 +99,16 @@ final readonly class DraftApplier
         }
 
         return $result;
+    }
+
+    /**
+     * Where the last inspection wrote the pages: `apply` never guesses, it reads the index.
+     */
+    private static function documentedIn(ProjectRoot $root): ?string
+    {
+        $index = new DevToolsDirectory($root)->indexFile();
+
+        return is_file($index) ? new XmlIndexStore(new WorkflowTypeRegistry())->read($index)->docs : null;
     }
 
     /**
@@ -342,6 +352,6 @@ final readonly class DraftApplier
         }
 
         $previous = $store->read($directory->indexFile());
-        $store->write($directory->indexFile(), Index::fromTracking($previous->scannedAt, $previous->vcs, $documents));
+        $store->write($directory->indexFile(), Index::fromTracking($previous->scannedAt, $previous->vcs, $documents, $directory->docs));
     }
 }

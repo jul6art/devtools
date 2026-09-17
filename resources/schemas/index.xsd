@@ -2,6 +2,8 @@
 <!--
     The index of every documented workflow: .devtools/index.xml (specs § 4.4, ADR-0004).
 
+    schema-version 2 adds `docs`: the directory the pages live in, `docs/workflows` by default.
+
     ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -28,6 +30,9 @@
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
             <xs:attribute name="scanned-at" type="xs:dateTime" use="required"/>
+            <!-- Where the pages and the menu were written, relative to the project (ADR-0004). Absent in an
+                 index written before schema-version 2: the pages were then inside .devtools/workflows/. -->
+            <xs:attribute name="docs" type="t:path"/>
         </xs:complexType>
     </xs:element>
 

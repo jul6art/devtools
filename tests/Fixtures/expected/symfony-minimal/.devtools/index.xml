@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="1" scanned-at="2026-09-16T00:00:00+00:00">
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T00:00:00+00:00" docs="docs/workflows">
   <source vcs="none"/>
-  <workflow id="async.order-created" type="async" title="OrderCreated" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/async/order-created.md"/>
-  <workflow id="command.app.import-catalog" type="commands" title="app:import-catalog" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/commands/app.import-catalog.md"/>
-  <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/data/migrations.md"/>
-  <workflow id="event.locale-listener" type="events" title="kernel.request → LocaleListener" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/events/locale-listener.md"/>
-  <workflow id="route.health" type="routes" title="GET /health" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/routes/health.md"/>
-  <workflow id="route.order.index" type="routes" title="GET /orders" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/routes/order.index.md"/>
-  <workflow id="route.order.new" type="routes" title="GET|POST /orders/new" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/routes/order.new.md"/>
-  <workflow id="route.order.show" type="routes" title="GET /orders/{id}" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/routes/order.show.md"/>
-  <workflow id="route.order.validate" type="routes" title="POST /orders/{id}/validate" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/routes/order.validate.md"/>
-  <workflow id="ui.cart-summary" type="ui" title="CartSummary" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="workflows/ui/cart-summary.md"/>
+  <workflow id="async.order-created" type="async" title="OrderCreated" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="async/order-created.md"/>
+  <workflow id="command.app.import-catalog" type="commands" title="app:import-catalog" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="commands/app.import-catalog.md"/>
+  <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="data/migrations.md"/>
+  <workflow id="event.locale-listener" type="events" title="kernel.request → LocaleListener" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="events/locale-listener.md"/>
+  <workflow id="route.health" type="routes" title="GET /health" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="routes/health.md"/>
+  <workflow id="route.order.index" type="routes" title="GET /orders" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="routes/order.index.md"/>
+  <workflow id="route.order.new" type="routes" title="GET|POST /orders/new" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="routes/order.new.md"/>
+  <workflow id="route.order.show" type="routes" title="GET /orders/{id}" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="routes/order.show.md"/>
+  <workflow id="route.order.validate" type="routes" title="POST /orders/{id}/validate" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="routes/order.validate.md"/>
+  <workflow id="ui.cart-summary" type="ui" title="CartSummary" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T00:00:00+00:00" page="ui/cart-summary.md"/>
 </index>

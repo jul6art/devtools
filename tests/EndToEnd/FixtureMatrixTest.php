@@ -240,7 +240,7 @@ final class FixtureMatrixTest extends TestCase
      */
     private static function devtoolsTree(string $project): array
     {
-        return array_filter(self::tree($project.'/.devtools'), static fn (string $path): bool => !str_starts_with($path, 'reports/'), \ARRAY_FILTER_USE_KEY);
+        return self::documentedTree($project);
     }
 
     private function assertSnapshot(string $project, string $name): void
@@ -249,9 +249,7 @@ final class FixtureMatrixTest extends TestCase
         $actual = [];
 
         foreach (self::devtoolsTree($project) as $path => $content) {
-            if (!str_starts_with($path, 'pending/') && !str_starts_with($path, 'schemas/')) {
-                $actual[$path] = (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content);
-            }
+            $actual[$path] = (string) preg_replace('/tool="devtools [^"]*"/', 'tool="devtools"', $content);
         }
 
         if ('1' === getenv('DEVTOOLS_UPDATE_SNAPSHOTS')) {

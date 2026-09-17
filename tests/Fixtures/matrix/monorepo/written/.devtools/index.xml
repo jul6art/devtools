@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
+  <source vcs="git" commit="3442aca21494a3cb140a486b2463d8a50a5ae11c" branch="main" dirty="true"/>
+  <workflow id="route.api.item.list" type="routes" title="GET /api/items" status="fresh" confidence="medium" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/api.item.list.md"/>
+  <workflow id="route.items" type="routes" title="/items" status="fresh" confidence="medium" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/items.md"/>
+</index>

@@ -35,7 +35,7 @@ final class InstallationTest extends TestCase
         $run = $this->devtools([$home.'/vendor/bin/devtools', 'workflows:inspect', '--no-ai'], $project);
 
         self::assertSame(0, $run->getExitCode(), $run->getOutput().$run->getErrorOutput());
-        self::assertFileExists($project.'/.devtools/workflows/routes/orders.new.md');
+        self::assertFileExists($project.'/docs/workflows/routes/orders.new.md');
     }
 
     public function testARequireDevInstallationDocumentsItsProject(): void
@@ -49,7 +49,7 @@ final class InstallationTest extends TestCase
         $run = $this->devtools([$project.'/vendor/bin/devtools', 'workflows:inspect', '--no-ai'], $project);
 
         self::assertSame(0, $run->getExitCode(), $run->getOutput().$run->getErrorOutput());
-        self::assertFileExists($project.'/.devtools/workflows/routes/orders.new.md');
+        self::assertFileExists($project.'/docs/workflows/routes/orders.new.md');
         self::assertStringNotContainsString('vendor/', (string) file_get_contents($project.'/.devtools/graph/files-to-workflows.xml'), 'Its own vendor/ is not documented.');
     }
 

@@ -85,9 +85,12 @@ devtools:
 
     # The language the workflow pages are written in, as two lowercase letters. Default: en.
     language: fr
+
+    # Where the pages and their menu are written, relative to the project. Default: docs/workflows.
+    docs_dir: docs/workflows
 ```
 
-`devtools.enabled` and `devtools.language` are also exposed as container parameters.
+`devtools.enabled`, `devtools.language` and `devtools.docs_dir` are also exposed as container parameters.
 
 **The language of the pages** is decided in this order: the `--locale` option of `workflows:inspect`, then
 `<language pages="…"/>` of `.devtools/config.xml`, then this key, then English. The option is what a one-off
@@ -116,20 +119,30 @@ vendor/bin/devtools init
 ```
 
 ```
-.devtools/
+docs/workflows/    the documentation — what a human opens
+├── workflows.md   the menu
+└── <type>/<id>.md one page per workflow
+
+.devtools/         the machinery — what DevTools reads back
 ├── config.xml     the project's options — yours, DevTools never rewrites it
-├── schemas/       a copy of every XSD, so .devtools/ can be validated without DevTools
-├── workflows/     one page and one tracking file per workflow
+├── stack.xml      the stacks detected
+├── index.xml      every workflow, and where the pages were written
+├── workflows/     one tracking file (.xml) per workflow
 ├── knowledge/     how the project's stack works
 ├── discovery/     what Claude found in a stack without a native adapter
 ├── graph/         the file → workflows index and the overview diagram
+├── schemas/       a copy of every XSD, so .devtools/ can be validated without DevTools
 ├── pending/       work area for Claude — ignored by git
 └── reports/       one report per run — ignored by git
 ```
 
-Commit `.devtools/` — `config.xml`, `stack.xml`, `workflows.md`, `index.xml`, `workflows/`, `knowledge/`,
-`discovery/`, `graph/`, `schemas/` — and `.claude/skills/` once `claude:install` has run: the documentation
-is the team's, reviewed in pull requests like code. `init` adds the two work areas to the project's
+The pages go to `docs/workflows/` by default; `--docs=documentation/flux` on `workflows:inspect`, or
+`devtools.docs_dir` in the bundle, puts them anywhere else in the project. `index.xml` records the choice, so
+`workflows:apply` and the next run find them without being told.
+
+Commit both directories — `docs/workflows/` and `.devtools/` (all of it except `pending/` and `reports/`) —
+and `.claude/skills/` once `claude:install` has run: the documentation is the team's, reviewed in pull
+requests like code. `init` adds the two work areas to the project's
 `.gitignore` (without duplicating a line that already covers them) and changes nothing when run again.
 
 ⚠️ **Every XML file in `.devtools/` is validated against its schema, on write and on read.** A file
@@ -197,6 +210,7 @@ page to open first. Commit all of it; the report stays out of git.
 | `--only=routes` | write the pages of one type only; the menu and the index stay complete |
 | `--no-ai` | write no brief for Claude: factual pages only |
 | `--locale=fr` | the language Claude writes the pages in, as two lowercase letters |
+| `--docs=docs/workflows` | the directory the pages and the menu are written in |
 
 Exit code `0` when everything was documented, `1` with warnings — a console that did not answer, a stack
 without an adapter, a file that could not be parsed — and `2` when nothing could be (invalid

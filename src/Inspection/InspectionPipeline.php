@@ -98,7 +98,7 @@ final readonly class InspectionPipeline
         $lock = null;
 
         try {
-            $directory = new DevToolsDirectory(new ProjectRoot($options->path));
+            $directory = new DevToolsDirectory(new ProjectRoot($options->path), $options->docs);
 
             if (!$options->dryRun) {
                 new Initializer($this->writer)->initialize($directory);
@@ -149,7 +149,7 @@ final readonly class InspectionPipeline
         $this->hasher->reset();
         $tracking = new XmlTrackingStore($types, $this->writer);
         $previous = $this->previousTracking($directory, $tracking);
-        [$vcs, $candidates] = $this->changes($directory->root, $previous, $options);
+        [$vcs, $candidates] = $this->changes($directory->root, $previous, $options, $directory->docs);
         $report->decisions = $decisions = new FreshnessResolver($this->hasher)->resolve($directory->root, $workflows, $previous, $candidates, $options->force, $options->forceAll);
 
         foreach (array_diff($options->force, array_map(static fn (Workflow $workflow): string => $workflow->id->value, $workflows)) as $unknown) {
@@ -236,13 +236,13 @@ final readonly class InspectionPipeline
         $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options);
 
         $indexStore = new XmlIndexStore($types, $this->writer);
-        $index = Index::fromTracking($now, $vcs, [...$documents, ...$orphans]);
+        $index = Index::fromTracking($now, $vcs, [...$documents, ...$orphans], $directory->docs);
 
         // The index keeps its date and commit while its entries do not change. Recording HEAD instead would
         // make committing the documentation change the documentation, forever.
         if (is_file($directory->indexFile())) {
             $previousIndex = $indexStore->read($directory->indexFile());
-            $unchanged = new Index($previousIndex->scannedAt, $previousIndex->vcs, $index->entries);
+            $unchanged = new Index($previousIndex->scannedAt, $previousIndex->vcs, $index->entries, $directory->docs);
 
             if ($indexStore->serialize($unchanged) === $indexStore->serialize($previousIndex)) {
                 $index = $previousIndex;
@@ -251,7 +251,7 @@ final readonly class InspectionPipeline
 
         $indexStore->write($directory->indexFile(), $index);
         new XmlFilesToWorkflowsStore($this->writer)->write($directory->filesToWorkflowsFile(), FilesToWorkflows::fromTracking($documents));
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes));
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs));
         $this->writer->write($directory->overviewFile(), new GraphRenderer()->render($workflows));
     }
 
@@ -264,7 +264,7 @@ final readonly class InspectionPipeline
      *
      * @return array{VcsState, list<string>|null}
      */
-    private function changes(ProjectRoot $root, array $previous, InspectionOptions $options): array
+    private function changes(ProjectRoot $root, array $previous, InspectionOptions $options, string $docs): array
     {
         $state = $this->git->state($root);
 
@@ -272,7 +272,7 @@ final readonly class InspectionPipeline
             return [VcsState::none(), null];
         }
 
-        $workingTree = $this->git->workingTree($root, $state);
+        $workingTree = $this->git->workingTree($root, $state, [DevToolsDirectory::NAME, $docs]);
         $vcs = new VcsState($state->commit, $state->branch, [] !== $workingTree);
         $recorded = array_values(array_unique(array_filter(array_map(static fn (TrackingDocument $document): ?string => $document->vcs->commit, $previous))));
 
@@ -493,7 +493,7 @@ final readonly class InspectionPipeline
                 promptPath: Resources::path('prompts/page/v1.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
-                pagePath: DevToolsDirectory::NAME.'/'.DevToolsDirectory::pageRelativePath($workflow->type, $workflow->id),
+                pagePath: $directory->pageRelativePath($workflow->type, $workflow->id),
                 knowledgePath: $knowledgePath,
                 reasons: [$document->lastRevision()->reason],
                 sections: PageDraft::expectedSections(),

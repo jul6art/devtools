@@ -35,13 +35,13 @@ final class InspectionPipelineTest extends TestCase
 
         self::assertSame(0, $report->exitCode());
         self::assertSame(6, $report->count('created'));
-        self::assertFileExists($project.'/.devtools/workflows/routes/order.new.md');
+        self::assertFileExists($project.'/docs/workflows/routes/order.new.md');
         self::assertFileExists($project.'/.devtools/workflows/routes/order.new.xml');
         self::assertFileExists($project.'/.devtools/index.xml');
         self::assertFileExists($project.'/.devtools/graph/files-to-workflows.xml');
         self::assertFileExists($project.'/.devtools/graph/workflows.mermaid');
         self::assertFileExists($project.'/.devtools/stack.xml');
-        self::assertStringContainsString('## Routes (4)', (string) file_get_contents($project.'/.devtools/workflows.md'));
+        self::assertStringContainsString('## Routes (4)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
         self::assertNotNull($report->path, 'A report is written.');
         self::assertFileExists($report->path);
     }
@@ -55,10 +55,33 @@ final class InspectionPipelineTest extends TestCase
         foreach (glob($project.'/.devtools/workflows/*/*.xml') ?: [] as $xml) {
             $document = $tracking->read($xml);
             self::assertSame(TrackingStatus::Fresh, $document->status);
-            self::assertSame([], new PageParser()->parse((string) file_get_contents(substr($xml, 0, -4).'.md'))->conformityProblems(), $xml);
+            $page = $project.'/docs/workflows/'.basename(\dirname($xml)).'/'.basename($xml, '.xml').'.md';
+            self::assertSame([], new PageParser()->parse((string) file_get_contents($page))->conformityProblems(), $page);
         }
 
         self::assertCount(6, new XmlIndexStore(new WorkflowTypeRegistry())->read($project.'/.devtools/index.xml')->entries);
+    }
+
+    public function testThePagesGoWhereTheOptionSaysAndTheIndexRemembersIt(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+
+        $this->pipeline()->run(new InspectionOptions($project, docs: 'documentation/flux/'));
+
+        self::assertFileExists($project.'/documentation/flux/workflows.md');
+        self::assertFileExists($project.'/documentation/flux/routes/order.new.md');
+        self::assertFileDoesNotExist($project.'/docs/workflows/workflows.md');
+        self::assertSame('documentation/flux', new XmlIndexStore(new WorkflowTypeRegistry())->read($project.'/.devtools/index.xml')->docs);
+        self::assertStringContainsString('[Stack](../../.devtools/stack.xml)', (string) file_get_contents($project.'/documentation/flux/workflows.md'));
+        self::assertFileExists($project.'/.devtools/workflows/routes/order.new.xml', 'The tracking stays in .devtools/.');
+    }
+
+    public function testADocumentationDirectoryOutsideTheProjectIsRefused(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is not a directory of the project');
+
+        new InspectionOptions($this->copyFixtureProject('symfony-minimal'), docs: '../elsewhere');
     }
 
     public function testADryRunWritesNothing(): void
@@ -79,8 +102,9 @@ final class InspectionPipelineTest extends TestCase
 
         $this->pipeline()->run(new InspectionOptions($project, only: 'commands'));
 
-        self::assertSame(['app.import-catalog.md', 'app.import-catalog.xml'], array_map(basename(...), glob($project.'/.devtools/workflows/*/*') ?: []));
-        self::assertStringContainsString('## Routes (4)', (string) file_get_contents($project.'/.devtools/workflows.md'));
+        self::assertSame(['app.import-catalog.xml'], array_map(basename(...), glob($project.'/.devtools/workflows/*/*') ?: []), 'Only the tracking of that type is written.');
+        self::assertSame(['app.import-catalog.md'], array_map(basename(...), glob($project.'/docs/workflows/*/*') ?: []), 'And only its page.');
+        self::assertStringContainsString('## Routes (4)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }
 
     public function testAnEntryPointThatDisappearedIsOrphanedAndItsPageKept(): void
@@ -91,9 +115,9 @@ final class InspectionPipelineTest extends TestCase
         $report = $this->pipeline(new FakeAdapter(['app_order_show']))->run(new InspectionOptions($project));
 
         self::assertSame(1, $report->count('orphaned'));
-        self::assertFileExists($project.'/.devtools/workflows/routes/order.show.md');
+        self::assertFileExists($project.'/docs/workflows/routes/order.show.md');
         self::assertSame(TrackingStatus::Orphaned, new XmlTrackingStore(new WorkflowTypeRegistry())->read($project.'/.devtools/workflows/routes/order.show.xml')->status);
-        self::assertStringContainsString('[`route.order.show`](workflows/routes/order.show.md) — orphelin', (string) file_get_contents($project.'/.devtools/workflows.md'));
+        self::assertStringContainsString('[`route.order.show`](routes/order.show.md) — orphelin', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }
 
     public function testASecondRunConcurrentWithTheFirstIsRefused(): void
