@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Tests\Support;
 
+use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -14,6 +16,8 @@ use Symfony\Component\Filesystem\Filesystem;
 trait UsesTemporaryDirectory
 {
     private ?string $temporaryDirectory = null;
+
+    private ?string $previousKnowledgeHome = null;
 
     protected function temporaryDirectory(): string
     {
@@ -33,6 +37,50 @@ trait UsesTemporaryDirectory
             new Filesystem()->remove($this->temporaryDirectory);
             $this->temporaryDirectory = null;
         }
+    }
+
+    /**
+     * Each test gets its own knowledge library (ADR-0041): a sheet one test deposits must never answer
+     * the stack the next test means to be unknown, and no test may ever write into `resources/knowledge/`
+     * of this repository.
+     *
+     * Both `putenv()` and `$_SERVER` are set: Symfony Process keeps only the variables present in both,
+     * so a sub-process would otherwise fall back to the library of the machine.
+     */
+    #[Before]
+    protected function isolateKnowledgeLibrary(): void
+    {
+        $previous = getenv(KnowledgeLibrary::HOME_ENV);
+        $this->previousKnowledgeHome = \is_string($previous) ? $previous : null;
+        self::putKnowledgeHome($this->temporaryDirectory().'/knowledge-library');
+    }
+
+    #[After]
+    protected function restoreKnowledgeLibrary(): void
+    {
+        self::putKnowledgeHome($this->previousKnowledgeHome);
+        $this->previousKnowledgeHome = null;
+    }
+
+    /**
+     * The library this test writes to, created on first use like any other library.
+     */
+    protected function knowledgeLibrary(): KnowledgeLibrary
+    {
+        return KnowledgeLibrary::locate();
+    }
+
+    private static function putKnowledgeHome(?string $path): void
+    {
+        if (null === $path) {
+            putenv(KnowledgeLibrary::HOME_ENV);
+            unset($_SERVER[KnowledgeLibrary::HOME_ENV], $_ENV[KnowledgeLibrary::HOME_ENV]);
+
+            return;
+        }
+
+        putenv(KnowledgeLibrary::HOME_ENV.'='.$path);
+        $_SERVER[KnowledgeLibrary::HOME_ENV] = $_ENV[KnowledgeLibrary::HOME_ENV] = $path;
     }
 
     /**

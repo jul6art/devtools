@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -30,16 +30,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Entité | `src/Entity/Order.php` |  |
-| Message | `src/Message/OrderCreated.php` |  |
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` | point d'entrée |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
+—
 
 ## Données
 
@@ -55,10 +48,6 @@ dans `config/packages/framework.yaml`.
 Le handler ne fait rien du résultat, et aucun code du projet ne distribue `OrderCreated` : ce workflow n'est
 aujourd'hui jamais déclenché.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -67,4 +56,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

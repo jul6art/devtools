@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Tests\Rendering;
 
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -52,26 +54,45 @@ final class PageRendererTest extends TestCase
     }
 
     /**
-     * A real controller reaches thirty files, and thirty boxes in a row say nothing (found on a 266-workflow
-     * project). The files stay listed one by one under "Composants impliqués".
+     * The page is no longer an inventory: the files and the tests of a workflow live in its XML tracking
+     * file, which is what links it to the code (ADR-0043). 250 of a real page's 344 lines were those two
+     * tables.
      */
-    public function testALongJourneyIsDrawnAsACountPerRoleInsteadOfOneBoxPerFile(): void
+    public function testThePageListsNeitherTheFilesNorTheTestsOfTheWorkflow(): void
     {
-        $many = [];
+        $workflow = RenderingFixtures::withFiles(RenderingFixtures::workflows()['routes'], [new FileRef('src/Entity/Order.php', FileRole::Entity)]);
+        $page = new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingFixtures::context());
 
-        for ($i = 0; $i < 9; ++$i) {
-            $many[] = new FileRef(\sprintf('src/Entity/Entity%d.php', $i), FileRole::Entity);
-            $many[] = new FileRef(\sprintf('src/Repository/Repository%d.php', $i), FileRole::Repository);
-        }
+        self::assertStringNotContainsString('Composants impliqués', $page);
+        self::assertStringNotContainsString('Tests existants', $page);
+        self::assertStringNotContainsString('src/Entity/Order.php', $page);
+        self::assertStringNotContainsString('tests/Controller/OrderControllerTest.php', $page);
+        self::assertStringNotContainsString('Paquets :', $page);
+    }
 
-        $workflow = RenderingFixtures::withFiles(RenderingFixtures::workflows()['routes'], $many);
-        $journey = (string) new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingFixtures::context()))->section(PageSection::Journey);
+    /**
+     * A listener is not a workflow: what a reader wants is what it can do inside this one (ADR-0043).
+     */
+    public function testTheMechanismsOfTheWorkflowAreListedWithWhatTheyWrite(): void
+    {
+        $workflow = new Workflow(
+            id: new WorkflowId('route.order.new'),
+            type: WorkflowType::routes(),
+            title: 'Order creation',
+            main: new EntryPoint('route', 'app_order_new', new FileRef('src/Controller/OrderController.php', FileRole::Controller)),
+            mechanisms: [new Mechanism(
+                'listener',
+                'App\\EventListener\\LocaleListener',
+                'kernel.request',
+                new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener),
+                16,
+                [new DecisionPoint('App\\Entity\\User::locale', "'fr'", null, new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener), 22)],
+            )],
+        );
 
-        self::assertStringContainsString('"Entité ×9"', $journey);
-        self::assertStringContainsString('"Repository ×9"', $journey);
-        self::assertStringNotContainsString('Entity3.php', $journey);
-        self::assertStringContainsString('src/Controller/OrderController.php', $journey, 'The entry point keeps its own box.');
-        self::assertLessThanOrEqual(12, substr_count($journey, "\n  n"), 'One box per role, not one per file: 24 files reached.');
+        $mechanisms = (string) new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingContext::of([$workflow])))->section(PageSection::CrossCutting);
+
+        self::assertStringContainsString('| `App\\EventListener\\LocaleListener` | `kernel.request` | 16 | `App\\Entity\\User::locale` |', $mechanisms);
     }
 
     /**
@@ -121,7 +142,7 @@ final class PageRendererTest extends TestCase
         $parsed = new PageParser()->parse($page);
 
         self::assertSame('—', $parsed->sections['Résumé']);
-        self::assertStringContainsString('| Contrôleur | `src/Controller/OrderController.php` |', $parsed->sections['Composants impliqués']);
+        self::assertStringContainsString('| Point d\'entrée | `GET\|POST /orders/new` (`app_order_new`) |', $parsed->sections['Déclencheur']);
         self::assertSame('`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : a1b2c3d', $parsed->header);
     }
 
@@ -129,10 +150,10 @@ final class PageRendererTest extends TestCase
     {
         $renderer = new PageRenderer();
         $page = $renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
-        $edited = str_replace('| Formulaire | `src/Form/OrderType.php` |', '| Formulaire | `src/Form/OtherType.php` |', $page);
+        $edited = str_replace('n3["app_order_show"]', 'n3["app_order_elsewhere"]', $page);
         $edited = str_replace("## Résumé\n\n—", "## Résumé\n\nWritten by Claude.", $edited);
 
-        self::assertSame([PageSection::Components], new PageParser()->parse($edited)->devToolsSectionsDifferingFrom(new PageParser()->parse($page)));
+        self::assertSame([PageSection::Navigation], new PageParser()->parse($edited)->devToolsSectionsDifferingFrom(new PageParser()->parse($page)));
     }
 
     public function testAFactualRewriteKeepsWhatClaudeWrote(): void
@@ -145,22 +166,29 @@ final class PageRendererTest extends TestCase
             '| Préconditions | — |' => '| Préconditions | catalogue chargé |',
         ]));
         $written = $written->withSection(PageSection::Journey, "```mermaid\nsequenceDiagram\n  U->>C: POST /orders/new\n```");
+        $written = $written->withSection(PageSection::Decisions, "**`App\\Entity\\Order::status`**\n\n```mermaid\nflowchart TD\n  d1{\"sans référence\"}\n```");
         $written = $written->withSection(PageSection::CrossCutting, 'La locale est fixée par `LocaleListener`.');
 
         $rewritten = new PageParser()->parse($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $written));
 
-        foreach ([PageSection::Summary, PageSection::Journey, PageSection::Data, PageSection::CrossCutting, PageSection::Attention] as $section) {
+        foreach ([PageSection::Summary, PageSection::Journey, PageSection::Decisions, PageSection::Data, PageSection::CrossCutting, PageSection::Attention] as $section) {
             self::assertSame($written->sections[$section->value], $rewritten->sections[$section->value], $section->value);
         }
 
         self::assertStringContainsString('| Préconditions | catalogue chargé |', $rewritten->sections['Déclencheur']);
     }
 
-    public function testWithoutAWrittenPageNothingIsKept(): void
+    /**
+     * Without Claude, "Parcours" and "Décisions" hold "—": a flowchart of the files reached restated the
+     * table this ADR removed, and a decision diagram is Claude's to draw (ADR-0043).
+     */
+    public function testWithoutAWrittenPageTheSectionsClaudeOwnsAreEmpty(): void
     {
-        $page = new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
+        $parsed = new PageParser()->parse(new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context()));
 
-        self::assertStringContainsString('flowchart TD', new PageParser()->parse($page)->sections['Parcours']);
+        self::assertSame('—', $parsed->sections['Parcours']);
+        self::assertSame('—', $parsed->sections['Décisions']);
+        self::assertStringContainsString('stateDiagram-v2', $parsed->sections['Navigation / états'], 'The state machine stays factual.');
     }
 
     /**
@@ -212,9 +240,9 @@ final class PageRendererTest extends TestCase
     {
         $page = new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
 
-        self::assertStringContainsString('[`event.locale-listener`](../events/locale-listener.md)', $page);
         self::assertStringContainsString('[`route.order.show`](order.show.md)', $page);
         self::assertStringContainsString('`route.order.index`', $page, 'A dependency without a page is named, not linked.');
+        self::assertStringNotContainsString('](../events/', $page, 'There is no events type any more (ADR-0043).');
     }
 
     public function testAWorkflowWithoutStatesOrNavigationSaysSo(): void
@@ -223,6 +251,6 @@ final class PageRendererTest extends TestCase
         $parsed = new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingContext::of([$workflow])));
 
         self::assertSame('—', $parsed->sections['Navigation / états']);
-        self::assertSame('—', $parsed->sections['Tests existants']);
+        self::assertSame('—', $parsed->sections['Mécanismes transverses']);
     }
 }

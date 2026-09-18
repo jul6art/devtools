@@ -27,11 +27,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Contrôleur | `src/app.js` | point d'entrée |
+—
 
 ## Données
 
@@ -44,10 +42,6 @@ Déclarée directement sur `app`, hors de tout routeur.
 ## Points d'attention
 
 La réponse ne vérifie aucune dépendance : elle reste « ok » même si le service de commandes est cassé.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

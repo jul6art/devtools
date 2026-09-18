@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -15,22 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["Migrations"]
-  n2["Autre · migrations/Version20260901000000.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `migrations/Version20260901000000.php` | point d'entrée |
+—
 
 ## Données
 
@@ -44,10 +37,6 @@ flowchart TD
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -56,4 +45,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | initial |
+| 2026-09-16 | 65429e2 | initial |

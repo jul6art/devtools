@@ -369,3 +369,86 @@
 
 - **Les brouillons de `symfony-legacy-yaml` sont ceux de `symfony-minimal`** : même application, seule la
   configuration diffère ; les pages ne décrivent que le code.
+
+---
+
+### 2026-09-18 — ADR-0041, bibliothèque de connaissances
+
+- **La bibliothèque par défaut d'une copie source est `resources/knowledge/` : la suite de tests écrivait
+  donc dans le dépôt.** Le garde-fou est à deux étages : `tests/bootstrap.php` pointe
+  `DEVTOOLS_KNOWLEDGE_HOME` sur un dossier temporaire **vidé au démarrage**, et `UsesTemporaryDirectory`
+  en donne un **par test**. **Règle :** une ressource partagée que le code écrit se neutralise par test,
+  pas seulement globalement — sans le vidage et l'isolation par test, quatre tests se répondaient entre
+  eux (une fiche déposée par l'un answerait la stack qu'un autre veut inconnue). Un test dédié liste
+  `resources/knowledge/` et refuse tout fichier de plus.
+
+- **`putenv()` seul ne traverse pas Symfony Process** (déjà vu le 2026-09-17), et la cause exacte est dans
+  `Process::getDefaultEnv()` : `array_intersect_key(getenv(), $_SERVER)`. **Règle :** une variable
+  d'environnement qu'un sous-processus doit voir se pose dans `putenv()` **et** `$_SERVER`.
+
+- **« Le paquet est accessible en écriture » ne distingue pas une copie source d'un `vendor/`** : le dossier
+  `vendor/jul6art/devtools/resources/knowledge` appartient à celui qui a lancé Composer, donc il est
+  inscriptible. Le discriminant est la **présence de `/vendor/` dans le chemin**, pas les droits.
+
+- **Trois classes avaient recopié la résolution `<knowledge library="…">`** (pipeline, applicateur,
+  commande). **Règle :** dès qu'une résolution de chemin apparaît une deuxième fois, elle remonte dans
+  l'objet qu'elle construit (`KnowledgeLibrary::forProject()`).
+
+---
+
+### 2026-09-18 — ADR-0042, progression et compteurs
+
+- **Deux copies d'un même fixture dans un test partagent leur dossier** : `temporaryDirectory()` est
+  mémoïsé par test, donc `copyFixtureProject('x')` deux fois écrit deux fois au même endroit, et la seconde
+  inspection voit le `.devtools/` de la première. **Règle :** un test qui compare deux exécutions les lance
+  sur **le même projet**, après une exécution de mise en route, au lieu d'espérer deux copies indépendantes.
+
+- **« Le même texte aux couleurs près » ne vaut que pour le bilan** : une sortie décorée porte en plus la
+  barre de progression, qui est précisément ce qu'une sortie non décorée ne doit pas avoir. Le test compare
+  le bloc final, pas tout l'affichage.
+
+---
+
+### 2026-09-18 — ADR-0043, décisions, mécanismes et gabarit de page
+
+- **Une affectation inconditionnelle n'est pas une décision.** La première version enregistrait tout
+  `set*()` atteint : sur `symfony-minimal`, neuf workflows sur neuf portaient
+  `Product::price = new Money(0)`. **Règle :** un champ n'entre dans le modèle que si **une de ses valeurs
+  dépend d'une condition, ou qu'il en a plusieurs** (`DecisionPoint::branching()`) — sinon on a réécrit
+  l'inventaire qu'on venait de supprimer.
+
+- **Une route de back-office atteint une douzaine d'entités, chacune avec ses setters conditionnels.** Sans
+  borne sur le **nombre de champs** (et pas seulement de points), une page de cereezer réclamait douze
+  diagrammes. **Règle :** `MAX_TARGETS = 8`, les champs qui branchent le plus d'abord, départage par nom
+  pour rester déterministe.
+
+- **Un listener d'événement de machine à états se rattachait à tous les workflows.**
+  `workflow.work_order.*` n'est ni un événement kernel, ni console, ni Doctrine : le repli « s'applique
+  partout » l'ajoutait aux 76 pages. **Règle :** un repli d'attachement ne vaut jamais « partout » ;
+  `workflow.<machine>.*` se rattache aux workflows qui pilotent `<machine>`, et un événement inconnu aux
+  workflows qui traversent le fichier qui le déclare — quitte à n'en toucher aucun.
+
+- **Le `FileRef` d'une décision ne portait pas le même rôle après un aller-retour XML** : on écrit le chemin
+  seul, on relit avec le rôle par défaut. **Règle :** une position dans un fichier n'a pas de rôle ;
+  `DecisionPoint` normalise le sien, et l'aller-retour redevient exact.
+
+- **Les brouillons de `symfony-legacy-yaml` ne sont plus ceux de `symfony-minimal`** (contredit l'entrée du
+  2026-09-17). Les deux applications ont le même code mais pas le même graphe : sans `#[AsMessageHandler]`,
+  le second handler de `OrderCreated` n'est pas groupé, donc le workflow asynchrone n'atteint pas
+  `OrderPricing` et ne décide rien. **Règle :** dès que le contenu d'une page dépend du graphe, deux
+  fixtures « même application, autre configuration » ont besoin de leurs propres brouillons.
+
+- **`tests/Fixtures/projects/monorepo/api/config/` n'était pas dans git** (dossier vide, git ne les suit pas)
+  alors que le snapshot de `stack.xml` l'attendait : deux tests étaient rouges sur une copie fraîche du
+  dépôt depuis le 2026-09-17. **Règle :** un dossier qu'un snapshot mentionne doit contenir un fichier
+  suivi ; un `composer install && composer qa` sur un clone neuf est la seule façon de le voir.
+
+- **Rector et PHP-CS-Fixer renomment les imports sous les pieds d'un correctif en cours.**
+  `Stmt\ClassMethod` était devenu `ClassMethod` entre deux passes, et trois remplacements de texte ont
+  échoué en silence. **Règle :** après `composer cs`, relire le fichier avant d'y appliquer un remplacement
+  littéral écrit avant.
+
+- **Une page rédigée ne cite pas un fichier que DevTools a produit.** Cinq brouillons sur sept ont été
+  refusés pour avoir écrit `` `.devtools/config.xml` `` ou `` `.devtools/stack.xml` `` en code inline : le
+  validateur ne connaît que les fichiers du modèle, et un fichier généré n'en fait pas partie. **Règle :**
+  dans une page, un artefact de `.devtools/` se nomme en toutes lettres, pas en chemin entre backticks.

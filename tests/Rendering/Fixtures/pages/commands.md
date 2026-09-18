@@ -15,16 +15,13 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["Catalog import"]
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
 —
 
@@ -37,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

@@ -15,22 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["Migrations"]
-  n2["Autre · migrations/001_create_orders.sql"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `migrations/001_create_orders.sql` | point d'entrée |
+—
 
 ## Données
 
@@ -41,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

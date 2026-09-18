@@ -57,6 +57,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $language = $this->dom->optional($root, 'language');
         $php = $this->dom->optional($root, 'php');
         $routes = $this->dom->optional($root, 'routes');
+        $knowledge = $this->dom->optional($root, 'knowledge');
 
         return new Config(
             excludes: array_map(static fn (\DOMElement $exclude): string => trim($exclude->textContent), $this->dom->children($this->dom->optional($root, 'paths'), 'exclude')),
@@ -74,6 +75,8 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
             routeGrouping: $routes?->hasAttribute('group') ? $routes->getAttribute('group') : $defaults->routeGrouping,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,
+            knowledgeLibrary: $knowledge?->hasAttribute('library') ? trim($knowledge->getAttribute('library')) : $defaults->knowledgeLibrary,
+            shareKnowledge: $knowledge?->hasAttribute('share') ? 'false' !== $knowledge->getAttribute('share') && '0' !== $knowledge->getAttribute('share') : $defaults->shareKnowledge,
         );
     }
 }

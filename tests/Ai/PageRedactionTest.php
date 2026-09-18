@@ -50,18 +50,18 @@ final class PageRedactionTest extends TestCase
         $this->inspect();
 
         $briefs = glob($this->project.'/.devtools/pending/page.*.brief.xml') ?: [];
-        self::assertCount(6, $briefs);
+        self::assertCount(5, $briefs);
 
         $brief = new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml');
         self::assertSame('route.order.new', $brief->workflow->value);
-        self::assertSame('page/1', $brief->promptVersion);
+        self::assertSame('page/2', $brief->promptVersion);
         self::assertFileExists($brief->promptPath);
         self::assertSame('en', $brief->language, 'English unless the project or the caller says otherwise.');
         self::assertSame('.devtools/pending/page.route.order.new.draft.md', $brief->draftPath);
         self::assertFileExists($this->project.'/'.$brief->modelPath);
         self::assertSame('2026-09-16T15:00:00+02:00', $brief->revision->format(\DATE_ATOM));
         self::assertStringContainsString('rédaction en attente', (string) file_get_contents($this->project.'/docs/workflows/workflows.md'));
-        self::assertSame(['Résumé', 'Préconditions', 'Parcours', 'Données', 'Mécanismes transverses', "Points d'attention", 'Changement'], $brief->sections, 'The brief carries the closed list of sections, in order.');
+        self::assertSame(['Résumé', 'Préconditions', 'Parcours', 'Décisions', 'Données', 'Mécanismes transverses', "Points d'attention", 'Changement'], $brief->sections, 'The brief carries the closed list of sections, in order.');
         self::assertSame([], $brief->changes, 'Nothing moved: the page has never been written.');
     }
 
@@ -135,7 +135,7 @@ final class PageRedactionTest extends TestCase
         $tracking = new XmlTrackingStore(new WorkflowTypeRegistry())->read($this->project.'/.devtools/workflows/routes/order.new.xml');
         self::assertSame(GenerationMode::Ai, $tracking->generated->mode);
         self::assertSame('claude-opus-5', $tracking->generated->model);
-        self::assertSame('page/1', $tracking->generated->prompt);
+        self::assertSame('page/2', $tracking->generated->prompt);
         self::assertCount(1, $tracking->history, 'The first writing amends the initial revision instead of adding one.');
 
         self::assertSame([], glob($this->project.'/.devtools/pending/page.route.order.new.*') ?: [], 'Brief, model and draft are removed.');
@@ -198,13 +198,31 @@ final class PageRedactionTest extends TestCase
      */
     public static function refusals(): iterable
     {
-        yield 'extra section' => [static fn (string $draft): string => $draft."\n## Composants impliqués\n\n| Rôle | Fichier |\n", 'section "Composants impliqués" is not one a draft may write (line 48)'];
+        yield 'extra section' => [static fn (string $draft): string => $draft."\n## Composants impliqués\n\n| Rôle | Fichier |\n", 'section "Composants impliqués" is not one a draft may write (line 71)'];
         yield 'missing section' => [static fn (string $draft): string => str_replace("## Données\n\nÉcrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.\n\n", '', $draft), 'section "Données" is missing'];
         yield 'journey without mermaid' => [static fn (string $draft): string => (string) preg_replace('/```mermaid.*?```/s', 'Le contrôleur appelle le service.', $draft), '"Parcours" must hold exactly one Mermaid sequenceDiagram or flowchart (line 15)'];
-        yield 'invented path' => [static fn (string $draft): string => str_replace('`src/Repository/OrderRepository.php`', '`src/Repository/InvoiceRepository.php`', $draft), '`src/Repository/InvoiceRepository.php` is not a file of the workflow (line 34)'];
-        yield 'data file' => [static fn (string $draft): string => str_replace('lit le prix des produits.', 'lit le prix des produits et `var/app.sqlite`.', $draft), '`var/app.sqlite` is not a file of the workflow (line 34)'];
+        yield 'invented path' => [static fn (string $draft): string => str_replace('`src/Repository/OrderRepository.php`', '`src/Repository/InvoiceRepository.php`', $draft), '`src/Repository/InvoiceRepository.php` is not a file of the workflow (line 57)'];
+        yield 'data file' => [static fn (string $draft): string => str_replace('lit le prix des produits.', 'lit le prix des produits et `var/app.sqlite`.', $draft), '`var/app.sqlite` is not a file of the workflow (line 57)'];
         yield 'outdated' => [static fn (string $draft): string => str_replace('revision: 2026-09-16T15:00:00+02:00', 'revision: 2026-09-01T10:00:00+02:00', $draft), 'outdated'];
         yield 'two-line preconditions' => [static fn (string $draft): string => str_replace('Le catalogue de produits est chargé.', "Le catalogue est chargé.\nEt l'opérateur connecté.", $draft), '"Préconditions" must be one line (line 11)'];
+
+        // ADR-0043: the decisions are Claude's to draw, but only from what the model records.
+        yield 'invented decision target' => [
+            static fn (string $draft): string => str_replace('**`App\Entity\Order::currency`**', '**`App\Entity\Order::invented`**', $draft),
+            '`App\Entity\Order::invented` is not a value this workflow decides',
+        ];
+        yield 'decided field left undrawn' => [
+            static fn (string $draft): string => (string) preg_replace('/\*\*`App\\\\Entity\\\\Order::currency`\*\*.*?```\n/s', '', $draft),
+            '`App\Entity\Order::currency` is decided by this workflow and is not drawn',
+        ];
+        yield 'decisions without a flowchart' => [
+            static fn (string $draft): string => (string) preg_replace('/```mermaid\nflowchart TD.*?```/s', 'Selon le pays.', $draft),
+            '"Décisions" must hold at least one Mermaid flowchart',
+        ];
+        yield 'decisions emptied while the model records some' => [
+            static fn (string $draft): string => (string) preg_replace('/(## Décisions\n\n).*?(\n## Données)/s', '$1—$2', $draft),
+            '"Décisions" is empty while the model records 6 decided value(s)',
+        ];
     }
 
     public function testAModelEmptiedByHandIsRefusedByName(): void

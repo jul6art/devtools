@@ -46,12 +46,24 @@ final readonly class Workflow
     public array $navigation;
 
     /**
-     * @param list<EntryPoint> $satellites
-     * @param list<FileRef>    $files
-     * @param list<PackageRef> $packages
-     * @param list<WorkflowId> $dependsOn
-     * @param list<FileRef>    $tests
-     * @param list<Edge>       $navigation
+     * @var list<DecisionPoint>
+     */
+    public array $decisions;
+
+    /**
+     * @var list<Mechanism>
+     */
+    public array $mechanisms;
+
+    /**
+     * @param list<EntryPoint>    $satellites
+     * @param list<FileRef>       $files
+     * @param list<PackageRef>    $packages
+     * @param list<WorkflowId>    $dependsOn
+     * @param list<FileRef>       $tests
+     * @param list<Edge>          $navigation
+     * @param list<DecisionPoint> $decisions  where this workflow decides a field's value (ADR-0043)
+     * @param list<Mechanism>     $mechanisms listeners and filters that run inside it (ADR-0043)
      */
     public function __construct(
         public WorkflowId $id,
@@ -64,6 +76,8 @@ final readonly class Workflow
         array $dependsOn = [],
         array $tests = [],
         array $navigation = [],
+        array $decisions = [],
+        array $mechanisms = [],
         public ?StateMachine $states = null,
         public Confidence $confidence = Confidence::Medium,
         public WorkflowSource $source = new WorkflowSource('claude'),
@@ -79,6 +93,8 @@ final readonly class Workflow
         $this->dependsOn = SortedList::of($dependsOn, static fn (WorkflowId $dependency): string => $dependency->value, \sprintf('dependency of "%s"', $id));
         $this->tests = SortedList::of($tests, static fn (FileRef $test): string => $test->path, \sprintf('test of "%s"', $id));
         $this->navigation = SortedList::of($navigation, static fn (Edge $edge): string => $edge->sortKey(), \sprintf('navigation edge of "%s"', $id));
+        $this->decisions = SortedList::of($decisions, static fn (DecisionPoint $decision): string => $decision->sortKey(), \sprintf('decision of "%s"', $id));
+        $this->mechanisms = SortedList::of($mechanisms, static fn (Mechanism $mechanism): string => $mechanism->sortKey(), \sprintf('mechanism of "%s"', $id));
 
         foreach ($this->dependsOn as $dependency) {
             if ($dependency->equals($id)) {

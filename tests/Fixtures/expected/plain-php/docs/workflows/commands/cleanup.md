@@ -15,26 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["cleanup"]
-  n2["Autre · bin/cleanup"]
-  n3["Autre · lib/db.php"]
-  n1 --> n2
-  n2 --> n3
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `bin/cleanup` | point d'entrée |
-| Configuration | `composer.json` |  |
-| Autre | `lib/db.php` |  |
+—
 
 ## Données
 
@@ -45,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

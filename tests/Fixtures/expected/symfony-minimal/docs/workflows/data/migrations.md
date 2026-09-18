@@ -15,22 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["Migrations"]
-  n2["Autre · migrations/Version20260901000000.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `migrations/Version20260901000000.php` | point d'entrée |
+—
 
 ## Données
 
@@ -41,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

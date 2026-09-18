@@ -27,6 +27,10 @@ sequenceDiagram
   end
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Écrit une ligne dans `orders` par ligne lue.

@@ -21,6 +21,10 @@ sequenceDiagram
   A-->>M: 200 {"status": "ok"}
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Aucune.

@@ -17,4 +17,8 @@ final class Order
     public ?Money $total = null;
 
     public string $status = 'draft';
+
+    public string $country = 'LU';
+
+    public string $currency = 'EUR';
 }

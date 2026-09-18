@@ -45,12 +45,14 @@ final readonly class Config
     private array $excludes;
 
     /**
-     * @param list<string>                $excludes      added to {@see self::DEFAULT_EXCLUDES}
-     * @param array<string, string>       $aliases       entry point name => workflow identifier (ADR-0003)
-     * @param array<string, list<string>> $groups        main entry point => satellites (ADR-0006)
+     * @param list<string>                $excludes         added to {@see self::DEFAULT_EXCLUDES}
+     * @param array<string, string>       $aliases          entry point name => workflow identifier (ADR-0003)
+     * @param array<string, list<string>> $groups           main entry point => satellites (ADR-0006)
      * @param list<WorkflowType>          $customTypes
-     * @param string|null                 $phpWebRoot    the web directory of a PHP project without framework; null to look for public/, web/, www/ (ADR-0014)
-     * @param string|null                 $pagesLanguage the language Claude writes the pages in; null when the project does not say, and the default then applies
+     * @param string|null                 $phpWebRoot       the web directory of a PHP project without framework; null to look for public/, web/, www/ (ADR-0014)
+     * @param string|null                 $pagesLanguage    the language Claude writes the pages in; null when the project does not say, and the default then applies
+     * @param string|null                 $knowledgeLibrary where the shared knowledge library lives; null to let {@see \Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::locate()} decide (ADR-0041)
+     * @param bool                        $shareKnowledge   whether a knowledge file Claude writes is deposited in that library
      */
     public function __construct(
         array $excludes = [],
@@ -65,6 +67,8 @@ final readonly class Config
         public ?string $pagesLanguage = null,
         public string $routeGrouping = self::ROUTES_BY_ENTRY_POINT,
         public ?string $phpWebRoot = null,
+        public ?string $knowledgeLibrary = null,
+        public bool $shareKnowledge = true,
     ) {
         if ($graphDepth < 0) {
             throw new InvalidConfig('The graph depth cannot be negative.');

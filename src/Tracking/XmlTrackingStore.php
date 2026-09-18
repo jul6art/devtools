@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tracking;
 
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\Serialization\EntryPointXml;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
@@ -112,6 +114,23 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
             }
         }
 
+        $this->writeDecisions($root, $document->decisions);
+
+        if ([] !== $document->mechanisms) {
+            $mechanisms = $this->dom->element($root, 'mechanisms');
+
+            foreach ($document->mechanisms as $mechanism) {
+                $node = $this->dom->element($mechanisms, 'mechanism', array_filter([
+                    'kind' => $mechanism->kind,
+                    'name' => $mechanism->name,
+                    'event' => $mechanism->event,
+                    'priority' => null === $mechanism->priority ? null : (string) $mechanism->priority,
+                ], static fn (?string $value): bool => null !== $value));
+                $this->dom->element($node, 'declared-in', ['path' => $mechanism->declaredIn->path, 'role' => $mechanism->declaredIn->role->value]);
+                $this->writeDecisions($node, $mechanism->decisions);
+            }
+        }
+
         $this->dom->element($root, 'confidence', text: $document->confidence->value);
         $this->dom->element($root, 'producer', text: $document->producer->value);
         $this->dom->element($root, 'status', text: $document->status->value);
@@ -129,6 +148,47 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
         }
 
         return $this->dom->toXml($xml);
+    }
+
+    /**
+     * @param list<DecisionPoint> $decisions
+     */
+    private function writeDecisions(\DOMElement $parent, array $decisions): void
+    {
+        if ([] === $decisions) {
+            return;
+        }
+
+        $container = $this->dom->element($parent, 'decisions');
+
+        foreach ($decisions as $decision) {
+            $this->dom->element($container, 'decision', array_filter([
+                'target' => $decision->target,
+                'value' => $decision->value,
+                'condition' => $decision->condition,
+                'file' => $decision->declaredIn->path,
+                'line' => (string) $decision->line,
+                'confidence' => $decision->confidence->value,
+            ], static fn (?string $value): bool => null !== $value));
+        }
+    }
+
+    /**
+     * @return list<DecisionPoint>
+     */
+    private function readDecisions(\DOMElement $parent): array
+    {
+        return array_map(
+            static fn (\DOMElement $decision): DecisionPoint => new DecisionPoint(
+                $decision->getAttribute('target'),
+                $decision->getAttribute('value'),
+                $decision->hasAttribute('condition') ? $decision->getAttribute('condition') : null,
+                new FileRef($decision->getAttribute('file')),
+                (int) $decision->getAttribute('line'),
+                Confidence::from($decision->getAttribute('confidence')),
+            ),
+            $this->dom->children($this->dom->optional($parent, 'decisions'), 'decision'),
+        );
     }
 
     public function unserialize(string $xml, string $source): TrackingDocument
@@ -191,6 +251,18 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
                     $revision->getAttribute('reason'),
                 ),
                 $this->dom->children($this->dom->single($root, 'history'), 'revision'),
+            ),
+            decisions: $this->readDecisions($root),
+            mechanisms: array_map(
+                fn (\DOMElement $mechanism): Mechanism => new Mechanism(
+                    $mechanism->getAttribute('kind'),
+                    $mechanism->getAttribute('name'),
+                    $mechanism->getAttribute('event'),
+                    new FileRef($this->dom->single($mechanism, 'declared-in')->getAttribute('path'), FileRole::from($this->dom->single($mechanism, 'declared-in')->getAttribute('role'))),
+                    $mechanism->hasAttribute('priority') ? (int) $mechanism->getAttribute('priority') : null,
+                    $this->readDecisions($mechanism),
+                ),
+                $this->dom->children($this->dom->optional($root, 'mechanisms'), 'mechanism'),
             ),
         );
     }

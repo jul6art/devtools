@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -24,11 +24,9 @@ flowchart TD
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `migrations/Version20260901000000.php` | point d'entrée |
+—
 
 ## Données
 
@@ -43,10 +41,6 @@ Aucune modification de schéma.
 Le projet n'installe pas Doctrine Migrations : ce fichier n'est exécuté par rien. Il est documenté parce qu'il
 se trouve dans `migrations/`.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -55,4 +49,4 @@ se trouve dans `migrations/`.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

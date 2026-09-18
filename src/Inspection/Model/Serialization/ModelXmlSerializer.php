@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Inspection\Model\Serialization;
 
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\InspectionResult;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\Transition;
@@ -118,6 +120,23 @@ final readonly class ModelXmlSerializer
             }
         }
 
+        $this->writeDecisions($element, $workflow->decisions);
+
+        if ([] !== $workflow->mechanisms) {
+            $mechanisms = $this->dom->element($element, 'mechanisms');
+
+            foreach ($workflow->mechanisms as $mechanism) {
+                $node = $this->dom->element($mechanisms, 'mechanism', array_filter([
+                    'kind' => $mechanism->kind,
+                    'name' => $mechanism->name,
+                    'event' => $mechanism->event,
+                    'priority' => null === $mechanism->priority ? null : (string) $mechanism->priority,
+                ], static fn (?string $value): bool => null !== $value));
+                $this->dom->element($node, 'declared-in', ['path' => $mechanism->declaredIn->path, 'role' => $mechanism->declaredIn->role->value]);
+                $this->writeDecisions($node, $mechanism->decisions);
+            }
+        }
+
         if ($workflow->states instanceof StateMachine) {
             $states = $this->dom->element($element, 'states', ['name' => $workflow->states->name]);
 
@@ -136,6 +155,29 @@ final readonly class ModelXmlSerializer
                     $this->dom->element($transitionElement, 'to', ['place' => $place]);
                 }
             }
+        }
+    }
+
+    /**
+     * @param list<DecisionPoint> $decisions
+     */
+    private function writeDecisions(\DOMElement $parent, array $decisions): void
+    {
+        if ([] === $decisions) {
+            return;
+        }
+
+        $container = $this->dom->element($parent, 'decisions');
+
+        foreach ($decisions as $decision) {
+            $this->dom->element($container, 'decision', array_filter([
+                'target' => $decision->target,
+                'value' => $decision->value,
+                'condition' => $decision->condition,
+                'file' => $decision->declaredIn->path,
+                'line' => (string) $decision->line,
+                'confidence' => $decision->confidence->value,
+            ], static fn (?string $value): bool => null !== $value));
         }
     }
 
@@ -177,6 +219,18 @@ final readonly class ModelXmlSerializer
             $this->dom->children($this->dom->optional($element, 'navigation'), 'edge'),
         );
 
+        $mechanisms = array_map(
+            fn (\DOMElement $mechanism): Mechanism => new Mechanism(
+                $mechanism->getAttribute('kind'),
+                $mechanism->getAttribute('name'),
+                $mechanism->getAttribute('event'),
+                self::fileOf($this->dom->single($mechanism, 'declared-in')),
+                $mechanism->hasAttribute('priority') ? (int) $mechanism->getAttribute('priority') : null,
+                $this->readDecisions($mechanism),
+            ),
+            $this->dom->children($this->dom->optional($element, 'mechanisms'), 'mechanism'),
+        );
+
         return new Workflow(
             id: new WorkflowId($element->getAttribute('id')),
             type: $this->types->get($element->getAttribute('type')),
@@ -188,6 +242,8 @@ final readonly class ModelXmlSerializer
             dependsOn: $dependsOn,
             tests: $this->readFiles($element, 'tests'),
             navigation: $navigation,
+            decisions: $this->readDecisions($element),
+            mechanisms: $mechanisms,
             states: $this->readStates($this->dom->optional($element, 'states')),
             confidence: Confidence::from($element->getAttribute('confidence')),
             source: new WorkflowSource($element->getAttribute('source')),
@@ -199,9 +255,29 @@ final readonly class ModelXmlSerializer
      */
     private function readFiles(\DOMElement $parent, string $name): array
     {
+        return array_map(self::fileOf(...), $this->dom->children($this->dom->optional($parent, $name), 'file'));
+    }
+
+    private static function fileOf(\DOMElement $file): FileRef
+    {
+        return new FileRef($file->getAttribute('path'), FileRole::from($file->getAttribute('role')));
+    }
+
+    /**
+     * @return list<DecisionPoint>
+     */
+    private function readDecisions(\DOMElement $parent): array
+    {
         return array_map(
-            static fn (\DOMElement $file): FileRef => new FileRef($file->getAttribute('path'), FileRole::from($file->getAttribute('role'))),
-            $this->dom->children($this->dom->optional($parent, $name), 'file'),
+            static fn (\DOMElement $decision): DecisionPoint => new DecisionPoint(
+                $decision->getAttribute('target'),
+                $decision->getAttribute('value'),
+                $decision->hasAttribute('condition') ? $decision->getAttribute('condition') : null,
+                new FileRef($decision->getAttribute('file')),
+                (int) $decision->getAttribute('line'),
+                Confidence::from($decision->getAttribute('confidence')),
+            ),
+            $this->dom->children($this->dom->optional($parent, 'decisions'), 'decision'),
         );
     }
 

@@ -18,7 +18,6 @@ final class Labels
         'routes' => 'Routes',
         'commands' => 'Commandes',
         'async' => 'Asynchrone',
-        'events' => 'Événements',
         'ui' => 'Interface',
         'integrations' => 'Intégrations',
         'data' => 'Données',

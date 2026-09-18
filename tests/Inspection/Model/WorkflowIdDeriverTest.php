@@ -40,7 +40,6 @@ final class WorkflowIdDeriverTest extends TestCase
         yield 'route, prefix stripped' => [WorkflowType::routes(), 'app_order_new', [], 'route.order.new'];
         yield 'command' => [WorkflowType::commands(), 'app:import-catalog', [], 'command.app.import-catalog'];
         yield 'async, from the message class' => [WorkflowType::async(), 'App\\MessageHandler\\OrderCreatedHandler', ['message' => 'App\\Message\\OrderCreated'], 'async.order-created'];
-        yield 'event' => [WorkflowType::events(), 'App\\EventListener\\LocaleListener', [], 'event.locale-listener'];
         yield 'ui' => [WorkflowType::ui(), 'App\\Twig\\Components\\CartSummary', [], 'ui.cart-summary'];
         yield 'integration' => [WorkflowType::integrations(), 'stripe', [], 'integration.stripe'];
         yield 'data' => [WorkflowType::data(), 'migrations', [], 'data.migrations'];
@@ -54,7 +53,7 @@ final class WorkflowIdDeriverTest extends TestCase
         yield 'accents' => [WorkflowType::routes(), 'app_commande_créée_à_l_été', [], 'route.commande.creee.a.l.ete'];
         yield 'ligatures and eszett' => [WorkflowType::integrations(), 'Œuvre Straße', [], 'integration.oeuvre-strasse'];
         yield 'other characters become hyphens' => [WorkflowType::commands(), 'app:import catalog (full)', [], 'command.app.import-catalog-full'];
-        yield 'acronym in a class name' => [WorkflowType::events(), 'App\\EventListener\\HTTPCacheListener', [], 'event.http-cache-listener'];
+        yield 'acronym in a class name' => [WorkflowType::ui(), 'App\\Twig\\Components\\HTTPCacheBadge', [], 'ui.http-cache-badge'];
         yield 'digits in a class name' => [WorkflowType::async(), 'App\\Handler', ['message' => 'App\\Message\\Oauth2TokenRefreshed'], 'async.oauth2-token-refreshed'];
         yield 'async without message attribute' => [WorkflowType::async(), 'App\\Scheduler\\NightlyReport', [], 'async.nightly-report'];
         yield 'custom type' => [WorkflowType::custom('webhooks', 'webhook'), 'stripe:payment_succeeded', [], 'webhook.stripe.payment.succeeded'];

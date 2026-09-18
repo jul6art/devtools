@@ -15,22 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["GET /health"]
-  n2["Contrôleur · src/app.js"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Contrôleur | `src/app.js` | point d'entrée |
+—
 
 ## Données
 
@@ -41,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

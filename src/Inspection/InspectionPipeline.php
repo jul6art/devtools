@@ -34,6 +34,8 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdCollision;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
+use Jul6Art\DevTools\Inspection\Progress\NullProgressReporter;
+use Jul6Art\DevTools\Inspection\Progress\ProgressReporter;
 use Jul6Art\DevTools\Project\ProjectLock;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\GraphRenderer;
@@ -47,6 +49,7 @@ use Jul6Art\DevTools\Rendering\RenderingContext;
 use Jul6Art\DevTools\Resources;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeBrief;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
+use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeProvider;
 use Jul6Art\DevTools\Stack\Knowledge\XmlKnowledgeBriefStore;
 use Jul6Art\DevTools\Stack\StackDetectionFailed;
@@ -91,7 +94,7 @@ final readonly class InspectionPipeline
     ) {
     }
 
-    public function run(InspectionOptions $options): InspectionReport
+    public function run(InspectionOptions $options, ProgressReporter $progress = new NullProgressReporter()): InspectionReport
     {
         $report = new InspectionReport($this->clock->now());
         $started = microtime(true);
@@ -105,14 +108,18 @@ final readonly class InspectionPipeline
                 $lock = ProjectLock::acquire($directory->path());
             }
 
-            $this->inspect($directory, $options, $report);
+            $this->inspect($directory, $options, $report, $progress);
         } catch (InvalidXml|InvalidConfig|InvalidModel|WorkflowIdCollision|StackDetectionFailed|\InvalidArgumentException|\RuntimeException $error) {
             $report->errors[] = $error->getMessage();
         } finally {
+            $progress->finish();
             $lock?->release();
         }
 
         $report->seconds = microtime(true) - $started;
+        $report->filesHashed = $this->hasher->hashes();
+        $report->gitProcesses = $this->git->processes();
+        $report->peakMemoryBytes = memory_get_peak_usage(true);
 
         if (!$options->dryRun && isset($directory) && is_dir($directory->path())) {
             $report->path = $directory->path('reports/inspect-'.$report->startedAt->format('Y-m-d-His').'.md');
@@ -122,8 +129,9 @@ final readonly class InspectionPipeline
         return $report;
     }
 
-    private function inspect(DevToolsDirectory $directory, InspectionOptions $options, InspectionReport $report): void
+    private function inspect(DevToolsDirectory $directory, InspectionOptions $options, InspectionReport $report, ProgressReporter $progress): void
     {
+        $progress->stage('Configuration et stack');
         $config = new XmlConfigReader()->read($directory->configFile());
         $types = new WorkflowTypeRegistry($config->customTypes);
 
@@ -139,12 +147,13 @@ final readonly class InspectionPipeline
             $stackStore->write($directory->stackFile(), $stacks);
         }
 
-        [$workflows, $uncovered, $stackOf, $discoveries] = $this->workflowsOf($directory->root, $stacks, $config, $report);
+        [$workflows, $uncovered, $stackOf, $discoveries] = $this->workflowsOf($directory->root, $stacks, $config, $report, $progress);
 
         if ([] !== $report->errors) {
             return;
         }
 
+        $progress->stage('Fraîcheur');
         $now = $this->clock->now();
         $this->hasher->reset();
         $tracking = new XmlTrackingStore($types, $this->writer);
@@ -159,7 +168,10 @@ final readonly class InspectionPipeline
         $documents = [];
         $written = static fn (Workflow|TrackingDocument $workflow): bool => !$options->dryRun && (null === $options->only || $options->only === $workflow->type->name);
 
+        $progress->stage('Rendu des pages', \count($workflows));
+
         foreach ($workflows as $workflow) {
+            $progress->advance($workflow->id->value);
             $old = $previous[$workflow->id->value] ?? null;
             $decision = $decisions[$workflow->id->value];
 
@@ -193,7 +205,13 @@ final readonly class InspectionPipeline
 
             if ($written($workflow)) {
                 $pageFile = $directory->pageFile($workflow->type, $workflow->id);
-                $this->writer->write($pageFile, new PageRenderer()->render($workflow, $document->history, $context, self::writtenPage($pageFile)));
+                $page = new PageRenderer()->render($workflow, $document->history, $context, self::writtenPage($pageFile));
+
+                if ($this->writer->write($pageFile, $page)) {
+                    ++$report->pagesWritten;
+                    $report->bytesWritten += \strlen($page);
+                }
+
                 $tracking->write($directory->trackingFile($workflow->type, $workflow->id), $document);
             }
         }
@@ -217,24 +235,28 @@ final readonly class InspectionPipeline
                 continue;
             }
 
-            $orphans[] = $orphan = TrackingStatus::Orphaned === $old->status ? $old : new TrackingDocument($old->id, $old->type, $old->title, $old->generated, $old->vcs, $old->main, $old->satellites, $old->files, $old->tests, $old->packages, $old->dependsOn, $old->confidence, $old->producer, TrackingStatus::Orphaned, $old->history);
+            $orphans[] = $orphan = TrackingStatus::Orphaned === $old->status ? $old : new TrackingDocument($old->id, $old->type, $old->title, $old->generated, $old->vcs, $old->main, $old->satellites, $old->files, $old->tests, $old->packages, $old->dependsOn, $old->confidence, $old->producer, TrackingStatus::Orphaned, $old->history, $old->decisions, $old->mechanisms);
 
             if ($written($orphan)) {
                 $tracking->write($directory->trackingFile($orphan->type, $orphan->id), $orphan);
             }
         }
 
+        $progress->finish();
+
         if ($options->dryRun) {
             return;
         }
 
-        $knowledge = $this->knowledge($directory, $stacks, $options);
+        $progress->stage('Connaissances et briefs');
+        $knowledge = $this->knowledge($directory, $stacks, $config, $options, $report);
 
         if (!$options->noAi) {
-            $this->writeDiscoveryBriefs($directory, $config, $discoveries, $knowledge);
+            $this->writeDiscoveryBriefs($directory, $config, $discoveries, $knowledge, $report);
         }
-        $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options);
+        $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options, $report);
 
+        $progress->stage('Index, menu et graphe');
         $indexStore = new XmlIndexStore($types, $this->writer);
         $index = Index::fromTracking($now, $vcs, [...$documents, ...$orphans], $directory->docs);
 
@@ -335,16 +357,18 @@ final readonly class InspectionPipeline
     /**
      * @return array{list<Workflow>, list<FileRef>, array<string, StackProfile>, list<array{StackProfile, list<string>}>} workflows, uncovered files, the stack of each workflow, and the discoveries Claude has to make
      */
-    private function workflowsOf(ProjectRoot $root, StackDocument $stacks, Config $config, InspectionReport $report): array
+    private function workflowsOf(ProjectRoot $root, StackDocument $stacks, Config $config, InspectionReport $report, ProgressReporter $progress): array
     {
         $workflows = [];
         $uncovered = [];
         $stackOf = [];
         $discoveries = [];
         $inspected = 0;
+        $progress->stage('Extraction', \count($stacks->stacks));
 
         foreach ($stacks->stacks as $stack) {
             $label = self::label($stack);
+            $progress->advance($label);
             $adapter = $this->adapters->for($stack->adapter);
 
             if (!$adapter instanceof AdapterInterface) {
@@ -356,6 +380,7 @@ final readonly class InspectionPipeline
             ++$inspected;
             $extractor = new PhpReferenceExtractor();
             $found = $adapter->extract($root, $stack, $config, $extractor);
+            $report->consoleCalls += $found->consoleCalls;
 
             if (null !== $found->fallbackCause) {
                 $report->fallbacks[] = ['stack' => $label, 'cause' => $found->fallbackCause];
@@ -369,7 +394,7 @@ final readonly class InspectionPipeline
             if (null !== $found->workflows) {
                 [$stackWorkflows, $stackUncovered, $buildWarnings] = [$found->workflows, $found->uncovered, []];
             } else {
-                $built = new WorkflowBuilder($config)->build($root, $stack, $found->candidates, $found->templateDirectories, $extractor);
+                $built = new WorkflowBuilder($config)->build($root, $stack, $found->candidates, $found->templateDirectories, $extractor, $found->mechanisms);
                 [$stackWorkflows, $stackUncovered, $buildWarnings] = [$built->result->workflows, $built->result->uncovered, $built->warnings];
             }
 
@@ -387,10 +412,14 @@ final readonly class InspectionPipeline
             }
             $uncovered = [...$uncovered, ...$stackUncovered];
 
+            $report->filesParsed += $extractor->parsedFiles();
+
             // The model of this stack is built: what follows reads files, never syntax trees. On a real
             // repository they are hundreds of megabytes, and the bundle runs inside a booted kernel.
             $extractor->release();
         }
+
+        $progress->finish();
 
         if (0 === $inspected) {
             $report->errors[] = 'No stack of this project has an adapter in this version of DevTools; nothing was documented.';
@@ -420,6 +449,8 @@ final readonly class InspectionPipeline
             producer: $workflow->source,
             status: TrackingStatus::Manual === $old?->status ? TrackingStatus::Manual : TrackingStatus::Fresh,
             history: $history,
+            decisions: $workflow->decisions,
+            mechanisms: $workflow->mechanisms,
         );
     }
 
@@ -452,7 +483,7 @@ final readonly class InspectionPipeline
      *
      * @return list<WorkflowId> the workflows waiting for a writing
      */
-    private function writeBriefs(DevToolsDirectory $directory, Config $config, array $knowledge, array $stackOf, array $workflows, array $decisions, array $documents, WorkflowTypeRegistry $types, InspectionOptions $options): array
+    private function writeBriefs(DevToolsDirectory $directory, Config $config, array $knowledge, array $stackOf, array $workflows, array $decisions, array $documents, WorkflowTypeRegistry $types, InspectionOptions $options, InspectionReport $report): array
     {
         new Filesystem()->remove([...glob($directory->path('pending/page.*.brief.xml')) ?: [], ...glob($directory->path('pending/page.*.model.xml')) ?: []]);
 
@@ -486,15 +517,16 @@ final readonly class InspectionPipeline
             $modelPath = DevToolsDirectory::NAME.'/pending/'.PageBrief::fileName($workflow->id, 'model.xml');
             $this->writer->write($directory->root->absolute($modelPath), $models->serialize(new InspectionResult($stack->knowledgeKey ?? $stack->language, [$workflow])));
 
-            $briefs->write($directory->path('pending/'.PageBrief::fileName($workflow->id, 'brief.xml')), new PageBrief(
+            $briefPath = $directory->path('pending/'.PageBrief::fileName($workflow->id, 'brief.xml'));
+            $briefs->write($briefPath, new PageBrief(
                 workflow: $workflow->id,
                 type: $workflow->type,
                 revision: $document->lastRevision()->at,
                 // The last revision is still DevTools' own until Claude writes it: the writing completes it,
                 // however many inspections ran in between (a brief must not change from one run to the next).
                 amend: GenerationMode::NoAi === $document->generated->mode,
-                promptVersion: 'page/1',
-                promptPath: Resources::path('prompts/page/v1.md'),
+                promptVersion: 'page/2',
+                promptPath: Resources::path('prompts/page/v2.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
                 pagePath: $directory->pageRelativePath($workflow->type, $workflow->id),
@@ -504,6 +536,7 @@ final readonly class InspectionPipeline
                 changes: self::changedFiles($decisions[$workflow->id->value] ?? null),
                 draftPath: DevToolsDirectory::NAME.'/pending/'.PageBrief::fileName($workflow->id, 'draft.md'),
             ));
+            self::countBrief($report, $briefPath, $directory->root->absolute($modelPath));
             $pending[] = $workflow->id;
         }
 
@@ -516,13 +549,15 @@ final readonly class InspectionPipeline
      *
      * @return array<string, string|null> knowledge key => file relative to the project, null while missing
      */
-    private function knowledge(DevToolsDirectory $directory, StackDocument $stacks, InspectionOptions $options): array
+    private function knowledge(DevToolsDirectory $directory, StackDocument $stacks, Config $config, InspectionOptions $options, InspectionReport $report): array
     {
         if (!$options->noAi) {
             new Filesystem()->remove(glob($directory->path('pending/knowledge.*.brief.xml')) ?: []);
         }
 
-        $provider = new KnowledgeProvider($this->writer);
+        $library = KnowledgeLibrary::forProject($directory->root, $config, $this->writer);
+        $report->knowledgeLibrary = $library->path;
+        $provider = new KnowledgeProvider($this->writer, $library);
         $knowledge = [];
 
         foreach ($stacks->stacks as $stack) {
@@ -533,7 +568,8 @@ final readonly class InspectionPipeline
             $knowledge[$stack->knowledgeKey] = $provider->provide($directory, $stack->knowledgeKey);
 
             if (null === $knowledge[$stack->knowledgeKey] && !$options->noAi) {
-                new XmlKnowledgeBriefStore($this->writer)->write($directory->path('pending/'.KnowledgeBrief::fileName($stack->knowledgeKey, 'brief.xml')), new KnowledgeBrief(
+                $briefPath = $directory->path('pending/'.KnowledgeBrief::fileName($stack->knowledgeKey, 'brief.xml'));
+                new XmlKnowledgeBriefStore($this->writer)->write($briefPath, new KnowledgeBrief(
                     key: $stack->knowledgeKey,
                     language: $stack->language,
                     framework: $stack->framework,
@@ -542,6 +578,7 @@ final readonly class InspectionPipeline
                     promptPath: Resources::path('prompts/knowledge/v1.md'),
                     draftPath: DevToolsDirectory::NAME.'/pending/'.KnowledgeBrief::fileName($stack->knowledgeKey, 'draft.md'),
                 ));
+                self::countBrief($report, $briefPath);
             }
         }
 
@@ -555,7 +592,7 @@ final readonly class InspectionPipeline
      * @param list<array{StackProfile, list<string>}> $discoveries
      * @param array<string, string|null>              $knowledge
      */
-    private function writeDiscoveryBriefs(DevToolsDirectory $directory, Config $config, array $discoveries, array $knowledge): void
+    private function writeDiscoveryBriefs(DevToolsDirectory $directory, Config $config, array $discoveries, array $knowledge, InspectionReport $report): void
     {
         new Filesystem()->remove(glob($directory->path('pending/discovery.*.brief.xml')) ?: []);
 
@@ -567,7 +604,8 @@ final readonly class InspectionPipeline
             }
 
             $slug = Discovery::slug($stack);
-            new XmlDiscoveryBriefStore($this->writer)->write($directory->path('pending/'.DiscoveryBrief::fileName($slug, 'brief.xml')), new DiscoveryBrief(
+            $briefPath = $directory->path('pending/'.DiscoveryBrief::fileName($slug, 'brief.xml'));
+            new XmlDiscoveryBriefStore($this->writer)->write($briefPath, new DiscoveryBrief(
                 slug: $slug,
                 root: $stack->root,
                 sourceDirectories: $stack->sourceDirs,
@@ -579,6 +617,19 @@ final readonly class InspectionPipeline
                 limitedTo: $limitedTo,
                 draftPath: DevToolsDirectory::NAME.'/pending/'.DiscoveryBrief::fileName($slug, 'draft.xml'),
             ));
+            self::countBrief($report, $briefPath);
+        }
+    }
+
+    /**
+     * A brief counts once written, with the bytes it really takes: the estimate of what the redaction will
+     * cost is derived from these, never guessed (ADR-0042).
+     */
+    private static function countBrief(InspectionReport $report, string ...$paths): void
+    {
+        foreach ($paths as $path) {
+            ++$report->briefsWritten;
+            $report->briefBytes += is_file($path) ? (int) filesize($path) : 0;
         }
     }
 

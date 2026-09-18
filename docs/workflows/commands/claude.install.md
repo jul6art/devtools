@@ -1,11 +1,9 @@
 # claude:install
-`command.claude.install` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
+`command.claude.install` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
 
 ## Résumé
 
-`devtools claude:install [path]` copie dans le projet le skill Claude Code `devtools-inspect`, qui enchaîne
-inspection, rédaction des brouillons et application. Un skill modifié par l'équipe n'est remplacé qu'avec
-`--force`.
+Copie dans le projet le skill Claude Code que DevTools embarque, `.claude/skills/devtools-inspect/` : la boucle inspecter → rédiger → appliquer que Claude suit pour documenter les workflows. Le fichier se committe ; l'installer une seconde fois ne change rien tant qu'il n'a pas été modifié à la main.
 
 ## Déclencheur
 
@@ -13,72 +11,50 @@ inspection, rédaction des brouillons et application. Un skill modifié par l'é
 |---|---|
 | Point d'entrée | `claude:install` (command) |
 | Sécurité | — |
-| Préconditions | Le chemin donné, ou le dossier courant, est un dossier existant. |
+| Préconditions | Le chemin donné est un dossier existant. |
 
 ## Parcours
 
 ```mermaid
 sequenceDiagram
   participant U as Développeur
-  participant C as ClaudeInstallCommand
-  participant R as Resources
-  participant W as AtomicFileWriter
-  U->>C: devtools claude:install [--force]
-  C->>R: path(claude/skills/devtools-inspect/SKILL.md)
-  alt skill présent, différent et sans --force
-    C-->>U: avertissement, code 1
-  else
-    C->>W: write(.claude/skills/devtools-inspect/SKILL.md)
-    C-->>U: succès
-  end
+  participant C as claude:install
+  participant R as resources/claude/
+  participant P as .claude/skills/
+  U->>C: devtools claude:install .
+  C->>R: lecture du skill embarqué
+  C->>P: écriture si le contenu diffère
+  C-->>U: installé, à jour, ou modifié à la main
 ```
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `src/Command/ClaudeInstallCommand.php` | point d'entrée |
-| Autre | `src/Inspection/Model/FileRef.php` |  |
-| Autre | `src/Inspection/Model/FileRole.php` |  |
-| Autre | `src/Inspection/Model/InvalidModel.php` |  |
-| Autre | `src/Project/PathOutsideProject.php` |  |
-| Autre | `src/Project/ProjectRoot.php` |  |
-| Autre | `src/Resources.php` |  |
-| Autre | `src/Tracking/AtomicFileWriter.php` |  |
+**`Jul6Art\DevTools\Command\ClaudeInstallCommand::execute`**
 
-Paquets : `symfony/console` 8.1.7, `symfony/filesystem` 8.1.6
+```mermaid
+flowchart TD
+  d1{"le chemin n'est pas un dossier"}
+  d1 -->|oui| v1["INVALID"]
+  d1 -->|non| d2{"le skill sur place diffère de celui livré, sans --force"}
+  d2 -->|oui| v2["FAILURE — la version locale est gardée"]
+  d2 -->|non| v3["SUCCESS — installé ou déjà identique"]
+```
 
 ## Données
 
-Lit le skill livré dans `resources/` ; écrit .claude/skills/devtools-inspect/SKILL.md dans le projet.
+Lit le skill embarqué, écrit son homologue dans le projet.
 
 ## Mécanismes transverses
 
-`ProjectRoot` borne l'écriture au projet ; `AtomicFileWriter` écrit de façon atomique.
+Aucun.
 
 ## Points d'attention
 
-Un skill identique à la version livrée est remplacé sans `--force` : une mise à jour de DevTools se propage
-donc tant que l'équipe ne l'a pas modifié, puis plus jamais sans intervention.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| ClaudeInstallTest | `tests/Ai/ClaudeInstallTest.php` | — |
-| PageRedactionTest | `tests/Ai/PageRedactionTest.php` | — |
-| XmlConfigReaderTest | `tests/Config/XmlConfigReaderTest.php` | — |
-| ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
-| GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
-| KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
-| StackDetectorTest | `tests/Stack/StackDetectorTest.php` | — |
-| AtomicFileWriterTest | `tests/Tracking/AtomicFileWriterTest.php` | — |
-| InitializerTest | `tests/Tracking/InitializerTest.php` | — |
+Un skill modifié à la main n'est jamais écrasé sans `--force` : c'est le fichier de l'équipe, comme une fiche de connaissance.
 
 ## Workflows liés
 
@@ -88,7 +64,4 @@ donc tant que l'équipe ne l'a pas modifié, puis plus jamais sans intervention.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-17 | a3b1c1b | rédaction initiale |
-| 2026-09-17 | 8f7ea01 | files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
-| 2026-09-17 | 66f5ede | forced |
-| 2026-09-17 | b334cfb | forced |
+| 2026-09-18 | b8049a4 | rédaction initiale |

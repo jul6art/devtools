@@ -1,5 +1,5 @@
 # GET /health
-`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -29,15 +29,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/HealthController.php` | point d'entrée |
-
-Paquets : `symfony/http-foundation` 7.4.19
+—
 
 ## Données
 
@@ -52,16 +46,12 @@ Aucune donnée lue ni écrite.
 Répond « ok » sans rien vérifier (ni dépendance, ni stockage) : il dit que PHP répond, pas que l'application
 fonctionne.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
+—
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

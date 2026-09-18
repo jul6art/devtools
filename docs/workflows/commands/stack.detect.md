@@ -1,11 +1,9 @@
 # stack:detect
-`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
+`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
 
 ## Résumé
 
-`devtools stack:detect [path]` détecte les stacks du projet à partir de ses manifestes (`composer.json`,
-`package.json`…, à la racine et dans les sous-dossiers immédiats), puis écrit .devtools/stack.xml et
-affiche une ligne par stack : racine, langage, framework, adaptateur, connaissance, sources.
+Lit les manifestes d'un projet — `composer.json`, `package.json`, `go.mod`… — et écrit le fichier de stack : la langue, le framework et sa version majeure, le gestionnaire de paquets, l'adaptateur qui trouvera les points d'entrée, la clé de connaissance et les dossiers de sources. Un monorepo est reconnu en lisant la racine et ses sous-dossiers immédiats, jamais en parcourant l'arborescence.
 
 ## Déclencheur
 
@@ -13,94 +11,68 @@ affiche une ligne par stack : racine, langage, framework, adaptateur, connaissan
 |---|---|
 | Point d'entrée | `stack:detect` (command) |
 | Sécurité | — |
-| Préconditions | Le chemin donné, ou le dossier courant, est un dossier existant. |
+| Préconditions | Le chemin donné est un dossier existant contenant au moins un manifeste reconnu. |
 
 ## Parcours
 
 ```mermaid
 sequenceDiagram
   participant U as Développeur
-  participant C as StackDetectCommand
-  participant X as XmlStackStore
-  participant R as XmlConfigReader
+  participant C as stack:detect
   participant D as StackDetector
-  U->>C: devtools stack:detect [path]
-  C->>X: read(stack.xml) s'il existe
-  C->>R: read(config.xml)
-  C->>D: detect(root, config, précédent)
-  D->>D: ComposerDetector, NodeDetector, LanguageOnlyDetector
-  D-->>C: StackDocument (verrous conservés)
-  C->>X: write(stack.xml)
-  C-->>U: tableau des stacks
+  participant S as stack.xml
+  U->>C: devtools stack:detect .
+  C->>D: detect(racine, config, stack.xml existant)
+  D->>D: un détecteur par gestionnaire de paquets
+  D-->>C: une StackProfile par stack
+  C->>S: écriture (nom de projet verrouillé conservé)
+  C-->>U: la table des stacks trouvées
 ```
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `src/Command/StackDetectCommand.php` | point d'entrée |
-| Autre | `src/Config/Config.php` |  |
-| Autre | `src/Config/ConfigReaderInterface.php` |  |
-| Autre | `src/Config/InvalidConfig.php` |  |
-| Autre | `src/Config/XmlConfigReader.php` |  |
-| Autre | `src/Inspection/Model/FileRef.php` |  |
-| Autre | `src/Inspection/Model/FileRole.php` |  |
-| Autre | `src/Inspection/Model/InvalidModel.php` |  |
-| Autre | `src/Inspection/Model/NonEmpty.php` |  |
-| Autre | `src/Inspection/Model/WorkflowId.php` |  |
-| Autre | `src/Inspection/Model/WorkflowType.php` |  |
-| Autre | `src/Project/PathOutsideProject.php` |  |
-| Autre | `src/Project/ProjectRoot.php` |  |
-| Autre | `src/Resources.php` |  |
-| Autre | `src/Stack/Detector/ComposerDetector.php` |  |
-| Autre | `src/Stack/Detector/LanguageOnlyDetector.php` |  |
-| Autre | `src/Stack/Detector/NodeDetector.php` |  |
-| Autre | `src/Stack/Detector/ReadsManifests.php` |  |
-| Autre | `src/Stack/Detector/StackDetectorInterface.php` |  |
-| Autre | `src/Stack/StackDetector.php` |  |
-| Autre | `src/Stack/StackDocument.php` |  |
-| Autre | `src/Stack/StackProfile.php` |  |
-| Autre | `src/Stack/XmlStackStore.php` |  |
-| Autre | `src/Tracking/AtomicFileWriter.php` |  |
-| Autre | `src/Tracking/DevToolsDirectory.php` |  |
-| Autre | `src/Xml/DomBuilder.php` |  |
-| Autre | `src/Xml/InvalidXml.php` |  |
-| Autre | `src/Xml/SafeXmlLoader.php` |  |
+**`Jul6Art\DevTools\Command\StackDetectCommand::execute`**
 
-Paquets : `symfony/console` 8.1.7, `symfony/filesystem` 8.1.6
+```mermaid
+flowchart TD
+  d1{"le chemin n'est pas un dossier"}
+  d1 -->|oui| v1["INVALID"]
+  d1 -->|non| v2["SUCCESS — stack.xml écrit"]
+```
+
+**`Jul6Art\DevTools\Stack\StackDetector::detectors`**
+
+```mermaid
+flowchart TD
+  d1{"des détecteurs sont fournis"}
+  d1 -->|oui| v1["ceux-là, dans cet ordre"]
+  d1 -->|non| v2["Composer, puis Npm, puis Go — l'ordre par défaut"]
+```
+
+**`element::textContent`**
+
+```mermaid
+flowchart TD
+  d1{"un texte est donné à l'élément XML"}
+  d1 -->|oui| v1["le texte devient le contenu"]
+  d1 -->|non| v2["l'élément reste vide"]
+```
 
 ## Données
 
-Lit les manifestes et lockfiles du projet, `config.xml` et l'ancien `stack.xml` ; écrit `stack.xml`.
+Lit les manifestes et les verrous de dépendances ; écrit le fichier de stack, validé par son XSD.
 
 ## Mécanismes transverses
 
-Tout XML est lu par `SafeXmlLoader` (pas de DOCTYPE, pas de réseau) et validé par son XSD ; les éléments
-marqués `locked="true"` dans l'ancien `stack.xml` sont repris tels quels.
+Aucun.
 
 ## Points d'attention
 
-Un `stack.xml` invalide fait échouer la commande au lieu d'être écrasé : une correction manuelle mal formée
-n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparation.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| PageRedactionTest | `tests/Ai/PageRedactionTest.php` | — |
-| StackDetectCommandTest | `tests/Command/StackDetectCommandTest.php` | — |
-| XmlConfigReaderTest | `tests/Config/XmlConfigReaderTest.php` | — |
-| ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
-| GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
-| MenuRendererTest | `tests/Rendering/MenuRendererTest.php` | — |
-| KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
-| StackDetectorTest | `tests/Stack/StackDetectorTest.php` | — |
-| InitializerTest | `tests/Tracking/InitializerTest.php` | — |
+Un `package.json` sans framework à côté d'un projet Symfony est de l'outillage, pas une stack : sinon la voie Claude se lancerait sur les assets. Le nom du projet est verrouillable dans `stack.xml`, et une détection suivante ne l'écrase plus.
 
 ## Workflows liés
 
@@ -110,10 +82,4 @@ n'est jamais perdue silencieusement, mais bloque la détection jusqu'à réparat
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-17 | a3b1c1b | rédaction initiale |
-| 2026-09-17 | 8f7ea01 | files changed: src/Config/Config.php, src/Config/XmlConfigReader.php; files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
-| 2026-09-17 | 98d3d2d | files changed: src/Xml/SafeXmlLoader.php |
-| 2026-09-17 | e6f9993 | files changed: src/Config/Config.php |
-| 2026-09-17 | 66f5ede | files changed: src/Tracking/DevToolsDirectory.php |
-| 2026-09-17 | 66f5ede | forced |
-| 2026-09-17 | b334cfb | forced |
+| 2026-09-18 | b8049a4 | rédaction initiale |

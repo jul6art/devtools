@@ -25,6 +25,10 @@ sequenceDiagram
   R-->>C: 201 JSON
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Ajoute une commande au tableau en mémoire ; l'identifiant vaut la taille du tableau plus un.

@@ -64,13 +64,6 @@ final class GraphFixture
                 confidence: Confidence::High,
                 source: new WorkflowSource('native:symfony'),
             ),
-            new EntryPointCandidate(
-                type: WorkflowType::events(),
-                entryPoint: new EntryPoint('listener', 'App\\EventListener\\LocaleListener', new FileRef('src/EventListener/LocaleListener.php'), ['event' => 'kernel.request']),
-                title: 'kernel.request → LocaleListener',
-                confidence: Confidence::High,
-                source: new WorkflowSource('native:symfony'),
-            ),
         ];
     }
 }

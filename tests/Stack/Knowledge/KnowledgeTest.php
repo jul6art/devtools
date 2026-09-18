@@ -14,6 +14,7 @@ use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Resources;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeBrief;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
+use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeProvider;
 use Jul6Art\DevTools\Stack\Knowledge\XmlKnowledgeBriefStore;
 use Jul6Art\DevTools\Tests\Inspection\Pipeline\FakeAdapter;
@@ -53,6 +54,21 @@ final class KnowledgeTest extends TestCase
     {
         self::assertFileExists(Resources::path('knowledge/symfony-7.md'));
         self::assertFileExists(Resources::path('knowledge/symfony-8.md'));
+    }
+
+    /**
+     * The library of a source checkout is `resources/knowledge/` itself (ADR-0041), so a test that forgot
+     * to point `DEVTOOLS_KNOWLEDGE_HOME` somewhere else would deposit a sheet in this repository. The
+     * whole suite is pinned in `tests/bootstrap.php`; this is the assertion that catches a leak, whatever
+     * order the tests ran in.
+     */
+    public function testNoTestEverDepositsASheetInTheKnowledgeThisRepositoryShips(): void
+    {
+        $files = array_map(basename(...), glob(Resources::path('knowledge/*')) ?: []);
+        sort($files, \SORT_STRING);
+
+        self::assertSame(['_canvas.md', 'symfony-7.md', 'symfony-8.md'], $files);
+        self::assertFalse(KnowledgeLibrary::locate()->isEmbedded(), 'The suite writes to a temporary library, never to the knowledge the package ships.');
     }
 
     public function testTheProjectsKnowledgeWinsAndEmbeddedKnowledgeIsCopiedOnFirstUse(): void
@@ -116,7 +132,7 @@ final class KnowledgeTest extends TestCase
 
         $this->inspect($project);
 
-        self::assertCount(6, glob($project.'/.devtools/pending/page.*.brief.xml') ?: []);
+        self::assertCount(5, glob($project.'/.devtools/pending/page.*.brief.xml') ?: []);
         self::assertSame('.devtools/knowledge/symfony-99.md', new XmlPageBriefStore()->read($project.'/.devtools/pending/page.route.order.new.brief.xml')->knowledgePath);
         self::assertStringContainsString('[Connaissances symfony-99](../../.devtools/knowledge/symfony-99.md)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }

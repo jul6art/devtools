@@ -15,18 +15,7 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["/index.php"]
-  n2["Contrôleur · public/index.php"]
-  n3["Repository · lib/OrderRepository.php"]
-  n4["Autre · lib/db.php"]
-  n5["Autre · lib/views/header.php"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-```
+—
 
 ## Navigation / états
 
@@ -39,14 +28,9 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Repository | `lib/OrderRepository.php` |  |
-| Autre | `lib/db.php` |  |
-| Autre | `lib/views/header.php` |  |
-| Contrôleur | `public/index.php` | point d'entrée |
+—
 
 ## Données
 
@@ -59,12 +43,6 @@ flowchart LR
 ## Points d'attention
 
 —
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderRepositoryTest | `tests/OrderRepositoryTest.php` | — |
 
 ## Workflows liés
 

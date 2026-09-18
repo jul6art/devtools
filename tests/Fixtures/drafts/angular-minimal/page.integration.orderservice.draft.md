@@ -25,6 +25,10 @@ sequenceDiagram
   S-->>C: Observable<Order[]> / Observable<Order>
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Lit `Order` (`id: number`, `customer: string`) ; l'interface est déclarée dans le service.

@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -49,19 +49,9 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-
-Paquets : `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19, `symfony/security-http` 7.4.19, `symfony/workflow` 7.4.9
+—
 
 ## Données
 
@@ -77,17 +67,12 @@ Lit l'`Order` et modifie sa propriété `status` (marking store `method`) ; la m
 La commande modifiée n'est pas ré-enregistrée (`save` n'est pas appelé). Une transition impossible (commande
 déjà validée) lève une exception non interceptée : réponse 500 au lieu d'un message.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
 - [`route.order.show`](order.show.md) — navigation
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

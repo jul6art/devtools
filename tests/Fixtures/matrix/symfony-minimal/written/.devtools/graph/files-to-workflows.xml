@@ -29,7 +29,6 @@
   <file path="config/services.yaml">
     <workflow ref="async.order-created" relation="file"/>
     <workflow ref="command.app.import-catalog" relation="file"/>
-    <workflow ref="event.locale-listener" relation="file"/>
     <workflow ref="route.health" relation="file"/>
     <workflow ref="route.order.index" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
@@ -63,9 +62,6 @@
     <workflow ref="async.order-created" relation="file"/>
     <workflow ref="command.app.import-catalog" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
-  </file>
-  <file path="src/EventListener/LocaleListener.php">
-    <workflow ref="event.locale-listener" relation="file"/>
   </file>
   <file path="src/Form/OrderType.php">
     <workflow ref="route.order.new" relation="file"/>

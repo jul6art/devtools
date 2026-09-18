@@ -61,7 +61,7 @@ final class FreshnessTest extends TestCase
         $report = $this->inspect();
 
         self::assertSame($before, $this->documentation(), 'Idempotence: zero file modified outside reports/.');
-        self::assertSame(6, $report->count('unchanged'));
+        self::assertSame(5, $report->count('unchanged'));
         self::assertSame(0, $report->count('updated'));
     }
 
@@ -287,7 +287,7 @@ final class FreshnessTest extends TestCase
 
         self::assertSame(['route.health'], $this->rewritten($this->inspect(force: ['route.health'])));
         self::assertEquals([Reason::forced()], $this->inspect(force: ['route.health'])->decision('route.health')?->reasons);
-        self::assertCount(6, $this->rewritten($this->inspect(forceAll: true)));
+        self::assertCount(5, $this->rewritten($this->inspect(forceAll: true)));
 
         $this->append('src/Controller/HealthController.php', "\n// changed\n");
         $repository->commitAll('change');

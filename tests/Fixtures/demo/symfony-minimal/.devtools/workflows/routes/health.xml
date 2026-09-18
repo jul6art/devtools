@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.health" type="routes" schema-version="1">
   <title>GET /health</title>
-  <generated at="2026-09-16T22:28:46+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/1"/>
+  <generated at="2026-09-17T09:00:00+02:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
   <source vcs="none"/>
   <entrypoints>
     <entrypoint kind="route" name="app_health" role="main">
@@ -26,13 +26,15 @@
     <package name="symfony/http-foundation" version="8.1.7"/>
     <package name="symfony/routing" version="8.1.6"/>
   </packages>
-  <depends-on>
-    <workflow ref="event.locale-listener"/>
-  </depends-on>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" reason="rédaction initiale"/>
+    <revision at="2026-09-17T09:00:00+02:00" reason="rédaction initiale"/>
   </history>
 </workflow>

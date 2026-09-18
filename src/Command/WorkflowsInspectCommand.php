@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Command;
 
+use Jul6Art\DevTools\Console\ConsoleProgressReporter;
 use Jul6Art\DevTools\Console\MemoryLimit;
+use Jul6Art\DevTools\Console\SummaryRenderer;
 use Jul6Art\DevTools\Inspection\Freshness\DecisionKind;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
 use Jul6Art\DevTools\Inspection\InspectionOptions;
@@ -92,7 +94,8 @@ final class WorkflowsInspectCommand extends Command
             return Command::INVALID;
         }
 
-        $report = $this->pipeline->run($options);
+        $io->title(\sprintf('DevTools — inspection de %s', $path));
+        $report = $this->pipeline->run($options, new ConsoleProgressReporter($io));
         $this->display($io, $report, true === $input->getOption('dry-run'));
 
         return $report->exitCode();
@@ -109,11 +112,6 @@ final class WorkflowsInspectCommand extends Command
             $io->warning(\sprintf("%s — the console could not answer; attributes were read instead, with medium confidence.\n%s", $fallback['stack'], $fallback['cause']));
         }
 
-        $io->table(
-            ['Created', 'Updated', 'Unchanged', 'Orphaned'],
-            [array_map(static fn (string $outcome): int => $report->count($outcome), InspectionReport::OUTCOMES)],
-        );
-
         foreach ($report->warnings as $warning) {
             $io->warning($warning);
         }
@@ -122,8 +120,14 @@ final class WorkflowsInspectCommand extends Command
             $io->error($error);
         }
 
-        if (null !== $report->path) {
-            $io->text('Report: '.$report->path);
-        }
+        new SummaryRenderer()->inspection($io, $report, self::stacks($report));
+    }
+
+    /**
+     * `Symfony 7.4 + Angular 22.0`, read from what the report recorded per stack.
+     */
+    private static function stacks(InspectionReport $report): string
+    {
+        return implode(' + ', array_map(static fn (array $stack): string => $stack['stack'], $report->stacks));
     }
 }

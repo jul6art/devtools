@@ -16,16 +16,7 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["Order creation"]
-  n2["Contrôleur · src/Controller/OrderController.php"]
-  n3["Formulaire · src/Form/OrderType.php"]
-  n4["Template · templates/order/new.html.twig"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-```
+—
 
 ## Navigation / états
 
@@ -48,15 +39,9 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Formulaire | `src/Form/OrderType.php` |  |
-| Template | `templates/order/new.html.twig` |  |
-
-Paquets : `doctrine/orm` 3.5.2, `symfony/form` 7.4.3
+—
 
 ## Données
 
@@ -64,23 +49,18 @@ Paquets : `doctrine/orm` 3.5.2, `symfony/form` 7.4.3
 
 ## Mécanismes transverses
 
-- [`event.locale-listener`](../events/locale-listener.md)
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\LocaleListener` | `kernel.request` | 16 | — |
 
 ## Points d'attention
 
 —
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderControllerTest | `tests/Controller/OrderControllerTest.php` | — |
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
 - `route.order.index` — dépend de
-- [`route.order.show`](order.show.md) — navigation
+- [`route.order.show`](order.show.md) — dépend de
 
 ## Historique
 

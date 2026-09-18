@@ -34,6 +34,7 @@ final readonly class PageDraft
             PageSection::Summary->value,
             self::PRECONDITIONS,
             PageSection::Journey->value,
+            PageSection::Decisions->value,
             PageSection::Data->value,
             PageSection::CrossCutting->value,
             PageSection::Attention->value,

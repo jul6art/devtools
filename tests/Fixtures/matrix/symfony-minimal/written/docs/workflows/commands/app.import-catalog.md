@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : 6753625
+`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : d15a772
 
 ## Résumé
 
@@ -29,17 +29,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/services.yaml` |  |
-| Autre | `src/Command/ImportCatalogCommand.php` | point d'entrée |
-| Entité | `src/Entity/Product.php` |  |
-| Repository | `src/Repository/ProductRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-
-Paquets : `symfony/console` 8.1.7
+—
 
 ## Données
 
@@ -54,12 +46,6 @@ Paquets : `symfony/console` 8.1.7
 Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun effet durable. Le produit est
 écrit en dur ; aucun fichier de catalogue n'est lu.
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
-
 ## Workflows liés
 
 —
@@ -68,4 +54,4 @@ Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun e
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 6753625 | rédaction initiale |
+| 2026-09-16 | d15a772 | rédaction initiale |

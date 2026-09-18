@@ -1,40 +1,20 @@
 # Workflows — jul6art/devtools
 
-Stack : Php · 5 workflows · dernier scan : 2026-09-17 (commit b334cfb)
+Stack : Php · 7 workflows · dernier scan : 2026-09-18 (commit b8049a4)
 
 [Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances php-8](../../.devtools/knowledge/php-8.md)
 
-## Routes (0)
+## Commandes (7)
 
-—
+- [claude:install](commands/claude.install.md) — `command.claude.install` · MAJ 2026-09-18
+- [init](commands/init.md) — `command.init` · MAJ 2026-09-18
+- [knowledge:list](commands/knowledge.list.md) — `command.knowledge.list` · MAJ 2026-09-18
+- [knowledge:promote](commands/knowledge.promote.md) — `command.knowledge.promote` · MAJ 2026-09-18
+- [stack:detect](commands/stack.detect.md) — `command.stack.detect` · MAJ 2026-09-18
+- [workflows:apply](commands/workflows.apply.md) — `command.workflows.apply` · MAJ 2026-09-18
+- [workflows:inspect](commands/workflows.inspect.md) — `command.workflows.inspect` · MAJ 2026-09-18
 
-## Commandes (5)
-
-- [claude:install](commands/claude.install.md) — `command.claude.install` · MAJ 2026-09-17
-- [init](commands/init.md) — `command.init` · MAJ 2026-09-17
-- [stack:detect](commands/stack.detect.md) — `command.stack.detect` · MAJ 2026-09-17
-- [workflows:apply](commands/workflows.apply.md) — `command.workflows.apply` · MAJ 2026-09-17
-- [workflows:inspect](commands/workflows.inspect.md) — `command.workflows.inspect` · MAJ 2026-09-17
-
-## Asynchrone (0)
-
-—
-
-## Événements (0)
-
-—
-
-## Interface (0)
-
-—
-
-## Intégrations (0)
-
-—
-
-## Données (0)
-
-—
+Aucun workflow trouvé pour : Routes, Asynchrone, Interface, Intégrations, Données.
 
 ## À vérifier
 

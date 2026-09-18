@@ -26,6 +26,10 @@ sequenceDiagram
   R-->>C: 200 JSON
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Lit le tableau `orders` gardé en mémoire par `src/services/orderService.js`.

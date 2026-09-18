@@ -1,6 +1,6 @@
 # ADR-0012 — Connaissances de stack (`knowledge`)
 
-- **Statut** : Accepted — 2026-09-16
+- **Statut** : Superseded by ADR-0041 — 2026-09-18 (Accepted 2026-09-16)
 - **Décideurs** : jul6art
 - **Specs** : § 4.3 étape 2, § 8 (stacks couvertes), § 12 question 3
 

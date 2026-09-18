@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -16,36 +16,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["CartSummary"]
-  n2["Composant · src/Twig/Components/CartSummary.php"]
-  n3["Entité · src/Entity/Order.php"]
-  n4["Repository · src/Repository/OrderRepository.php"]
-  n5["Autre · src/ValueObject/Money.php"]
-  n6["Template · templates/components/CartSummary.html.twig"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-  n2 --> n6
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Composant | `src/Twig/Components/CartSummary.php` | point d'entrée |
-| Autre | `src/ValueObject/Money.php` |  |
-| Template | `templates/components/CartSummary.html.twig` |  |
-
-Paquets : `symfony/ux-live-component` 2.36.0
+—
 
 ## Données
 
@@ -59,10 +38,6 @@ Paquets : `symfony/ux-live-component` 2.36.0
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -71,4 +46,4 @@ Paquets : `symfony/ux-live-component` 2.36.0
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | initial |
+| 2026-09-16 | 65429e2 | initial |

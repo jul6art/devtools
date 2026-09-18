@@ -28,6 +28,10 @@ sequenceDiagram
   D-->>U: nom du client
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Lit une `Order` (`id`, `customer`) depuis l'API HTTP ; aucune écriture.

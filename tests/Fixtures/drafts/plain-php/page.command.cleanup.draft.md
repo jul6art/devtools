@@ -22,6 +22,10 @@ sequenceDiagram
   S->>B: DELETE FROM orders WHERE customer = ""
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Supprime des lignes de `orders`.

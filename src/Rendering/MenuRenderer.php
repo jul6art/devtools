@@ -16,10 +16,11 @@ use Jul6Art\DevTools\Tracking\IndexEntry;
 use Jul6Art\DevTools\Tracking\TrackingStatus;
 
 /**
- * Renders `workflows.md`, the home page and menu of `.devtools/` (specs § 4.7).
+ * Renders `workflows.md`, the home page and menu of the documentation (specs § 4.7, ADR-0043).
  *
- * Counters are shown even at zero, and "À vérifier" and "Non couvert" are always present: they are the
- * guard rails that make visible what the analysis did not understand.
+ * A type with no workflow is named in one line at the end rather than given an empty section of its own.
+ * "À vérifier" and "Non couvert" are always present, at zero too: they are the guard rails that make
+ * visible what the analysis did not understand.
  */
 final class MenuRenderer
 {
@@ -55,10 +56,26 @@ final class MenuRenderer
             ]),
         ];
 
+        $empty = [];
+
         foreach ([...array_map(WorkflowType::native(...), array_keys(WorkflowType::NATIVE)), ...$customTypes] as $type) {
             $entries = array_values(array_filter($index->entries, static fn (IndexEntry $entry): bool => $entry->type->name === $type->name));
+
+            // A type with no entry does not take a section of its own any more (ADR-0043): six empty
+            // headings is exactly the scattering the menu was criticised for. It is still named, once,
+            // at the end — the reader must be able to tell "none found" from "not looked for".
+            if ([] === $entries) {
+                $empty[] = Labels::type($type);
+
+                continue;
+            }
+
             $lines = [...$lines, '', \sprintf('## %s (%d)', Labels::type($type), \count($entries)), ''];
-            $lines = [...$lines, ...([] === $entries ? [MarkdownWriter::EMPTY] : self::listing($entries))];
+            $lines = [...$lines, ...self::listing($entries)];
+        }
+
+        if ([] !== $empty) {
+            $lines = [...$lines, '', \sprintf('Aucun workflow trouvé pour : %s.', implode(', ', $empty))];
         }
 
         $pending = array_map(static fn (WorkflowId $id): string => $id->value, $pendingRedaction);

@@ -16,12 +16,15 @@ final readonly class WorkflowType
 {
     /**
      * Folder name => identifier prefix, in the order of specs § 4.2 — which is also the menu order.
+     *
+     * ⚠️ `events` is **not** here, against the § 4.2 which lists it (ADR-0043): a listener is not a
+     * workflow but a {@see Mechanism} of the workflows it intercepts. A project that really wants such
+     * pages declares a custom type in `.devtools/config.xml`.
      */
     public const array NATIVE = [
         'routes' => 'route',
         'commands' => 'command',
         'async' => 'async',
-        'events' => 'event',
         'ui' => 'ui',
         'integrations' => 'integration',
         'data' => 'data',
@@ -44,11 +47,6 @@ final readonly class WorkflowType
     public static function async(): self
     {
         return self::native('async');
-    }
-
-    public static function events(): self
-    {
-        return self::native('events');
     }
 
     public static function ui(): self

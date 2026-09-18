@@ -1,6 +1,6 @@
 # ADR-0008 — Rendu normé des pages, du menu et du graphe (mode factuel)
 
-- **Statut** : Accepted — 2026-09-16
+- **Statut** : Superseded by ADR-0043 — 2026-09-18 (Accepted 2026-09-16)
 - **Décideurs** : jul6art
 - **Specs** : § 4.3 étapes 7 (`--no-ai`) et 9, § 4.4, § 4.5, § 4.7, § 7.2 (famille rendu), § 12 question 4
 

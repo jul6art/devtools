@@ -28,13 +28,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `bin/cleanup` | point d'entrée |
-| Configuration | `composer.json` |  |
-| Autre | `lib/db.php` |  |
+—
 
 ## Données
 
@@ -48,10 +44,6 @@ Supprime des lignes de `orders`.
 
 La condition `customer = ""` utilise des guillemets doubles : SQLite les accepte comme chaîne par
 tolérance, d'autres bases y verraient un nom de colonne. Rien n'est affiché ni journalisé.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

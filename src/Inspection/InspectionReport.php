@@ -48,9 +48,37 @@ final class InspectionReport
 
     public ?string $path = null;
 
+    /**
+     * Where the shared knowledge library lives for this run (ADR-0041): a library that moves without
+     * saying so is worse than no library.
+     */
+    public ?string $knowledgeLibrary = null;
+
     public string $projectName = '';
 
     public float $seconds = 0.0;
+
+    /**
+     * What the run actually did (ADR-0042). Every one of these is incremented by the operation itself —
+     * a counter read off a cache survives its own removal, and then measures nothing.
+     */
+    public int $filesParsed = 0;
+
+    public int $filesHashed = 0;
+
+    public int $gitProcesses = 0;
+
+    public int $consoleCalls = 0;
+
+    public int $briefsWritten = 0;
+
+    public int $briefBytes = 0;
+
+    public int $pagesWritten = 0;
+
+    public int $bytesWritten = 0;
+
+    public int $peakMemoryBytes = 0;
 
     public function __construct(public readonly \DateTimeImmutable $startedAt)
     {
@@ -77,6 +105,16 @@ final class InspectionReport
         }
 
         return $total;
+    }
+
+    /**
+     * Four bytes per token: an order of magnitude for the redaction to come, not a measurement.
+     * DevTools never calls Claude (ADR-0002), so it has no token to count; the API client of ADR-0035
+     * will replace this estimate with the real figure.
+     */
+    public function estimatedTokens(): int
+    {
+        return (int) ceil($this->briefBytes / 4);
     }
 
     /**
@@ -139,7 +177,18 @@ final class InspectionReport
             }
         }
 
-        $lines = [...$lines, '', \sprintf('Duration: %.1f s', $this->seconds)];
+        $lines = [
+            ...$lines,
+            '',
+            '## Measurements',
+            '',
+            \sprintf('- %d files parsed, %d hashed', $this->filesParsed, $this->filesHashed),
+            \sprintf('- %d git processes, %d console calls', $this->gitProcesses, $this->consoleCalls),
+            \sprintf('- %d pages written (%d bytes), %d briefs (%d bytes, ~%d tokens estimated)', $this->pagesWritten, $this->bytesWritten, $this->briefsWritten, $this->briefBytes, $this->estimatedTokens()),
+            null === $this->knowledgeLibrary ? '- knowledge library: —' : '- knowledge library: '.$this->knowledgeLibrary,
+            '',
+            \sprintf('Duration: %.1f s · peak memory: %.0f MB', $this->seconds, $this->peakMemoryBytes / 1048576),
+        ];
 
         return implode("\n", $lines)."\n";
     }

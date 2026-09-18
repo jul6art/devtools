@@ -30,6 +30,10 @@ sequenceDiagram
   P-->>U: liste + accès à /orders/new.php
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Lit la colonne `customer` de la table `orders` ; aucune écriture.

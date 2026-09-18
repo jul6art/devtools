@@ -33,14 +33,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `bin/import.php` | point d'entrée |
-| Configuration | `composer.json` |  |
-| Repository | `lib/OrderRepository.php` |  |
-| Autre | `lib/db.php` |  |
+—
 
 ## Données
 
@@ -54,12 +49,6 @@ sequenceDiagram
 
 Pas de transaction : une erreur au milieu du fichier laisse un import partiel. Les lignes vides deviennent
 des commandes sans client.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderRepositoryTest | `tests/OrderRepositoryTest.php` | — |
 
 ## Workflows liés
 

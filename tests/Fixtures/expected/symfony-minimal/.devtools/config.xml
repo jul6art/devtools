@@ -25,7 +25,7 @@
          <group main="app_order_index"><satellite>app_order_export</satellite></group> -->
     <groups/>
 
-    <!-- Workflow types of your own, next to routes, commands, async, events, ui, integrations, data:
+    <!-- Workflow types of your own, next to routes, commands, async, ui, integrations, data:
          <type name="webhooks" prefix="webhook"/> -->
     <types/>
 

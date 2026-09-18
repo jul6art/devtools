@@ -1,5 +1,5 @@
 # GET /api/items
-`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 3442aca
+`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
 
 ## Résumé
 
@@ -15,22 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["GET /api/items"]
-  n2["Contrôleur · api/src/Controller/ItemController.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Contrôleur | `api/src/Controller/ItemController.php` | point d'entrée |
+—
 
 ## Données
 
@@ -44,10 +37,6 @@ flowchart TD
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -56,4 +45,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 3442aca | initial |
+| 2026-09-16 | 6ecdbd0 | initial |

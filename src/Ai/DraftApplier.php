@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Ai;
 
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
+use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\XmlDiscoveryBriefStore;
@@ -26,7 +27,9 @@ use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Rendering\ParsedPage;
 use Jul6Art\DevTools\Rendering\RenderingContext;
+use Jul6Art\DevTools\Stack\Knowledge\DepositOutcome;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
+use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
 use Jul6Art\DevTools\Stack\Knowledge\XmlKnowledgeBriefStore;
 use Jul6Art\DevTools\Tracking\AtomicFileWriter;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
@@ -54,19 +57,24 @@ final readonly class DraftApplier
     ) {
     }
 
-    public function apply(ProjectRoot $root): ApplyResult
+    /**
+     * @param bool $share false for `--no-share`: the knowledge stays in the project (ADR-0041)
+     */
+    public function apply(ProjectRoot $root, bool $share = true): ApplyResult
     {
         $result = new ApplyResult();
         $directory = new DevToolsDirectory($root, self::documentedIn($root));
+        $config = new XmlConfigReader()->read($directory->configFile());
+        $library = KnowledgeLibrary::forProject($root, $config, $this->writer);
 
         // Knowledge first: page briefs of a stack are only written once its knowledge exists.
         foreach (glob($directory->path('pending/knowledge.*.draft.md')) ?: [] as $draftFile) {
-            $this->applyKnowledge($directory, $draftFile, $result);
+            $this->applyKnowledge($directory, $draftFile, $result, $library, $share && $config->shareKnowledge);
         }
 
         // Then discoveries: pages of the Claude path only exist once a discovery says what they are.
         foreach (glob($directory->path('pending/discovery.*.draft.xml')) ?: [] as $draftFile) {
-            $this->applyDiscovery($directory, $draftFile, $result);
+            $this->applyDiscovery($directory, $draftFile, $result, $config);
         }
 
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
@@ -75,7 +83,7 @@ final readonly class DraftApplier
             return $result;
         }
 
-        $types = new WorkflowTypeRegistry(new XmlConfigReader()->read($directory->configFile())->customTypes);
+        $types = new WorkflowTypeRegistry($config->customTypes);
         $tracking = new XmlTrackingStore($types, $this->writer);
         $documents = [];
 
@@ -161,6 +169,8 @@ final readonly class DraftApplier
             $document->producer,
             $document->status,
             $history,
+            $document->decisions,
+            $document->mechanisms,
         );
 
         $page = new PageRenderer()->render($workflow, $history, RenderingContext::fromTracking(array_values($documents)), self::writtenSections($draft));
@@ -177,13 +187,12 @@ final readonly class DraftApplier
      * A discovery draft is untrusted: every file it names must exist inside the stack, identifiers are recomputed
      * from the entry points, and confidence is set to medium whatever it declares (ADR-0013).
      */
-    private function applyDiscovery(DevToolsDirectory $directory, string $draftFile, ApplyResult $result): void
+    private function applyDiscovery(DevToolsDirectory $directory, string $draftFile, ApplyResult $result, Config $config): void
     {
         $id = basename($draftFile, '.draft.xml');
 
         try {
             $brief = new XmlDiscoveryBriefStore($this->writer)->read($directory->path('pending/'.$id.'.brief.xml'));
-            $config = new XmlConfigReader()->read($directory->configFile());
             $types = new WorkflowTypeRegistry($config->customTypes);
             $serializer = new ModelXmlSerializer($types);
             $draft = $serializer->deserialize((string) file_get_contents($draftFile), $brief->draftPath);
@@ -299,7 +308,7 @@ final readonly class DraftApplier
         return array_values($byPath);
     }
 
-    private function applyKnowledge(DevToolsDirectory $directory, string $draftFile, ApplyResult $result): void
+    private function applyKnowledge(DevToolsDirectory $directory, string $draftFile, ApplyResult $result, KnowledgeLibrary $library, bool $share): void
     {
         $id = basename($draftFile, '.draft.md');
 
@@ -321,6 +330,18 @@ final readonly class DraftApplier
         }
 
         $this->writer->write($directory->path('knowledge/'.$brief->key.'.md'), $draft);
+
+        // The library grows only with a sheet that passed the canvas, and never overwrites one it holds.
+        $outcome = $share ? $library->deposit($brief->key, $draft, basename($directory->root->path)) : DepositOutcome::Declined;
+
+        if (DepositOutcome::Deposited === $outcome) {
+            $result->deposited[$brief->key] = $library->path.'/'.$brief->key.'.md';
+        }
+
+        if (DepositOutcome::NotWritable === $outcome) {
+            $result->warnings[] = \sprintf('The knowledge library "%s" cannot be written: "%s" stays in this project only.', $library->path, $brief->key);
+        }
+
         new Filesystem()->remove([$draftFile, $directory->path('pending/'.$id.'.brief.xml')]);
         $result->accepted[] = $id;
     }

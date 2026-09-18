@@ -41,13 +41,9 @@ flowchart LR
   n1 -->|"redirect"| n3
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Repository | `lib/OrderRepository.php` |  |
-| Autre | `lib/db.php` |  |
-| Contrôleur | `public/orders/new.php` | point d'entrée |
+—
 
 ## Données
 
@@ -61,12 +57,6 @@ flowchart LR
 
 Aucune validation : un nom vide est enregistré (c'est ce que `bin/cleanup` supprime ensuite), et aucun
 jeton CSRF ne protège le formulaire.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderRepositoryTest | `tests/OrderRepositoryTest.php` | — |
 
 ## Workflows liés
 

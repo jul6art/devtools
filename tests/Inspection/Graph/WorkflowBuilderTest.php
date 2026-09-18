@@ -8,9 +8,11 @@ use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Inspection\Graph\BuildResult;
 use Jul6Art\DevTools\Inspection\Graph\CoverageCalculator;
+use Jul6Art\DevTools\Inspection\Graph\DecisionExtractor;
 use Jul6Art\DevTools\Inspection\Graph\EntryPointCandidate;
 use Jul6Art\DevTools\Inspection\Graph\TestLocator;
 use Jul6Art\DevTools\Inspection\Graph\WorkflowBuilder;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
@@ -31,9 +33,24 @@ final class WorkflowBuilderTest extends TestCase
         self::assertSame('app_health', $health->main->name);
         self::assertSame(['app_status'], array_map(static fn (EntryPoint $satellite): string => $satellite->name, $health->satellites));
         self::assertSame(
-            ['command.app.import-catalog', 'event.locale-listener', 'route.health', 'route.order.index', 'route.order.new', 'route.order.show'],
+            ['command.app.import-catalog', 'route.health', 'route.order.index', 'route.order.new', 'route.order.show'],
             array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $this->build()->result->workflows),
         );
+    }
+
+    /**
+     * ADR-0043: a route of a real back-office reaches a dozen entities, each with its own conditional
+     * setters. A page carrying a diagram for every one of them is the inventory this ADR removed, so only
+     * the fields whose value depends on the most are kept — deterministically.
+     */
+    public function testAtMostEightDecidedFieldsAreKeptPerWorkflow(): void
+    {
+        $decisions = $this->workflow($this->build(), 'route.order.new')->decisions;
+        $targets = array_values(array_unique(array_map(static fn (DecisionPoint $decision): string => $decision->target, $decisions)));
+
+        self::assertLessThanOrEqual(DecisionExtractor::MAX_TARGETS, \count($targets));
+        self::assertContains('App\\Entity\\Order::status', $targets, 'The field with the most branches is kept.');
+        self::assertSame($targets, array_values(array_unique(array_map(static fn (DecisionPoint $decision): string => $decision->target, $this->workflow($this->build(), 'route.order.new')->decisions))), 'Two builds keep the same fields.');
     }
 
     public function testADeclaredGroupAttachesASatellite(): void
@@ -61,7 +78,7 @@ final class WorkflowBuilderTest extends TestCase
     public function testFilesNoWorkflowReferencesAreUncovered(): void
     {
         self::assertSame(
-            ['migrations/Version20260901000000.php', 'src/Kernel.php', 'src/Message/OrderCreated.php', 'src/MessageHandler/NotifyOnOrderCreated.php', 'src/MessageHandler/OrderCreatedHandler.php', 'src/Twig/Components/CartSummary.php', 'src/Util/StringHelper.php', 'templates/components/CartSummary.html.twig'],
+            ['migrations/Version20260901000000.php', 'src/EventListener/LocaleListener.php', 'src/Kernel.php', 'src/Message/OrderCreated.php', 'src/MessageHandler/NotifyOnOrderCreated.php', 'src/MessageHandler/OrderCreatedHandler.php', 'src/Twig/Components/CartSummary.php', 'src/Util/StringHelper.php', 'templates/components/CartSummary.html.twig'],
             array_map(static fn (FileRef $file): string => $file->path, $this->build()->result->uncovered),
         );
     }
@@ -69,11 +86,15 @@ final class WorkflowBuilderTest extends TestCase
     public function testAnEntryPointADependencyPointsToBecomesAnIdentifier(): void
     {
         $candidates = GraphFixture::candidates();
-        $candidates = [...\array_slice($candidates, 0, 1), $candidates[1]->withDependsOn([$candidates[6]->entryPoint]), ...\array_slice($candidates, 2)];
+        $commands = array_values(array_filter($candidates, static fn (EntryPointCandidate $candidate): bool => 'command' === $candidate->entryPoint->kind));
+
+        self::assertNotSame([], $commands, 'The fixture declares a command.');
+
+        $candidates = [...\array_slice($candidates, 0, 1), $candidates[1]->withDependsOn([$commands[0]->entryPoint]), ...\array_slice($candidates, 2)];
 
         $result = new WorkflowBuilder(new Config())->build(GraphFixture::root(), GraphFixture::stack(), $candidates, ['templates'])->result;
 
-        self::assertSame(['event.locale-listener'], array_map(strval(...), $this->workflow(new BuildResult($result, []), 'route.order.index')->dependsOn));
+        self::assertSame(['command.app.import-catalog'], array_map(strval(...), $this->workflow(new BuildResult($result, []), 'route.order.index')->dependsOn));
     }
 
     public function testGroupedByControllerEveryRouteOfAResourceIsOneWorkflow(): void
@@ -81,7 +102,7 @@ final class WorkflowBuilderTest extends TestCase
         $build = $this->build(new Config(routeGrouping: Config::ROUTES_BY_CONTROLLER));
         $ids = array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $build->result->workflows);
 
-        self::assertSame(['command.app.import-catalog', 'event.locale-listener', 'route.health', 'route.order'], $ids, 'One workflow per controller: what its routes have in common, or its controller when they share nothing.');
+        self::assertSame(['command.app.import-catalog', 'route.health', 'route.order'], $ids, 'One workflow per controller: what its routes have in common, or its controller when they share nothing.');
 
         $orders = $this->workflow($build, 'route.order');
 

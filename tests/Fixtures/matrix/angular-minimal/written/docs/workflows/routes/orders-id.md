@@ -34,13 +34,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `src/app/app.routes.ts` | point d'entrée |
-| Composant | `src/app/orders/order-detail.component.ts` |  |
-| Service | `src/app/orders/order.service.ts` |  |
+—
 
 ## Données
 
@@ -54,10 +50,6 @@ Aucun intercepteur HTTP ni garde de route n'est déclaré dans `src/app`.
 
 L'identifiant est lu dans le snapshot de la route : naviguer d'une fiche à une autre sans recréer le
 composant n'actualise pas la commande. Un identifiant non numérique donne `NaN` et appelle `/api/orders/NaN`.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

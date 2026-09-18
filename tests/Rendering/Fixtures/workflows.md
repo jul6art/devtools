@@ -12,25 +12,7 @@ Stack : Symfony 8.1 · 2 workflows · dernier scan : 2026-09-16 (commit a1b2c3d)
 
 - [Catalog import](commands/app.import-catalog.md) — `command.app.import-catalog` · MAJ 2026-09-10 · confiance moyenne
 
-## Asynchrone (0)
-
-—
-
-## Événements (0)
-
-—
-
-## Interface (0)
-
-—
-
-## Intégrations (0)
-
-—
-
-## Données (0)
-
-—
+Aucun workflow trouvé pour : Asynchrone, Interface, Intégrations, Données.
 
 ## À vérifier
 

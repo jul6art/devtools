@@ -18,6 +18,10 @@ flowchart LR
   M["001_create_orders.sql"] --> T[("orders")]
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Table `orders` : `id INTEGER PRIMARY KEY`, `customer TEXT NOT NULL`.

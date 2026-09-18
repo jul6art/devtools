@@ -1,5 +1,5 @@
 # GET|POST /orders/new
-`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -50,26 +50,28 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Entité | `src/Entity/Order.php` |  |
-| Entité | `src/Entity/Product.php` |  |
-| Formulaire | `src/Form/OrderType.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Repository | `src/Repository/ProductRepository.php` |  |
-| Service | `src/Service/OrderPricing.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-| Template | `templates/base.html.twig` |  |
-| Template | `templates/order/_form.html.twig` |  |
-| Template | `templates/order/new.html.twig` |  |
+**`App\Entity\Order::status`**
 
-Paquets : `symfony/form` 7.4.19, `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19, `symfony/options-resolver` 7.4.8, `symfony/security-http` 7.4.19
+```mermaid
+flowchart TD
+  d1{"la commande n'a pas de client"}
+  d1 -->|oui| v1["status = draft"]
+  d1 -->|non| d2{"le produit n'a pas de prix"}
+  d2 -->|oui| v2["status = quoted"]
+  d2 -->|non| v3["status = priced"]
+```
+
+**`App\Entity\Order::currency`**
+
+```mermaid
+flowchart TD
+  d1{"pays de la commande"}
+  d1 -->|CH| v1["currency = CHF"]
+  d1 -->|GB| v2["currency = GBP"]
+  d1 -->|tout autre pays| v3["currency = EUR"]
+```
 
 ## Données
 
@@ -83,19 +85,12 @@ Paquets : `symfony/form` 7.4.19, `symfony/framework-bundle` 7.4.19, `symfony/htt
 
 Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le renseigne.
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
 - [`route.order.show`](order.show.md) — navigation
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

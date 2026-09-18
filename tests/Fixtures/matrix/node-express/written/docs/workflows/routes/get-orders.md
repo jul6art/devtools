@@ -32,13 +32,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `src/app.js` |  |
-| Contrôleur | `src/routes/orders.js` | point d'entrée |
-| Service | `src/services/orderService.js` |  |
+—
 
 ## Données
 
@@ -51,12 +47,6 @@ Lit le tableau `orders` gardé en mémoire par `src/services/orderService.js`.
 ## Points d'attention
 
 Le stockage est en mémoire : la liste est vide à chaque redémarrage et n'est pas partagée entre processus.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| orders.test.js | `test/orders.test.js` | — |
 
 ## Workflows liés
 

@@ -28,6 +28,10 @@ sequenceDiagram
   L-->>U: un lien par commande vers /orders/:id
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Lit des `Order` (`id`, `customer`) depuis l'API HTTP ; aucune écriture.

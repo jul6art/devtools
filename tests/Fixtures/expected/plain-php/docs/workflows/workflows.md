@@ -14,25 +14,11 @@ Stack : Php · 5 workflows · dernier scan : 2026-09-16
 - [cleanup](commands/cleanup.md) — `command.cleanup` · MAJ 2026-09-16
 - [import-orders](commands/import-orders.md) — `command.import-orders` · MAJ 2026-09-16
 
-## Asynchrone (0)
-
-—
-
-## Événements (0)
-
-—
-
-## Interface (0)
-
-—
-
-## Intégrations (0)
-
-—
-
 ## Données (1)
 
 - [Migrations](data/migrations.md) — `data.migrations` · MAJ 2026-09-16
+
+Aucun workflow trouvé pour : Asynchrone, Interface, Intégrations.
 
 ## À vérifier
 

@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -15,18 +15,7 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["POST /orders/{id}/validate"]
-  n2["Contrôleur · src/Controller/OrderController.php"]
-  n3["Entité · src/Entity/Order.php"]
-  n4["Repository · src/Repository/OrderRepository.php"]
-  n5["Autre · src/ValueObject/Money.php"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-```
+—
 
 ## Navigation / états
 
@@ -47,19 +36,9 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-
-Paquets : `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19, `symfony/security-http` 7.4.19, `symfony/workflow` 7.4.9
+—
 
 ## Données
 
@@ -67,23 +46,20 @@ Paquets : `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19, `
 
 ## Mécanismes transverses
 
-- [`event.locale-listener`](../events/locale-listener.md)
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 
 ## Points d'attention
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
 - [`route.order.show`](order.show.md) — navigation
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | initial |
+| 2026-09-16 | 65429e2 | initial |

@@ -1,5 +1,5 @@
 # GET /orders
-`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -40,20 +40,9 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-| Template | `templates/base.html.twig` |  |
-| Template | `templates/order/index.html.twig` |  |
-
-Paquets : `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19
+—
 
 ## Données
 
@@ -68,15 +57,8 @@ Lit toutes les `Order` du dépôt en mémoire `src/Repository/OrderRepository.ph
 Pas de pagination : le dépôt renvoie toutes les commandes. Le composant `CartSummary` rendu dans la page a son
 propre workflow (`ui.cart-summary`).
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderControllerTest | `tests/Controller/OrderControllerTest.php` | — |
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
 - [`route.order.new`](order.new.md) — navigation
 - [`route.order.show`](order.show.md) — navigation
 
@@ -84,4 +66,4 @@ propre workflow (`ui.cart-summary`).
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

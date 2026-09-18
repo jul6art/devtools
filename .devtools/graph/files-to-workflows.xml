@@ -2,6 +2,7 @@
 <files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
   <file path="src/Ai/ApplyResult.php">
     <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Ai/DraftApplier.php">
     <workflow ref="command.workflows.apply" relation="file"/>
@@ -35,6 +36,12 @@
   <file path="src/Command/InitCommand.php">
     <workflow ref="command.init" relation="file"/>
   </file>
+  <file path="src/Command/KnowledgeListCommand.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+  </file>
+  <file path="src/Command/KnowledgePromoteCommand.php">
+    <workflow ref="command.knowledge.promote" relation="file"/>
+  </file>
   <file path="src/Command/StackDetectCommand.php">
     <workflow ref="command.stack.detect" relation="file"/>
   </file>
@@ -45,21 +52,40 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Config/Config.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Config/ConfigReaderInterface.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Config/InvalidConfig.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Config/XmlConfigReader.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Console/ConsoleProgressReporter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Console/MemoryLimit.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Console/SummaryRenderer.php">
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
@@ -94,12 +120,14 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/DecisionKind.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/FileHasher.php">
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/FreshnessDecision.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/FreshnessResolver.php">
@@ -126,10 +154,16 @@
   <file path="src/Inspection/Graph/CoverageCalculator.php">
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
+  <file path="src/Inspection/Graph/DecisionExtractor.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Inspection/Graph/DependencyResolver.php">
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Graph/EntryPointCandidate.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/MechanismAttachment.php">
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Graph/PhpReferenceExtractor.php">
@@ -154,9 +188,14 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/InspectionReport.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Confidence.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/DecisionPoint.php">
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
@@ -171,6 +210,8 @@
   <file path="src/Inspection/Model/FileRef.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -178,6 +219,8 @@
   <file path="src/Inspection/Model/FileRole.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -189,12 +232,20 @@
   <file path="src/Inspection/Model/InvalidModel.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Model/Mechanism.php">
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/NonEmpty.php">
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -229,6 +280,8 @@
   </file>
   <file path="src/Inspection/Model/WorkflowId.php">
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -251,6 +304,8 @@
   </file>
   <file path="src/Inspection/Model/WorkflowType.php">
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -259,9 +314,17 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
+  <file path="src/Inspection/Progress/NullProgressReporter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Progress/ProgressReporter.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Project/PathOutsideProject.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -272,6 +335,8 @@
   <file path="src/Project/ProjectRoot.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -280,7 +345,6 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Rendering/Labels.php">
-    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Rendering/MarkdownWriter.php">
@@ -316,6 +380,8 @@
   <file path="src/Resources.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -339,15 +405,34 @@
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
+  <file path="src/Stack/Knowledge/DepositOutcome.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Stack/Knowledge/KnowledgeBrief.php">
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/KnowledgeCanvas.php">
+    <workflow ref="command.knowledge.promote" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/KnowledgeLibrary.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/KnowledgeProvider.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Stack/Knowledge/LibraryEntry.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php">
@@ -377,12 +462,16 @@
   <file path="src/Tracking/AtomicFileWriter.php">
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Tracking/DevToolsDirectory.php">
     <workflow ref="command.init" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -478,20 +567,28 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Version.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Xml/DomBuilder.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Xml/InvalidXml.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Xml/SafeXmlLoader.php">
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -503,6 +600,8 @@
   <file path="tests/Ai/PageRedactionTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
@@ -515,11 +614,22 @@
   </file>
   <file path="tests/Config/XmlConfigReaderTest.php">
     <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
+  </file>
+  <file path="tests/Console/MemoryLimitTest.php">
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Console/ProgressAndCountersTest.php">
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
   </file>
   <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
@@ -527,6 +637,8 @@
   <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
@@ -543,15 +655,28 @@
   <file path="tests/Project/ProjectRootTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
   </file>
   <file path="tests/Rendering/MenuRendererTest.php">
     <workflow ref="command.stack.detect" relation="test"/>
   </file>
+  <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
   <file path="tests/Stack/Knowledge/KnowledgeTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
@@ -559,15 +684,20 @@
   <file path="tests/Stack/StackDetectorTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
   </file>
   <file path="tests/Tracking/AtomicFileWriterTest.php">
     <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
   </file>
   <file path="tests/Tracking/InitializerTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
   </file>

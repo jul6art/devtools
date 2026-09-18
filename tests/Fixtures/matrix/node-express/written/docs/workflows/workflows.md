@@ -10,29 +10,7 @@ Stack : Express 4.21 · 3 workflows · dernier scan : 2026-09-16 (commit f2bd976
 - [GET /orders](routes/get-orders.md) — `route.get-orders` · MAJ 2026-09-16 · confiance moyenne
 - [POST /orders](routes/post-orders.md) — `route.post-orders` · MAJ 2026-09-16 · confiance moyenne
 
-## Commandes (0)
-
-—
-
-## Asynchrone (0)
-
-—
-
-## Événements (0)
-
-—
-
-## Interface (0)
-
-—
-
-## Intégrations (0)
-
-—
-
-## Données (0)
-
-—
+Aucun workflow trouvé pour : Commandes, Asynchrone, Interface, Intégrations, Données.
 
 ## À vérifier
 

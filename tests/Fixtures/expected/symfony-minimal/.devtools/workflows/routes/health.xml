@@ -26,9 +26,11 @@
     <package name="symfony/http-foundation" version="8.1.7"/>
     <package name="symfony/routing" version="8.1.6"/>
   </packages>
-  <depends-on>
-    <workflow ref="event.locale-listener"/>
-  </depends-on>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>

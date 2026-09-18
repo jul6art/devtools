@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Ai;
 
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Rendering\MarkdownWriter;
 use Jul6Art\DevTools\Rendering\PageSection;
 
 /**
@@ -52,6 +54,8 @@ final class PageDraftValidator
             $errors[] = \sprintf('"%s" must hold exactly one Mermaid sequenceDiagram or flowchart (line %d).', PageSection::Journey->value, $journey['line']);
         }
 
+        $errors = [...$errors, ...self::decisions($draft, $workflow)];
+
         foreach ([PageDraft::PRECONDITIONS, PageDraft::CHANGE] as $oneLine) {
             $section = $draft->sections[$oneLine] ?? null;
 
@@ -82,6 +86,50 @@ final class PageDraftValidator
 
         if ('' === ($draft->metadata['model'] ?? '')) {
             $errors[] = 'The front-matter must name the model that wrote the draft.';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * "Décisions" draws one flowchart per decided field (ADR-0043). What is checked is mechanical: a
+     * diagram is there, every field named exists in the model, and no decided field is left out.
+     *
+     * The **conditions** are deliberately not compared: rewriting them in business language is the work
+     * asked for, and a literal comparison would refuse exactly the drafts that did it well.
+     *
+     * @return list<string>
+     */
+    private static function decisions(PageDraft $draft, Workflow $workflow): array
+    {
+        $section = $draft->sections[PageSection::Decisions->value] ?? null;
+
+        if (null === $section || '' === $section['content'] || MarkdownWriter::EMPTY === $section['content']) {
+            return [] === $workflow->decisions
+                ? []
+                : [\sprintf('"%s" is empty while the model records %d decided value(s): draw one flowchart per field.', PageSection::Decisions->value, \count($workflow->decisions))];
+        }
+
+        if ([] === $workflow->decisions) {
+            return [\sprintf('"%s" must hold "%s": the model records no decided value for this workflow (line %d).', PageSection::Decisions->value, MarkdownWriter::EMPTY, $section['line'])];
+        }
+
+        $errors = [];
+
+        if (1 > preg_match_all('/^```mermaid\n\s*flowchart\b.*?^```$/ms', $section['content'])) {
+            $errors[] = \sprintf('"%s" must hold at least one Mermaid flowchart (line %d).', PageSection::Decisions->value, $section['line']);
+        }
+
+        $targets = array_values(array_unique(array_map(static fn (DecisionPoint $decision): string => $decision->target, $workflow->decisions)));
+        preg_match_all('/`([^`\s]+::[^`\s]+)`/', $section['content'], $matches);
+        $named = array_values(array_unique($matches[1]));
+
+        foreach (array_diff($named, $targets) as $unknown) {
+            $errors[] = \sprintf('`%s` is not a value this workflow decides (line %d): name only targets the model records.', $unknown, $section['line']);
+        }
+
+        foreach (array_diff($targets, $named) as $missing) {
+            $errors[] = \sprintf('`%s` is decided by this workflow and is not drawn (line %d).', $missing, $section['line']);
         }
 
         return $errors;

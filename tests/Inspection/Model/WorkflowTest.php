@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tests\Inspection\Model;
 
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
@@ -35,8 +37,10 @@ final class WorkflowTest extends TestCase
             array_map(static fn (FileRef $file): string => $file->path, $workflow->files),
         );
         self::assertSame(['doctrine/orm', 'symfony/form'], array_map(static fn (PackageRef $package): string => $package->name, $workflow->packages));
-        self::assertSame(['event.locale-listener', 'route.order.index'], array_map(strval(...), $workflow->dependsOn));
+        self::assertSame(['route.order.index', 'route.order.show'], array_map(strval(...), $workflow->dependsOn));
         self::assertSame(['app_order_index', 'app_order_show'], array_map(static fn (Edge $edge): string => $edge->target, $workflow->navigation));
+        self::assertSame([42, 45], array_map(static fn (DecisionPoint $decision): int => $decision->line, $workflow->decisions), 'Decisions are sorted by target, then file and line.');
+        self::assertSame(['App\\EventListener\\LocaleListener'], array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $workflow->mechanisms));
     }
 
     public function testItRejectsADuplicateFile(): void
@@ -94,15 +98,29 @@ final class WorkflowTest extends TestCase
         );
     }
 
-    public function testTheRegistryKnowsTheSevenNativeTypes(): void
+    /**
+     * Six, not the seven of specs § 4.2: `events` is gone (ADR-0043), a listener being a mechanism of the
+     * workflows it intercepts rather than a workflow of its own.
+     */
+    public function testTheRegistryKnowsTheSixNativeTypes(): void
     {
         $registry = new WorkflowTypeRegistry();
 
         self::assertSame(
-            ['routes', 'commands', 'async', 'events', 'ui', 'integrations', 'data'],
+            ['routes', 'commands', 'async', 'ui', 'integrations', 'data'],
             array_map(static fn (WorkflowType $type): string => $type->name, $registry->all()),
         );
-        self::assertSame('event', $registry->get('events')->idPrefix);
+        self::assertSame('async', $registry->get('async')->idPrefix);
+    }
+
+    public function testEventsIsNoLongerANativeTypeAndCanBeDeclaredAsACustomOne(): void
+    {
+        self::assertSame('event', WorkflowType::custom('events', 'event')->idPrefix);
+
+        $this->expectException(InvalidModel::class);
+        $this->expectExceptionMessage('"events"');
+
+        new WorkflowTypeRegistry()->get('events');
     }
 
     public function testTheRegistryRejectsAnUnknownType(): void

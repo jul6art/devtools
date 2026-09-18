@@ -37,9 +37,14 @@ final class MenuRendererTest extends TestCase
     {
         $menu = $this->menu();
 
-        foreach (['## Routes (1)', '## Commandes (1)', '## Asynchrone (0)', '## Événements (0)', '## Interface (0)', '## Intégrations (0)', '## Données (0)'] as $heading) {
+        foreach (['## Routes (1)', '## Commandes (1)'] as $heading) {
             self::assertStringContainsString($heading, $menu);
         }
+
+        // A type with no workflow does not take an empty section any more (ADR-0043); it is still named,
+        // so "none found" stays distinguishable from "not looked for".
+        self::assertStringNotContainsString('## Asynchrone', $menu);
+        self::assertStringContainsString('Aucun workflow trouvé pour : Asynchrone, Interface, Intégrations, Données.', $menu);
 
         self::assertStringContainsString('2 workflows', $menu);
     }

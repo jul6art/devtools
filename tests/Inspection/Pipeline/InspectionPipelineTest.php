@@ -34,7 +34,7 @@ final class InspectionPipelineTest extends TestCase
         $report = $this->pipeline()->run(new InspectionOptions($project));
 
         self::assertSame(0, $report->exitCode());
-        self::assertSame(6, $report->count('created'));
+        self::assertSame(5, $report->count('created'));
         self::assertFileExists($project.'/docs/workflows/routes/order.new.md');
         self::assertFileExists($project.'/.devtools/workflows/routes/order.new.xml');
         self::assertFileExists($project.'/.devtools/index.xml');
@@ -59,7 +59,7 @@ final class InspectionPipelineTest extends TestCase
             self::assertSame([], new PageParser()->parse((string) file_get_contents($page))->conformityProblems(), $page);
         }
 
-        self::assertCount(6, new XmlIndexStore(new WorkflowTypeRegistry())->read($project.'/.devtools/index.xml')->entries);
+        self::assertCount(5, new XmlIndexStore(new WorkflowTypeRegistry())->read($project.'/.devtools/index.xml')->entries);
     }
 
     public function testThePagesGoWhereTheOptionSaysAndTheIndexRemembersIt(): void
@@ -92,7 +92,7 @@ final class InspectionPipelineTest extends TestCase
         $report = $this->pipeline()->run(new InspectionOptions($project, dryRun: true));
 
         self::assertSame($before, self::tree($project));
-        self::assertSame(6, $report->count('created'));
+        self::assertSame(5, $report->count('created'));
         self::assertNull($report->path);
     }
 

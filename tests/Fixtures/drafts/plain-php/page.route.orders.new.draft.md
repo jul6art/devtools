@@ -28,6 +28,10 @@ sequenceDiagram
   P-->>U: Location: /index.php
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Écrit une ligne dans `orders` (colonne `customer`), par une requête préparée.

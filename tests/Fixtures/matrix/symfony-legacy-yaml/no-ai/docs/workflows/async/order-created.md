@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -16,35 +16,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["OrderCreated"]
-  n2["Handler · src/MessageHandler/OrderCreatedHandler.php"]
-  n3["Entité · src/Entity/Order.php"]
-  n4["Message · src/Message/OrderCreated.php"]
-  n5["Repository · src/Repository/OrderRepository.php"]
-  n6["Autre · src/ValueObject/Money.php"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-  n2 --> n6
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Entité | `src/Entity/Order.php` |  |
-| Message | `src/Message/OrderCreated.php` |  |
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` | point d'entrée |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
+—
 
 ## Données
 
@@ -58,10 +38,6 @@ flowchart TD
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -70,4 +46,4 @@ flowchart TD
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | initial |
+| 2026-09-16 | 65429e2 | initial |

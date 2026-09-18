@@ -1,5 +1,5 @@
 # GET /orders/{id}
-`route.order.show` · type : routes · dernière mise à jour : 2026-09-16 · commit : d3202e4
+`route.order.show` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
 
 ## Résumé
 
@@ -30,20 +30,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Contrôleur | `src/Controller/OrderController.php` | point d'entrée |
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-| Template | `templates/base.html.twig` |  |
-| Template | `templates/order/show.html.twig` |  |
-
-Paquets : `symfony/framework-bundle` 7.4.19, `symfony/http-foundation` 7.4.19
+—
 
 ## Données
 
@@ -58,16 +47,12 @@ Lit une `Order` dans `src/Repository/OrderRepository.php`.
 Un identifiant inconnu n'est pas traité : `get()` renvoie null et le template lit `order.customer` sur une
 valeur nulle, au lieu d'une réponse 404.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
+—
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d3202e4 | rédaction initiale |
+| 2026-09-16 | 65429e2 | rédaction initiale |

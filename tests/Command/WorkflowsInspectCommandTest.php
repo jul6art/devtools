@@ -27,7 +27,7 @@ final class WorkflowsInspectCommandTest extends TestCase
 
         self::assertSame(1, $tester->execute(['path' => $project], ['verbosity' => OutputInterface::VERBOSITY_NORMAL]));
         self::assertStringContainsString('console missing', $tester->getDisplay());
-        self::assertStringContainsString('Report: ', $tester->getDisplay());
+        self::assertStringContainsString('rapport ', $tester->getDisplay(), 'The summary names the report it wrote (ADR-0042).');
     }
 
     public function testTheFreshnessOptionsReachThePipeline(): void

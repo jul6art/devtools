@@ -1,5 +1,5 @@
 # GET /api/items
-`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 3442aca
+`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
 
 ## Résumé
 
@@ -28,11 +28,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Contrôleur | `api/src/Controller/ItemController.php` | point d'entrée |
+—
 
 ## Données
 
@@ -46,10 +44,6 @@ Aucun listener ni règle de sécurité n'est déclaré dans `api/`.
 
 Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du monorepo ne sont pas reliés.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -58,4 +52,4 @@ Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du mono
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 3442aca | rédaction initiale |
+| 2026-09-16 | 6ecdbd0 | rédaction initiale |

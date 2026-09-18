@@ -16,22 +16,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["App\Twig\Components\CartSummary"]
-  n2["Composant · src/Twig/Components/CartSummary.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Composant | `src/Twig/Components/CartSummary.php` | point d'entrée |
+—
 
 ## Données
 
@@ -42,10 +35,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

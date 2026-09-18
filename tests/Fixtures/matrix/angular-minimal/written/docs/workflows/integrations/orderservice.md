@@ -32,11 +32,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Service | `src/app/orders/order.service.ts` | point d'entrée |
+—
 
 ## Données
 
@@ -49,10 +47,6 @@ Aucun : ni intercepteur, ni cache, ni reprise sur erreur.
 ## Points d'attention
 
 Les réponses ne sont pas validées : le typage `Order` est une promesse, pas un contrôle.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

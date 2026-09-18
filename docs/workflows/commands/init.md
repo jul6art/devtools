@@ -1,11 +1,9 @@
 # init
-`command.init` · type : commands · dernière mise à jour : 2026-09-17 · commit : b334cfb
+`command.init` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
 
 ## Résumé
 
-`devtools init [path]` prépare le dossier `.devtools/` d'un projet : les dossiers de travail, le
-`config.xml` par défaut, une copie des schémas XSD et l'exclusion des zones de travail dans `.gitignore`.
-La commande est idempotente et liste ce qu'elle a changé.
+Crée le dossier `.devtools/` d'un projet et le prépare à être inspecté : la configuration commentée, les six sous-dossiers, la copie des XSD, et la ligne du `.gitignore` qui exclut les zones de travail. La commande est idempotente — elle n'écrase aucun fichier existant — et `workflows:inspect` l'appelle d'elle-même, si bien qu'on ne la lance à la main que pour lire la configuration avant le premier scan.
 
 ## Déclencheur
 
@@ -13,76 +11,52 @@ La commande est idempotente et liste ce qu'elle a changé.
 |---|---|
 | Point d'entrée | `init` (command) |
 | Sécurité | — |
-| Préconditions | Le chemin donné, ou le dossier courant, est un dossier existant. |
+| Préconditions | Le chemin donné est un dossier existant. |
 
 ## Parcours
 
 ```mermaid
 sequenceDiagram
   participant U as Développeur
-  participant C as InitCommand
+  participant C as init
   participant I as Initializer
-  participant W as AtomicFileWriter
-  U->>C: devtools init [path]
-  C->>I: initialize(DevToolsDirectory)
-  I->>I: crée .devtools/ et ses dossiers manquants
-  I->>W: config.xml (seulement s'il n'existe pas)
-  I->>W: schemas/*.xsd (si différents)
-  I->>W: .gitignore (zones de travail)
-  I-->>C: liste des changements
-  C-->>U: liste, ou « nothing changed »
+  participant P as Projet
+  U->>C: devtools init .
+  C->>I: initialize(.devtools)
+  I->>P: config.xml, dossiers, schémas
+  I->>P: .gitignore += pending/, reports/
+  I-->>C: la liste de ce qui a changé
+  C-->>U: créé, ou déjà en place
 ```
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `src/Command/InitCommand.php` | point d'entrée |
-| Autre | `src/Inspection/Model/FileRef.php` |  |
-| Autre | `src/Inspection/Model/FileRole.php` |  |
-| Autre | `src/Inspection/Model/InvalidModel.php` |  |
-| Autre | `src/Inspection/Model/NonEmpty.php` |  |
-| Autre | `src/Inspection/Model/WorkflowId.php` |  |
-| Autre | `src/Inspection/Model/WorkflowType.php` |  |
-| Autre | `src/Project/PathOutsideProject.php` |  |
-| Autre | `src/Project/ProjectRoot.php` |  |
-| Autre | `src/Resources.php` |  |
-| Autre | `src/Tracking/AtomicFileWriter.php` |  |
-| Autre | `src/Tracking/DevToolsDirectory.php` |  |
-| Autre | `src/Tracking/Initializer.php` |  |
+**`Jul6Art\DevTools\Command\InitCommand::execute`**
 
-Paquets : `symfony/console` 8.1.7, `symfony/filesystem` 8.1.6
+```mermaid
+flowchart TD
+  d1{"le chemin n'est pas un dossier"}
+  d1 -->|oui| v1["INVALID — rien n'est écrit"]
+  d1 -->|non| d2{"tout était déjà en place"}
+  d2 -->|oui| v2["SUCCESS — aucun fichier touché"]
+  d2 -->|non| v3["SUCCESS — les fichiers créés sont listés"]
+```
 
 ## Données
 
-Écrit dans le projet analysé : .devtools/config.xml, `.devtools/schemas/`, `.gitignore`. Rien n'est lu
-du code du projet.
+Écrit la configuration du projet, `.devtools/schemas/`, les dossiers du § 4.4 et le `.gitignore` du projet. Ne lit rien du code.
 
 ## Mécanismes transverses
 
-`ProjectRoot` refuse tout chemin hors du projet, liens symboliques compris ; `AtomicFileWriter` écrit
-par fichier temporaire puis renommage, et n'écrit pas un contenu identique.
+Aucun : la commande ne traverse pas le projet, elle le prépare.
 
 ## Points d'attention
 
-Le `config.xml` d'un projet n'est jamais réécrit, même s'il diffère du modèle livré : une nouvelle option
-n'y apparaît pas d'elle-même. Les schémas, eux, sont toujours remis à jour.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| PageRedactionTest | `tests/Ai/PageRedactionTest.php` | — |
-| ClaudeDrivenTest | `tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php` | — |
-| GenericPhpAdapterTest | `tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php` | — |
-| ProjectRootTest | `tests/Project/ProjectRootTest.php` | — |
-| KnowledgeTest | `tests/Stack/Knowledge/KnowledgeTest.php` | — |
-| StackDetectorTest | `tests/Stack/StackDetectorTest.php` | — |
-| InitializerTest | `tests/Tracking/InitializerTest.php` | — |
+Le `.gitignore` appartient au projet : `init` y ajoute deux lignes et ne le réécrit jamais. Après la première inspection, le dépôt est donc « sale » pour git, et c'est exact.
 
 ## Workflows liés
 
@@ -92,8 +66,4 @@ n'y apparaît pas d'elle-même. Les schémas, eux, sont toujours remis à jour.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-17 | a3b1c1b | rédaction initiale |
-| 2026-09-17 | 8f7ea01 | files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php |
-| 2026-09-17 | 66f5ede | files changed: src/Tracking/DevToolsDirectory.php |
-| 2026-09-17 | 66f5ede | forced |
-| 2026-09-17 | b334cfb | forced |
+| 2026-09-18 | b8049a4 | rédaction initiale |

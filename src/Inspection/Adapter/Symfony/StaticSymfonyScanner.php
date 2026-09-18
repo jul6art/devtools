@@ -14,8 +14,11 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -39,6 +42,8 @@ final class StaticSymfonyScanner
     private const string HANDLER = 'Symfony\Component\Messenger\Attribute\AsMessageHandler';
 
     private const string LISTENER = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
+
+    private const string ENTITY_LISTENER = 'Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener';
 
     private const string IS_GRANTED = 'Symfony\Component\Security\Http\Attribute\IsGranted';
 
@@ -133,18 +138,18 @@ final class StaticSymfonyScanner
     }
 
     /**
-     * @return array<string, list<array{event: string, method: string}>>
+     * @return array<string, list<array{event: string, method: string, priority: int|null}>>
      */
     public function listeners(): array
     {
         $listeners = [];
 
         foreach ($this->classes() as $name => ['class' => $class]) {
-            foreach ($this->attributes($class->attrGroups, [self::LISTENER]) as $attribute) {
+            foreach ($this->attributes($class->attrGroups, [self::LISTENER, self::ENTITY_LISTENER]) as $attribute) {
                 $event = self::stringArgument($attribute, 0, 'event');
 
                 if (null !== $event) {
-                    $listeners[$name][] = ['event' => $event, 'method' => self::stringArgument($attribute, -1, 'method') ?? '__invoke'];
+                    $listeners[$name][] = ['event' => $event, 'method' => self::stringArgument($attribute, -1, 'method') ?? '__invoke', 'priority' => self::integerArgument($attribute, -1, 'priority')];
                 }
             }
 
@@ -153,13 +158,43 @@ final class StaticSymfonyScanner
                     $event = self::stringArgument($attribute, 0, 'event') ?? $this->firstParameterType($method);
 
                     if (null !== $event) {
-                        $listeners[$name][] = ['event' => $event, 'method' => $method->name->toString()];
+                        $listeners[$name][] = ['event' => $event, 'method' => $method->name->toString(), 'priority' => self::integerArgument($attribute, -1, 'priority')];
                     }
                 }
             }
         }
 
         return $listeners;
+    }
+
+    /**
+     * The entities a `#[AsEntityListener(entity: X::class)]` declares: what turns a Doctrine listener from
+     * "runs on any entity" into "runs on this one" (ADR-0043).
+     *
+     * @return list<string> fully qualified, sorted
+     */
+    public function entityListenerTargets(string $class): array
+    {
+        $declaration = $this->classes()[ltrim($class, '\\')]['class'] ?? null;
+
+        if (!$declaration instanceof ClassLike) {
+            return [];
+        }
+
+        $entities = [];
+
+        foreach ($this->attributes($declaration->attrGroups, [self::ENTITY_LISTENER]) as $attribute) {
+            $entity = self::argument($attribute, -1, 'entity');
+
+            if ($entity instanceof ClassConstFetch && $entity->class instanceof Name) {
+                $entities[] = $entity->class->toString();
+            }
+        }
+
+        $entities = array_values(array_unique($entities));
+        sort($entities, \SORT_STRING);
+
+        return $entities;
     }
 
     /**
@@ -368,6 +403,18 @@ final class StaticSymfonyScanner
         }
 
         return null;
+    }
+
+    private static function integerArgument(Attribute $attribute, int $position, string $name): ?int
+    {
+        $value = self::argument($attribute, $position, $name);
+
+        if ($value instanceof Int_) {
+            return $value->value;
+        }
+
+        // A negative priority is a unary minus around the literal, not a literal of its own.
+        return $value instanceof UnaryMinus && $value->expr instanceof Int_ ? -$value->expr->value : null;
     }
 
     private static function stringArgument(Attribute $attribute, int $position, string $name): ?string

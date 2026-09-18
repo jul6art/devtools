@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tracking;
 
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\SortedList;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
@@ -48,17 +50,29 @@ final readonly class TrackingDocument
     public array $dependsOn;
 
     /**
+     * @var list<DecisionPoint>
+     */
+    public array $decisions;
+
+    /**
+     * @var list<Mechanism>
+     */
+    public array $mechanisms;
+
+    /**
      * @var non-empty-list<Revision>
      */
     public array $history;
 
     /**
-     * @param list<EntryPoint>  $satellites
-     * @param list<TrackedFile> $files
-     * @param list<FileRef>     $tests
-     * @param list<PackageRef>  $packages
-     * @param list<WorkflowId>  $dependsOn
-     * @param list<Revision>    $history    oldest first
+     * @param list<EntryPoint>    $satellites
+     * @param list<TrackedFile>   $files
+     * @param list<FileRef>       $tests
+     * @param list<PackageRef>    $packages
+     * @param list<WorkflowId>    $dependsOn
+     * @param list<Revision>      $history    oldest first
+     * @param list<DecisionPoint> $decisions  the values this workflow decides (ADR-0043)
+     * @param list<Mechanism>     $mechanisms what runs inside it without being a workflow (ADR-0043)
      */
     public function __construct(
         public WorkflowId $id,
@@ -76,6 +90,8 @@ final readonly class TrackingDocument
         public WorkflowSource $producer = new WorkflowSource('claude'),
         public TrackingStatus $status = TrackingStatus::Fresh,
         array $history = [],
+        array $decisions = [],
+        array $mechanisms = [],
     ) {
         if ($id->prefix() !== $type->idPrefix) {
             throw new InvalidModel(\sprintf('The tracked workflow "%s" is of type "%s": its identifier must start with "%s".', $id, $type->name, $type->idPrefix));
@@ -96,6 +112,8 @@ final readonly class TrackingDocument
         $this->tests = SortedList::of($tests, static fn (FileRef $test): string => $test->path, \sprintf('test of "%s"', $id));
         $this->packages = SortedList::of($packages, static fn (PackageRef $package): string => $package->name, \sprintf('package of "%s"', $id));
         $this->dependsOn = SortedList::of($dependsOn, static fn (WorkflowId $dependency): string => $dependency->value, \sprintf('dependency of "%s"', $id));
+        $this->decisions = SortedList::of($decisions, static fn (DecisionPoint $decision): string => $decision->sortKey(), \sprintf('decision of "%s"', $id));
+        $this->mechanisms = SortedList::of($mechanisms, static fn (Mechanism $mechanism): string => $mechanism->sortKey(), \sprintf('mechanism of "%s"', $id));
         $this->history = $history;
     }
 

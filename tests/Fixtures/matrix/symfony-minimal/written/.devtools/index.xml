@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
-  <source vcs="git" commit="67536258059f0b116bc211724ab699620d1c0a2a" branch="main" dirty="true"/>
+  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
   <workflow id="async.order-created" type="async" title="OrderCreated" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="async/order-created.md"/>
   <workflow id="command.app.import-catalog" type="commands" title="app:import-catalog" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="commands/app.import-catalog.md"/>
   <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="data/migrations.md"/>
-  <workflow id="event.locale-listener" type="events" title="kernel.request → LocaleListener" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="events/locale-listener.md"/>
   <workflow id="route.health" type="routes" title="GET /health" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/health.md"/>
   <workflow id="route.order.index" type="routes" title="GET /orders" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/order.index.md"/>
   <workflow id="route.order.new" type="routes" title="GET|POST /orders/new" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/order.new.md"/>

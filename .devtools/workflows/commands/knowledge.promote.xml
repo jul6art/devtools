@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.knowledge.promote" type="commands" schema-version="1">
+  <title>knowledge:promote</title>
+  <generated at="2026-09-18T11:35:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" branch="master" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="command" name="knowledge:promote" role="main">
+      <declared-in path="src/Command/KnowledgePromoteCommand.php" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/Command/KnowledgePromoteCommand.php" role="other" sha256="d428c486f569f378fc09c67818e915a9e73387cc60a1757ec2c617c83e4d230b"/>
+    <file path="src/Config/Config.php" role="other" sha256="dd73cf356e4b9d738a893448b578dc61d916ca4ab72d75c3f1384bcec28b1362"/>
+    <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
+    <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
+    <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
+    <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
+    <file path="src/Inspection/Model/InvalidModel.php" role="other" sha256="ea5d752b174d526cd64e79f3c4c3ac2a8f3bdbaaeb77a17934591b2373174e0c"/>
+    <file path="src/Inspection/Model/NonEmpty.php" role="other" sha256="4fc8a417d0ba527b0e758172fc6f2b72040a0d9c4bd1fb9a39f648de34a8e956"/>
+    <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
+    <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
+    <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
+    <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
+    <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
+    <file path="src/Stack/Knowledge/DepositOutcome.php" role="other" sha256="b5960860a59b3caead90903b300988eaca9bc227d2ba39af36b5114eb2c23005"/>
+    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="1c6bf65d2aa2f2e01194f730c67877b8e33f5eeaaaebeb7d0fa7fb04983a6c4b"/>
+    <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="2414179d85e5038390d1bc75b303dc39f37a53074f9843aafa01a93502755c81"/>
+    <file path="src/Stack/Knowledge/LibraryEntry.php" role="other" sha256="c9391caf7927c28cd247391c76164c71b0fec89e681072dc19f50d5cf56e44a6"/>
+    <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="c3c3057cf1bde08f9fc1277ca2194efad244d1d74955cffc20987690270f5414"/>
+    <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
+    <file path="src/Xml/DomBuilder.php" role="other" sha256="8c885bf525d746d7acc2420a96705922d6680125f9be2eb330cede798d017b6d"/>
+    <file path="src/Xml/InvalidXml.php" role="other" sha256="5e6a85caa327cf77f737c259704f9bb5bfe87474b53fcad0286b483cc53cc966"/>
+    <file path="src/Xml/SafeXmlLoader.php" role="other" sha256="51e2eb73f63ffa9f8df23d86d093f70792327debf08c5a1acd3daf7539e4d7d0"/>
+  </files>
+  <tests>
+    <file path="tests/Ai/PageRedactionTest.php" role="test"/>
+    <file path="tests/Config/XmlConfigReaderTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
+    <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
+    <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
+    <file path="tests/Stack/StackDetectorTest.php" role="test"/>
+    <file path="tests/Tracking/AtomicFileWriterTest.php" role="test"/>
+    <file path="tests/Tracking/InitializerTest.php" role="test"/>
+  </tests>
+  <packages>
+    <package name="symfony/console" version="8.1.7"/>
+    <package name="symfony/filesystem" version="8.1.6"/>
+  </packages>
+  <decisions>
+    <decision target="Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="!\Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::embeddedIsWritable()" file="src/Command/KnowledgePromoteCommand.php" line="56" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="is_file($target)" file="src/Command/KnowledgePromoteCommand.php" line="64" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="null === $source" file="src/Command/KnowledgePromoteCommand.php" line="72" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="[] !== $problems" file="src/Command/KnowledgePromoteCommand.php" line="81" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/KnowledgePromoteCommand.php" line="87" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="$this-&gt;has($key)" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="135" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="139" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="147" confidence="high"/>
+    <decision target="element::textContent" value="$text" condition="null !== $text" file="src/Xml/DomBuilder.php" line="45" confidence="medium"/>
+  </decisions>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
+  </history>
+</workflow>

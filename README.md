@@ -190,13 +190,22 @@ bin/console devtools:workflows:inspect           # through the bundle, the appli
 ```
 
 ```
- --------- --------- ----------- ----------
-  Created   Updated   Unchanged   Orphaned
- --------- --------- ----------- ----------
-  10        0         0           0
- --------- --------- ----------- ----------
- Report: .devtools/reports/inspect-2026-09-16-150000.md
+ DevTools — cereezer                                        Symfony 7.4
+
+ ✔ 84 workflows      12 créés · 3 mis à jour · 69 inchangés · 0 orphelins
+ ✔ 1 247 fichiers parcourus · 412 hachés · 3 processus git · 4 appels console
+ ✔ 15 briefs écrits pour Claude · 152 Ko (~38 000 tokens estimés)
+ ⚠ 1 repli statique (symfony @ .)
+
+ Durée 12,4 s · mémoire 214 Mo · rapport .devtools/reports/inspect-2026-09-16-150000.md
 ```
+
+A progress bar shows each stage while it runs, and the summary is green, yellow or red — the colour of
+the exit code. Nothing is drawn when the output is not a terminal (CI, redirection), and `--quiet`
+writes nothing at all. The same measurements are repeated at the bottom of the report.
+
+The token figure is an **estimate** of what the redaction will cost, four bytes per token: DevTools never
+calls Claude, so it has no token to measure.
 
 It writes one page and one tracking file per workflow, `index.xml`, `graph/`, and `workflows.md`, the
 page to open first. Commit all of it; the report stays out of git.
@@ -260,6 +269,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<routes group="controller"/>` | `entry-point` | one workflow per route, or one per controller with its routes as triggers |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language of the pages Claude writes; `--locale` wins over it |
+| `<knowledge library="…" share="true"/>` | see *Knowledge* | where the shared stack knowledge lives, and whether a new sheet is deposited there |
 
 What a workflow contains
 ------------------------
@@ -292,27 +302,65 @@ whose name is computed, a class built from a string. Such files appear under "No
 The pages
 ---------
 
-Every workflow page has the same eleven sections, in the same order — which is what makes pages
-parsable, diffable, and comparable across stacks:
+Every workflow page has the same ten sections, in the same order — which is what makes pages parsable,
+diffable, and comparable across stacks:
 
 | Section | Written by | Without Claude |
 | --- | --- | --- |
 | Résumé | Claude | — |
 | Déclencheur | DevTools (the *Préconditions* row: Claude) | entry point, satellites, security |
-| Parcours | Claude | a diagram of the entry point and the files it reaches |
+| Parcours | Claude | — |
 | Navigation / états | DevTools | where the workflow leads, and its state machine |
-| Composants impliqués | DevTools | every file with its role, and the packages |
+| Décisions | Claude, from the model | — |
 | Données | Claude | — |
-| Mécanismes transverses | Claude | the listeners it depends on |
+| Mécanismes transverses | DevTools, enriched by Claude | the listeners that run inside it, and what they write |
 | Points d'attention | Claude | — |
-| Tests existants | DevTools | the tests found |
 | Workflows liés | DevTools | dependencies and navigation, linked |
 | Historique | DevTools | one line per rewrite, never rewritten |
 
+⚠️ **The page lists neither the files nor the tests of the workflow.** They live in its tracking file,
+`.devtools/workflows/<type>/<id>.xml`, which is what links the workflow to its code and what freshness
+reads. On a real project those two tables were 250 of a page's 344 lines.
+
 ⚠️ **A section DevTools writes is regenerated from the code on every rewrite** — a fact corrected by hand
 there is lost; fix it where it comes from. What Claude wrote survives factual rewrites. `workflows.md`
-lists every workflow by type with its counter, even at zero, then two sections that are never hidden:
-*À vérifier* (stale, orphaned, waiting for Claude) and *Non couvert* (source files no workflow reaches).
+lists every workflow by type with its counter, names in one line the types with no workflow at all, then
+two sections that are never hidden: *À vérifier* (stale, orphaned, waiting for Claude) and *Non couvert*
+(source files no workflow reaches).
+
+### Décisions — the diagram that answers "why this value?"
+
+A flowchart of the files a route reaches restates a table; a flowchart of the **logic that gives a field
+one value rather than another** answers the only question a reader really has. DevTools extracts those
+decision points from the code it already parsed — a property written under an `if`, an `elseif`, a
+`match`, a ternary or a `??`, a method returning an enumeration case — and records them in the model and
+the tracking file:
+
+```xml
+<decisions>
+  <decision target="App\Entity\Order::status" value="'priced'"
+            condition="!('' === $order-&gt;customer || null === $order-&gt;total)"
+            file="src/Service/OrderPricing.php" line="29" confidence="high"/>
+</decisions>
+```
+
+Claude turns them into one diagram per field, conditions rewritten in business language; a draft is
+refused when it names a field the model does not record, or leaves one out.
+
+**An assignment written once with no condition is not a decision**, it is a default: only a field whose
+value depends on something is kept. A receiver DevTools cannot type is recorded at `confidence="medium"`
+under the name as written — named, never invented. Extraction stops at three nested conditions and fifty
+points per workflow, and says so rather than pretending the model is whole.
+
+### Listeners are mechanisms, not workflows
+
+A listener has no page of its own: what a reader wants to know is what it can do **during a given
+workflow**. Kernel listeners run inside every route, console listeners inside every command, a Doctrine
+listener targeting an entity inside the workflows that reach it — each with its event, its priority and
+the fields it writes, in *Mécanismes transverses*.
+
+⚠️ There is therefore **no `events` workflow type**, against the seven of the specs. A project that wants
+such pages declares a custom type in `config.xml`.
 
 Writing with Claude Code
 ------------------------
@@ -342,19 +390,40 @@ after its brief was written. A refused draft changes nothing and stays in `pendi
 `--no-ai` writes no brief: factual pages only, the mode for CI. What Claude wrote survives later factual
 rewrites; a workflow whose files change gets a new brief.
 
-**Knowledge of the stack.** A page is never written without knowing how its framework works.
-`.devtools/knowledge/<stack>-<major>.md` answers that — the request cycle, the extension mechanisms, where
-each kind of entry point is declared, the traps — following a fixed canvas. DevTools ships Symfony 7 and 8
-and copies the one a project uses on its first run; for any other stack, the run writes a knowledge brief,
-Claude consults the framework's official documentation and writes the file, and the page briefs of that
-stack follow on the next run. The file belongs to the project from then on: edit it, it is never
-overwritten.
-
 ⚠️ **Briefs live in `.devtools/pending/`, ignored by git**: they are recomputed on every run and quote
 absolute paths of the machine.
 
-`tests/Fixtures/demo/symfony-minimal/.devtools/` is the output of a real session on the fixture
-application.
+`tests/Fixtures/demo/symfony-minimal/` is the output of a real session on the fixture application.
+
+Knowledge of the stack
+----------------------
+
+A page is never written without knowing how its framework works. `.devtools/knowledge/<stack>-<major>.md`
+answers that — the request cycle, the extension mechanisms, where each kind of entry point is declared,
+the traps — following a fixed canvas. A sheet is generic per stack and major version, so it is written
+once and read by every project after that. DevTools looks for it in this order:
+
+1. `.devtools/knowledge/<key>.md` of the project — always wins, versioned, never overwritten;
+2. the **shared library**, which every project on this machine feeds;
+3. the knowledge DevTools ships (Symfony 7 and 8 today);
+4. failing all three, the run writes a knowledge brief, Claude consults the framework's official
+   documentation and writes the file, and the page briefs of that stack follow on the next run.
+
+Whichever answers is copied into the project, which commits what it actually used.
+
+**Where the library lives**, in order: `DEVTOOLS_KNOWLEDGE_HOME`, then `<knowledge library="…"/>` of
+`config.xml`, then `resources/knowledge/` of DevTools itself when it runs from a source checkout — the
+folder grows — and otherwise `$XDG_DATA_HOME/devtools/knowledge` or `~/.devtools/knowledge`. A package
+installed under `vendor/` is never written to.
+
+```shell
+vendor/bin/devtools knowledge:list                 # where the library is, and what it holds
+vendor/bin/devtools knowledge:promote angular-18   # copy a sheet into what DevTools ships, for a PR
+```
+
+A sheet is deposited only after it passed the canvas, and **a sheet already in the library is never
+overwritten** — correct it where it lives. `<knowledge share="false"/>`, or `workflows:apply --no-share`,
+turns the deposit off; a library nobody can write to is a warning, not a failure.
 
 Symfony projects
 ----------------
@@ -450,7 +519,8 @@ Structure
 bin/devtools                 standalone entry point
 src/
 ├── Console/                 the console application every command is registered in
-├── Command/                 init, stack:detect, workflows:inspect, workflows:apply, claude:install
+├── Command/                 init, stack:detect, workflows:inspect, workflows:apply,
+│                            claude:install, knowledge:list, knowledge:promote
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read

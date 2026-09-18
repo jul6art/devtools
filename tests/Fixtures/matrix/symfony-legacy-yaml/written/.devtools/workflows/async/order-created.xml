@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="async.order-created" type="async" schema-version="1">
   <title>OrderCreated</title>
-  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
-  <source vcs="git" commit="d3202e46755a95d4fce8abf8b78a063f8cd1811c" branch="main" dirty="true"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="message-handler" name="App\MessageHandler\OrderCreatedHandler" role="main">
       <declared-in path="src/MessageHandler/OrderCreatedHandler.php" role="handler"/>
@@ -11,7 +11,7 @@
   </entrypoints>
   <files>
     <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
-    <file path="src/Entity/Order.php" role="entity" sha256="f2e57ab0209aa9a2ec218a71ec55a2f753fa0fc7d2236fe2b65d8119f56f94dd"/>
+    <file path="src/Entity/Order.php" role="entity" sha256="a731872e1c48bf879742d5cbd18b95940ea3bb4e252e502ec6850af9396664fc"/>
     <file path="src/Message/OrderCreated.php" role="message" sha256="e836d9619343232809a3b4ec701bd00a981339cfe3db4af44a4c3b393584cc00"/>
     <file path="src/MessageHandler/OrderCreatedHandler.php" role="handler" sha256="f3efb2512edbd54367ccc9276b0329070e3abbcd6a8939be4cc215dac7550fc2"/>
     <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
@@ -21,6 +21,6 @@
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="d3202e46755a95d4fce8abf8b78a063f8cd1811c" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" reason="rédaction initiale"/>
   </history>
 </workflow>

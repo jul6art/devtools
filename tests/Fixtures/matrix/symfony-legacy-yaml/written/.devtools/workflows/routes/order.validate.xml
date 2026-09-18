@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.validate" type="routes" schema-version="1">
   <title>POST /orders/{id}/validate</title>
-  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/1"/>
-  <source vcs="git" commit="d3202e46755a95d4fce8abf8b78a063f8cd1811c" branch="main" dirty="true"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="app_order_validate" role="main">
       <declared-in path="src/Controller/OrderController.php" role="controller"/>
@@ -16,7 +16,7 @@
     <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
     <file path="config/routes.yaml" role="config" sha256="877e010ec7cda9c3bb1936514124beaac76c6fe353563303ee79133c52e5810a"/>
     <file path="src/Controller/OrderController.php" role="controller" sha256="b6fcbeeb1a8cef7a27cd55ade0723206bca441e6284a4078f44b986f55534a2f"/>
-    <file path="src/Entity/Order.php" role="entity" sha256="f2e57ab0209aa9a2ec218a71ec55a2f753fa0fc7d2236fe2b65d8119f56f94dd"/>
+    <file path="src/Entity/Order.php" role="entity" sha256="a731872e1c48bf879742d5cbd18b95940ea3bb4e252e502ec6850af9396664fc"/>
     <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
     <file path="src/ValueObject/Money.php" role="other" sha256="1379a114fadb49a067c3023379b8ec9b8d68080e574f006c98278df245076b15"/>
   </files>
@@ -26,13 +26,15 @@
     <package name="symfony/security-http" version="7.4.19"/>
     <package name="symfony/workflow" version="7.4.9"/>
   </packages>
-  <depends-on>
-    <workflow ref="event.locale-listener"/>
-  </depends-on>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="d3202e46755a95d4fce8abf8b78a063f8cd1811c" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" reason="rédaction initiale"/>
   </history>
 </workflow>

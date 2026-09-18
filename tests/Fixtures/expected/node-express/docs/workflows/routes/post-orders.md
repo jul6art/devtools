@@ -15,26 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["POST /orders"]
-  n2["Contrôleur · src/routes/orders.js"]
-  n3["Service · src/services/orderService.js"]
-  n1 --> n2
-  n2 --> n3
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `src/app.js` |  |
-| Contrôleur | `src/routes/orders.js` | point d'entrée |
-| Service | `src/services/orderService.js` |  |
+—
 
 ## Données
 
@@ -45,10 +34,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

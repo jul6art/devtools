@@ -37,7 +37,7 @@ final class ContainerTest extends AbstractFunctionalTestCase
         self::assertInstanceOf(CommandLoaderInterface::class, $loader);
         $names = array_values(array_filter($loader->getNames(), static fn (string $name): bool => str_starts_with($name, 'devtools:')));
         sort($names);
-        self::assertSame(['devtools:claude:install', 'devtools:init', 'devtools:stack:detect', 'devtools:workflows:apply', 'devtools:workflows:inspect'], $names);
+        self::assertSame(['devtools:claude:install', 'devtools:init', 'devtools:knowledge:list', 'devtools:knowledge:promote', 'devtools:stack:detect', 'devtools:workflows:apply', 'devtools:workflows:inspect'], $names);
     }
 
     public function testTheConfiguredLanguageReachesTheInspectionCommand(): void

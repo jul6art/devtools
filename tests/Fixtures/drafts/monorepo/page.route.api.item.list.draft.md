@@ -22,6 +22,10 @@ sequenceDiagram
   I-->>C: 200 []
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Aucune : la réponse est un tableau vide construit en dur.

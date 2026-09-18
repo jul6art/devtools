@@ -24,11 +24,9 @@ flowchart LR
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Autre | `migrations/001_create_orders.sql` | point d'entrée |
+—
 
 ## Données
 
@@ -42,10 +40,6 @@ mémoire.
 ## Points d'attention
 
 Rien n'indique quelles migrations ont été jouées sur une base existante.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

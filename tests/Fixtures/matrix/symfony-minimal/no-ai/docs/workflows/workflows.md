@@ -1,6 +1,6 @@
 # Workflows — acme/symfony-minimal
 
-Stack : Symfony 8.1 · 10 workflows · dernier scan : 2026-09-16 (commit 6753625)
+Stack : Symfony 8.1 · 9 workflows · dernier scan : 2026-09-16 (commit d15a772)
 
 [Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-8](../../.devtools/knowledge/symfony-8.md)
 
@@ -20,21 +20,15 @@ Stack : Symfony 8.1 · 10 workflows · dernier scan : 2026-09-16 (commit 6753625
 
 - [OrderCreated](async/order-created.md) — `async.order-created` · MAJ 2026-09-16
 
-## Événements (1)
-
-- [kernel.request → LocaleListener](events/locale-listener.md) — `event.locale-listener` · MAJ 2026-09-16
-
 ## Interface (1)
 
 - [CartSummary](ui/cart-summary.md) — `ui.cart-summary` · MAJ 2026-09-16
 
-## Intégrations (0)
-
-—
-
 ## Données (1)
 
 - [Migrations](data/migrations.md) — `data.migrations` · MAJ 2026-09-16
+
+Aucun workflow trouvé pour : Intégrations.
 
 ## À vérifier
 
@@ -42,5 +36,6 @@ Stack : Symfony 8.1 · 10 workflows · dernier scan : 2026-09-16 (commit 6753625
 
 ## Non couvert
 
+- `src/EventListener/LocaleListener.php` — aucun workflow ne référence ce fichier
 - `src/Kernel.php` — aucun workflow ne référence ce fichier
 - `src/Util/StringHelper.php` — aucun workflow ne référence ce fichier

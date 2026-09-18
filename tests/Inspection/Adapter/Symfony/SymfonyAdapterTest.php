@@ -17,6 +17,7 @@ use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\InspectionResult;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\Transition;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Tests\Inspection\Graph\GraphFixture;
@@ -33,7 +34,6 @@ final class SymfonyAdapterTest extends TestCase
         'async.order-created',
         'command.app.import-catalog',
         'data.migrations',
-        'event.locale-listener',
         'route.health',
         'route.order.index',
         'route.order.new',
@@ -94,15 +94,33 @@ final class SymfonyAdapterTest extends TestCase
         self::assertNull($this->workflow($result, 'route.order.index')->states);
     }
 
-    public function testEveryRouteDependsOnTheProjectsKernelListeners(): void
+    /**
+     * A kernel listener runs inside every route, so it is a mechanism of each of them — not a workflow
+     * of its own with a page nobody opens (ADR-0043).
+     */
+    public function testEveryRouteCarriesTheProjectsKernelListenersAsMechanisms(): void
     {
         [$result] = $this->inspect(new RecordedConsoleRunner());
 
         foreach ($result->workflows as $workflow) {
             if ('routes' === $workflow->type->name) {
-                self::assertSame(['event.locale-listener'], array_map(strval(...), $workflow->dependsOn), (string) $workflow->id);
+                self::assertSame(
+                    ['App\\EventListener\\LocaleListener'],
+                    array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $workflow->mechanisms),
+                    (string) $workflow->id,
+                );
+                self::assertSame('kernel.request', $workflow->mechanisms[0]->event);
             }
         }
+
+        self::assertSame([], $this->workflow($result, 'command.app.import-catalog')->mechanisms, 'A kernel listener does not run inside a command.');
+    }
+
+    public function testNoWorkflowOfTypeEventsIsProducedAnyMore(): void
+    {
+        [$result] = $this->inspect(new RecordedConsoleRunner());
+
+        self::assertSame([], array_values(array_filter(array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $result->workflows), static fn (string $id): bool => str_starts_with($id, 'event.'))));
     }
 
     public function testATestRequestingTheRoutesLiteralPathIsOneOfItsTests(): void
@@ -177,7 +195,7 @@ final class SymfonyAdapterTest extends TestCase
         $extractor = new PhpReferenceExtractor();
         $adapter = new SymfonyAdapter($runner)->extract($root, $stack, new Config(), $extractor);
 
-        return [new WorkflowBuilder(new Config())->build($root, $stack, $adapter->candidates, $adapter->templateDirectories, $extractor)->result, $adapter];
+        return [new WorkflowBuilder(new Config())->build($root, $stack, $adapter->candidates, $adapter->templateDirectories, $extractor, $adapter->mechanisms)->result, $adapter];
     }
 
     /**

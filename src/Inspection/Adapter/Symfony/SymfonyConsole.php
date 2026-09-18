@@ -6,8 +6,11 @@ namespace Jul6Art\DevTools\Inspection\Adapter\Symfony;
 
 /**
  * Asks the analysed project's console a question and reads its JSON answer (ADR-0007).
+ *
+ * Not `readonly`: it counts the processes it launched, so the report measures the calls rather than
+ * repeating what the docblock claims (ADR-0042).
  */
-final readonly class SymfonyConsole
+final class SymfonyConsole
 {
     /**
      * The only text accepted before the JSON: the title `debug:config` prints on standard output.
@@ -17,13 +20,26 @@ final readonly class SymfonyConsole
     /**
      * @param list<string> $command the console, e.g. ['php', 'bin/console']
      */
+    private int $calls = 0;
+
+    /**
+     * @param list<string> $command the console, e.g. ['php', 'bin/console']
+     */
     public function __construct(
-        private ConsoleRunnerInterface $runner,
-        private string $workingDirectory,
-        private array $command,
-        private string $environment,
-        private float $timeout = 60,
+        private readonly ConsoleRunnerInterface $runner,
+        private readonly string $workingDirectory,
+        private readonly array $command,
+        private readonly string $environment,
+        private readonly float $timeout = 60,
     ) {
+    }
+
+    /**
+     * How many times the project's console was actually launched.
+     */
+    public function calls(): int
+    {
+        return $this->calls;
     }
 
     /**
@@ -34,6 +50,7 @@ final readonly class SymfonyConsole
     public function json(array $arguments): array
     {
         $question = implode(' ', $arguments);
+        ++$this->calls;
         $run = $this->runner->run([...$this->command, ...$arguments, '--format=json', '--env='.$this->environment], $this->workingDirectory, $this->timeout);
 
         if (0 !== $run->exitCode) {

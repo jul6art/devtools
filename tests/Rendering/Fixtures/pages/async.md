@@ -16,22 +16,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["App\MessageHandler\OrderCreatedHandler"]
-  n2["Handler · src/MessageHandler/OrderCreatedHandler.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` | point d'entrée |
+—
 
 ## Données
 
@@ -42,10 +35,6 @@ flowchart TD
 —
 
 ## Points d'attention
-
-—
-
-## Tests existants
 
 —
 

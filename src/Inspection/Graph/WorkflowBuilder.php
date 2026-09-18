@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Inspection\Graph;
 
 use Jul6Art\DevTools\Config\Config;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
+use Jul6Art\DevTools\Inspection\Model\FileRef;
+use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdAssigner;
@@ -31,9 +35,11 @@ final readonly class WorkflowBuilder
     /**
      * @param list<EntryPointCandidate> $candidates
      * @param list<string>              $templateDirectories relative to the stack root
+     * @param list<MechanismAttachment> $mechanisms          listeners and filters to attach (ADR-0043)
      */
-    public function build(ProjectRoot $root, StackProfile $stack, array $candidates, array $templateDirectories = [], PhpReferenceExtractor $extractor = new PhpReferenceExtractor()): BuildResult
+    public function build(ProjectRoot $root, StackProfile $stack, array $candidates, array $templateDirectories = [], PhpReferenceExtractor $extractor = new PhpReferenceExtractor(), array $mechanisms = []): BuildResult
     {
+        $decisions = new DecisionExtractor($extractor);
         $locator = ClassLocator::for($root, $stack);
         $resolver = new DependencyResolver($root, $stack, $locator, $extractor, new TwigReferenceExtractor(), $this->config->graphDepth, $templateDirectories);
         $tests = new TestLocator($root, $stack, $locator, $extractor);
@@ -87,6 +93,11 @@ final readonly class WorkflowBuilder
                 }
             }
 
+            $attached = array_values(array_map(
+                static fn (MechanismAttachment $attachment): Mechanism => $attachment->mechanism,
+                array_filter($mechanisms, static fn (MechanismAttachment $attachment): bool => $attachment->applies($main->type, array_values($files), $main->states)),
+            ));
+
             $workflows[] = new Workflow(
                 id: $ids[$key],
                 type: $main->type,
@@ -98,6 +109,8 @@ final readonly class WorkflowBuilder
                 dependsOn: $this->dependencies($ids[$key], $group, $groups, $ids),
                 tests: array_values($testFiles),
                 navigation: array_values($navigation),
+                decisions: self::decisionsOf($root, $decisions, $group, array_values($files)),
+                mechanisms: $attached,
                 states: $main->states,
                 confidence: $main->confidence,
                 source: $main->source,
@@ -107,6 +120,70 @@ final readonly class WorkflowBuilder
         return new BuildResult(
             new InspectionResult($stack->knowledgeKey ?? $stack->language, $workflows, CoverageCalculator::uncovered($root, $stack, $workflows)),
             array_values(array_unique($warnings)),
+        );
+    }
+
+    /**
+     * Where this workflow decides a field's value: the entry point's own methods, then every file it
+     * traverses that is neither configuration nor a test — those declare, they do not decide.
+     *
+     * @param non-empty-list<EntryPointCandidate> $group
+     * @param list<FileRef>                       $files
+     *
+     * @return list<DecisionPoint>
+     */
+    private static function decisionsOf(ProjectRoot $root, DecisionExtractor $extractor, array $group, array $files): array
+    {
+        $scoped = [];
+
+        foreach ($group as $member) {
+            $path = $member->entryPoint->declaredIn->path;
+            $scoped[$path] = [...$scoped[$path] ?? [], ...null === $member->method ? [] : [$member->method]];
+        }
+
+        $points = [];
+
+        foreach ($files as $file) {
+            if (\in_array($file->role, [FileRole::Config, FileRole::Test, FileRole::Template], true) || !str_ends_with($file->path, '.php')) {
+                continue;
+            }
+
+            foreach ($extractor->extract($root->absolute($file), $file, array_values(array_unique($scoped[$file->path] ?? []))) as $point) {
+                $points[$point->sortKey()] ??= $point;
+            }
+
+            if (\count($points) >= DecisionExtractor::MAX_POINTS) {
+                break;
+            }
+        }
+
+        return self::richest(DecisionPoint::branching(array_values($points)));
+    }
+
+    /**
+     * The {@see DecisionExtractor::MAX_TARGETS} fields whose value depends on the most: a page carrying a
+     * diagram for every entity setter a route reaches is the inventory ADR-0043 removed.
+     *
+     * @param list<DecisionPoint> $points
+     *
+     * @return list<DecisionPoint>
+     */
+    private static function richest(array $points): array
+    {
+        $counts = [];
+
+        foreach ($points as $point) {
+            $counts[$point->target] = ($counts[$point->target] ?? 0) + 1;
+        }
+
+        // Most branches first, then by name: two scans of an unchanged project keep the same fields.
+        uksort($counts, static fn (string $a, string $b): int => [$counts[$b], $a] <=> [$counts[$a], $b]);
+        $kept = \array_slice(array_keys($counts), 0, DecisionExtractor::MAX_TARGETS);
+
+        return \array_slice(
+            array_values(array_filter($points, static fn (DecisionPoint $point): bool => \in_array($point->target, $kept, true))),
+            0,
+            DecisionExtractor::MAX_POINTS,
         );
     }
 

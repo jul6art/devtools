@@ -7,14 +7,18 @@ namespace Jul6Art\DevTools\Inspection\Adapter\Symfony;
 use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterResult;
+use Jul6Art\DevTools\Inspection\Graph\DecisionExtractor;
 use Jul6Art\DevTools\Inspection\Graph\EntryPointCandidate;
+use Jul6Art\DevTools\Inspection\Graph\MechanismAttachment;
 use Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor;
 use Jul6Art\DevTools\Inspection\Graph\TwigReferenceExtractor;
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -28,6 +32,12 @@ use Jul6Art\DevTools\Stack\StackProfile;
 final readonly class SymfonyAdapter implements AdapterInterface
 {
     private const array KERNEL_EVENTS = ['kernel.request', 'kernel.controller', 'kernel.controller_arguments', 'kernel.view', 'kernel.response', 'kernel.finish_request', 'kernel.exception', 'kernel.terminate'];
+
+    /**
+     * The lifecycle events Doctrine fires for any entity: a listener on one of them runs inside every
+     * workflow that reaches an entity.
+     */
+    private const array DOCTRINE_EVENTS = ['prePersist', 'postPersist', 'preUpdate', 'postUpdate', 'preRemove', 'postRemove', 'postLoad', 'preFlush', 'onFlush', 'postFlush', 'onClear', 'loadClassMetadata'];
 
     private const string TEMPLATES = 'templates';
 
@@ -47,8 +57,10 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $scanner = new StaticSymfonyScanner($root, $stack, $extractor);
         $files = new ProjectFiles($root, $stack);
 
+        $symfonyConsole = new SymfonyConsole($this->runner, $root->absolute($stack->root), CommandLine::split($config->symfonyConsole), $config->symfonyEnv, $config->symfonyTimeout);
+
         try {
-            $console = ConsoleIntrospection::ask(new SymfonyConsole($this->runner, $root->absolute($stack->root), CommandLine::split($config->symfonyConsole), $config->symfonyEnv, $config->symfonyTimeout));
+            $console = ConsoleIntrospection::ask($symfonyConsole);
             [$confidence, $fallbackCause] = [Confidence::High, null];
         } catch (ConsoleFailed|\InvalidArgumentException $failure) {
             [$console, $confidence, $fallbackCause] = [null, Confidence::Medium, $failure->getMessage()];
@@ -58,27 +70,8 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $services = $files->existing(['config/services.yaml', 'config/services.php'], FileRole::Config);
         $candidates = [];
 
-        // Listeners first: routes depend on the kernel ones.
-        $kernelListeners = [];
-
-        foreach ($console instanceof ConsoleIntrospection ? $console->listeners : $scanner->listeners() as $class => $listens) {
-            $file = $scanner->fileOf($class);
-
-            if (!$file instanceof FileRef) {
-                continue;
-            }
-
-            $methods = array_values(array_unique(array_map(static fn (array $listen): string => $listen['method'], $listens)));
-            $events = array_values(array_unique(array_map(static fn (array $listen): string => $listen['event'], $listens)));
-            sort($events);
-            $entryPoint = new EntryPoint('listener', $class, $file, ['events' => implode(', ', $events)]);
-
-            $candidates[] = new EntryPointCandidate(WorkflowType::events(), $entryPoint, implode(', ', $events).' → '.self::shortName($class), 1 === \count($methods) ? $methods[0] : null, $services, confidence: $confidence, source: $source);
-
-            if ([] !== array_intersect($events, self::KERNEL_EVENTS)) {
-                $kernelListeners[] = $entryPoint;
-            }
-        }
+        // A listener is not a workflow: it is what can happen inside the workflows it intercepts (ADR-0043).
+        $mechanisms = $this->mechanisms($console, $scanner, $root, $extractor);
 
         $routeConfiguration = [...$files->existing(['config/routes.yaml', 'config/routes.php'], FileRole::Config), ...$files->in('config/routes', FileRole::Config), ...$files->existing(['config/packages/security.yaml'], FileRole::Config)];
         $workflowConfiguration = $files->declaring('workflows');
@@ -111,7 +104,6 @@ final readonly class SymfonyAdapter implements AdapterInterface
                 title: trim(('ANY' === $route['methods'] ? '' : $route['methods']).' '.$route['path']),
                 method: $route['method'],
                 structuralFiles: [...$routeConfiguration, ...$services, ...($states instanceof StateMachine ? $workflowConfiguration : [])],
-                dependsOn: $kernelListeners,
                 navigation: $this->navigation($root, $files, $extractor, $file, $route['method'], $route['name']),
                 states: $states,
                 extraTests: $files->testsRequesting($route['path']),
@@ -165,7 +157,85 @@ final readonly class SymfonyAdapter implements AdapterInterface
             }
         }
 
-        return new AdapterResult($candidates, [self::TEMPLATES], $scanner->warnings(), $fallbackCause);
+        return new AdapterResult($candidates, [self::TEMPLATES], $scanner->warnings(), $fallbackCause, consoleCalls: $symfonyConsole->calls(), mechanisms: $mechanisms);
+    }
+
+    /**
+     * The listeners of the project, turned into mechanisms and pointed at the workflows they intercept.
+     *
+     * The rules are those of ADR-0043: kernel events run inside every route, console events inside every
+     * command, Doctrine events inside the workflows that reach an entity — and a targeted entity
+     * listener only inside the workflows that reach *its* entity.
+     *
+     * @return list<MechanismAttachment>
+     */
+    private function mechanisms(?ConsoleIntrospection $console, StaticSymfonyScanner $scanner, ProjectRoot $root, PhpReferenceExtractor $extractor): array
+    {
+        $decisions = new DecisionExtractor($extractor);
+        $attachments = [];
+
+        foreach ($console instanceof ConsoleIntrospection ? $console->listeners : $scanner->listeners() as $class => $listens) {
+            $file = $scanner->fileOf($class);
+
+            if (!$file instanceof FileRef) {
+                continue;
+            }
+
+            $methods = array_values(array_unique(array_map(static fn (array $listen): string => $listen['method'], $listens)));
+            $written = DecisionPoint::branching($decisions->extract($root->absolute($file), $file, $methods));
+            $entities = $scanner->entityListenerTargets($class);
+            $seen = [];
+
+            foreach ($listens as $listen) {
+                if (isset($seen[$listen['event']])) {
+                    continue;
+                }
+
+                $seen[$listen['event']] = true;
+                $mechanism = new Mechanism('listener', $class, $listen['event'], $file, $listen['priority'] ?? null, $written);
+                $attachments[] = self::attach($mechanism, $listen['event'], $entities, $scanner);
+            }
+        }
+
+        return $attachments;
+    }
+
+    /**
+     * @param list<string> $entities the entities a targeted Doctrine listener declares
+     */
+    private static function attach(Mechanism $mechanism, string $event, array $entities, StaticSymfonyScanner $scanner): MechanismAttachment
+    {
+        if (\in_array($event, self::KERNEL_EVENTS, true)) {
+            return new MechanismAttachment($mechanism, WorkflowType::routes()->name);
+        }
+
+        if (str_starts_with($event, 'console.')) {
+            return new MechanismAttachment($mechanism, WorkflowType::commands()->name);
+        }
+
+        if ([] !== $entities) {
+            return new MechanismAttachment($mechanism, files: array_values(array_filter(array_map(
+                static fn (string $entity): ?string => $scanner->fileOf($entity)?->path,
+                $entities,
+            ))));
+        }
+
+        if (\in_array($event, self::DOCTRINE_EVENTS, true)) {
+            return new MechanismAttachment($mechanism, anyEntity: true);
+        }
+
+        // `workflow.work_order.entered.assigned` runs inside the workflows that drive that state machine,
+        // and only those: attaching it to every route is exactly the noise ADR-0043 removes.
+        if (1 === preg_match('/^workflow\.([^.]+)\./', $event, $matches)) {
+            return new MechanismAttachment($mechanism, stateMachine: $matches[1]);
+        }
+
+        // Anything else is a domain event, a class of the project: the workflows that traverse it are the
+        // ones that fire it. A listener nothing reaches is attached nowhere, and its file says so under
+        // "Non couvert".
+        $declaring = $scanner->fileOf($event);
+
+        return new MechanismAttachment($mechanism, files: [$declaring instanceof FileRef ? $declaring->path : $mechanism->declaredIn->path]);
     }
 
     /**

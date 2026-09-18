@@ -39,7 +39,7 @@ final readonly class WorkflowIdDeriver
             'routes' => self::split($this->withoutRoutePrefix($entryPoint->name), '/[_.]+/'),
             'commands' => self::split($entryPoint->name, '/[:.]+/'),
             'async' => [self::kebab($entryPoint->attributes['message'] ?? $entryPoint->name)],
-            'events', 'ui' => [self::kebab($entryPoint->name)],
+            'ui' => [self::kebab($entryPoint->name)],
             default => self::split($entryPoint->name, '/[:_.\/]+/'),
         };
 

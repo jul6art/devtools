@@ -33,8 +33,8 @@
         <package name="symfony/form" version="7.4.3"/>
       </packages>
       <depends-on>
-        <workflow ref="event.locale-listener"/>
         <workflow ref="route.order.index"/>
+        <workflow ref="route.order.show"/>
       </depends-on>
       <tests>
         <file path="tests/Controller/OrderControllerTest.php" role="test"/>
@@ -43,6 +43,15 @@
         <edge target="app_order_index" label="link"/>
         <edge target="app_order_show" label="redirect"/>
       </navigation>
+      <decisions>
+        <decision target="App\Entity\Order::status" value="OrderStatus::DRAFT" condition="null === $order-&gt;getReference()" file="src/Controller/OrderController.php" line="42" confidence="high"/>
+        <decision target="App\Entity\Order::status" value="OrderStatus::PLACED" condition="!(null === $order-&gt;getReference())" file="src/Controller/OrderController.php" line="45" confidence="high"/>
+      </decisions>
+      <mechanisms>
+        <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="16">
+          <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+        </mechanism>
+      </mechanisms>
       <states name="order">
         <place name="draft"/>
         <place name="validated"/>

@@ -46,9 +46,6 @@
     <workflow ref="command.app.import-catalog" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
   </file>
-  <file path="src/EventListener/LocaleListener.php">
-    <workflow ref="event.locale-listener" relation="file"/>
-  </file>
   <file path="src/Form/OrderType.php">
     <workflow ref="route.order.new" relation="file"/>
   </file>

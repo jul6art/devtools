@@ -39,13 +39,9 @@ flowchart LR
   n1 -->|"link"| n2
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `src/app/app.routes.ts` | point d'entrée |
-| Composant | `src/app/orders/order-list.component.ts` |  |
-| Service | `src/app/orders/order.service.ts` |  |
+—
 
 ## Données
 
@@ -58,10 +54,6 @@ Aucun intercepteur HTTP ni garde de route n'est déclaré dans `src/app`.
 ## Points d'attention
 
 Aucun état de chargement ni de gestion d'erreur : si l'API échoue, la liste reste vide sans message.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

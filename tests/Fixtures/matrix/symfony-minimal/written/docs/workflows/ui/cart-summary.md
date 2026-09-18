@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : 6753625
+`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : d15a772
 
 ## Résumé
 
@@ -34,17 +34,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Entité | `src/Entity/Order.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Composant | `src/Twig/Components/CartSummary.php` | point d'entrée |
-| Autre | `src/ValueObject/Money.php` |  |
-| Template | `templates/components/CartSummary.html.twig` |  |
-
-Paquets : `symfony/ux-live-component` 2.36.0
+—
 
 ## Données
 
@@ -60,10 +52,6 @@ Route `/_components/{_live_component}/{_live_action}` fournie par LiveComponentB
 `count` est `writable` : le client peut le modifier sans passer par `refresh`. Au premier rendu il vaut 0 tant
 que `refresh` n'a pas été appelé.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -72,4 +60,4 @@ que `refresh` n'a pas été appelé.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 6753625 | rédaction initiale |
+| 2026-09-16 | d15a772 | rédaction initiale |

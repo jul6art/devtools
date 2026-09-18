@@ -6,6 +6,8 @@ namespace Jul6Art\DevTools\Console;
 
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\InitCommand;
+use Jul6Art\DevTools\Command\KnowledgeListCommand;
+use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
@@ -33,6 +35,8 @@ final class Application extends BaseApplication
             new WorkflowsInspectCommand(),
             new WorkflowsApplyCommand(),
             new ClaudeInstallCommand(),
+            new KnowledgeListCommand(),
+            new KnowledgePromoteCommand(),
         ]);
     }
 }

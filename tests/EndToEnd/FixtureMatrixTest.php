@@ -153,7 +153,7 @@ final class FixtureMatrixTest extends TestCase
         // The legacy fixture has a single handler of OrderCreated, so its async workflow does not move.
         $legacy = [$symfony[0], array_diff_key($symfony[1], ['async.order-created' => null])];
 
-        yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-minimal', ...$legacy];
+        yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-legacy-yaml', ...$legacy];
         yield 'plain-php' => ['plain-php', 'plain-php', ['lib/db.php' => "\n// connection reviewed\n", 'migrations/001_create_orders.sql' => null, 'public/about.php' => "<?php\n\necho 'Acme';\n"], [
             'command.cleanup' => 'rewrite: files changed: lib/db.php',
             'command.import-orders' => 'rewrite: files changed: lib/db.php',

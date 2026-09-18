@@ -1,5 +1,5 @@
 # /items
-`route.items` · type : routes · dernière mise à jour : 2026-09-16 · commit : 3442aca
+`route.items` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
 
 ## Résumé
 
@@ -29,12 +29,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `front/src/app/app.routes.ts` | point d'entrée |
-| Composant | `front/src/app/item-list.component.ts` |  |
+—
 
 ## Données
 
@@ -48,10 +45,6 @@ Aucun garde ni intercepteur n'est déclaré dans `front/src/app`.
 
 Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est un squelette.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
 —
@@ -60,4 +53,4 @@ Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 3442aca | rédaction initiale |
+| 2026-09-16 | 6ecdbd0 | rédaction initiale |

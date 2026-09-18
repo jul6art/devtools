@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tests\Inspection\Model;
 
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\Transition;
@@ -52,9 +54,16 @@ final class ModelFixtures
                 new FileRef('src/Form/OrderType.php', FileRole::Form),
             ],
             packages: [new PackageRef('symfony/form', '7.4.3'), new PackageRef('doctrine/orm', '3.5.2')],
-            dependsOn: [new WorkflowId('event.locale-listener'), new WorkflowId('route.order.index')],
+            dependsOn: [new WorkflowId('route.order.index'), new WorkflowId('route.order.show')],
             tests: [new FileRef('tests/Controller/OrderControllerTest.php', FileRole::Test)],
             navigation: [new Edge('app_order_show', 'redirect'), new Edge('app_order_index', 'link')],
+            decisions: [
+                new DecisionPoint('App\\Entity\\Order::status', 'OrderStatus::DRAFT', 'null === $order->getReference()', new FileRef('src/Controller/OrderController.php', FileRole::Controller), 42),
+                new DecisionPoint('App\\Entity\\Order::status', 'OrderStatus::PLACED', '!(null === $order->getReference())', new FileRef('src/Controller/OrderController.php', FileRole::Controller), 45),
+            ],
+            mechanisms: [
+                new Mechanism('listener', 'App\\EventListener\\LocaleListener', 'kernel.request', new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener), 16),
+            ],
             states: new StateMachine(
                 'order',
                 ['draft', 'validated', 'shipped'],

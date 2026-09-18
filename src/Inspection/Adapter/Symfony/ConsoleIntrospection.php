@@ -17,7 +17,7 @@ final readonly class ConsoleIntrospection
      * @param list<array{name: string, path: string, methods: string, controller: string|null}> $routes
      * @param array<string, string>                                                             $commands      class => command name
      * @param array<string, string|null>                                                        $handlers      class => handled message, when the container knows it
-     * @param array<string, list<array{event: string, method: string}>>                         $listeners     class => what it listens to
+     * @param array<string, list<array{event: string, method: string, priority: int|null}>>     $listeners     class => what it listens to
      * @param array<string, StateMachine>                                                       $stateMachines
      * @param list<array{path: string, roles: list<string>}>                                    $accessControl
      * @param array<string, list<string>>                                                       $supports      state machine => the entity classes it drives
@@ -79,7 +79,8 @@ final readonly class ConsoleIntrospection
                 $class = Json::string($listener, 'class');
 
                 if (null !== $class) {
-                    $listeners[$class][] = ['event' => (string) $event, 'method' => Json::string($listener, 'name') ?? '__invoke'];
+                    $priority = \is_array($listener) ? $listener['priority'] ?? null : null;
+                    $listeners[$class][] = ['event' => (string) $event, 'method' => Json::string($listener, 'name') ?? '__invoke', 'priority' => \is_int($priority) ? $priority : null];
                 }
             }
         }

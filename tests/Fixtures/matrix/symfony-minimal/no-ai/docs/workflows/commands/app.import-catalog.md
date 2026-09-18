@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : 6753625
+`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : d15a772
 
 ## Résumé
 
@@ -15,34 +15,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["app:import-catalog"]
-  n2["Autre · src/Command/ImportCatalogCommand.php"]
-  n3["Entité · src/Entity/Product.php"]
-  n4["Repository · src/Repository/ProductRepository.php"]
-  n5["Autre · src/ValueObject/Money.php"]
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/services.yaml` |  |
-| Autre | `src/Command/ImportCatalogCommand.php` | point d'entrée |
-| Entité | `src/Entity/Product.php` |  |
-| Repository | `src/Repository/ProductRepository.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
-
-Paquets : `symfony/console` 8.1.7
+—
 
 ## Données
 
@@ -56,12 +37,6 @@ Paquets : `symfony/console` 8.1.7
 
 —
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
-
 ## Workflows liés
 
 —
@@ -70,4 +45,4 @@ Paquets : `symfony/console` 8.1.7
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 6753625 | initial |
+| 2026-09-16 | d15a772 | initial |

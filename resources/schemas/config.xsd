@@ -91,6 +91,12 @@
                         <xs:attribute name="web-root" type="t:nonEmpty"/>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="knowledge" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="library" type="t:nonEmpty"/>
+                        <xs:attribute name="share" type="xs:boolean"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="language" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="pages" use="required">

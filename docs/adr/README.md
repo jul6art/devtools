@@ -25,11 +25,11 @@
 | [0005](0005-detection-de-stack.md) | Détection de stack et `stack.xml` | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
 | [0006](0006-graphe-de-dependances-php.md) | Graphe de dépendances PHP et regroupement | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
 | [0007](0007-adaptateur-symfony.md) | Adaptateur Symfony : la console du projet comme source de vérité | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
-| [0008](0008-rendu-norme-des-pages-et-du-menu.md) | Rendu normé des pages, du menu et du graphe | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
+| [0008](0008-rendu-norme-des-pages-et-du-menu.md) | Rendu normé des pages, du menu et du graphe | MVP 2 — Tranche factuelle | Superseded by 0043 | 2026-09-16 |
 | [0009](0009-commande-workflows-inspect.md) | Commande `workflows:inspect` et pipeline | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
 | [0010](0010-fraicheur.md) | Fraîcheur : ne réécrire que ce qui a changé | MVP 3 — Fraîcheur | Accepted | 2026-09-16 (Infection : CI) |
 | [0011](0011-redaction-des-pages-par-claude-code.md) | Rédaction des pages par Claude Code | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
-| [0012](0012-connaissances-de-stack.md) | Connaissances de stack (`knowledge`) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
+| [0012](0012-connaissances-de-stack.md) | Connaissances de stack (`knowledge`) | MVP 4 — Rédaction et langages | Superseded by 0041 | 2026-09-17 |
 | [0013](0013-voie-claude-pour-les-stacks-sans-adaptateur.md) | Voie Claude pour les stacks sans adaptateur natif | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | en cours (CI, MSI, commit du dogfooding) |
@@ -58,6 +58,9 @@
 | [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Proposed | — |
 | [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Proposed | — |
 | [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Proposed | — |
+| [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
+| [0042](0042-progression-et-compteurs-en-console.md) | Progression et compteurs de la sortie console | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
+| [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 
@@ -84,6 +87,15 @@ Phase 2 — Retours et règles (0025–0029)      Phase 3 — Généralisation (
   « une erreur signalée deux fois ne peut      Compléments (0035–0040), chacun indépendant
     plus revenir sans casser la gate »           API Claude, rename, glossaire, multi-projets,
                                                  ask, intégration au générateur de squelettes
+
+MVP+ — Retours d'usage (0041–0043), nés de la première inspection d'un projet réel (cereezer,
+84 workflows). Indépendants les uns des autres, chacun jouable dès le MVP livré.
+  0041 la connaissance d'une stack inconnue grandit une bibliothèque au lieu de rester au projet
+  0042 la console dit ce qu'elle fait, où elle en est, et ce que l'exécution a coûté
+  0043 la page cesse d'être un inventaire : les faits au XML, les listeners rattachés aux
+       workflows qu'ils interceptent, et un graphique là où une logique décide d'une valeur
+
+  « une page se lit, et son diagramme répond à “pourquoi cette valeur-là ?” »
 ```
 
 ## Graphe de dépendances (un lot n'attend que ses flèches entrantes)
@@ -129,6 +141,11 @@ Compléments
 0016 + 0032               ──► 0038
 0018 (+ 0035, 0037)       ──► 0039
 0034 + 0018 + 0019 + 0024 ──► 0040
+
+MVP+
+0012 + 0013               ──► 0041
+0009 + 0010 + 0011        ──► 0042
+0006 + 0008 + 0011        ──► 0043
 ```
 
 - **Chemin critique du MVP** : 0003 → 0004 → 0005 → 0006 → 0007 → 0009 → 0010 → 0011.
@@ -171,3 +188,7 @@ Compléments
 | § 9 phase 0 : intégration à `symfony-skeleton-generator` | après la première version publiée | 0001, 0040 |
 | § 6, § 4.6.1 : `provencale/devtools`, `devtools.provencale.lu` | `jul6art/devtools`, namespaces XML sous `github.com/jul6art/devtools` | 0003 |
 | § 5 : schémas `feedback`, `rule`, `scenario` de la v0.1 | réécrits contre les formats du MVP ; à relire après la phase 1 | 0020, 0025, 0026 |
+| § 12 question 3 : remontée d'une connaissance par pull request manuelle | dépôt automatique dans une bibliothèque partagée ; `knowledge:promote` reste manuel | 0041 |
+| § 4.2 : sept types de déclencheur, dont `events` | six : un listener est un mécanisme rattaché aux workflows qu'il intercepte, pas un workflow | 0043 |
+| § 4.5 : gabarit de page à onze sections | dix : « Composants impliqués » et « Tests existants » ne vivent que dans le XML de suivi, et une section « Décisions » apparaît | 0043 |
+| § 4.3 étape 7 : « Parcours » a un repli factuel | la section vaut `—` sans Claude : le diagramme des fichiers atteints redisait la table supprimée | 0043 |

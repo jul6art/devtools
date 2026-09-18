@@ -16,28 +16,15 @@
 
 ## Parcours
 
-```mermaid
-flowchart TD
-  n1["GET /health"]
-  n2["Contrôleur · src/Controller/HealthController.php"]
-  n1 --> n2
-```
+—
 
 ## Navigation / états
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Configuration | `config/routes/ux_live_component.yaml` |  |
-| Configuration | `config/services.yaml` |  |
-| Contrôleur | `src/Controller/HealthController.php` | point d'entrée |
-
-Paquets : `symfony/http-foundation` 8.1.7, `symfony/routing` 8.1.6
+—
 
 ## Données
 
@@ -45,19 +32,17 @@ Paquets : `symfony/http-foundation` 8.1.7, `symfony/routing` 8.1.6
 
 ## Mécanismes transverses
 
-- [`event.locale-listener`](../events/locale-listener.md)
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 
 ## Points d'attention
 
 —
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
+—
 
 ## Historique
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The index of the shared knowledge library: where each sheet came from, and when (ADR-0041).
+
+    What a listing shows is read here, never by re-reading the sheets themselves.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/knowledge-library/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/knowledge-library/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="knowledge-library">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="key" type="t:key" use="required"/>
+                        <xs:attribute name="project" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="at" type="xs:dateTime" use="required"/>
+                        <xs:attribute name="tool" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="sha256" type="t:sha256" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+        <xs:unique name="uniqueKey">
+            <xs:selector xpath="t:entry"/>
+            <xs:field xpath="@key"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- `symfony-7`, `angular-18`: a stack and its major version, the key of ADR-0005. -->
+    <xs:simpleType name="key">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="sha256">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-f]{64}"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

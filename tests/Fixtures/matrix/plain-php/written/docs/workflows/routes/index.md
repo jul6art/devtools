@@ -43,14 +43,9 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Repository | `lib/OrderRepository.php` |  |
-| Autre | `lib/db.php` |  |
-| Autre | `lib/views/header.php` |  |
-| Contrôleur | `public/index.php` | point d'entrée |
+—
 
 ## Données
 
@@ -64,12 +59,6 @@ Lit la colonne `customer` de la table `orders` ; aucune écriture.
 
 La connexion vise var/app.sqlite en dur : aucune configuration par environnement. Aucune pagination ni
 tri, et aucune authentification ne protège la page.
-
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderRepositoryTest | `tests/OrderRepositoryTest.php` | — |
 
 ## Workflows liés
 

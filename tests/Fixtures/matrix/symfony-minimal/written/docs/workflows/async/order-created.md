@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 6753625
+`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : d15a772
 
 ## Résumé
 
@@ -31,23 +31,28 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/framework.yaml` |  |
-| Configuration | `config/services.yaml` |  |
-| Entité | `src/Entity/Order.php` |  |
-| Entité | `src/Entity/Product.php` |  |
-| Message | `src/Message/OrderCreated.php` |  |
-| Handler | `src/MessageHandler/NotifyOnOrderCreated.php` | point d'entrée |
-| Handler | `src/MessageHandler/OrderCreatedHandler.php` |  |
-| Repository | `src/Repository/OrderRepository.php` |  |
-| Repository | `src/Repository/ProductRepository.php` |  |
-| Service | `src/Service/OrderPricing.php` |  |
-| Autre | `src/ValueObject/Money.php` |  |
+**`App\Entity\Order::status`**
 
-Paquets : `symfony/messenger` 8.1.7
+```mermaid
+flowchart TD
+  d1{"la commande n'a pas de client"}
+  d1 -->|oui| v1["status = draft"]
+  d1 -->|non| d2{"le produit n'a pas de prix"}
+  d2 -->|oui| v2["status = quoted"]
+  d2 -->|non| v3["status = priced"]
+```
+
+**`App\Entity\Order::currency`**
+
+```mermaid
+flowchart TD
+  d1{"pays de la commande"}
+  d1 -->|CH| v1["currency = CHF"]
+  d1 -->|GB| v2["currency = GBP"]
+  d1 -->|tout autre pays| v3["currency = EUR"]
+```
 
 ## Données
 
@@ -63,12 +68,6 @@ dans `config/packages/framework.yaml`.
 Le handler ne fait rien du résultat, et aucun code du projet ne distribue `OrderCreated` : ce workflow n'est
 aujourd'hui jamais déclenché.
 
-## Tests existants
-
-| Test | Fichier | Couvre |
-|---|---|---|
-| OrderPricingTest | `tests/Service/OrderPricingTest.php` | — |
-
 ## Workflows liés
 
 —
@@ -77,4 +76,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 6753625 | rédaction initiale |
+| 2026-09-16 | d15a772 | rédaction initiale |

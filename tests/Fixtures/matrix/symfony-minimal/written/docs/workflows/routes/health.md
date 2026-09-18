@@ -1,5 +1,5 @@
 # GET /health
-`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6753625
+`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : d15a772
 
 ## Résumé
 
@@ -29,17 +29,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `config/packages/security.yaml` |  |
-| Configuration | `config/routes.yaml` |  |
-| Configuration | `config/routes/ux_live_component.yaml` |  |
-| Configuration | `config/services.yaml` |  |
-| Contrôleur | `src/Controller/HealthController.php` | point d'entrée |
-
-Paquets : `symfony/http-foundation` 8.1.7, `symfony/routing` 8.1.6
+—
 
 ## Données
 
@@ -54,16 +46,12 @@ Aucune donnée lue ni écrite.
 Répond « ok » sans rien vérifier (ni dépendance, ni stockage) : il dit que PHP répond, pas que l'application
 fonctionne.
 
-## Tests existants
-
-—
-
 ## Workflows liés
 
-- [`event.locale-listener`](../events/locale-listener.md) — dépend de
+—
 
 ## Historique
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | 6753625 | rédaction initiale |
+| 2026-09-16 | d15a772 | rédaction initiale |

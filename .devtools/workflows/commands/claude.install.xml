@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.claude.install" type="commands" schema-version="1">
   <title>claude:install</title>
-  <generated at="2026-09-17T20:47:06+00:00" tool="devtools dev-master" mode="no-ai"/>
-  <source vcs="git" commit="b334cfb2898595d16b294c299a9a459254abf42f" branch="master" dirty="true"/>
+  <generated at="2026-09-18T11:35:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="claude:install" role="main">
       <declared-in path="src/Command/ClaudeInstallCommand.php" role="other"/>
@@ -25,6 +25,7 @@
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
     <file path="tests/Stack/StackDetectorTest.php" role="test"/>
     <file path="tests/Tracking/AtomicFileWriterTest.php" role="test"/>
@@ -34,13 +35,15 @@
     <package name="symfony/console" version="8.1.7"/>
     <package name="symfony/filesystem" version="8.1.6"/>
   </packages>
+  <decisions>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/ClaudeInstallCommand.php" line="48" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="is_file($target) &amp;&amp; file_get_contents($target) !== $shipped &amp;&amp; true !== $input-&gt;getOption('force')" file="src/Command/ClaudeInstallCommand.php" line="58" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/ClaudeInstallCommand.php" line="64" confidence="high"/>
+  </decisions>
   <confidence>high</confidence>
   <producer>native:generic-php</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-17T02:25:05+00:00" commit="a3b1c1bf4ce001a636ac7a8aa0c4a2f86d3861d9" reason="rédaction initiale"/>
-    <revision at="2026-09-17T18:02:23+00:00" commit="8f7ea01b55e691026bc9caab4d27df07feda3ebb" reason="files removed: tests/Inspection/Graph/GraphFixture.php, tests/Inspection/Pipeline/FakeAdapter.php"/>
-    <revision at="2026-09-17T20:02:40+00:00" commit="66f5ede0d670f5623051e4f54dfcebf20e2df438" reason="forced"/>
-    <revision at="2026-09-17T20:47:06+00:00" commit="b334cfb2898595d16b294c299a9a459254abf42f" reason="forced"/>
+    <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
   </history>
 </workflow>

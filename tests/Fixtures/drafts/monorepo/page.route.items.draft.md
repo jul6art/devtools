@@ -23,6 +23,10 @@ sequenceDiagram
   L-->>U: « Items »
 ```
 
+## Décisions
+
+—
+
 ## Données
 
 Aucune : le composant ne charge rien.

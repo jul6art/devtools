@@ -31,13 +31,9 @@ sequenceDiagram
 
 —
 
-## Composants impliqués
+## Décisions
 
-| Rôle | Fichier | Notes |
-|---|---|---|
-| Configuration | `src/app.js` |  |
-| Contrôleur | `src/routes/orders.js` | point d'entrée |
-| Service | `src/services/orderService.js` |  |
+—
 
 ## Données
 
@@ -51,10 +47,6 @@ Ajoute une commande au tableau en mémoire ; l'identifiant vaut la taille du tab
 
 Aucune validation : un corps sans `customer` crée une commande incomplète, et un corps absent lève une
 erreur sur `req.body.customer`. Aucun test ne couvre la création.
-
-## Tests existants
-
-—
 
 ## Workflows liés
 

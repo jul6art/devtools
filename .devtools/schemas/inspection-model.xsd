@@ -79,6 +79,25 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="decisions" type="m:decisions" minOccurs="0"/>
+            <xs:element name="mechanisms" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="mechanism" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="declared-in" type="m:file"/>
+                                    <xs:element name="decisions" type="m:decisions" minOccurs="0"/>
+                                </xs:sequence>
+                                <xs:attribute name="kind" type="m:mechanismKind" use="required"/>
+                                <xs:attribute name="name" type="m:nonEmpty" use="required"/>
+                                <xs:attribute name="event" type="m:nonEmpty" use="required"/>
+                                <xs:attribute name="priority" type="xs:integer"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="states" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
@@ -163,6 +182,39 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
+
+    <!-- Where the code decides that a field takes one value rather than another (ADR-0043). -->
+    <xs:complexType name="decisions">
+        <xs:sequence>
+            <xs:element name="decision" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="target" type="m:nonEmpty" use="required"/>
+                    <xs:attribute name="value" type="m:nonEmpty" use="required"/>
+                    <xs:attribute name="condition" type="xs:string"/>
+                    <xs:attribute name="file" type="m:nonEmpty" use="required"/>
+                    <xs:attribute name="line" type="xs:positiveInteger" use="required"/>
+                    <xs:attribute name="confidence" type="m:confidence" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="mechanismKind">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="listener"/>
+            <xs:enumeration value="subscriber"/>
+            <xs:enumeration value="middleware"/>
+            <xs:enumeration value="doctrine-filter"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="confidence">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="high"/>
+            <xs:enumeration value="medium"/>
+            <xs:enumeration value="low"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="placeRef">
         <xs:attribute name="place" type="m:nonEmpty" use="required"/>
