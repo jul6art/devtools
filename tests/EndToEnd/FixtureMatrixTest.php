@@ -60,9 +60,10 @@ final class FixtureMatrixTest extends TestCase
      * @param array<string, string>      $expected workflow => "decision: why" of the inspection after the change
      */
     #[DataProvider('fixtures')]
-    public function testAFixtureIsDocumentedWrittenAndFollowedThroughChanges(string $fixture, string $drafts, array $change, array $expected, int $inspectExitCode = 0): void
+    public function testAFixtureIsDocumentedWrittenAndFollowedThroughChanges(string $fixture, string $drafts, array $change, array $expected, int $inspectExitCode = 0, ?string $snapshots = null, bool $groupByController = false): void
     {
         $this->inspectExitCode = $inspectExitCode;
+        $snapshots ??= $fixture;
 
         if (is_dir(self::FIXTURES.'/projects/'.$fixture.'/vendor') || is_file(self::FIXTURES.'/projects/'.$fixture.'/composer.lock')) {
             RealConsoleTest::installDependencies(self::FIXTURES.'/projects/'.$fixture);
@@ -84,8 +85,23 @@ final class FixtureMatrixTest extends TestCase
 
         // 1. Documented without AI.
         $this->devtools($project, 'init');
+
+        // ADR-0045: the same project, laid out by controller — one directory per controller, a README
+        // listing its routes, and the very same workflow identifiers, which is why the recorded drafts
+        // are reused as they are.
+        if ($groupByController) {
+            file_put_contents($project.'/.devtools/config.xml', <<<'XML'
+                <?xml version="1.0" encoding="UTF-8"?>
+                <devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
+                    <routes group="controller"/>
+                    <language pages="fr"/>
+                </devtools>
+
+                XML);
+        }
+
         $this->devtools($project, 'workflows:inspect', '--no-ai', '--locale=fr');
-        $this->assertSnapshot($project, $fixture.'/no-ai');
+        $this->assertSnapshot($project, $snapshots.'/no-ai');
 
         // 2. Nothing changed, nothing rewritten.
         $before = self::devtoolsTree($project);
@@ -103,7 +119,7 @@ final class FixtureMatrixTest extends TestCase
         } while ($copied > 0);
 
         self::assertSame([], glob($project.'/.devtools/pending/*.brief.xml') ?: [], 'Every brief has a recorded draft.');
-        $this->assertSnapshot($project, $fixture.'/written');
+        $this->assertSnapshot($project, $snapshots.'/written');
 
         foreach (glob($project.'/.devtools/workflows/*/*.md') ?: [] as $page) {
             self::assertSame([], new PageParser()->parse((string) file_get_contents($page))->conformityProblems(), $page);
@@ -133,7 +149,7 @@ final class FixtureMatrixTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{0: string, 1: string, 2: array<string, string|null>, 3: array<string, string>, 4?: int}>
+     * @return iterable<string, array{0: string, 1: string, 2: array<string, string|null>, 3: array<string, string>, 4?: int, 5?: string, 6?: bool}>
      */
     public static function fixtures(): iterable
     {
@@ -152,6 +168,9 @@ final class FixtureMatrixTest extends TestCase
 
         // The legacy fixture has a single handler of OrderCreated, so its async workflow does not move.
         $legacy = [$symfony[0], array_diff_key($symfony[1], ['async.order-created' => null])];
+
+        // ADR-0045, the grouped layout end to end: same project, same drafts, one more level of menu.
+        yield 'symfony-minimal grouped by controller' => ['symfony-minimal', 'symfony-minimal', ...$symfony, 0, 'symfony-grouped', true];
 
         yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-legacy-yaml', ...$legacy];
         yield 'plain-php' => ['plain-php', 'plain-php', ['lib/db.php' => "\n// connection reviewed\n", 'migrations/001_create_orders.sql' => null, 'public/about.php' => "<?php\n\necho 'Acme';\n"], [

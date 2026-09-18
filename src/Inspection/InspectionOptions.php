@@ -18,6 +18,7 @@ final readonly class InspectionOptions
      * @param string|null  $language         the language the pages are written in, from `--locale`: it wins over the project's configuration
      * @param string|null  $fallbackLanguage the language to use when neither the option nor the project says (the Symfony bundle's configuration)
      * @param string|null  $docs             the directory the pages and the menu are written in, relative to the project; null for docs/workflows
+     * @param list<string> $restrictTo       identifiers whose pages may be written; every other workflow is left exactly as it is (ADR-0047)
      */
     public function __construct(
         public string $path,
@@ -31,6 +32,7 @@ final readonly class InspectionOptions
         public ?string $language = null,
         public ?string $fallbackLanguage = null,
         public ?string $docs = null,
+        public array $restrictTo = [],
     ) {
         // The documentation directory is checked here rather than at the first write: a bad path must stop
         // the run before it has created anything.

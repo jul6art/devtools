@@ -1,0 +1,12 @@
+
+ DevTools — acme/symfony-minimal   diff des workflows
+
+ ⚠ 1 fait changé · 1 workflow
+ 12 fichiers parcourus · 15 hachés
+
+ modifié décision App\Entity\Order::status  src/Service/OrderPricing.php:24
+   - 'quoted'
+   + 'estimated'
+   1 workflow · route.order.new
+
+

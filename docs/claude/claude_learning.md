@@ -515,3 +515,33 @@
 - **Une page vide se voit, un compteur ne le dit pas.** « 99 inchangés » restait vrai alors que 78 pages
   étaient vides : la vérification qui compte est celle qui lit la section « Résumé » des pages, pas le
   rapport de la commande.
+
+### 2026-09-18 (quater) — le lot « dérive » (ADR-0046, 0017, 0047, 0048)
+
+- **Une `ChoiceQuestion` à clés répond par la CLÉ, jamais par le libellé.** `match ($answer) { 'accepter' => … }`
+  ne matchait rien, et la revue interactive acceptait zéro fait sans le dire. Un test qui n'asserte que
+  le code de sortie ne l'aurait pas vu : c'est l'effet (la page réécrite) qu'il faut asserter.
+- **PHPStan ne visite `CollectedDataNode` que si un collecteur est enregistré.** Sans lui, la règle
+  n'était jamais appelée et l'analyse d'un projet en pleine dérive rendait « No errors ». Le collecteur
+  qui a l'air inutile est ce qui fait tourner la règle — et le commentaire doit le dire, sinon quelqu'un
+  le supprimera.
+- **Un `Scope` de PHPStan a cinquante-sept méthodes** : le doubler pour un test unitaire prouve la
+  plomberie de personne. La règle se vérifie par une vraie exécution de `phpstan analyse` (groupe
+  `end-to-end`), ce qui éprouve en plus le `.neon` livré.
+- **Le format d'erreur choisi change ce qu'un test peut lire** : `raw` n'imprime pas le `tip`, `json`
+  échappe les antislashs des noms de classes. Asserter sur la sortie d'un outil, c'est asserter sur son
+  format — le choisir explicitement.
+- **Le diff se calcule là où les deux versions sont déjà en main.** Le pipeline tient l'ancien suivi et
+  le modèle reconstruit côte à côte : y ajouter la comparaison n'a coûté ni parcours, ni hachage, ni
+  processus git (mesuré : le re-scan de 300 routes reste à 0,26 s).
+- **Un projet-fixture a un cache Symfony, et ce cache ment.** Modifier la priorité d'un listener dans
+  `symfony-minimal` ne changeait rien au modèle : la console répondait depuis `var/cache`. Éprouvé sur
+  une copie d'un vrai projet, cache vidé, la dérive apparaît (« 20 → 12, 86 workflows »). ⚠️ Un test qui
+  passe sur la fixture ne prouve rien pour ce qui vient de la console.
+- **`--force` ne restreint pas, il ajoute.** Accepter un fait relançait l'inspection avec `--force` sur
+  les workflows concernés, et réécrivait aussi tous ceux que la fraîcheur trouvait périmés — sur un vrai
+  projet, accepter la sécurité d'une route réécrivait les quatre autres du même contrôleur. D'où
+  `restrictTo` : ce qui n'a pas été accepté n'est pas écrit, et reste en dérive.
+- **Un test qui passe avec et sans le correctif ne teste rien.** Le premier test de `restrictTo` était
+  vert dans les deux cas parce que le second workflow ne traversait pas le fichier modifié. Vérifier par
+  mutation, toujours, avant de croire un test de non-régression.

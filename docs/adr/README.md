@@ -34,7 +34,7 @@
 | [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | en cours (CI, MSI, commit du dogfooding) |
 | [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Proposed | — |
-| [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Proposed | — |
+| [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Accepted | 2026-09-18 |
 | [0018](0018-serveur-mcp.md) | Serveur MCP `devtools` | 1 — Impact, MCP, gate | Proposed | — |
 | [0019](0019-hooks-claude-code.md) | Hooks Claude Code : l'impact avant la modification | 1 — Impact, MCP, gate | Proposed | — |
 | [0020](0020-scenarios-derives-des-workflows.md) | Scénarios reproductibles dérivés des workflows | 1 — Impact, MCP, gate | Proposed | — |
@@ -63,6 +63,9 @@
 | [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0044](0044-introspection-approfondie.md) | Introspection approfondie : connaissance amendable, logique conditionnelle complète | MVP+ — Retours d'usage | Accepted | — |
 | [0045](0045-controleur-niveau-de-menu.md) | Le contrôleur est un niveau de menu, pas un workflow | MVP+ — Retours d'usage | Accepted | — |
+| [0046](0046-diff-type-des-workflows.md) | Diff typé des workflows : ce qui a changé, pas seulement que ça a changé | MVP+ — Retours d'usage | Accepted | — |
+| [0047](0047-accepter-ou-refuser-un-changement.md) | Accepter un changement, ou le refuser : la revue | MVP+ — Retours d'usage | Accepted | — |
+| [0048](0048-regle-phpstan-de-derive.md) | La dérive se voit là où on écrit le code : une règle PHPStan | MVP+ — Retours d'usage | Accepted | — |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 
@@ -100,7 +103,13 @@ MVP+ — Retours d'usage (0041–0045), nés de la première inspection d'un pro
        contraintes de validation, un saut d'appel, et la machine à états parmi les décisions
   0045 le contrôleur cesse d'être un workflow : un dossier, une page d'index qui liste ses
        routes, et une page complète par route — le regroupement ne concerne plus que le menu
-       (acceptée le 2026-09-18, démarrage non planifié)
+       (acceptée et livrée le 2026-09-18 sur les trois projets documentés)
+  0046 la fraîcheur disait « ça a changé » ; le diff typé dit QUOI — un fait, sa valeur d'avant,
+       celle d'après, et les workflows qu'il touche, groupés par fait et non par workflow
+  0047 ce que l'humain fait ensuite : accepter le fait (la doc suit, ciblée) ou le refuser (le code
+       revient, et rien n'est écrit)
+  0048 la même dérive, à la ligne où elle est écrite, dans PHPStan — qui affiche ce que DevTools
+       calcule, sans second extracteur
 
   « une page se lit, et son diagramme répond à “pourquoi cette valeur-là ?” »
 ```

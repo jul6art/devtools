@@ -96,6 +96,38 @@ final class GitClient
         return array_values(array_unique($relative));
     }
 
+    /**
+     * What changed in these files since a commit, as git prints it (ADR-0046).
+     *
+     * The working tree is the other side, not HEAD: the inspection reads the files as they are on disk,
+     * so the diff must show what it read.
+     *
+     * @param list<string> $paths
+     */
+    public function diff(ProjectRoot $root, string $commit, array $paths): string
+    {
+        if ([] === $paths) {
+            return '';
+        }
+
+        [$ok, $output] = $this->git($root, ['diff', '--no-color', '--relative', $commit, '--', ...$paths]);
+
+        return $ok ? $output : '';
+    }
+
+    /**
+     * Brings files back to the state a commit left them in (ADR-0047).
+     *
+     * ⚠️ The only thing in DevTools that touches a project's own code. It is called from one place, behind
+     * one explicit option, and it says whether git accepted.
+     *
+     * @param list<string> $paths
+     */
+    public function restore(ProjectRoot $root, string $commit, array $paths): bool
+    {
+        return [] !== $paths && $this->git($root, ['restore', '--source='.$commit, '--', ...$paths])[0];
+    }
+
     public function processes(): int
     {
         return $this->processes;

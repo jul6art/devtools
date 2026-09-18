@@ -18,6 +18,8 @@ use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\DiscoveryBrief;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\XmlDiscoveryBriefStore;
+use Jul6Art\DevTools\Inspection\Diff\WorkflowChange;
+use Jul6Art\DevTools\Inspection\Diff\WorkflowDiffer;
 use Jul6Art\DevTools\Inspection\Freshness\DecisionKind;
 use Jul6Art\DevTools\Inspection\Freshness\FileHasher;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
@@ -95,6 +97,7 @@ final readonly class InspectionPipeline
         private AtomicFileWriter $writer = new AtomicFileWriter(),
         private GitClient $git = new GitClient(),
         private FileHasher $hasher = new FileHasher(),
+        private WorkflowDiffer $differ = new WorkflowDiffer(),
     ) {
     }
 
@@ -183,6 +186,37 @@ final readonly class InspectionPipeline
             // index points at the new one, so nothing would ever delete it.
             $moved = $old instanceof TrackingDocument && $old->group?->directory !== $workflow->group?->directory;
 
+            $report->entryFiles[$workflow->id->value] = $workflow->main->declaredIn->path;
+
+            if ($old instanceof TrackingDocument && GenerationMode::NoAi === $old->generated->mode) {
+                $report->neverWritten[] = $workflow->id->value;
+            }
+
+            // ADR-0046: the two versions are in hand here and nowhere else — comparing them anywhere else
+            // would mean parsing the code or reading the tracking files a second time.
+            if ($old instanceof TrackingDocument) {
+                $changes = $this->differ->between($old, $workflow);
+
+                if ([] !== $changes) {
+                    $report->changes[$workflow->id->value] = $changes;
+
+                    if (null !== $old->vcs->commit) {
+                        $report->writtenFrom[$workflow->id->value] = $old->vcs->commit;
+                    }
+                }
+            }
+
+            // ⚠️ ADR-0047: accepting one fact must not rewrite the page of a workflow nobody accepted.
+            // Its tracking file keeps the old state, so it stays in drift until someone decides on it.
+            if ([] !== $options->restrictTo && !\in_array($workflow->id->value, $options->restrictTo, true)) {
+                if ($old instanceof TrackingDocument) {
+                    $documents[] = $old;
+                    $report->record($workflow->type->name, 'unchanged');
+                }
+
+                continue;
+            }
+
             if (DecisionKind::Keep === $decision->kind && !$moved && $old instanceof TrackingDocument) {
                 $documents[] = $old;
                 $report->record($workflow->type->name, 'unchanged');
@@ -194,7 +228,7 @@ final readonly class InspectionPipeline
                 DecisionKind::Create === $decision->kind => [new Revision($now, $vcs->commit, 'initial')],
                 DecisionKind::ManualStale === $decision->kind => $old->history ?? [],
                 DecisionKind::Keep === $decision->kind => [...($old->history ?? []), new Revision($now, $vcs->commit, 'regroupement : la page change de dossier')],
-                default => [...($old->history ?? []), new Revision($now, $vcs->commit, $decision->describe())],
+                default => [...($old->history ?? []), new Revision($now, $vcs->commit, self::why($decision, $report->changes[$workflow->id->value] ?? []))],
             };
             $document = $this->trackingOf($directory->root, $workflow, $old, $now, $vcs, $history);
             $documents[] = $document;
@@ -343,6 +377,35 @@ final readonly class InspectionPipeline
         $commit = $commits[0];
 
         return 1 === \count($commits) && $this->git->commitExists($root, $commit) ? $commit : null;
+    }
+
+    /**
+     * Why a page is rewritten, in the words of ADR-0046 when a fact moved: « modified decision
+     * App\Entity\User::email » says more than « files changed: src/Entity/User.php », which names a file
+     * holding twenty other things.
+     *
+     * @param list<WorkflowChange> $changes
+     */
+    private static function why(FreshnessDecision $decision, array $changes): string
+    {
+        if ([] === $changes) {
+            return $decision->describe();
+        }
+
+        $first = self::describe($changes[0]);
+
+        return 1 === \count($changes) ? $first : \sprintf('%s (+%d)', $first, \count($changes) - 1);
+    }
+
+    private static function describe(WorkflowChange $change): string
+    {
+        return trim(\sprintf(
+            '%s %s %s%s',
+            $change->nature->value,
+            $change->subject->value,
+            $change->target,
+            null === $change->before && null === $change->after ? '' : \sprintf(': %s → %s', $change->before ?? '—', $change->after ?? '—'),
+        ));
     }
 
     /**
@@ -556,6 +619,7 @@ final readonly class InspectionPipeline
                 sections: PageDraft::expectedSections(),
                 changes: self::changedFiles($decisions[$workflow->id->value] ?? null),
                 draftPath: DevToolsDirectory::NAME.'/pending/'.PageBrief::fileName($workflow->id, 'draft.md'),
+                facts: array_map(self::describe(...), $report->changes[$workflow->id->value] ?? []),
             ));
             self::countBrief($report, $briefPath, $directory->root->absolute($modelPath));
             $pending[] = $workflow->id;

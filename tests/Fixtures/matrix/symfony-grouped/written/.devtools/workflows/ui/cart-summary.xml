@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="ui.cart-summary" type="ui" schema-version="1">
+  <title>CartSummary</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="component" name="App\Twig\Components\CartSummary" role="main">
+      <declared-in path="src/Twig/Components/CartSummary.php" role="component"/>
+      <attribute name="live" value="true"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/Entity/Order.php" role="entity" sha256="a731872e1c48bf879742d5cbd18b95940ea3bb4e252e502ec6850af9396664fc"/>
+    <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
+    <file path="src/Twig/Components/CartSummary.php" role="component" sha256="30582bc4b012afa538b6d3edc550e6bcb87f9ba1b9a83e500bbab370b1394112"/>
+    <file path="src/ValueObject/Money.php" role="other" sha256="1379a114fadb49a067c3023379b8ec9b8d68080e574f006c98278df245076b15"/>
+    <file path="templates/components/CartSummary.html.twig" role="template" sha256="8e49b91e18c0f183a3a772f5f74520fb5e0cc00425d77b5b3826e44ecec5bee4"/>
+  </files>
+  <packages>
+    <package name="symfony/ux-live-component" version="2.36.0"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" reason="rédaction initiale"/>
+  </history>
+</workflow>

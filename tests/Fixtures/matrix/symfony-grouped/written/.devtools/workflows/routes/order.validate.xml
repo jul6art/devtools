@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.validate" type="routes" schema-version="1">
+  <title>POST /orders/{id}/validate</title>
+  <group directory="order" title="/orders"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="app_order_validate" role="main">
+      <declared-in path="src/Controller/OrderController.php" role="controller"/>
+      <attribute name="methods" value="POST"/>
+      <attribute name="path" value="/orders/{id}/validate"/>
+      <attribute name="security" value="ROLE_USER, ROLE_MANAGER"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
+    <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
+    <file path="config/routes.yaml" role="config" sha256="7a076fce496afa2297a65dbd49c86770a1d0c81c455ea6e77a30452e632e627a"/>
+    <file path="config/routes/ux_live_component.yaml" role="config" sha256="221f0ec3918097d5e57b9585400f7ba3d3563ef64c77cbbddfcdcb61de51e083"/>
+    <file path="config/services.yaml" role="config" sha256="ffb7e71a58d604bb7b7f23356e843fdbfa48beac4a32edbfd16a856ff0856cfb"/>
+    <file path="src/Controller/OrderController.php" role="controller" sha256="1eda5298a39d8498cd30801a81b3dfb5f856540888bf713434cc85417c27b394"/>
+    <file path="src/Entity/Order.php" role="entity" sha256="a731872e1c48bf879742d5cbd18b95940ea3bb4e252e502ec6850af9396664fc"/>
+    <file path="src/Repository/OrderRepository.php" role="repository" sha256="63ab4b49ca128b66e944c01bfb4f7ba1a08a777f2cfa7e6cd71bd96eb7eb18ff"/>
+    <file path="src/ValueObject/Money.php" role="other" sha256="1379a114fadb49a067c3023379b8ec9b8d68080e574f006c98278df245076b15"/>
+  </files>
+  <packages>
+    <package name="symfony/framework-bundle" version="8.1.7"/>
+    <package name="symfony/http-foundation" version="8.1.7"/>
+    <package name="symfony/routing" version="8.1.6"/>
+    <package name="symfony/security-http" version="8.1.7"/>
+    <package name="symfony/workflow" version="8.1.0"/>
+  </packages>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" reason="rédaction initiale"/>
+  </history>
+</workflow>

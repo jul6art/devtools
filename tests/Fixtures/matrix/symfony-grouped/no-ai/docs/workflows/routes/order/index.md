@@ -1,0 +1,58 @@
+# GET /orders
+`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : d15a772
+
+## Résumé
+
+—
+
+## Déclencheur
+
+| Élément | Valeur |
+|---|---|
+| Point d'entrée | `GET /orders` (`app_order_index`) |
+| Sécurité | `ROLE_USER` |
+| Préconditions | — |
+
+## Parcours
+
+—
+
+## Navigation / états
+
+```mermaid
+flowchart LR
+  n1["app_order_index"]
+  n2["app_order_new"]
+  n3["app_order_show"]
+  n1 -->|"link"| n2
+  n1 -->|"link"| n3
+```
+
+## Décisions
+
+—
+
+## Données
+
+—
+
+## Mécanismes transverses
+
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
+
+## Points d'attention
+
+—
+
+## Workflows liés
+
+- [`route.order.new`](new.md) — navigation
+- [`route.order.show`](show.md) — navigation
+
+## Historique
+
+| Date | Commit | Changement |
+|---|---|---|
+| 2026-09-16 | d15a772 | initial |

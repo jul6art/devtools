@@ -146,9 +146,9 @@ Un projet en `entry-point` — le défaut — ne change ni d'arborescence ni de 
       rédigée au chemin plat, à côté de la page que le lecteur ouvre
 - [x] Un lien d'une page groupée vers une autre page est relatif au **dossier où la page vit** : voisine
       dans le même contrôleur, `../<groupe>/<page>.md` ailleurs, `../../<type>/<page>.md` dans un autre type
-- [ ] La matrice de bout en bout rejouée sur les projets-fixtures, snapshots régénérés — **reste à
-      faire** : aucune fixture de la matrice n'active le regroupement, le mode est couvert par des tests
-      de pipeline et de rédaction dédiés
+- [x] La matrice de bout en bout rejouée sur les projets-fixtures, snapshots régénérés — `symfony-minimal`
+      y est joué **deux fois**, à plat et groupé par contrôleur, avec les mêmes brouillons enregistrés :
+      les identifiants de workflow ne changent pas, seule la mise en page le fait
 
 ## Conséquences
 

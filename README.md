@@ -29,9 +29,11 @@ DevTools is built in that order:
 3. **Feedback and rules** — typed feedback, promoted to a rule on its second occurrence, then to a
    mechanical assertion.
 
-> ⚠️ **This repository is at the skeleton stage.** The console application, the Symfony bridge and
-> the quality harness exist; no command does anything yet. The full design lives in
-> [`docs/specs.md`](docs/specs.md) (French).
+> **Where it stands.** Step 1 is delivered and runs on real projects: three of them are documented
+> this way, the largest holding 259 workflows over 310 pages. Step 2 has its first half — what changed
+> in a workflow (`workflows:diff`), the gate that fails on it (`workflows:check`), the review that
+> accepts or refuses it (`workflows:review`), and the same drift shown by PHPStan. The design lives in
+> [`docs/specs.md`](docs/specs.md) and the decisions in [`docs/adr/`](docs/adr/README.md) (French).
 
 Requirements
 ------------
@@ -255,6 +257,173 @@ of the workflow — or with `--force`.
 ⚠️ **Without AI, a stack left to Claude is not documented**: `--no-ai` never asks for a discovery, so an
 Express or Angular project gets its pages only once a discovery has been applied (see *Projects without a
 native adapter*).
+
+### `devtools workflows:diff [path]`
+
+What changed **in the workflows** since their pages were written — not that something changed, but which
+fact, what it said, and what it says now:
+
+```
+ DevTools — cereezer   diff des workflows
+
+ ⚠ 1 fait changé · 87 workflows
+ 731 fichiers parcourus · 532 hachés
+
+ modifié décision App\Entity\User::deactivatedAt  src/Entity/User.php:366
+   - new \DateTimeImmutable()
+   + new \DateTimeImmutable('now')
+   87 workflows · async.field-device-stale, command.app.dev.login-link, route.admin.user.index (+84)
+```
+
+**Facts are grouped, never workflows.** On a real project, 233 of 259 workflows traverse the same entity:
+one changed line in it is one thing to read, not 233. The widest fact comes first.
+
+A fact is an entry point, an attribute of one (`path`, `methods`, `security`), a decided value, a
+mechanism, a dependency, a test or a package. ⚠️ **Facts read through the project's console — the
+listeners and their priorities — are only as fresh as its cache**: a stale `var/cache` hides a change
+that the code already has. ⚠️ **A file whose bytes changed without changing any of
+these is not a change** — the hash is what triggers the comparison, never what it reports, and a method
+that moved down a file reports nothing at all.
+
+| Option | |
+| --- | --- |
+| `--code` | the `git diff` of the file behind each fact, since the commit its page was written from |
+| `--only=routes` | one type of workflow |
+| `--format=md` | Markdown, for a pull request |
+| `--exit-code` | exit with `1` when a fact changed — for a hook or a CI job |
+
+The command **writes nothing at all**, reports included: it runs the inspection in read-only mode. Exit
+code `0`, `1` with `--exit-code` when a fact changed, `2` when the project could not be inspected.
+
+`--code` costs one git process per distinct reference, not one per fact: the tracking files of a project
+almost always share the same commit.
+
+A workflow that did not exist is named *nouveau*, one that no longer does *disparu* — neither is unfolded
+into its facts.
+
+### `devtools workflows:check [path]` — the gate
+
+Fails when the documentation no longer matches the code, and **writes nothing**:
+
+```
+ DevTools — cereezer   contrôle des workflows
+
+ ✖ 2 causes
+
+ route.order.export                        non documenté
+ modifié attribut app_order_new#security   ROLE_USER → ROLE_ADMIN   3 workflows
+```
+
+| Cause of failure | |
+| --- | --- |
+| an entry point with no page | `non documenté` |
+| a page whose workflow is gone | `orphelin` |
+| a fact changed since the pages were written | the fact, grouped, with its reach |
+| `--require-ai`, a page never written by Claude | `jamais rédigé` |
+
+⚠️ **A file whose bytes changed without changing a fact is not a cause.** That is the whole difference
+with the freshness: the gate does not stop anyone for a comment added to a traversed file.
+
+| Option | |
+| --- | --- |
+| `--require-ai` | fail as well on a page that only holds facts |
+| `--only=routes` | one type of workflow |
+| `--format=github` | `::error file=…,line=…::` annotations, so the pull request shows the line |
+
+Exit code `0` when there is nothing to report, `1` for at least one cause, `2` when the project could
+not be inspected.
+
+```yaml
+# .github/workflows/documentation.yml
+- run: vendor/bin/devtools workflows:check --format=github
+```
+
+### `devtools git:install-hooks [path]`
+
+| Hook | What it does |
+| --- | --- |
+| `pre-commit` | `workflows:check` — **warns without blocking**, unless `--strict` |
+| `post-merge`, `post-checkout` | `workflows:inspect --no-ai`: the facts follow the branch |
+
+Hooks go to `core.hooksPath` when the project configured one, `.git/hooks/` otherwise. ⚠️ **An existing
+hook is never overwritten**: the block is appended between `# >>> devtools >>>` and `# <<< devtools <<<`,
+and `git:uninstall-hooks` removes exactly that block — a hook that held nothing else goes away with it.
+
+⚠️ **They never block a commit for a technical reason.** DevTools missing, `.devtools/` missing: the hook
+exits 0. A gate that stops the work because of itself is a gate that gets uninstalled.
+
+### Accepting a change, or refusing it
+
+Once `workflows:check` has failed, two decisions — and only two:
+
+```shell
+vendor/bin/devtools workflows:review                            # fact by fact, in a terminal
+vendor/bin/devtools workflows:accept 'App\Entity\User::email'   # the change was wanted
+vendor/bin/devtools workflows:reject 'App\Entity\User::email'   # it was not
+```
+
+**Accepting** rewrites the pages of the workflows carrying that fact — and only those. Their history
+names the fact (`modified decision App\Entity\User::email`) instead of the file it lives in, and the
+brief Claude receives carries it too, so the prose is reread where it matters rather than everywhere.
+`--all` takes every changed fact, `--no-ai` keeps the facts right and leaves the prose for later.
+
+**Refusing** writes nothing — neither documentation nor code. It prints the command that brings the file
+back to the state the page was written from:
+
+```
+ ✗ modifié décision App\Entity\User::email
+
+ À lancer pour ramener le code :
+
+   git restore --source=8f3c21a -- src/Entity/User.php
+```
+
+⚠️ `--restore` runs it. It is the only thing in DevTools that touches a project's own code, so it is
+bounded: never without the option, and **never on a file that carries another changed fact** — undoing
+that one silently is exactly the accident this guard exists for. The command is printed instead.
+
+⚠️ It brings back **the whole file**, at the commit the page was written from: a fact accepted earlier
+but not yet committed goes back with it. Accepting writes the documentation, not the code.
+
+`workflows:review` walks the facts one by one, widest first, and asks. **Nothing is written before the
+last answer**: interrupting a review leaves the project exactly as it was. Without a terminal it refuses
+to guess and exits 1 — in CI, `workflows:check` is the command.
+
+### PHPStan — the drift where the code is written
+
+PHPStan already runs in most projects' `composer qa`, and in the editor. The extension reports a changed
+fact as an error, on the line that carries it:
+
+```neon
+# phpstan.neon
+includes:
+    - vendor/jul6art/devtools/resources/phpstan/extension.neon
+```
+
+⚠️ **This one needs the package in the project's autoload** — `composer require --dev jul6art/devtools`.
+PHPStan builds the rule through its own container, before any bootstrap file is loaded, so a DevTools
+that only exists as a standalone binary somewhere else on the machine cannot be reached: the analysis
+stops on `Class '…\WorkflowDriftRule' not found`. The commands (`workflows:check`, `workflows:diff`)
+have no such constraint — they are the ones to wire into a hook when the package is not a dependency.
+
+```
+ ------ ---------------------------------------------------------------------
+  Line   src/Entity/User.php
+ ------ ---------------------------------------------------------------------
+  250    modified decision App\Entity\User::email: null !== $email -> '' !== trim($email)
+         🪪 devtools.workflowDrift
+         💡 87 workflows documented this. Accept it with
+            devtools workflows:accept 'App\Entity\User::email', or refuse it.
+ ------ ---------------------------------------------------------------------
+```
+
+⚠️ **The rule analyses nothing itself.** It calls the same read-only inspection as `workflows:diff`, once
+per PHPStan run: a second extractor built on the syntax tree PHPStan already holds would be faster, and
+would silently diverge from the first one. DevTools computes, PHPStan displays.
+
+It hangs on the node PHPStan visits once at the end of an analysis, so the result cache cannot hide a
+drift that appeared since the last run. A project without a `.devtools/` directory is never told
+anything, and `parameters.devtools.path` points at the project when it is not the current directory.
 
 ### `.devtools/config.xml`
 
@@ -535,17 +704,21 @@ Structure
 bin/devtools                 standalone entry point
 src/
 ├── Console/                 the console application every command is registered in
-├── Command/                 init, stack:detect, workflows:inspect, workflows:apply,
-│                            claude:install, knowledge:list, knowledge:promote
+├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
+│                            workflows:review, workflows:accept, workflows:reject, workflows:apply,
+│                            git:install-hooks, git:uninstall-hooks, claude:install,
+│                            knowledge:list, knowledge:promote
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
+├── Review/                  accepting a changed fact, or refusing it and undoing the code
 ├── Stack/                   stack detection from manifests, .devtools/stack.xml, knowledge of a stack
 ├── Inspection/
 │   ├── Model/               the intermediate model every adapter produces, and its XML form
 │   ├── Adapter/             entry points of a stack: Symfony, PHP without a framework, the Claude path
 │   ├── Graph/               files a PHP entry point traverses, grouping, tests, coverage
 │   ├── Freshness/           what changed since the documentation was written: git, then hashes
+│   ├── Diff/                what changed in a workflow, fact by fact, grouped across workflows
 │   └── InspectionPipeline   the whole run of workflows:inspect
 ├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
 ├── Rendering/               pages, workflows.md and the overview diagram

@@ -6,7 +6,11 @@ namespace Jul6Art\DevTools\Tests\Support;
 
 /**
  * The coverage floors of ADR-0015, checked against a Clover report: more than 90 % of the statements of
- * `src/` outside the bridge, all of them in `Inspection/Freshness/` and `Tracking/`.
+ * `src/` outside the bridge, all of them in the directories that **decide** — `Inspection/Freshness/`
+ * and `Tracking/` (ADR-0010), `Inspection/Diff/` and `Review/` (ADR-0046, ADR-0047).
+ *
+ * ⚠️ A wrong « nothing changed » is worse than a needless rewrite, and a wrong « no drift » is worse
+ * than a needless review: both are silences, and a silence is what nobody comes back to check.
  */
 final readonly class CoverageThresholds
 {
@@ -16,6 +20,8 @@ final readonly class CoverageThresholds
     public const array FLOORS = [
         'src/' => 90.0,
         'src/Inspection/Freshness/' => 100.0,
+        'src/Inspection/Diff/' => 100.0,
+        'src/Review/' => 100.0,
         'src/Tracking/' => 100.0,
     ];
 

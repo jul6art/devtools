@@ -19,6 +19,7 @@ final readonly class PageBrief
      * @param bool                                      $amend    the inspection just added the revision this writing completes
      * @param list<string>                              $sections the closed list of sections the draft holds, in order
      * @param list<array{path: string, change: string}> $changes  the files added, removed or changed since the last revision
+     * @param list<string>                              $facts    what changed in the workflow itself (ADR-0046), as one line each
      */
     public function __construct(
         public WorkflowId $workflow,
@@ -35,6 +36,7 @@ final readonly class PageBrief
         public array $sections,
         public array $changes,
         public string $draftPath,
+        public array $facts = [],
     ) {
     }
 

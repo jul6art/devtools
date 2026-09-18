@@ -21,6 +21,9 @@
 # lock files are committed.
 /tests/Fixtures/projects/*/vendor/
 /tests/Fixtures/projects/*/var/
+
+# Coverage reports: written by `composer coverage`, read by the check, never committed.
+/var/
 /tests/Fixtures/projects/*/.devtools/
 /tests/Fixtures/projects/*/config/reference.php
 

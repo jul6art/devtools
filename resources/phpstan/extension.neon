@@ -1,0 +1,30 @@
+# DevTools — the drift of the documented workflows, as PHPStan errors (ADR-0048).
+#
+# Include it from the project's phpstan.neon:
+#
+#     includes:
+#         - vendor/jul6art/devtools/resources/phpstan/extension.neon
+#
+# Nothing is reported on a project without a .devtools/ directory.
+parameters:
+    devtools:
+        path: null
+
+parametersSchema:
+    devtools: structure([
+        path: schema(string(), nullable())
+    ])
+
+services:
+    # ⚠️ The collector looks useless and is not: PHPStan visits CollectedDataNode, where the rule hangs,
+    # only when at least one collector is registered.
+    -
+        class: Jul6Art\DevTools\Bridge\PHPStan\AnalysedFileCollector
+        tags:
+            - phpstan.collector
+    # ⚠️ A static factory, not a class: PHPStan 2.1.0's container ignores a constructor's default values
+    # and would need every service of the core wired here, in a second description of the same thing.
+    -
+        factory: Jul6Art\DevTools\Bridge\PHPStan\WorkflowDriftRule::create(%devtools.path%)
+        tags:
+            - phpstan.rules.rule

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Inspection;
 
+use Jul6Art\DevTools\Inspection\Diff\ChangeGroup;
+use Jul6Art\DevTools\Inspection\Diff\WorkflowChange;
 use Jul6Art\DevTools\Inspection\Freshness\DecisionKind;
 use Jul6Art\DevTools\Inspection\Freshness\FreshnessDecision;
 
@@ -45,6 +47,37 @@ final class InspectionReport
      * @var array<string, FreshnessDecision> by identifier
      */
     public array $decisions = [];
+
+    /**
+     * What changed in each workflow, fact by fact (ADR-0046): the freshness says a page must be
+     * rewritten, this says why a reader should care.
+     *
+     * @var array<string, list<WorkflowChange>> by identifier
+     */
+    public array $changes = [];
+
+    /**
+     * The file that declares each workflow's entry point, by identifier: what a check annotates when it
+     * reports a workflow that is not documented (ADR-0017).
+     *
+     * @var array<string, string>
+     */
+    public array $entryFiles = [];
+
+    /**
+     * The workflows whose page has never been written by Claude — `--require-ai` of ADR-0017.
+     *
+     * @var list<string>
+     */
+    public array $neverWritten = [];
+
+    /**
+     * The commit each tracking file was written from, by identifier: what `workflows:diff --code` diffs
+     * against, so that nothing reads the tracking files a second time.
+     *
+     * @var array<string, string>
+     */
+    public array $writtenFrom = [];
 
     public ?string $path = null;
 
@@ -89,6 +122,16 @@ final class InspectionReport
         return $this->decisions[$id] ?? null;
     }
 
+    /**
+     * The changed facts, each with the workflows that carry it, widest first (ADR-0046).
+     *
+     * @return list<ChangeGroup>
+     */
+    public function changeGroups(): array
+    {
+        return ChangeGroup::of($this->changes);
+    }
+
     public function record(string $type, string $outcome): void
     {
         $this->counts[$type][$outcome] = ($this->counts[$type][$outcome] ?? 0) + 1;
@@ -127,6 +170,11 @@ final class InspectionReport
             [] !== $this->warnings || [] !== $this->fallbacks => 1,
             default => 0,
         };
+    }
+
+    private static function cell(?string $value): string
+    {
+        return null === $value ? '—' : '`'.str_replace('|', '\|', $value).'`';
     }
 
     public function toMarkdown(): string
@@ -168,6 +216,23 @@ final class InspectionReport
 
             foreach ($changes as $id => $decision) {
                 $lines[] = \sprintf('| `%s` | %s | %s |', $id, $decision->kind->value, str_replace('|', '\|', $decision->describe()));
+            }
+        }
+
+        $groups = $this->changeGroups();
+
+        if ([] !== $groups) {
+            $lines = [...$lines, '', '## Changed facts', '', '| Fact | Was | Is | Workflows |', '|---|---|---|---|'];
+
+            foreach ($groups as $group) {
+                $lines[] = \sprintf(
+                    '| %s `%s` | %s | %s | %d |',
+                    $group->change->nature->value,
+                    str_replace('|', '\|', $group->change->target),
+                    self::cell($group->change->before),
+                    self::cell($group->change->after),
+                    $group->count(),
+                );
             }
         }
 
