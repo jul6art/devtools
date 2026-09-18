@@ -61,6 +61,7 @@
 | [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0042](0042-progression-et-compteurs-en-console.md) | Progression et compteurs de la sortie console | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
+| [0044](0044-introspection-approfondie.md) | Introspection approfondie : connaissance amendable, logique conditionnelle complète | MVP+ — Retours d'usage | Accepted | — |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 
@@ -88,12 +89,15 @@ Phase 2 — Retours et règles (0025–0029)      Phase 3 — Généralisation (
     plus revenir sans casser la gate »           API Claude, rename, glossaire, multi-projets,
                                                  ask, intégration au générateur de squelettes
 
-MVP+ — Retours d'usage (0041–0043), nés de la première inspection d'un projet réel (cereezer,
+MVP+ — Retours d'usage (0041–0044), nés de la première inspection d'un projet réel (cereezer,
 84 workflows). Indépendants les uns des autres, chacun jouable dès le MVP livré.
   0041 la connaissance d'une stack inconnue grandit une bibliothèque au lieu de rester au projet
   0042 la console dit ce qu'elle fait, où elle en est, et ce que l'exécution a coûté
   0043 la page cesse d'être un inventaire : les faits au XML, les listeners rattachés aux
        workflows qu'ils interceptent, et un graphique là où une logique décide d'une valeur
+  0044 ce que 0041 et 0043 ont nommé et laissé : fiche amendable, voters, formulaires,
+       contraintes de validation, un saut d'appel, et la machine à états parmi les décisions
+       (acceptée le 2026-09-18, démarrage non planifié)
 
   « une page se lit, et son diagramme répond à “pourquoi cette valeur-là ?” »
 ```
@@ -146,6 +150,7 @@ MVP+
 0012 + 0013               ──► 0041
 0009 + 0010 + 0011        ──► 0042
 0006 + 0008 + 0011        ──► 0043
+0041 + 0043               ──► 0044
 ```
 
 - **Chemin critique du MVP** : 0003 → 0004 → 0005 → 0006 → 0007 → 0009 → 0010 → 0011.
