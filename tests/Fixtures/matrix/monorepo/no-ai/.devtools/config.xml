@@ -33,6 +33,11 @@
          <symfony console="docker compose exec -T php bin/console" env="dev" timeout="120"/> -->
     <symfony console="bin/console" env="dev" timeout="60"/>
 
+    <!-- One workflow per route (entry-point), or one per controller with its routes as triggers
+         (controller), which suits a back-office with twenty routes per resource.
+         <routes group="controller"/> -->
+    <routes group="entry-point"/>
+
     <!-- The web directory of a PHP project without framework, each of its .php files being a route.
          By default public/, web/ and www/: <php web-root="htdocs"/> -->
     <php/>

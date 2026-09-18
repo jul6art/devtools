@@ -2,6 +2,7 @@
 <files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
   <file path="config/packages/framework.yaml">
     <workflow ref="async.order-created" relation="file"/>
+    <workflow ref="route.order.new" relation="file"/>
     <workflow ref="route.order.validate" relation="file"/>
   </file>
   <file path="config/packages/security.yaml">

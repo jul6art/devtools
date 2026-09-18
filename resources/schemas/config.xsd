@@ -74,6 +74,18 @@
                         <xs:attribute name="timeout" type="xs:decimal"/>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="routes" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="group">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="entry-point"/>
+                                    <xs:enumeration value="controller"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="php" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="web-root" type="t:nonEmpty"/>

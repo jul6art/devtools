@@ -56,6 +56,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $symfony = $this->dom->optional($root, 'symfony');
         $language = $this->dom->optional($root, 'language');
         $php = $this->dom->optional($root, 'php');
+        $routes = $this->dom->optional($root, 'routes');
 
         return new Config(
             excludes: array_map(static fn (\DOMElement $exclude): string => trim($exclude->textContent), $this->dom->children($this->dom->optional($root, 'paths'), 'exclude')),
@@ -71,6 +72,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             symfonyEnv: $symfony?->hasAttribute('env') ? $symfony->getAttribute('env') : $defaults->symfonyEnv,
             symfonyTimeout: $symfony?->hasAttribute('timeout') ? (float) $symfony->getAttribute('timeout') : $defaults->symfonyTimeout,
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
+            routeGrouping: $routes?->hasAttribute('group') ? $routes->getAttribute('group') : $defaults->routeGrouping,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,
         );
     }

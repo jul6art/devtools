@@ -40,10 +40,21 @@ flowchart LR
   n1 -->|"redirect"| n2
 ```
 
+```mermaid
+stateDiagram-v2
+  state "draft" as s1
+  state "validated" as s2
+  state "shipped" as s3
+  [*] --> s1
+  s1 --> s2 : validate
+  s2 --> s3 : ship
+```
+
 ## Composants impliqués
 
 | Rôle | Fichier | Notes |
 |---|---|---|
+| Configuration | `config/packages/framework.yaml` |  |
 | Configuration | `config/packages/security.yaml` |  |
 | Configuration | `config/routes.yaml` |  |
 | Configuration | `config/routes/ux_live_component.yaml` |  |

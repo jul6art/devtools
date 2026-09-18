@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Tests\Inspection\Graph;
 
 use Jul6Art\DevTools\Config\Config;
+use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Inspection\Graph\BuildResult;
 use Jul6Art\DevTools\Inspection\Graph\CoverageCalculator;
 use Jul6Art\DevTools\Inspection\Graph\EntryPointCandidate;
@@ -73,6 +74,29 @@ final class WorkflowBuilderTest extends TestCase
         $result = new WorkflowBuilder(new Config())->build(GraphFixture::root(), GraphFixture::stack(), $candidates, ['templates'])->result;
 
         self::assertSame(['event.locale-listener'], array_map(strval(...), $this->workflow(new BuildResult($result, []), 'route.order.index')->dependsOn));
+    }
+
+    public function testGroupedByControllerEveryRouteOfAResourceIsOneWorkflow(): void
+    {
+        $build = $this->build(new Config(routeGrouping: Config::ROUTES_BY_CONTROLLER));
+        $ids = array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $build->result->workflows);
+
+        self::assertSame(['command.app.import-catalog', 'event.locale-listener', 'route.health', 'route.order'], $ids, 'One workflow per controller: what its routes have in common, or its controller when they share nothing.');
+
+        $orders = $this->workflow($build, 'route.order');
+
+        self::assertSame('/orders', $orders->title);
+        self::assertSame(['app_order_index', 'app_order_new', 'app_order_show'], array_map(static fn (EntryPoint $satellite): string => $satellite->name, $orders->satellites));
+        self::assertSame('3', $orders->main->attributes['routes']);
+        self::assertContains('templates/order/new.html.twig', array_map(static fn (FileRef $file): string => $file->path, $orders->files), 'The resource traverses what all its routes traverse.');
+    }
+
+    public function testAnUnknownWayOfGroupingRoutesIsRefused(): void
+    {
+        $this->expectException(InvalidConfig::class);
+        $this->expectExceptionMessage('is not a way of grouping routes');
+
+        new Config(routeGrouping: 'par-écran');
     }
 
     private function build(Config $config = new Config()): BuildResult

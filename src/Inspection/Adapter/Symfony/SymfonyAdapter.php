@@ -92,7 +92,9 @@ final readonly class SymfonyAdapter implements AdapterInterface
             }
 
             $roles = array_values(array_unique([...$console instanceof ConsoleIntrospection ? self::accessControlRoles($console, $route['path']) : [], ...$scanner->grantedRoles($route['class'], $route['method'])]));
-            $states = $console instanceof ConsoleIntrospection ? self::stateMachine($console, $scanner->workflowParameters($route['class'], $route['method'])) : null;
+            $states = $console instanceof ConsoleIntrospection
+                ? self::stateMachine($console, $scanner->workflowParameters($route['class'], $route['method'])) ?? self::machineOfEntity($console, $extractor->extract($root->absolute($file), [$route['method']])->classes)
+                : null;
             $attributes = ['path' => $route['path']];
 
             if ('ANY' !== $route['methods']) {
@@ -216,6 +218,24 @@ final readonly class SymfonyAdapter implements AdapterInterface
 
             if (isset($console->stateMachines[$name])) {
                 return $console->stateMachines[$name];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The machine a route drives when it does not receive it by Symfony's convention: a project routinely
+     * wraps `WorkflowInterface` in a service of its own, and the route is then recognised by the entity it
+     * handles — the one the machine declares it supports.
+     *
+     * @param list<string> $classes the classes the route's method uses
+     */
+    private static function machineOfEntity(ConsoleIntrospection $console, array $classes): ?StateMachine
+    {
+        foreach ($console->supports as $machine => $entities) {
+            if ([] !== array_intersect($entities, $classes) && isset($console->stateMachines[$machine])) {
+                return $console->stateMachines[$machine];
             }
         }
 

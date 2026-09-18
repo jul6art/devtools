@@ -257,6 +257,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<groups><group main="app_order_index"><satellite>app_order_export</satellite></group></groups>` | — | documents an entry point as part of another workflow |
 | `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
+| `<routes group="controller"/>` | `entry-point` | one workflow per route, or one per controller with its routes as triggers |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language of the pages Claude writes; `--locale` wins over it |
 
@@ -275,6 +276,11 @@ For a PHP project, the files of a workflow are found by reading the code, never 
 - **through the templates rendered** with a literal name, and their `extends`, `include`, `embed`;
 - **through the files required or included** by a literal path — `require __DIR__.'/../lib/db.php'`;
 - **up to `<graph depth>` hops** (3 by default): controller → service → repository → entity.
+
+**A back-office has twenty routes per resource.** `<routes group="controller"/>` then makes one workflow per
+controller — the resource — with its routes as triggers and its state machine on the page: a real project
+went from 233 route pages to 50. The menu gains a third level past a dozen entries of one type, one
+sub-heading per family (`route.admin.…` → *admin*).
 
 Existing tests are the test files that use the entry point or a file of its first hop. Two routes to
 the same method are one workflow; `<groups>` in `config.xml` joins others.

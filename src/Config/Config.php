@@ -28,6 +28,18 @@ final readonly class Config
     public const string DEFAULT_LANGUAGE = 'en';
 
     /**
+     * One route, one workflow.
+     */
+    public const string ROUTES_BY_ENTRY_POINT = 'entry-point';
+
+    /**
+     * Every route of a controller is one workflow — the resource — and each route is one of its triggers.
+     * A back-office reaches twenty routes per resource, and twenty pages saying "applies a transition" say
+     * less than one page carrying the state machine.
+     */
+    public const string ROUTES_BY_CONTROLLER = 'controller';
+
+    /**
      * @var list<string>
      */
     private array $excludes;
@@ -51,6 +63,7 @@ final readonly class Config
         public string $symfonyEnv = 'dev',
         public float $symfonyTimeout = 60.0,
         public ?string $pagesLanguage = null,
+        public string $routeGrouping = self::ROUTES_BY_ENTRY_POINT,
         public ?string $phpWebRoot = null,
     ) {
         if ($graphDepth < 0) {
@@ -59,6 +72,10 @@ final readonly class Config
 
         if ($symfonyTimeout <= 0) {
             throw new InvalidConfig('The console timeout must be a positive number of seconds.');
+        }
+
+        if (!\in_array($routeGrouping, [self::ROUTES_BY_ENTRY_POINT, self::ROUTES_BY_CONTROLLER], true)) {
+            throw new InvalidConfig(\sprintf('"%s" is not a way of grouping routes: "%s" or "%s".', $routeGrouping, self::ROUTES_BY_ENTRY_POINT, self::ROUTES_BY_CONTROLLER));
         }
 
         if (null !== $pagesLanguage && 1 !== preg_match('/^[a-z]{2}$/', $pagesLanguage)) {

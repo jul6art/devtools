@@ -12,6 +12,7 @@
     </entrypoint>
   </entrypoints>
   <files>
+    <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
     <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
     <file path="config/routes.yaml" role="config" sha256="877e010ec7cda9c3bb1936514124beaac76c6fe353563303ee79133c52e5810a"/>
     <file path="src/Controller/OrderController.php" role="controller" sha256="b6fcbeeb1a8cef7a27cd55ade0723206bca441e6284a4078f44b986f55534a2f"/>

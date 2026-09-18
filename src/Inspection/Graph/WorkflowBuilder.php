@@ -146,6 +146,12 @@ final readonly class WorkflowBuilder
                 continue;
             }
 
+            if (Config::ROUTES_BY_CONTROLLER === $this->config->routeGrouping && 'route' === $candidate->entryPoint->kind) {
+                $groups['controller:'.$candidate->entryPoint->declaredIn->path][] = $candidate;
+
+                continue;
+            }
+
             $message = $candidate->entryPoint->attributes['message'] ?? null;
 
             $key = match (true) {
@@ -160,7 +166,93 @@ final readonly class WorkflowBuilder
             $groups[$key][] = $candidate;
         }
 
+        foreach ($groups as $key => $group) {
+            if (str_starts_with($key, 'controller:')) {
+                $groups[$key] = [self::resource($group), ...$group];
+            }
+        }
+
         return $groups;
+    }
+
+    /**
+     * The workflow a controller's routes belong to: the resource they serve. Its entry point is the
+     * controller itself, named after what its routes have in common (`admin_work_order`), so that adding a
+     * route neither renames the workflow nor orphans its page (ADR-0003).
+     *
+     * @param non-empty-list<EntryPointCandidate> $routes
+     */
+    private static function resource(array $routes): EntryPointCandidate
+    {
+        $names = array_map(static fn (EntryPointCandidate $route): string => $route->entryPoint->name, $routes);
+        $paths = array_map(static fn (EntryPointCandidate $route): string => $route->entryPoint->attributes['path'] ?? '', $routes);
+        $path = self::commonPrefix($paths, '/');
+        $path = '' === $path ? '' : '/'.$path;
+        // What the route names have in common, when that says something: `app_order_new` and
+        // `app_order_show` give `app_order`. Two routes sharing only `app_` say nothing, and the resource
+        // is then named after its controller.
+        $name = self::commonPrefix($names, '_');
+        $name = 2 > \count(explode('_', $name)) ? self::controllerName($routes[0]->entryPoint->declaredIn->path) : $name;
+        $states = null;
+
+        foreach ($routes as $route) {
+            $states ??= $route->states;
+        }
+
+        return new EntryPointCandidate(
+            type: $routes[0]->type,
+            entryPoint: new EntryPoint('resource', '' === $name ? $routes[0]->entryPoint->name : $name, $routes[0]->entryPoint->declaredIn, array_filter([
+                'path' => '' === $path ? null : $path,
+                'routes' => (string) \count($routes),
+            ], static fn (?string $value): bool => null !== $value)),
+            title: '' === $path ? $routes[0]->title : $path,
+            structuralFiles: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->structuralFiles, $routes)),
+            dependsOn: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->dependsOn, $routes)),
+            states: $states,
+            extraTests: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->extraTests, $routes)),
+            confidence: $routes[0]->confidence,
+            source: $routes[0]->source,
+        );
+    }
+
+    /**
+     * `src/Controller/Admin/WorkOrderController.php` → `work_order`.
+     */
+    private static function controllerName(string $path): string
+    {
+        $class = preg_replace('/Controller$/', '', basename($path, '.php')) ?? '';
+
+        return strtolower((string) preg_replace('/(?<=[a-z0-9])(?=[A-Z])/', '_', $class));
+    }
+
+    /**
+     * What a list of names has in common, cut at a separator: `admin_work_order_new` and
+     * `admin_work_order_edit` → `admin_work_order`.
+     *
+     * @param list<string>     $values
+     * @param non-empty-string $separator
+     */
+    private static function commonPrefix(array $values, string $separator): string
+    {
+        $segments = null;
+
+        foreach ($values as $value) {
+            $parts = explode($separator, trim($value, $separator));
+            $segments ??= $parts;
+            $common = [];
+
+            foreach ($segments as $index => $segment) {
+                if (($parts[$index] ?? null) !== $segment) {
+                    break;
+                }
+
+                $common[] = $segment;
+            }
+
+            $segments = $common;
+        }
+
+        return implode($separator, $segments ?? []);
     }
 
     /**

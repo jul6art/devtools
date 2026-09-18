@@ -12,6 +12,7 @@
     </entrypoint>
   </entrypoints>
   <files>
+    <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
     <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
     <file path="config/routes.yaml" role="config" sha256="7a076fce496afa2297a65dbd49c86770a1d0c81c455ea6e77a30452e632e627a"/>
     <file path="config/routes/ux_live_component.yaml" role="config" sha256="221f0ec3918097d5e57b9585400f7ba3d3563ef64c77cbbddfcdcb61de51e083"/>

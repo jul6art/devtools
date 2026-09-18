@@ -20,6 +20,7 @@ final readonly class ConsoleIntrospection
      * @param array<string, list<array{event: string, method: string}>>                         $listeners     class => what it listens to
      * @param array<string, StateMachine>                                                       $stateMachines
      * @param list<array{path: string, roles: list<string>}>                                    $accessControl
+     * @param array<string, list<string>>                                                       $supports      state machine => the entity classes it drives
      */
     private function __construct(
         public array $routes,
@@ -28,6 +29,7 @@ final readonly class ConsoleIntrospection
         public array $listeners,
         public array $stateMachines,
         public array $accessControl,
+        public array $supports = [],
     ) {
     }
 
@@ -83,6 +85,7 @@ final readonly class ConsoleIntrospection
         }
 
         $stateMachines = [];
+        $supports = [];
 
         foreach (Json::array($console->json(['debug:config', 'framework', 'workflows']), 'workflows') as $name => $workflow) {
             $places = array_values(array_filter(array_map(static fn (mixed $place): ?string => \is_string($place) ? $place : Json::string($place, 'name'), Json::array($workflow, 'places'))));
@@ -94,6 +97,7 @@ final readonly class ConsoleIntrospection
             }
 
             $stateMachines[(string) $name] = new StateMachine((string) $name, $places, $transitions);
+            $supports[(string) $name] = array_values(array_filter(Json::array($workflow, 'supports'), \is_string(...)));
         }
 
         $accessControl = [];
@@ -106,6 +110,6 @@ final readonly class ConsoleIntrospection
             }
         }
 
-        return new self($routes, $commands, $handlers, $listeners, $stateMachines, $accessControl);
+        return new self($routes, $commands, $handlers, $listeners, $stateMachines, $accessControl, $supports);
     }
 }
