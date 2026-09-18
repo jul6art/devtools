@@ -129,6 +129,36 @@ final class DecisionExtractorTest extends TestCase
         self::assertSame(Confidence::High, $this->extract("if (\$order->paid) {\n    \$order->setStatus('p');\n} else {\n    \$order->setStatus('d');\n}")[0]->confidence);
     }
 
+    /**
+     * A fluent chain writes on the object it started from: the target is that object's type, not the
+     * printed chain. Before this, `(new RolePermission())->setRoleCode($code)->setPermission($p)`
+     * produced a target carrying spaces — which no page draft could ever quote back, since a target is
+     * named as one word.
+     */
+    public function testAFluentChainIsNamedAfterTheObjectItStartedFrom(): void
+    {
+        $points = $this->extract(
+            "if (\$order->paid) {\n    (new \\App\\Entity\\Line())->setLabel('a')->setAmount(1);\n} else {\n    (new \\App\\Entity\\Line())->setLabel('b')->setAmount(2);\n}",
+        );
+
+        self::assertSame('App\Entity\Line::amount', $points[0]->target);
+        self::assertSame(Confidence::High, $points[0]->confidence);
+    }
+
+    /**
+     * Only fluent names are walked up: a lookup returns something else entirely, and following it would
+     * name the repository's type with the confidence of a certainty.
+     */
+    public function testALookupIsNotWalkedUpAndNeverCarriesASpace(): void
+    {
+        $points = $this->extract(
+            "if (\$order->paid) {\n    \$repository->find(1, true)->setStatus('a');\n} else {\n    \$repository->find(1, true)->setStatus('b');\n}",
+        );
+
+        self::assertStringNotContainsString(' ', $points[0]->target);
+        self::assertSame(Confidence::Medium, $points[0]->confidence);
+    }
+
     public function testBeyondThreeNestedConditionsTheReadingStopsAndSaysSo(): void
     {
         $body = "if (\$a) {\n if (\$b) {\n  if (\$c) {\n   if (\$d) {\n    \$order->setStatus('deep');\n   }\n  }\n }\n}";

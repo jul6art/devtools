@@ -415,6 +415,14 @@ final class DecisionExtractor
      */
     private function receiver(Node $node): array
     {
+        // A fluent chain writes on the object it STARTED from: `(new RolePermission())->setRoleCode(…)
+        // ->setPermission(…)` decides `RolePermission::permission`. Without walking it up, the target was
+        // the printed chain itself — unreadable as a field name, and impossible to quote back in a page,
+        // since a target is named as one word (ADR-0043).
+        if ($node instanceof MethodCall && $node->name instanceof Identifier && self::isFluent($node->name->toString())) {
+            return $this->receiver($node->var);
+        }
+
         if ($node instanceof Variable && \is_string($node->name)) {
             if ('this' === $node->name) {
                 return '' === $this->scope ? ['this', Confidence::Medium] : [$this->scope, Confidence::High];
@@ -435,7 +443,21 @@ final class DecisionExtractor
             return [$node->class->toString(), Confidence::High];
         }
 
-        return [trim($node instanceof Expr ? $this->print($node) : 'unknown', '$'), Confidence::Medium];
+        $printed = trim($node instanceof Expr ? $this->print($node) : 'unknown', '$');
+
+        // Whatever is left is named, never dropped — but never with a space in it: a page quotes a target
+        // as one word, so a printed expression carrying spaces would name a field no author can write.
+        return [(string) preg_replace('/\s+/', '', $printed), Confidence::Medium];
+    }
+
+    /**
+     * The method names that conventionally return the object they were called on. Only those are walked
+     * up: `$repository->find($id)->setName(…)` starts from the REPOSITORY, and following it there would
+     * name the wrong type with the confidence of a certainty.
+     */
+    private static function isFluent(string $method): bool
+    {
+        return 1 === preg_match('/^(set|add|remove|with)[A-Z]/', $method);
     }
 
     private function learnParameterTypes(FunctionLike $node): void
