@@ -7,7 +7,7 @@ Workflow cartography and feedback loop for projects built with Claude Code
 
 <p align="left">
     <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-    <img src="https://img.shields.io/static/v1?label=stable&message=v1&color=0ea5e9" alt="Version">
+    <img src="https://img.shields.io/static/v1?label=stable&message=v2&color=0ea5e9" alt="Version">
 </p>
 
 **DevTools** gives a project a `.devtools/` folder — versioned next to `.git` — in which Claude Code

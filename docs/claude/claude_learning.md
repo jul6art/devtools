@@ -452,3 +452,14 @@
   refusés pour avoir écrit `` `.devtools/config.xml` `` ou `` `.devtools/stack.xml` `` en code inline : le
   validateur ne connaît que les fichiers du modèle, et un fichier généré n'en fait pas partie. **Règle :**
   dans une page, un artefact de `.devtools/` se nomme en toutes lettres, pas en chemin entre backticks.
+
+---
+
+### 2026-09-18 — Publication
+
+- **Un tag majeur laisse le badge « stable » du README sur l'ancienne version.** `v2.0.0` a été poussé
+  avec `message=v1` encore dans l'en-tête, et c'est le décideur qui l'a corrigé. Tous les bundles
+  `jul6art/*` portent ce badge et le tiennent à jour (`core-bundle` v3, `datatable-bundle` v2).
+  **Règle :** tagger une version, c'est trois gestes indissociables — le commit, le tag,
+  **et le badge `shields.io/static/v1?label=stable&message=v<majeure>` du README**, dans le même
+  commit que le code qu'on publie. Le badge ne porte que la majeure, jamais `v2.0.0`.
