@@ -121,7 +121,10 @@ vendor/bin/devtools init
 ```
 docs/workflows/    the documentation — what a human opens
 ├── workflows.md   the menu
-└── <type>/<id>.md one page per workflow
+├── <type>/<id>.md one page per workflow
+└── routes/<controller>/     with <routes group="controller"/>: one directory per controller
+    ├── README.md            its routes, in a table — the page the menu links to
+    └── <route>.md           one page per route, the same ten sections as any other
 
 .devtools/         the machinery — what DevTools reads back
 ├── config.xml     the project's options — yours, DevTools never rewrites it
@@ -266,7 +269,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<groups><group main="app_order_index"><satellite>app_order_export</satellite></group></groups>` | — | documents an entry point as part of another workflow |
 | `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
-| `<routes group="controller"/>` | `entry-point` | one workflow per route, or one per controller with its routes as triggers |
+| `<routes group="controller"/>` | `entry-point` | one page per route at the root of `routes/`, or the same pages laid out under a directory per controller, with an index |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language of the pages Claude writes; `--locale` wins over it |
 | `<knowledge library="…" share="true"/>` | see *Knowledge* | where the shared stack knowledge lives, and whether a new sheet is deposited there |
@@ -287,10 +290,20 @@ For a PHP project, the files of a workflow are found by reading the code, never 
 - **through the files required or included** by a literal path — `require __DIR__.'/../lib/db.php'`;
 - **up to `<graph depth>` hops** (3 by default): controller → service → repository → entity.
 
-**A back-office has twenty routes per resource.** `<routes group="controller"/>` then makes one workflow per
-controller — the resource — with its routes as triggers and its state machine on the page: a real project
-went from 233 route pages to 50. The menu gains a third level past a dozen entries of one type, one
-sub-heading per family (`route.admin.…` → *admin*).
+**A back-office has twenty routes per resource, and a menu of 233 entries is a list nobody reads.**
+`<routes group="controller"/>` groups them — and it groups the **navigation**, not the workflows: every
+route keeps its own page, with the same identifier it has by default, and the controller gets a directory
+and an index (ADR-0045). The menu then lists 50 controllers instead of 233 routes, and the page of a
+controller holds three sections: a summary of three to five sentences, the table of its routes, and the
+state machine of the resource when it has one.
+
+⚠️ **The grouping used to fold a controller's routes into one workflow**, with its routes as triggers. A
+controller with one route read well that way; one with thirteen produced a page whose single sequence
+diagram had to tell thirteen different gestures. Moving to a group changes every identifier of a project
+that used it: its pages become orphans, and `--prune` plus a full rewrite is the migration.
+
+The menu gains a third level past a dozen entries of one type, one sub-heading per family (`admin.…` →
+*admin*).
 
 Existing tests are the test files that use the entry point or a file of its first hop. Two routes to
 the same method are one workflow; `<groups>` in `config.xml` joins others.
@@ -305,18 +318,21 @@ The pages
 Every workflow page has the same ten sections, in the same order — which is what makes pages parsable,
 diffable, and comparable across stacks:
 
+A group page — `routes/<controller>/README.md` — has three of its own, and the summary is the only one
+Claude writes: `Summary`, `Routes` (the table), `States`.
+
 | Section | Written by | Without Claude |
 | --- | --- | --- |
-| Résumé | Claude | — |
-| Déclencheur | DevTools (the *Préconditions* row: Claude) | entry point, satellites, security |
-| Parcours | Claude | — |
-| Navigation / états | DevTools | where the workflow leads, and its state machine |
-| Décisions | Claude, from the model | — |
-| Données | Claude | — |
-| Mécanismes transverses | DevTools, enriched by Claude | the listeners that run inside it, and what they write |
-| Points d'attention | Claude | — |
-| Workflows liés | DevTools | dependencies and navigation, linked |
-| Historique | DevTools | one line per rewrite, never rewritten |
+| Summary | Claude | — |
+| Trigger | DevTools (the *preconditions* row: Claude) | entry point, satellites, security |
+| Journey | Claude | — |
+| Navigation / states | DevTools | where the workflow leads, and its state machine |
+| Decisions | Claude, from the model | — |
+| Data | Claude | — |
+| Cross-cutting mechanisms | DevTools, enriched by Claude | the listeners that run inside it, and what they write |
+| Points of attention | Claude | — |
+| Related workflows | DevTools | dependencies and navigation, linked |
+| History | DevTools | one line per rewrite, never rewritten |
 
 ⚠️ **The page lists neither the files nor the tests of the workflow.** They live in its tracking file,
 `.devtools/workflows/<type>/<id>.xml`, which is what links the workflow to its code and what freshness
@@ -325,10 +341,10 @@ reads. On a real project those two tables were 250 of a page's 344 lines.
 ⚠️ **A section DevTools writes is regenerated from the code on every rewrite** — a fact corrected by hand
 there is lost; fix it where it comes from. What Claude wrote survives factual rewrites. `workflows.md`
 lists every workflow by type with its counter, names in one line the types with no workflow at all, then
-two sections that are never hidden: *À vérifier* (stale, orphaned, waiting for Claude) and *Non couvert*
+two sections that are never hidden: *to check* (stale, orphaned, waiting for Claude) and *not covered*
 (source files no workflow reaches).
 
-### Décisions — the diagram that answers "why this value?"
+### Decisions — the diagram that answers "why this value?"
 
 A flowchart of the files a route reaches restates a table; a flowchart of the **logic that gives a field
 one value rather than another** answers the only question a reader really has. DevTools extracts those
@@ -357,7 +373,7 @@ points per workflow, and says so rather than pretending the model is whole.
 A listener has no page of its own: what a reader wants to know is what it can do **during a given
 workflow**. Kernel listeners run inside every route, console listeners inside every command, a Doctrine
 listener targeting an entity inside the workflows that reach it — each with its event, its priority and
-the fields it writes, in *Mécanismes transverses*.
+the fields it writes, in *Cross-cutting mechanisms*.
 
 ⚠️ There is therefore **no `events` workflow type**, against the seven of the specs. A project that wants
 such pages declares a custom type in `config.xml`.

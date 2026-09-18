@@ -18,12 +18,13 @@ final readonly class IndexEntry
         public Confidence $confidence,
         public GenerationMode $mode,
         public \DateTimeImmutable $updated,
+        public ?string $group = null,
     ) {
     }
 
     public static function fromTracking(TrackingDocument $document): self
     {
-        return new self($document->id, $document->type, $document->title, $document->status, $document->confidence, $document->generated->mode, $document->lastRevision()->at);
+        return new self($document->id, $document->type, $document->title, $document->status, $document->confidence, $document->generated->mode, $document->lastRevision()->at, $document->group?->directory);
     }
 
     /**
@@ -31,6 +32,6 @@ final readonly class IndexEntry
      */
     public function page(): string
     {
-        return DevToolsDirectory::pageInDocs($this->type, $this->id);
+        return DevToolsDirectory::pageInDocs($this->type, $this->id, $this->group);
     }
 }

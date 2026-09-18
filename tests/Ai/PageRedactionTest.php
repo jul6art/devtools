@@ -9,6 +9,7 @@ use Jul6Art\DevTools\Ai\DraftApplier;
 use Jul6Art\DevTools\Ai\PageBrief;
 use Jul6Art\DevTools\Ai\PageDraft;
 use Jul6Art\DevTools\Ai\PageDraftValidator;
+use Jul6Art\DevTools\Ai\XmlGroupBriefStore;
 use Jul6Art\DevTools\Ai\XmlPageBriefStore;
 use Jul6Art\DevTools\Clock\FrozenClock;
 use Jul6Art\DevTools\Inspection\AdapterResolver;
@@ -267,6 +268,102 @@ final class PageRedactionTest extends TestCase
         $this->inspect(noAi: true, at: '2026-09-16T16:00:00+02:00');
 
         self::assertStringContainsString('the brief was written for revision 2026-09-16T15:00:00+02:00, the workflow is now at revision 2026-09-16T16:00:00+02:00', implode("\n", $this->apply()->refused['route.order.new'] ?? []));
+    }
+
+    /**
+     * ADR-0045: a group page gets a brief of its own — one section, three to five sentences — and applying it
+     * replaces that section without touching the facts DevTools rendered.
+     */
+    public function testAGroupPageIsWrittenFromItsOwnBriefAndKeepsItsFacts(): void
+    {
+        self::groupByController($this->project);
+        $this->inspect();
+
+        $brief = new XmlGroupBriefStore()->read($this->project.'/.devtools/pending/group.routes.order.brief.xml');
+
+        self::assertSame('group/1', $brief->promptVersion);
+        self::assertFileExists($brief->promptPath);
+        self::assertSame('docs/workflows/routes/order/README.md', $brief->pagePath);
+        self::assertSame(['app_order_index', 'app_order_new', 'app_order_show'], array_map(static fn (array $route): string => $route['route'], $brief->routes));
+
+        file_put_contents($this->project.'/'.$brief->draftPath, "---\nmodel: claude-opus-5\n---\n\n## Résumé\n\nLes commandes, de leur création à leur validation.\n");
+
+        $result = $this->apply();
+
+        self::assertSame(['group.routes.order'], $result->accepted);
+        self::assertSame([], $result->refused);
+
+        $page = (string) file_get_contents($this->project.'/docs/workflows/routes/order/README.md');
+
+        self::assertStringContainsString("## Résumé\n\nLes commandes, de leur création à leur validation.", $page);
+        self::assertStringContainsString('| [`app_order_new`](new.md) |', $page, 'The facts stay exactly as the inspection rendered them.');
+        self::assertFileDoesNotExist($this->project.'/'.$brief->draftPath, 'An applied draft is removed.');
+        self::assertFileDoesNotExist($this->project.'/.devtools/pending/group.routes.order.brief.xml');
+
+        $this->inspect(at: '2026-09-16T16:00:00+02:00');
+
+        self::assertStringContainsString('Les commandes, de leur création à leur validation.', (string) file_get_contents($this->project.'/docs/workflows/routes/order/README.md'), 'A later inspection keeps what Claude wrote.');
+        self::assertFileDoesNotExist($this->project.'/.devtools/pending/group.routes.order.brief.xml', 'And asks for it again only when it is missing.');
+    }
+
+    /**
+     * ADR-0045: the page of a route lives in the directory of its group, and `apply` writes it there.
+     *
+     * It wrote it at the flat path instead — `routes/order.new.md` — because the serialized model carries no
+     * group and the path was recomputed from it: on three real projects, every written page landed beside the
+     * page the reader opens, which stayed empty.
+     */
+    public function testAnAcceptedDraftIsWrittenInTheDirectoryOfItsGroup(): void
+    {
+        self::groupByController($this->project);
+        $this->inspect();
+
+        self::assertSame('docs/workflows/routes/order/new.md', new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml')->pagePath);
+
+        $factual = new PageParser()->parse((string) file_get_contents($this->project.'/docs/workflows/routes/order/new.md'));
+        copy(self::DRAFT, $this->project.'/.devtools/pending/page.route.order.new.draft.md');
+
+        $result = $this->apply();
+
+        self::assertSame(['route.order.new'], $result->accepted);
+        self::assertSame([], $result->refused);
+
+        $page = new PageParser()->parse((string) file_get_contents($this->project.'/docs/workflows/routes/order/new.md'));
+
+        self::assertStringContainsString('Crée une commande', (string) $page->section(PageSection::Summary));
+        self::assertFileDoesNotExist($this->project.'/docs/workflows/routes/order.new.md', 'Nothing is written beside the directory of the group.');
+        self::assertSame([PageSection::History], $page->devToolsSectionsDifferingFrom($factual), 'The facts, links included, are rendered exactly as the inspection rendered them.');
+    }
+
+    public function testAGroupDraftThatSaysTooMuchIsRefused(): void
+    {
+        self::groupByController($this->project);
+        $this->inspect();
+
+        $sentences = str_repeat('Une phrase de plus. ', 6);
+        file_put_contents($this->project.'/.devtools/pending/group.routes.order.draft.md', "---\nmodel: claude-opus-5\n---\n\n## Résumé\n\n".$sentences."\n\n## Routes\n\nrien\n");
+
+        $result = $this->apply();
+
+        self::assertSame([], $result->accepted);
+        self::assertArrayHasKey('group.routes.order', $result->refused);
+        self::assertStringContainsString('exactly one section', implode("\n", $result->refused['group.routes.order']));
+        self::assertStringContainsString('longer than 5 sentences', implode("\n", $result->refused['group.routes.order']));
+    }
+
+    private static function groupByController(string $project): void
+    {
+        if (!is_dir($project.'/.devtools')) {
+            mkdir($project.'/.devtools', 0o777, true);
+        }
+
+        file_put_contents($project.'/.devtools/config.xml', <<<'XML'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
+                <routes group="controller"/>
+            </devtools>
+
+            XML);
     }
 
     private function inspect(bool $noAi = false, string $at = '2026-09-16T15:00:00+02:00', ?string $language = null, ?string $fallbackLanguage = null): InspectionReport

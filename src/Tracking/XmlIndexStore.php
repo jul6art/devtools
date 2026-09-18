@@ -20,7 +20,7 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
 
     public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/index/1';
 
-    private const int SCHEMA_VERSION = 2;
+    private const int SCHEMA_VERSION = 3;
 
     private DomBuilder $dom;
 
@@ -50,8 +50,17 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
         $root = $this->dom->element($xml, 'index', ['schema-version' => (string) self::SCHEMA_VERSION, 'scanned-at' => self::date($index->scannedAt), 'docs' => $index->docs]);
         VcsXml::write($this->dom, $root, 'source', $index->vcs);
 
+        foreach ($index->groups as $group) {
+            $this->dom->element($root, 'group', [
+                'type' => $group->type->name,
+                'directory' => $group->directory,
+                'title' => $group->title,
+                'page' => $group->page(),
+            ]);
+        }
+
         foreach ($index->entries as $entry) {
-            $this->dom->element($root, 'workflow', [
+            $this->dom->element($root, 'workflow', array_filter([
                 'id' => $entry->id->value,
                 'type' => $entry->type->name,
                 'title' => $entry->title,
@@ -60,7 +69,8 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
                 'mode' => $entry->mode->value,
                 'updated' => self::date($entry->updated),
                 'page' => $entry->page(),
-            ]);
+                'group' => $entry->group,
+            ], static fn (?string $value): bool => null !== $value));
         }
 
         return $this->dom->toXml($xml);
@@ -82,12 +92,21 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
                     Confidence::from($entry->getAttribute('confidence')),
                     GenerationMode::from($entry->getAttribute('mode')),
                     self::parseDate($entry->getAttribute('updated'), $source),
+                    '' === $entry->getAttribute('group') ? null : $entry->getAttribute('group'),
                 ),
                 $this->dom->children($root, 'workflow'),
             ),
             // An index written before schema-version 2 does not say: the documentation moves to the default,
             // and the pages left in .devtools/workflows/ are the previous version's, to delete by hand.
             '' === $root->getAttribute('docs') ? DevToolsDirectory::DEFAULT_DOCS : $root->getAttribute('docs'),
+            array_map(
+                fn (\DOMElement $group): IndexGroup => new IndexGroup(
+                    $this->types->get($group->getAttribute('type')),
+                    $group->getAttribute('directory'),
+                    $group->getAttribute('title'),
+                ),
+                $this->dom->children($root, 'group'),
+            ),
         );
     }
 }

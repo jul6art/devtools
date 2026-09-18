@@ -97,19 +97,43 @@ final class WorkflowBuilderTest extends TestCase
         self::assertSame(['command.app.import-catalog'], array_map(strval(...), $this->workflow(new BuildResult($result, []), 'route.order.index')->dependsOn));
     }
 
-    public function testGroupedByControllerEveryRouteOfAResourceIsOneWorkflow(): void
+    /**
+     * ADR-0045: grouping by controller is a matter of presentation. The workflows are the ones
+     * `entry-point` builds — one per route, same identifiers — and each carries the group its page is
+     * written in.
+     */
+    public function testGroupedByControllerTheWorkflowsAreTheSameAsByEntryPoint(): void
+    {
+        $grouped = $this->build(new Config(routeGrouping: Config::ROUTES_BY_CONTROLLER));
+        $flat = $this->build();
+
+        $ids = static fn (BuildResult $build): array => array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $build->result->workflows);
+
+        self::assertSame($ids($flat), $ids($grouped), 'The grouping never changes which workflows exist, nor their identifiers.');
+        self::assertSame(['command.app.import-catalog', 'route.health', 'route.order.index', 'route.order.new', 'route.order.show'], $ids($grouped));
+    }
+
+    public function testGroupedByControllerEveryRouteOfAControllerSharesOneGroup(): void
     {
         $build = $this->build(new Config(routeGrouping: Config::ROUTES_BY_CONTROLLER));
-        $ids = array_map(static fn (Workflow $workflow): string => (string) $workflow->id, $build->result->workflows);
 
-        self::assertSame(['command.app.import-catalog', 'route.health', 'route.order'], $ids, 'One workflow per controller: what its routes have in common, or its controller when they share nothing.');
+        $index = $this->workflow($build, 'route.order.index');
+        $new = $this->workflow($build, 'route.order.new');
 
-        $orders = $this->workflow($build, 'route.order');
+        self::assertNotNull($index->group);
+        self::assertNotNull($new->group);
+        self::assertSame('order', $index->group->directory, 'The directory is what the route names have in common.');
+        self::assertSame('/orders', $index->group->title, 'The title is the path the routes share.');
+        self::assertSame('src/Controller/OrderController.php', $index->group->declaredIn->path);
+        self::assertSame($index->group->directory, $new->group->directory);
 
-        self::assertSame('/orders', $orders->title);
-        self::assertSame(['app_order_index', 'app_order_new', 'app_order_show'], array_map(static fn (EntryPoint $satellite): string => $satellite->name, $orders->satellites));
-        self::assertSame('3', $orders->main->attributes['routes']);
-        self::assertContains('templates/order/new.html.twig', array_map(static fn (FileRef $file): string => $file->path, $orders->files), 'The resource traverses what all its routes traverse.');
+        self::assertSame('index', $index->group->leafOf($index->id));
+        self::assertSame('new', $new->group->leafOf($new->id));
+    }
+
+    public function testWithoutGroupingAWorkflowHasNoGroup(): void
+    {
+        self::assertNull($this->workflow($this->build(), 'route.order.index')->group);
     }
 
     public function testAnUnknownWayOfGroupingRoutesIsRefused(): void

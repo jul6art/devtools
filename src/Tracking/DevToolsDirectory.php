@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Tracking;
 
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 use Jul6Art\DevTools\Project\ProjectRoot;
@@ -82,17 +83,25 @@ final readonly class DevToolsDirectory
         return $this->path('graph/workflows.mermaid');
     }
 
-    public function pageFile(WorkflowType $type, WorkflowId $id): string
+    public function pageFile(WorkflowType $type, WorkflowId $id, ?string $group = null): string
     {
-        return $this->root->absolute($this->pageRelativePath($type, $id));
+        return $this->root->absolute($this->pageRelativePath($type, $id, $group));
     }
 
     /**
      * `route.order.create` → `docs/workflows/routes/order.create.md`, relative to the project.
      */
-    public function pageRelativePath(WorkflowType $type, WorkflowId $id): string
+    public function pageRelativePath(WorkflowType $type, WorkflowId $id, ?string $group = null): string
     {
-        return $this->docs.'/'.self::pageInDocs($type, $id);
+        return $this->docs.'/'.self::pageInDocs($type, $id, $group);
+    }
+
+    /**
+     * The page of a group — the one a reader opens to see the routes of a controller (ADR-0045).
+     */
+    public function groupPageFile(WorkflowType $type, string $group): string
+    {
+        return $this->root->absolute($this->docs.'/'.self::groupPageInDocs($type, $group));
     }
 
     /**
@@ -111,9 +120,29 @@ final readonly class DevToolsDirectory
 
     /**
      * `route.order.create` → `routes/order.create.md`, relative to the documentation directory.
+     *
+     * In a group (ADR-0045), the page moves under the group's directory and keeps only what its
+     * identifier says beyond it: `route.admin.user.edit` of the group `admin.user` is
+     * `routes/admin.user/edit.md`.
      */
-    public static function pageInDocs(WorkflowType $type, WorkflowId $id): string
+    public static function pageInDocs(WorkflowType $type, WorkflowId $id, ?string $group = null): string
     {
-        return \sprintf('%s/%s.md', $type->name, $id->pageName());
+        if (null === $group) {
+            return \sprintf('%s/%s.md', $type->name, $id->pageName());
+        }
+
+        return \sprintf('%s/%s/%s.md', $type->name, $group, WorkflowGroup::leaf($group, $id));
+    }
+
+    /**
+     * `routes/admin.user/README.md`, relative to the documentation directory.
+     *
+     * `README.md` and not `index.md`: `route.<resource>.index` is the list route of almost every
+     * controller, so the collision would be the rule; and a forge renders the `README.md` of a directory
+     * when it is opened, so the link to the directory already shows the table of routes.
+     */
+    public static function groupPageInDocs(WorkflowType $type, string $group): string
+    {
+        return \sprintf('%s/%s/README.md', $type->name, $group);
     }
 }

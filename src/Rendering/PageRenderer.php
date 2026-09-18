@@ -188,7 +188,7 @@ final class PageRenderer
 
     private function linkTo(Workflow $from, WorkflowId $target, RenderingContext $context): string
     {
-        $page = $context->relativePage($from->type, $target);
+        $page = $context->relativePage($from->type, $from->group?->directory, $target);
 
         return null === $page ? MarkdownWriter::code($target->value) : MarkdownWriter::link(MarkdownWriter::code($target->value), $page);
     }

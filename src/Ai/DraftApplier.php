@@ -23,6 +23,8 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowIdDeriver;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
+use Jul6Art\DevTools\Rendering\GroupPageRenderer;
+use Jul6Art\DevTools\Rendering\PageParser;
 use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Rendering\ParsedPage;
@@ -77,6 +79,12 @@ final readonly class DraftApplier
             $this->applyDiscovery($directory, $draftFile, $result, $config);
         }
 
+        // Then the group pages: their summary is written against the pages of the routes they list, so they
+        // are applied after the drafts of those routes, and they need neither model nor tracking.
+        foreach (glob($directory->path('pending/group.*.draft.md')) ?: [] as $draftFile) {
+            $this->applyGroup($directory, $draftFile, $result);
+        }
+
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
 
         if ([] === $drafts) {
@@ -110,6 +118,46 @@ final readonly class DraftApplier
     }
 
     /**
+     * The summary Claude wrote for a group page (ADR-0045).
+     *
+     * Only that section is replaced: the table of routes and the state machine stay exactly as the
+     * inspection rendered them, because `apply` has the page and not the model.
+     */
+    private function applyGroup(DevToolsDirectory $directory, string $draftFile, ApplyResult $result): void
+    {
+        $name = substr(basename($draftFile), \strlen('group.'), -\strlen('.draft.md'));
+        $id = 'group.'.$name;
+
+        try {
+            $brief = new XmlGroupBriefStore()->read($directory->path('pending/'.$id.'.brief.xml'));
+        } catch (InvalidXml $invalid) {
+            $result->refused[$id] = [$invalid->getMessage()];
+
+            return;
+        }
+
+        $draft = PageDraft::parse((string) file_get_contents($draftFile));
+        $problems = $this->validator->validateGroup($draft, $brief);
+        $pageFile = $directory->root->absolute($brief->pagePath);
+
+        if (!is_file($pageFile)) {
+            $problems[] = \sprintf('The page "%s" does not exist any more: run workflows:inspect again.', $brief->pagePath);
+        }
+
+        if ([] !== $problems) {
+            $result->refused[$id] = $problems;
+
+            return;
+        }
+
+        $page = new PageParser()->parse((string) file_get_contents($pageFile));
+        $this->writer->write($pageFile, GroupPageRenderer::withSummary($page, trim($draft->sections[PageSection::Summary->value]['content'])));
+
+        new Filesystem()->remove([$draftFile, $directory->path('pending/'.$id.'.brief.xml')]);
+        $result->accepted[] = $id;
+    }
+
+    /**
      * Where the last inspection wrote the pages: `apply` never guesses, it reads the index.
      */
     private static function documentedIn(ProjectRoot $root): ?string
@@ -128,6 +176,10 @@ final readonly class DraftApplier
         $document = $documents[$id] ?? throw new InvalidModel(\sprintf('No tracking file documents "%s": run the inspection again.', $id));
         $workflow = new ModelXmlSerializer($types)->deserialize((string) file_get_contents($directory->root->absolute($brief->modelPath)), $brief->modelPath)->workflows[0]
             ?? throw new InvalidModel(\sprintf('%s holds no workflow: run the inspection again.', $brief->modelPath));
+
+        // The group travels in the tracking, not in the model: without it the page would link to its
+        // neighbours as if it lived directly under its type (ADR-0045).
+        $workflow = $workflow->inGroup($document->group);
         $draft = PageDraft::parse((string) file_get_contents($draftFile));
 
         $errors = $this->validator->validate($draft, $workflow, $brief->revision);
@@ -171,10 +223,15 @@ final readonly class DraftApplier
             $history,
             $document->decisions,
             $document->mechanisms,
+            $document->group,
         );
 
         $page = new PageRenderer()->render($workflow, $history, RenderingContext::fromTracking(array_values($documents)), self::writtenSections($draft));
-        $this->writer->write($directory->pageFile($workflow->type, $workflow->id), $page);
+
+        // The path comes from the brief, never from the model: the serialized model carries no group
+        // (ADR-0045), so recomputing it here wrote a grouped project's pages back at the flat path —
+        // beside the page the reader opens, which stayed empty.
+        $this->writer->write($directory->root->absolute($brief->pagePath), $page);
         $tracking->write($directory->trackingFile($workflow->type, $workflow->id), $written);
 
         new Filesystem()->remove([$draftFile, $directory->root->absolute($brief->modelPath), $directory->path('pending/'.PageBrief::fileName($workflow->id, 'brief.xml'))]);

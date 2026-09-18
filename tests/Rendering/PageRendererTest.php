@@ -10,6 +10,7 @@ use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 use Jul6Art\DevTools\Rendering\MarkdownWriter;
@@ -243,6 +244,53 @@ final class PageRendererTest extends TestCase
         self::assertStringContainsString('[`route.order.show`](order.show.md)', $page);
         self::assertStringContainsString('`route.order.index`', $page, 'A dependency without a page is named, not linked.');
         self::assertStringNotContainsString('](../events/', $page, 'There is no events type any more (ADR-0043).');
+    }
+
+    /**
+     * ADR-0045: a page under `routes/<controller>/` links from where it lives — the page of another
+     * controller is one directory up, the page of another type two.
+     *
+     * The link was written as if every page sat directly under its type: from `routes/item.qr/`, the page
+     * of `route.item.show` was linked as `item.show.md`, where nothing is.
+     */
+    public function testLinksOfAGroupedPageAreRelativeToTheDirectoryItLivesIn(): void
+    {
+        $context = RenderingContext::of([
+            self::inGroup('route.order.show', 'order'),
+            self::inGroup('route.health.index', 'health'),
+            RenderingFixtures::workflows()['commands'],
+        ]);
+
+        self::assertSame('show.md', $context->relativePage(WorkflowType::routes(), 'order', new WorkflowId('route.order.show')), 'The same controller: a neighbour.');
+        self::assertSame('../health/index.md', $context->relativePage(WorkflowType::routes(), 'order', new WorkflowId('route.health.index')), 'Another controller: one level up.');
+        self::assertSame('../../commands/app.import-catalog.md', $context->relativePage(WorkflowType::routes(), 'order', new WorkflowId('command.app.import-catalog')), 'Another type: two.');
+        self::assertNull($context->relativePage(WorkflowType::routes(), 'order', new WorkflowId('route.order.absent')), 'An undocumented workflow is not linked.');
+
+        $page = new PageRenderer()->render(
+            self::inGroup('route.order.new', 'order', [new WorkflowId('route.health.index'), new WorkflowId('command.app.import-catalog')]),
+            RenderingFixtures::history(),
+            $context,
+        );
+
+        self::assertStringContainsString('](../health/index.md)', $page, 'The page itself writes the link from where it lives.');
+        self::assertStringContainsString('](../../commands/app.import-catalog.md)', $page);
+    }
+
+    /**
+     * @param list<WorkflowId> $dependsOn
+     */
+    private static function inGroup(string $id, string $directory, array $dependsOn = []): Workflow
+    {
+        $file = new FileRef('src/Controller/'.ucfirst($directory).'Controller.php', FileRole::Controller);
+
+        return new Workflow(
+            id: new WorkflowId($id),
+            type: WorkflowType::routes(),
+            title: $id,
+            main: new EntryPoint('route', str_replace('.', '_', $id), $file),
+            dependsOn: $dependsOn,
+            group: new WorkflowGroup($directory, '/'.$directory, $file),
+        );
     }
 
     public function testAWorkflowWithoutStatesOrNavigationSaysSo(): void

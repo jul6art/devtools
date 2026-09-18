@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
   <source vcs="git" commit="6ecdbd0eb5bfaa27515152c5df685add41f4592f" branch="main" dirty="true"/>
   <workflow id="route.api.item.list" type="routes" title="GET /api/items" status="fresh" confidence="medium" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/api.item.list.md"/>
 </index>

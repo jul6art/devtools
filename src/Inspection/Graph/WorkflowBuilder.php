@@ -13,6 +13,7 @@ use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdAssigner;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdDeriver;
@@ -51,6 +52,11 @@ final readonly class WorkflowBuilder
         foreach ($groups as $key => $group) {
             $ids[$key] = $assigner->assign($group[0]->type, $group[0]->entryPoint);
         }
+
+        // ⚠️ A deriver of its own, never the assigner: a group's directory is not an identifier handed out
+        // for this scan, and asking the assigner for it would make a single-route controller collide with
+        // its own route.
+        $presentation = $this->presentationGroups($groups, $ids, new WorkflowIdDeriver($this->config->routePrefix));
 
         $workflows = [];
         $warnings = array_filter([$locator->limitation()]);
@@ -114,6 +120,7 @@ final readonly class WorkflowBuilder
                 states: $main->states,
                 confidence: $main->confidence,
                 source: $main->source,
+                group: $presentation[$key] ?? null,
             );
         }
 
@@ -223,12 +230,6 @@ final readonly class WorkflowBuilder
                 continue;
             }
 
-            if (Config::ROUTES_BY_CONTROLLER === $this->config->routeGrouping && 'route' === $candidate->entryPoint->kind) {
-                $groups['controller:'.$candidate->entryPoint->declaredIn->path][] = $candidate;
-
-                continue;
-            }
-
             $message = $candidate->entryPoint->attributes['message'] ?? null;
 
             $key = match (true) {
@@ -243,23 +244,19 @@ final readonly class WorkflowBuilder
             $groups[$key][] = $candidate;
         }
 
-        foreach ($groups as $key => $group) {
-            if (str_starts_with($key, 'controller:')) {
-                $groups[$key] = [self::resource($group), ...$group];
-            }
-        }
-
         return $groups;
     }
 
     /**
-     * The workflow a controller's routes belong to: the resource they serve. Its entry point is the
-     * controller itself, named after what its routes have in common (`admin_work_order`), so that adding a
-     * route neither renames the workflow nor orphans its page (ADR-0003).
+     * The entry point a controller's routes have in common — the resource they serve — from which the
+     * group's directory and title are derived (ADR-0045).
+     *
+     * It is named after what the route names have in common (`admin_work_order`), so that adding a route
+     * neither renames the group nor moves the pages of its siblings (ADR-0003).
      *
      * @param non-empty-list<EntryPointCandidate> $routes
      */
-    private static function resource(array $routes): EntryPointCandidate
+    private static function resource(array $routes): EntryPoint
     {
         $names = array_map(static fn (EntryPointCandidate $route): string => $route->entryPoint->name, $routes);
         $paths = array_map(static fn (EntryPointCandidate $route): string => $route->entryPoint->attributes['path'] ?? '', $routes);
@@ -276,20 +273,83 @@ final readonly class WorkflowBuilder
             $states ??= $route->states;
         }
 
-        return new EntryPointCandidate(
-            type: $routes[0]->type,
-            entryPoint: new EntryPoint('resource', '' === $name ? $routes[0]->entryPoint->name : $name, $routes[0]->entryPoint->declaredIn, array_filter([
-                'path' => '' === $path ? null : $path,
-                'routes' => (string) \count($routes),
-            ], static fn (?string $value): bool => null !== $value)),
-            title: '' === $path ? $routes[0]->title : $path,
-            structuralFiles: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->structuralFiles, $routes)),
-            dependsOn: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->dependsOn, $routes)),
-            states: $states,
-            extraTests: array_merge(...array_map(static fn (EntryPointCandidate $route): array => $route->extraTests, $routes)),
-            confidence: $routes[0]->confidence,
-            source: $routes[0]->source,
-        );
+        unset($states);
+
+        return new EntryPoint('resource', '' === $name ? $routes[0]->entryPoint->name : $name, $routes[0]->entryPoint->declaredIn, array_filter([
+            'path' => '' === $path ? null : $path,
+            'routes' => (string) \count($routes),
+        ], static fn (?string $value): bool => null !== $value));
+    }
+
+    /**
+     * The groups the pages are laid out in, when `<routes group="controller"/>` asks for them (ADR-0045):
+     * one per controller, derived from the routes it declares.
+     *
+     * ⚠️ The grouping is a matter of PRESENTATION only: the workflows are the same ones `entry-point`
+     * builds, with the same identifiers. A group owns a directory and a title, never a workflow.
+     *
+     * @param array<string, non-empty-list<EntryPointCandidate>> $groups group key => members, main first
+     * @param array<string, WorkflowId>                          $ids    group key => workflow identifier
+     *
+     * @return array<string, WorkflowGroup> group key => the group its page is written in
+     */
+    private function presentationGroups(array $groups, array $ids, WorkflowIdDeriver $deriver): array
+    {
+        if (Config::ROUTES_BY_CONTROLLER !== $this->config->routeGrouping) {
+            return [];
+        }
+
+        $byController = [];
+
+        foreach ($groups as $key => $group) {
+            if ('route' !== $group[0]->entryPoint->kind) {
+                continue;
+            }
+
+            $byController[$group[0]->entryPoint->declaredIn->path][$key] = $group[0];
+        }
+
+        $result = [];
+
+        foreach ($byController as $path => $mains) {
+            $routes = array_values($mains);
+            $resource = self::resource($routes);
+            $directory = $deriver->derive($routes[0]->type, $resource)->pageName();
+            $keys = array_keys($mains);
+
+            // ⚠️ Two workflows of one controller may not write the same file. It happens when a route is
+            // named exactly like what the others have in common (`admin_user` next to `admin_user_index`):
+            // both would claim `index.md`. The controller's own name then becomes the directory, and every
+            // page keeps its whole identifier — a corner, handled rather than hoped away.
+            if (self::collides($directory, $keys, $ids)) {
+                $directory = $deriver->derive($routes[0]->type, new EntryPoint('resource', self::controllerName($path), $routes[0]->entryPoint->declaredIn))->pageName();
+            }
+
+            $states = null;
+
+            foreach ($routes as $route) {
+                $states ??= $route->states;
+            }
+
+            $group = new WorkflowGroup($directory, $resource->attributes['path'] ?? $routes[0]->title, $routes[0]->entryPoint->declaredIn, $states);
+
+            foreach ($keys as $key) {
+                $result[$key] = $group;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param list<string>              $keys
+     * @param array<string, WorkflowId> $ids
+     */
+    private static function collides(string $directory, array $keys, array $ids): bool
+    {
+        $leaves = array_map(static fn (string $key): string => WorkflowGroup::leaf($directory, $ids[$key]), $keys);
+
+        return \count($leaves) !== \count(array_unique($leaves));
     }
 
     /**

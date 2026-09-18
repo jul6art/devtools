@@ -12,6 +12,7 @@ use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\SortedList;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -92,6 +93,7 @@ final readonly class TrackingDocument
         array $history = [],
         array $decisions = [],
         array $mechanisms = [],
+        public ?WorkflowGroup $group = null,
     ) {
         if ($id->prefix() !== $type->idPrefix) {
             throw new InvalidModel(\sprintf('The tracked workflow "%s" is of type "%s": its identifier must start with "%s".', $id, $type->name, $type->idPrefix));

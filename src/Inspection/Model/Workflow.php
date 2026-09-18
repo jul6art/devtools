@@ -81,6 +81,7 @@ final readonly class Workflow
         public ?StateMachine $states = null,
         public Confidence $confidence = Confidence::Medium,
         public WorkflowSource $source = new WorkflowSource('claude'),
+        public ?WorkflowGroup $group = null,
     ) {
         if ($id->prefix() !== $type->idPrefix) {
             throw new InvalidModel(\sprintf('The workflow "%s" is of type "%s": its identifier must start with "%s".', $id, $type->name, $type->idPrefix));
@@ -101,5 +102,33 @@ final readonly class Workflow
                 throw new InvalidModel(\sprintf('The workflow "%s" cannot depend on itself.', $id));
             }
         }
+    }
+
+    /**
+     * The same workflow, in a group — for `workflows:apply`, which reads its model from the serialized
+     * file, where the group does not travel (it is presentation, ADR-0045), and its group from the tracking.
+     *
+     * Without it, a page rendered by `apply` wrote its links as if it lived directly under its type.
+     */
+    public function inGroup(?WorkflowGroup $group): self
+    {
+        return new self(
+            $this->id,
+            $this->type,
+            $this->title,
+            $this->main,
+            $this->satellites,
+            $this->files,
+            $this->packages,
+            $this->dependsOn,
+            $this->tests,
+            $this->navigation,
+            $this->decisions,
+            $this->mechanisms,
+            $this->states,
+            $this->confidence,
+            $this->source,
+            $group,
+        );
     }
 }

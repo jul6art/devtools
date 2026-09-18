@@ -463,3 +463,55 @@
   **Règle :** tagger une version, c'est trois gestes indissociables — le commit, le tag,
   **et le badge `shields.io/static/v1?label=stable&message=v<majeure>` du README**, dans le même
   commit que le code qu'on publie. Le badge ne porte que la majeure, jamais `v2.0.0`.
+
+---
+
+### 2026-09-18 (bis) — Le regroupement par contrôleur (ADR-0045)
+
+- **Une page qui agrège treize gestes n'en raconte aucun.** Le regroupement de l'ADR-0006 faisait d'un
+  contrôleur un workflow : un seul « Parcours » pour treize routes, une section « Décisions » mélangeant
+  leurs champs. Le décideur l'a vu sur `devinlive` en comparant `routes/home.md` (une route, lisible) à
+  une page de CRUD. **Règle :** le problème que le regroupement résolvait était celui du MENU — 233 entrées
+  sous une seule section — jamais celui de la page. Regrouper la navigation, pas les workflows.
+
+- **Un identifiant de groupe ne se demande pas à l'assigneur.** `WorkflowIdAssigner` refuse de donner deux
+  fois le même identifiant : dériver le dossier d'un contrôleur à route unique par son intermédiaire le
+  faisait entrer en collision avec sa propre route. **Règle :** un dossier de groupe n'est pas un
+  identifiant de workflow ; il se dérive avec un `WorkflowIdDeriver` neuf, sans registre.
+
+- **`index.md` ne peut pas être la page d'un groupe** : `route.<x>.index` est la route de liste de presque
+  tous les contrôleurs. La page du groupe est `README.md` — et une forge l'affiche à l'ouverture du
+  dossier, ce qui rend le lien du menu directement lisible.
+
+- **Une contrainte « le groupe est un préfixe de l'identifiant » lève sur un projet réel.** Elle a été
+  écrite dans `Workflow`, puis retirée : un contrôleur dont les routes ne partagent aucun préfixe retombe
+  sur le nom du contrôleur, et un alias de `config.xml` donne un identifiant arbitraire. **Règle :** la
+  dérivation du nom de fichier tolère le cas — le nom de page entier sert de feuille — au lieu de refuser
+  le workflow.
+
+- **Deux workflows d'un même groupe peuvent revendiquer le même fichier** quand une route porte exactement
+  le nom que les autres ont en commun (`admin_user` à côté d'`admin_user_index`). Le builder le détecte et
+  bascule le dossier sur le nom du contrôleur. **Règle :** une collision de chemin se traite au moment où
+  on dérive le chemin, pas au moment où on écrit le fichier.
+
+- **Le bloc d'idempotence de l'index compare une reconstruction à l'ancien fichier.** Y oublier le nouveau
+  champ (`groups`) aurait fait réécrire `index.xml` à chaque exécution, donc cassé « deux scans sans
+  changement ne modifient aucun fichier ». **Règle :** tout champ ajouté à `Index` s'ajoute aussi à la
+  copie qui sert à cette comparaison.
+
+### 2026-09-18 (ter)
+
+- **Un chemin de page se lit dans le brief, il ne se recalcule pas.** `workflows:apply` reconstruisait le
+  chemin depuis le modèle sérialisé, qui ne porte pas le groupe de l'ADR-0045 : les trois projets ont vu
+  chaque page rédigée atterrir au chemin plat, à côté de la page groupée restée vide, et `apply` annonçait
+  « appliqué » à chaque fois. Ce que le brief déclare fait foi — c'est déjà la règle de `applyGroup`.
+- **Une réécriture factuelle forcée n'est pas un changement du produit.** `--force` écrit une révision
+  « forced » par page et repasse le mode de génération à `no-ai` : sur 90 pages, cela fait 90 lignes
+  d'historique fausses et 90 briefs redemandés pour des pages déjà écrites. Quand la réécriture répare un
+  défaut de l'outil, il faut rendre leur mode aux pages rédigées et retirer la ligne.
+- **Un lien relatif se calcule depuis le dossier où la page vit.** Le rendu écrivait `item.show.md` depuis
+  `routes/item.qr/`, où il n'y a rien. Toute nouvelle profondeur de documentation doit faire relire les
+  liens : la structure change, les liens ne suivent pas tout seuls.
+- **Une page vide se voit, un compteur ne le dit pas.** « 99 inchangés » restait vrai alors que 78 pages
+  étaient vides : la vérification qui compte est celle qui lit la section « Résumé » des pages, pas le
+  rapport de la commande.

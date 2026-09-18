@@ -12,6 +12,7 @@ use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\Serialization\EntryPointXml;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
@@ -63,6 +64,10 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
         $root = $this->dom->element($xml, 'workflow', ['id' => $document->id->value, 'type' => $document->type->name, 'schema-version' => (string) self::SCHEMA_VERSION]);
 
         $this->dom->element($root, 'title', text: $document->title);
+
+        if ($document->group instanceof WorkflowGroup) {
+            $this->dom->element($root, 'group', ['directory' => $document->group->directory, 'title' => $document->group->title]);
+        }
 
         $generated = ['at' => self::date($document->generated->at), 'tool' => $document->generated->tool, 'mode' => $document->generated->mode->value];
 
@@ -264,6 +269,11 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
                 ),
                 $this->dom->children($this->dom->optional($root, 'mechanisms'), 'mechanism'),
             ),
+            // The declaring file is the main entry point's: a group is a controller, and it is the file
+            // that controller lives in. Storing it twice would let the two disagree.
+            group: ($group = $this->dom->optional($root, 'group')) instanceof \DOMElement
+                ? new WorkflowGroup($group->getAttribute('directory'), $group->getAttribute('title'), EntryPointXml::read($this->dom, $this->dom->single($this->dom->single($root, 'entrypoints'), 'entrypoint'))->declaredIn)
+                : null,
         );
     }
 }

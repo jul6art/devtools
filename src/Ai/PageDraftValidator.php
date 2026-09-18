@@ -25,6 +25,72 @@ final class PageDraftValidator
     private const string PATH_IN_CODE = '/`([^`\s\/][^`\s]*\/[^`\s]*\.[A-Za-z0-9]{1,6})`/';
 
     /**
+     * Five sentences: past that, the index says what the pages it links to are there to say.
+     */
+    private const int SUMMARY_MAX_SENTENCES = 5;
+
+    /**
+     * The summary of a group page (ADR-0045): one section, five sentences at most, no path, no diagram.
+     *
+     * @return list<string> every broken rule
+     */
+    public function validateGroup(PageDraft $draft, GroupBrief $brief): array
+    {
+        $errors = [];
+        $expected = [PageSection::Summary->value];
+
+        if (array_keys($draft->sections) !== $expected) {
+            $errors[] = \sprintf('A group draft holds exactly one section, "%s": DevTools writes the others.', PageSection::Summary->value);
+        }
+
+        $summary = $draft->sections[PageSection::Summary->value] ?? null;
+
+        if (null === $summary) {
+            return $errors;
+        }
+
+        $content = trim($summary['content']);
+
+        if ('' === $content || MarkdownWriter::EMPTY === $content) {
+            $errors[] = \sprintf('The section "%s" is empty: a group page without a summary is written by --no-ai, not by a draft.', PageSection::Summary->value);
+        }
+
+        if (self::SUMMARY_MAX_SENTENCES < preg_match_all('/[.!?](\s|$)/u', $content)) {
+            $errors[] = \sprintf('The summary is longer than %d sentences: an index that explains as much as a page stops being an index.', self::SUMMARY_MAX_SENTENCES);
+        }
+
+        if (str_contains($content, '```')) {
+            $errors[] = 'A group summary holds no code block: the state machine is rendered by DevTools.';
+        }
+
+        if (1 === preg_match(self::PATH_IN_CODE, $content, $matches)) {
+            $errors[] = \sprintf('"%s" is a file path: a group page names routes, and a path belongs to the page of a route.', $matches[1]);
+        }
+
+        $names = array_map(static fn (array $route): string => $route['route'], $brief->routes);
+
+        foreach (self::quoted($content) as $quoted) {
+            if (str_starts_with($quoted, $brief->directory) || \in_array($quoted, $names, true)) {
+                continue;
+            }
+
+            $errors[] = \sprintf('"%s" is neither a route of this controller nor its directory: the brief lists what may be named.', $quoted);
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function quoted(string $content): array
+    {
+        preg_match_all('/`([^`]+)`/', $content, $matches);
+
+        return array_values(array_unique($matches[1]));
+    }
+
+    /**
      * @return list<string> every broken rule, each naming the line when there is one
      */
     public function validate(PageDraft $draft, Workflow $workflow, \DateTimeImmutable $revision): array

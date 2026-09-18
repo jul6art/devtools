@@ -58,6 +58,7 @@ final class RenderingFixtures
             $workflow->states,
             $workflow->confidence,
             $workflow->source,
+            $workflow->group,
         );
     }
 

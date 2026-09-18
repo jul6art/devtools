@@ -61,6 +61,26 @@ final class XmlIndexStoresTest extends TestCase
         self::assertSame('docs/workflows', new XmlIndexStore(new WorkflowTypeRegistry())->unserialize($xml, 'index.xml')->docs);
     }
 
+    /**
+     * ADR-0045: an index written before groups existed is read as a project without any — never refused.
+     */
+    public function testAnIndexWrittenBeforeGroupsExistedIsStillRead(): void
+    {
+        $xml = <<<'XML'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
+              <source vcs="none"/>
+              <workflow id="route.order.new" type="routes" title="Order creation" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/order.new.md"/>
+            </index>
+            XML;
+
+        $index = new XmlIndexStore(new WorkflowTypeRegistry())->unserialize($xml, 'index.xml');
+
+        self::assertSame([], $index->groups);
+        self::assertNull($index->entries[0]->group);
+        self::assertSame('routes/order.new.md', $index->entries[0]->page(), 'Without a group the page stays where it was.');
+    }
+
     public function testFilesToWorkflowsDistinguishesFilesFromTests(): void
     {
         $graph = $this->filesToWorkflows();

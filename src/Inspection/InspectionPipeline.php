@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Inspection;
 
+use Jul6Art\DevTools\Ai\GroupBrief;
 use Jul6Art\DevTools\Ai\PageBrief;
 use Jul6Art\DevTools\Ai\PageDraft;
+use Jul6Art\DevTools\Ai\XmlGroupBriefStore;
 use Jul6Art\DevTools\Ai\XmlPageBriefStore;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
@@ -39,6 +41,8 @@ use Jul6Art\DevTools\Inspection\Progress\ProgressReporter;
 use Jul6Art\DevTools\Project\ProjectLock;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\GraphRenderer;
+use Jul6Art\DevTools\Rendering\GroupPageRenderer;
+use Jul6Art\DevTools\Rendering\GroupPageSection;
 use Jul6Art\DevTools\Rendering\MarkdownWriter;
 use Jul6Art\DevTools\Rendering\MenuRenderer;
 use Jul6Art\DevTools\Rendering\PageParser;
@@ -174,17 +178,22 @@ final readonly class InspectionPipeline
             $progress->advance($workflow->id->value);
             $old = $previous[$workflow->id->value] ?? null;
             $decision = $decisions[$workflow->id->value];
+            // ⚠️ A page that changes directory has changed, whatever the freshness says of its code: the
+            // grouping of ADR-0045 moved it, and leaving it out would keep the old file for ever — the
+            // index points at the new one, so nothing would ever delete it.
+            $moved = $old instanceof TrackingDocument && $old->group?->directory !== $workflow->group?->directory;
 
-            if (DecisionKind::Keep === $decision->kind && $old instanceof TrackingDocument) {
+            if (DecisionKind::Keep === $decision->kind && !$moved && $old instanceof TrackingDocument) {
                 $documents[] = $old;
                 $report->record($workflow->type->name, 'unchanged');
 
                 continue;
             }
 
-            $history = match ($decision->kind) {
-                DecisionKind::Create => [new Revision($now, $vcs->commit, 'initial')],
-                DecisionKind::ManualStale => $old->history ?? [],
+            $history = match (true) {
+                DecisionKind::Create === $decision->kind => [new Revision($now, $vcs->commit, 'initial')],
+                DecisionKind::ManualStale === $decision->kind => $old->history ?? [],
+                DecisionKind::Keep === $decision->kind => [...($old->history ?? []), new Revision($now, $vcs->commit, 'regroupement : la page change de dossier')],
                 default => [...($old->history ?? []), new Revision($now, $vcs->commit, $decision->describe())],
             };
             $document = $this->trackingOf($directory->root, $workflow, $old, $now, $vcs, $history);
@@ -204,8 +213,15 @@ final readonly class InspectionPipeline
             $report->record($workflow->type->name, DecisionKind::Create === $decision->kind ? 'created' : 'updated');
 
             if ($written($workflow)) {
-                $pageFile = $directory->pageFile($workflow->type, $workflow->id);
-                $page = new PageRenderer()->render($workflow, $document->history, $context, self::writtenPage($pageFile));
+                $pageFile = $directory->pageFile($workflow->type, $workflow->id, $workflow->group?->directory);
+
+                // The page moved: what Claude wrote is read from where it was, and the old file goes.
+                $from = $moved && $old instanceof TrackingDocument ? $directory->pageFile($workflow->type, $workflow->id, $old->group?->directory) : $pageFile;
+                $page = new PageRenderer()->render($workflow, $document->history, $context, self::writtenPage($from));
+
+                if ($from !== $pageFile) {
+                    new Filesystem()->remove([$from]);
+                }
 
                 if ($this->writer->write($pageFile, $page)) {
                     ++$report->pagesWritten;
@@ -229,17 +245,21 @@ final readonly class InspectionPipeline
             // --only names the type being written: --prune must not delete the pages of the others.
             if ($options->prune && (null === $options->only || $options->only === $old->type->name)) {
                 if (!$options->dryRun) {
-                    new Filesystem()->remove([$directory->pageFile($old->type, $old->id), $directory->trackingFile($old->type, $old->id)]);
+                    new Filesystem()->remove([$directory->pageFile($old->type, $old->id, $old->group?->directory), $directory->trackingFile($old->type, $old->id)]);
                 }
 
                 continue;
             }
 
-            $orphans[] = $orphan = TrackingStatus::Orphaned === $old->status ? $old : new TrackingDocument($old->id, $old->type, $old->title, $old->generated, $old->vcs, $old->main, $old->satellites, $old->files, $old->tests, $old->packages, $old->dependsOn, $old->confidence, $old->producer, TrackingStatus::Orphaned, $old->history, $old->decisions, $old->mechanisms);
+            $orphans[] = $orphan = TrackingStatus::Orphaned === $old->status ? $old : new TrackingDocument($old->id, $old->type, $old->title, $old->generated, $old->vcs, $old->main, $old->satellites, $old->files, $old->tests, $old->packages, $old->dependsOn, $old->confidence, $old->producer, TrackingStatus::Orphaned, $old->history, $old->decisions, $old->mechanisms, $old->group);
 
             if ($written($orphan)) {
                 $tracking->write($directory->trackingFile($orphan->type, $orphan->id), $orphan);
             }
+        }
+
+        if (!$options->dryRun) {
+            $this->writeGroupPages($directory, $workflows, $orphans, $options, $report);
         }
 
         $progress->finish();
@@ -264,7 +284,7 @@ final readonly class InspectionPipeline
         // make committing the documentation change the documentation, forever.
         if (is_file($directory->indexFile())) {
             $previousIndex = $indexStore->read($directory->indexFile());
-            $unchanged = new Index($previousIndex->scannedAt, $previousIndex->vcs, $index->entries, $directory->docs);
+            $unchanged = new Index($previousIndex->scannedAt, $previousIndex->vcs, $index->entries, $directory->docs, $index->groups);
 
             if ($indexStore->serialize($unchanged) === $indexStore->serialize($previousIndex)) {
                 $index = $previousIndex;
@@ -451,6 +471,7 @@ final readonly class InspectionPipeline
             history: $history,
             decisions: $workflow->decisions,
             mechanisms: $workflow->mechanisms,
+            group: $workflow->group,
         );
     }
 
@@ -485,7 +506,7 @@ final readonly class InspectionPipeline
      */
     private function writeBriefs(DevToolsDirectory $directory, Config $config, array $knowledge, array $stackOf, array $workflows, array $decisions, array $documents, WorkflowTypeRegistry $types, InspectionOptions $options, InspectionReport $report): array
     {
-        new Filesystem()->remove([...glob($directory->path('pending/page.*.brief.xml')) ?: [], ...glob($directory->path('pending/page.*.model.xml')) ?: []]);
+        new Filesystem()->remove([...glob($directory->path('pending/page.*.brief.xml')) ?: [], ...glob($directory->path('pending/page.*.model.xml')) ?: [], ...glob($directory->path('pending/group.*.brief.xml')) ?: []]);
 
         $byId = [];
 
@@ -529,7 +550,7 @@ final readonly class InspectionPipeline
                 promptPath: Resources::path('prompts/page/v2.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
-                pagePath: $directory->pageRelativePath($workflow->type, $workflow->id),
+                pagePath: $directory->pageRelativePath($workflow->type, $workflow->id, $workflow->group?->directory),
                 knowledgePath: $knowledgePath,
                 reasons: [$document->lastRevision()->reason],
                 sections: PageDraft::expectedSections(),
@@ -540,7 +561,61 @@ final readonly class InspectionPipeline
             $pending[] = $workflow->id;
         }
 
+        $this->writeGroupBriefs($directory, $config, $workflows, $options, $report);
+
         return $pending;
+    }
+
+    /**
+     * One brief per group whose summary is still to write (ADR-0045).
+     *
+     * ⚠️ Only when the summary is missing: the facts of a group page are rewritten by every inspection that
+     * touches one of its routes, and asking Claude again each time would make the cheapest page of the
+     * documentation the most expensive one.
+     *
+     * @param list<Workflow> $workflows
+     */
+    private function writeGroupBriefs(DevToolsDirectory $directory, Config $config, array $workflows, InspectionOptions $options, InspectionReport $report): void
+    {
+        $groups = [];
+
+        foreach ($workflows as $workflow) {
+            if (null === $workflow->group || (null !== $options->only && $options->only !== $workflow->type->name)) {
+                continue;
+            }
+
+            $groups[$workflow->type->name."\0".$workflow->group->directory][] = $workflow;
+        }
+
+        $briefs = new XmlGroupBriefStore();
+
+        foreach ($groups as $members) {
+            $group = $members[0]->group ?? throw new \LogicException('A grouped workflow was collected without its group.');
+            $type = $members[0]->type;
+            $pagePath = $directory->docs.'/'.DevToolsDirectory::groupPageInDocs($type, $group->directory);
+
+            if (self::writtenSummary($directory->root->absolute($pagePath)) instanceof ParsedPage) {
+                continue;
+            }
+
+            $briefPath = $directory->path('pending/'.GroupBrief::fileName($type, $group->directory, 'brief.xml'));
+            $briefs->write($briefPath, new GroupBrief(
+                type: $type,
+                directory: $group->directory,
+                title: $group->title,
+                promptVersion: 'group/1',
+                promptPath: Resources::path('prompts/group/v1.md'),
+                language: $options->language ?? $config->language($options->fallbackLanguage),
+                pagePath: $pagePath,
+                routes: array_map(static fn (Workflow $member): array => [
+                    'route' => $member->main->name,
+                    'title' => $member->title,
+                    'page' => $directory->docs.'/'.DevToolsDirectory::pageInDocs($member->type, $member->id, $group->directory),
+                ], $members),
+                draftPath: DevToolsDirectory::NAME.'/pending/'.GroupBrief::fileName($type, $group->directory, 'draft.md'),
+            ));
+            self::countBrief($report, $briefPath);
+        }
     }
 
     /**
@@ -631,6 +706,68 @@ final readonly class InspectionPipeline
             ++$report->briefsWritten;
             $report->briefBytes += is_file($path) ? (int) filesize($path) : 0;
         }
+    }
+
+    /**
+     * The page of every group, written after the pages it lists (ADR-0045): the table of its routes, the
+     * state machine of the resource, and the summary Claude wrote for it, kept across factual rewrites.
+     *
+     * A group whose last workflow disappeared loses its page with `--prune`, as its routes do: a directory
+     * holding nothing but a README is a link the menu no longer makes.
+     *
+     * @param list<Workflow>         $workflows
+     * @param list<TrackingDocument> $orphans
+     */
+    private function writeGroupPages(DevToolsDirectory $directory, array $workflows, array $orphans, InspectionOptions $options, InspectionReport $report): void
+    {
+        $groups = [];
+
+        foreach ($workflows as $workflow) {
+            if (null === $workflow->group || (null !== $options->only && $options->only !== $workflow->type->name)) {
+                continue;
+            }
+
+            $groups[$workflow->type->name."\0".$workflow->group->directory][] = $workflow;
+        }
+
+        foreach ($groups as $members) {
+            $group = $members[0]->group ?? throw new \LogicException('A grouped workflow was collected without its group.');
+            $file = $directory->groupPageFile($members[0]->type, $group->directory);
+            $page = new GroupPageRenderer()->render($group, $members, self::writtenSummary($file));
+
+            if ($this->writer->write($file, $page)) {
+                ++$report->pagesWritten;
+                $report->bytesWritten += \strlen($page);
+            }
+        }
+
+        if (!$options->prune) {
+            return;
+        }
+
+        $dead = [];
+
+        foreach ($orphans as $orphan) {
+            if (null !== $orphan->group && (null === $options->only || $options->only === $orphan->type->name)) {
+                $dead[$orphan->type->name."\0".$orphan->group->directory] = $directory->groupPageFile($orphan->type, $orphan->group->directory);
+            }
+        }
+
+        new Filesystem()->remove(array_values(array_diff_key($dead, $groups)));
+    }
+
+    /**
+     * The summary of a group page, when Claude wrote it.
+     */
+    private static function writtenSummary(string $pageFile): ?ParsedPage
+    {
+        if (!is_file($pageFile)) {
+            return null;
+        }
+
+        $page = new PageParser()->parse((string) file_get_contents($pageFile));
+
+        return MarkdownWriter::EMPTY === ($page->sections[GroupPageSection::Summary->value] ?? MarkdownWriter::EMPTY) ? null : $page;
     }
 
     /**

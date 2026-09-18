@@ -3,6 +3,7 @@
     The index of every documented workflow: .devtools/index.xml (specs § 4.4, ADR-0004).
 
     schema-version 2 adds `docs`: the directory the pages live in, `docs/workflows` by default.
+    schema-version 3 adds `group`: the controllers routes are laid out under (ADR-0045).
 
     ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
 -->
@@ -15,6 +16,16 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="source" type="t:vcs"/>
+                <!-- One per controller when the project groups routes that way (ADR-0045): the page of a
+                     group lists its routes, and the menu lists the groups. Never a workflow. -->
+                <xs:element name="group" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="type" type="t:slug" use="required"/>
+                        <xs:attribute name="directory" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="page" type="t:path" use="required"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="workflow" minOccurs="0" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:attribute name="id" type="t:workflowId" use="required"/>
@@ -25,6 +36,7 @@
                         <xs:attribute name="mode" type="t:mode" use="required"/>
                         <xs:attribute name="updated" type="xs:dateTime" use="required"/>
                         <xs:attribute name="page" type="t:path" use="required"/>
+                        <xs:attribute name="group" type="t:nonEmpty"/>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

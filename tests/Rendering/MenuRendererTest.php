@@ -17,6 +17,7 @@ use Jul6Art\DevTools\Tests\Tracking\TrackingFixtures;
 use Jul6Art\DevTools\Tracking\GenerationMode;
 use Jul6Art\DevTools\Tracking\Index;
 use Jul6Art\DevTools\Tracking\IndexEntry;
+use Jul6Art\DevTools\Tracking\IndexGroup;
 use Jul6Art\DevTools\Tracking\TrackingStatus;
 use Jul6Art\DevTools\Tracking\VcsState;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -99,6 +100,44 @@ final class MenuRendererTest extends TestCase
         self::assertStringContainsString('### admin (7)', $menu);
         self::assertStringContainsString('### portal (7)', $menu);
         self::assertStringNotContainsString('### ', $this->menu(), 'Two entries stay a flat list.');
+    }
+
+    /**
+     * ADR-0045: when routes are grouped by controller, the menu lists the controllers — one line each, with
+     * how many routes they hold — and the routes are listed on the group's own page.
+     */
+    public function testGroupedRoutesAreListedAsControllers(): void
+    {
+        $entries = [
+            self::entry('route.admin.user.index', '/admin/users', 'admin.user'),
+            self::entry('route.admin.user.edit', '/admin/users/{id}/edit', 'admin.user'),
+            self::entry('route.health', '/health', null),
+        ];
+
+        $menu = new MenuRenderer()->render(
+            new StackDocument('acme/shop', [new StackProfile('.', 'php', 'symfony', '8.1', 'composer', ['src'], [], [], 'symfony', 'symfony-8')]),
+            new Index(new \DateTimeImmutable('2026-09-16T15:00:00+02:00'), new VcsState(null), $entries, 'docs/workflows', [new IndexGroup(WorkflowType::routes(), 'admin.user', '/admin/users')]),
+            [],
+        );
+
+        self::assertStringContainsString('## Routes (3)', $menu, 'The count is of workflows, never of groups.');
+        self::assertStringContainsString('- [/admin/users](routes/admin.user/README.md) — `admin.user` · 2 routes · MAJ 2026-09-16', $menu);
+        self::assertStringNotContainsString('routes/admin.user/edit.md', $menu, 'A grouped route is listed on the page of its group.');
+        self::assertStringContainsString('- [/health](routes/health.md)', $menu, 'A workflow outside any group keeps its line.');
+    }
+
+    private static function entry(string $id, string $title, ?string $group): IndexEntry
+    {
+        return new IndexEntry(
+            new WorkflowId($id),
+            WorkflowType::routes(),
+            $title,
+            TrackingStatus::Fresh,
+            Confidence::High,
+            GenerationMode::NoAi,
+            new \DateTimeImmutable('2026-09-16T15:00:00+02:00'),
+            $group,
+        );
     }
 
     private function menu(): string

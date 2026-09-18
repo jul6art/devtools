@@ -13,6 +13,7 @@ use Jul6Art\DevTools\Stack\StackProfile;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\Index;
 use Jul6Art\DevTools\Tracking\IndexEntry;
+use Jul6Art\DevTools\Tracking\IndexGroup;
 use Jul6Art\DevTools\Tracking\TrackingStatus;
 
 /**
@@ -70,8 +71,9 @@ final class MenuRenderer
                 continue;
             }
 
+            $groups = array_values(array_filter($index->groups, static fn (IndexGroup $group): bool => $group->type->name === $type->name));
             $lines = [...$lines, '', \sprintf('## %s (%d)', Labels::type($type), \count($entries)), ''];
-            $lines = [...$lines, ...self::listing($entries)];
+            $lines = [...$lines, ...self::listing($entries, $groups, $index)];
         }
 
         if ([] !== $empty) {
@@ -122,40 +124,83 @@ final class MenuRenderer
      * the first segment of the identifier (`route.admin.…` → `admin`). A back-office has fifty resources,
      * and fifty lines under one heading is a list nobody scrolls.
      *
+     * ⚠️ When the project groups routes by controller (ADR-0045), what the menu lists is the **groups**:
+     * one line per controller, opening the page that lists its routes. A workflow of that type outside any
+     * group — there is none on a Symfony project, but the model allows it — is listed on its own.
+     *
      * @param non-empty-list<IndexEntry> $entries
+     * @param list<IndexGroup>           $groups
      *
      * @return list<string>
      */
-    private static function listing(array $entries): array
+    private static function listing(array $entries, array $groups, Index $index): array
     {
-        $families = [];
+        $items = [];
+
+        foreach ($groups as $group) {
+            $members = $index->of($group);
+
+            if ([] === $members) {
+                continue;
+            }
+
+            $items[self::family($group->directory)][] = self::groupLine($group, $members);
+        }
+
+        $grouped = array_map(static fn (IndexGroup $group): string => $group->directory, $groups);
 
         foreach ($entries as $entry) {
-            $families[self::family($entry)][] = $entry;
+            if (null !== $entry->group && \in_array($entry->group, $grouped, true)) {
+                continue;
+            }
+
+            $items[self::family($entry->id->pageName())][] = self::entry($entry);
         }
 
-        if (\count($entries) <= self::FLAT_ENTRIES || 2 > \count($families)) {
-            return array_map(self::entry(...), $entries);
+        $lines = array_merge(...array_values($items));
+
+        if (\count($lines) <= self::FLAT_ENTRIES || 2 > \count($items)) {
+            return $lines;
         }
 
-        ksort($families, \SORT_STRING);
-        $lines = [];
+        ksort($items, \SORT_STRING);
+        $sectioned = [];
 
-        foreach ($families as $family => $group) {
-            $lines = [...$lines, \sprintf('### %s (%d)', $family, \count($group)), '', ...array_map(self::entry(...), $group), ''];
+        foreach ($items as $family => $family_lines) {
+            $sectioned = [...$sectioned, \sprintf('### %s (%d)', $family, \count($family_lines)), '', ...$family_lines, ''];
         }
 
-        return \array_slice($lines, 0, -1);
+        return \array_slice($sectioned, 0, -1);
     }
 
     /**
-     * `route.admin.work.order` → `admin`; an identifier with a single segment is its own family.
+     * @param non-empty-list<IndexEntry> $members
      */
-    private static function family(IndexEntry $entry): string
+    private static function groupLine(IndexGroup $group, array $members): string
     {
-        $segments = explode('.', $entry->id->value);
+        $updated = null;
 
-        return $segments[1] ?? $entry->id->value;
+        foreach ($members as $member) {
+            $updated = null === $updated || $member->updated > $updated ? $member->updated : $updated;
+        }
+
+        return \sprintf(
+            '- %s — %s · %d %s · MAJ %s',
+            MarkdownWriter::link($group->title, $group->page()),
+            MarkdownWriter::code($group->directory),
+            \count($members),
+            1 === \count($members) ? 'route' : 'routes',
+            $updated->format('Y-m-d'),
+        );
+    }
+
+    /**
+     * The first segment of what names the page: `admin.work.order` → `admin`. A name with a single segment
+     * is its own family.
+     */
+    private static function family(string $pageName): string
+    {
+        return explode('.', $pageName)[0];
     }
 
     private static function entry(IndexEntry $entry): string
