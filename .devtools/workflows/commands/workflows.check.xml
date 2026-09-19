@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.inspect" type="commands" schema-version="1">
-  <title>workflows:inspect</title>
-  <generated at="2026-09-19T11:14:18+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.check" type="commands" schema-version="1">
+  <title>workflows:check</title>
+  <generated at="2026-09-19T11:14:45+00:00" tool="devtools dev-master" mode="no-ai"/>
   <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
   <entrypoints>
-    <entrypoint kind="command" name="workflows:inspect" role="main">
-      <declared-in path="src/Command/WorkflowsInspectCommand.php" role="other"/>
+    <entrypoint kind="command" name="workflows:check" role="main">
+      <declared-in path="src/Command/WorkflowsCheckCommand.php" role="other"/>
     </entrypoint>
   </entrypoints>
   <files>
-    <file path="src/Ai/ApplyResult.php" role="other" sha256="809bd235b446ccf522f33d5501a602f90fc948691c926b99afceb100cb6662b7"/>
     <file path="src/Ai/GroupBrief.php" role="other" sha256="23b03f77d6a1026fb8c05c80cfb921287387a99eb49ef1e00b1cbc7b04dd5470"/>
     <file path="src/Ai/PageBrief.php" role="other" sha256="6b6867f6eb4d858e73e02bb8f0d1d7bba3ec05cb13188de3b06c84a4743899d4"/>
     <file path="src/Ai/PageDraft.php" role="other" sha256="b3f7cf7698ba86d1489eb8ffaff81a93781d6cd80371040bc1bb4fc02543e9dd"/>
@@ -17,14 +16,13 @@
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="3e3f54b9d24172998397e70b86c25a639e1237e98211684e45a6042ccafd0973"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
-    <file path="src/Command/WorkflowsInspectCommand.php" role="other" sha256="e3a0e6f58e4b1656ffbd5caa1e64b278f841f14d309ff23525ad17924ed5673b"/>
+    <file path="src/Command/WorkflowsCheckCommand.php" role="other" sha256="48184f899efdc67bf4723e7bbc859798805fa933911da13c1cb94c3d80e64780"/>
     <file path="src/Config/Config.php" role="other" sha256="dd73cf356e4b9d738a893448b578dc61d916ca4ab72d75c3f1384bcec28b1362"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
-    <file path="src/Console/ConsoleProgressReporter.php" role="other" sha256="95bdfd0c2ff3c39264f081c40a63e791b4496290605eb6611f5c5dca35792089"/>
-    <file path="src/Console/MemoryLimit.php" role="other" sha256="70658987866e633268aad0bd71820acfe418015cd894698fed64258d6d233bcb"/>
-    <file path="src/Console/SummaryRenderer.php" role="other" sha256="e15e12cf42f142d1d925a66745c387fdf6576ba198ba9a7414ace816c397e2bd"/>
+    <file path="src/Console/ChangeRenderer.php" role="other" sha256="a6c8cd4fd1abeff3bd8a9fadfa318e1e414680c40647cebe6917dc5524dd5900"/>
+    <file path="src/Console/CheckRenderer.php" role="other" sha256="c6d635b0b48e763ebc50438f140e78d34bf976c290f927f28fcf32567c9e7ac6"/>
     <file path="src/Inspection/Adapter/AdapterInterface.php" role="other" sha256="75f0f6887c4e2b0f62c7e96f97ceef8812a2148e715bed3ddca32670ae688303"/>
     <file path="src/Inspection/Adapter/AdapterResult.php" role="other" sha256="bcc9e52822b5b0489d35887f5680d2db11b830594b308a6c5b997305a70b2e09"/>
     <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php" role="other" sha256="da3e506e2905d5dd1095f1ae0c446b61260ea766559563475e01c74f30ed9ede"/>
@@ -159,7 +157,6 @@
     <file path="tests/Command/WorkflowsCheckCommandTest.php" role="test"/>
     <file path="tests/Command/WorkflowsDiffCommandTest.php" role="test"/>
     <file path="tests/Command/WorkflowsInspectCommandTest.php" role="test"/>
-    <file path="tests/Console/MemoryLimitTest.php" role="test"/>
     <file path="tests/Console/ProgressAndCountersTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
@@ -177,12 +174,12 @@
     <package name="symfony/process" version="8.1.7"/>
   </packages>
   <decisions>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsInspectCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/WorkflowsInspectCommand.php" line="67" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsInspectCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" file="src/Command/WorkflowsInspectCommand.php" line="94" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Console\ConsoleProgressReporter::bar" value="$this-&gt;io-&gt;createProgressBar($steps)" file="src/Console/ConsoleProgressReporter.php" line="42" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Console\ConsoleProgressReporter::bar" value="null" condition="$this-&gt;bar instanceof \Symfony\Component\Console\Helper\ProgressBar" file="src/Console/ConsoleProgressReporter.php" line="67" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Console\ConsoleProgressReporter::stage" value="$name" file="src/Console/ConsoleProgressReporter.php" line="34" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Console\ConsoleProgressReporter::stage" value="''" file="src/Console/ConsoleProgressReporter.php" line="70" confidence="high"/>
+    <decision target="DateTimeImmutable::timezone" value="new \DateTimeZone(date_default_timezone_get())" condition="\is_string($epoch) &amp;&amp; 1 === preg_match('/^\d+$/', $epoch)" file="src/Clock/SystemClock.php" line="18" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/WorkflowsCheckCommand.php" line="55" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!\in_array($format, ['text', 'github'], true)" file="src/Command/WorkflowsCheckCommand.php" line="63" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="[] !== $report-&gt;errors" file="src/Command/WorkflowsCheckCommand.php" line="74" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" condition="[] === $causes" file="src/Command/WorkflowsCheckCommand.php" line="98" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" file="src/Command/WorkflowsCheckCommand.php" line="112" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::method" value="''" file="src/Inspection/Graph/DecisionExtractor.php" line="121" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::method" value="$node-&gt;name-&gt;toString()" condition="$node instanceof \PhpParser\Node\Stmt\ClassMethod" file="src/Inspection/Graph/DecisionExtractor.php" line="197" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::scope" value="''" file="src/Inspection/Graph/DecisionExtractor.php" line="120" confidence="high"/>
@@ -196,6 +193,7 @@
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::truncated" value="true" condition="$depth &gt;= self::MAX_DEPTH" file="src/Inspection/Graph/DecisionExtractor.php" line="283" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor::parser" value="$parser" condition="!(null === $parser)" file="src/Inspection/Graph/PhpReferenceExtractor.php" line="59" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor::parser" value="(new \PhpParser\ParserFactory())-&gt;createForNewestSupportedVersion()" condition="null === $parser" file="src/Inspection/Graph/PhpReferenceExtractor.php" line="59" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::path" value="$directory-&gt;path('reports/inspect-' . $report-&gt;startedAt-&gt;format('Y-m-d-His') . '.md')" condition="!$options-&gt;dryRun &amp;&amp; isset($directory) &amp;&amp; is_dir($directory-&gt;path())" file="src/Inspection/InspectionPipeline.php" line="132" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Model\Edge::label" value="\Jul6Art\DevTools\Inspection\Model\NonEmpty::string($label, 'navigation label')" condition="!(null === $label)" file="src/Inspection/Model/Edge.php" line="19" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Model\Edge::label" value="null" condition="null === $label" file="src/Inspection/Model/Edge.php" line="19" confidence="high"/>
   </decisions>
@@ -203,7 +201,6 @@
   <producer>native:generic-php</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
-    <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Bridge/PHPStan/WorkflowDriftTest.php (+3)"/>
+    <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="initial"/>
   </history>
 </workflow>

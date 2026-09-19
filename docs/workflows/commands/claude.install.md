@@ -1,5 +1,5 @@
 # claude:install
-`command.claude.install` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
+`command.claude.install` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
 
 ## Résumé
 
@@ -65,3 +65,4 @@ Un skill modifié à la main n'est jamais écrasé sans `--force` : c'est le fic
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
+| 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

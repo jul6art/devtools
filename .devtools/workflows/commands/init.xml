@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.init" type="commands" schema-version="1">
   <title>init</title>
-  <generated at="2026-09-18T11:35:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" branch="master" dirty="true"/>
+  <generated at="2026-09-19T11:14:18+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="init" role="main">
       <declared-in path="src/Command/InitCommand.php" role="other"/>
@@ -14,19 +14,22 @@
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
     <file path="src/Inspection/Model/InvalidModel.php" role="other" sha256="ea5d752b174d526cd64e79f3c4c3ac2a8f3bdbaaeb77a17934591b2373174e0c"/>
     <file path="src/Inspection/Model/NonEmpty.php" role="other" sha256="4fc8a417d0ba527b0e758172fc6f2b72040a0d9c4bd1fb9a39f648de34a8e956"/>
+    <file path="src/Inspection/Model/StateMachine.php" role="other" sha256="a15064a402a333570941d894c48d6c042cc894a9b59e6563e3d6d644bb56df97"/>
+    <file path="src/Inspection/Model/WorkflowGroup.php" role="other" sha256="3e59f16b1a96c509c42512aec1e20cc6dd099ce1cbe89af28ae221a40d28126a"/>
     <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
     <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="c3c3057cf1bde08f9fc1277ca2194efad244d1d74955cffc20987690270f5414"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="e32c0b7840c745103bba7c093c63c681d892304fa78e06ce3081cc1309c985b1"/>
     <file path="src/Tracking/Initializer.php" role="other" sha256="18941442f9a19f9f7711304160d7015302852e589daa243c053dbeb62995539f"/>
   </files>
   <tests>
     <file path="tests/Ai/PageRedactionTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
+    <file path="tests/Project/GitHooksTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
@@ -47,5 +50,6 @@
   <status>fresh</status>
   <history>
     <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
+    <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Project/GitHooksTest.php"/>
   </history>
 </workflow>

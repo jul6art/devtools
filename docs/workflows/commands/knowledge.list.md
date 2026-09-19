@@ -1,5 +1,5 @@
 # knowledge:list
-`command.knowledge.list` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
+`command.knowledge.list` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
 
 ## Résumé
 
@@ -76,3 +76,4 @@ Une fiche déposée à la main dans le dossier est listée même si `library.xml
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
+| 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

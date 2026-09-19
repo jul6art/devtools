@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to write the summary of a group page: .devtools/pending/group.<type>.<directory>.brief.xml
+    (ADR-0045).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/group-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/group-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="group-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="language">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-z]{2}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="page" type="t:pathElement"/>
+                <!-- The routes this group lists: their page is what Claude reads before summarising. -->
+                <xs:element name="route" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="page" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft" type="t:pathElement"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="type" type="t:nonEmpty" use="required"/>
+            <xs:attribute name="directory" type="t:nonEmpty" use="required"/>
+            <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,5 +1,5 @@
 # knowledge:promote
-`command.knowledge.promote` · type : commands · dernière mise à jour : 2026-09-18 · commit : b8049a4
+`command.knowledge.promote` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
 
 ## Résumé
 
@@ -91,3 +91,4 @@ La promotion ne vérifie que le canevas, pas la justesse : une fiche fausse prom
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
+| 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

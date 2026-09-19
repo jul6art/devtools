@@ -44,6 +44,8 @@
                         </xs:attribute>
                     </xs:complexType>
                 </xs:element>
+                <!-- What changed in the workflow itself since the last revision (ADR-0046): where to look first. -->
+                <xs:element name="fact" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
                 <!-- The closed list of sections the draft holds, in order: anything else is refused. -->
                 <xs:element name="section" type="t:nonEmpty" maxOccurs="unbounded"/>
                 <xs:element name="draft" type="t:pathElement"/>

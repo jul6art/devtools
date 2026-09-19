@@ -13,6 +13,14 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="title" type="t:nonEmpty"/>
+                <!-- The controller this workflow's page is grouped under, when the project groups routes
+                     that way (ADR-0045). Absent from every workflow of a project that does not. -->
+                <xs:element name="group" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="directory" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="generated">
                     <xs:complexType>
                         <xs:attribute name="at" type="xs:dateTime" use="required"/>
