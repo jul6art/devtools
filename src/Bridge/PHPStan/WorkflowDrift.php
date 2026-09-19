@@ -54,7 +54,10 @@ final readonly class WorkflowDrift
                     escapeshellarg($group->change->target),
                 ),
                 'file' => $group->change->declaredIn->path ?? self::entryFileOf($report->entryFiles, $group),
-                'line' => $group->change->line,
+                // ⚠️ Line 1 when the fact has none — an attribute of a route, a package. PHPStan prints
+                // `file.php:-1` for an error attached to a file without a line, which reads as a bug of
+                // the tool rather than as « somewhere in this file ».
+                'line' => $group->change->line ?? 1,
             ];
         }
 

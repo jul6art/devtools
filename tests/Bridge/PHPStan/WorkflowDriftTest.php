@@ -47,6 +47,28 @@ final class WorkflowDriftTest extends TestCase
         self::assertStringContainsString("workflows:accept 'App\\Entity\\Order::status'", $entries[0]['tip']);
     }
 
+    /**
+     * A fact with no line of its own — the security attribute of a route — is still reported at a line
+     * PHPStan can print: it renders `-1` otherwise, which reads as a broken tool.
+     */
+    public function testAFactWithoutALineIsReportedAtTheTopOfItsFile(): void
+    {
+        $project = $this->inspected();
+        // The tracking says one thing, the routing says another: an attribute changed, and an attribute
+        // has no line of its own in the model.
+        $tracking = $project.'/.devtools/workflows/routes/order.new.xml';
+        file_put_contents($tracking, (string) preg_replace('/name="path" value="[^"]*"/', 'name="path" value="/orders/create"', (string) file_get_contents($tracking), 1));
+
+        $entries = self::drift()->of($project);
+
+        self::assertNotSame([], $entries);
+
+        foreach ($entries as $entry) {
+            self::assertNotNull($entry['line'], $entry['message']);
+            self::assertGreaterThan(0, $entry['line'], $entry['message']);
+        }
+    }
+
     public function testAProjectWithoutDevToolsHearsNothing(): void
     {
         $directory = $this->temporaryDirectory().'/plain';
