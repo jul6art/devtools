@@ -268,6 +268,10 @@ final readonly class InspectionPipeline
 
         // An entry point that disappeared: its page is kept and flagged; only --prune deletes it.
         $orphans = [];
+        // ⚠️ Pruned workflows are kept apart, and still handed to the group pages: a controller whose
+        // last route was deleted leaves a README listing nothing. `continue` alone dropped them, and
+        // the directory survived every prune.
+        $pruned = [];
 
         foreach ($previous as $id => $old) {
             if (isset($decisions[$id]) && DecisionKind::Orphan !== $decisions[$id]->kind) {
@@ -282,6 +286,8 @@ final readonly class InspectionPipeline
                     new Filesystem()->remove([$directory->pageFile($old->type, $old->id, $old->group?->directory), $directory->trackingFile($old->type, $old->id)]);
                 }
 
+                $pruned[] = $old;
+
                 continue;
             }
 
@@ -293,7 +299,7 @@ final readonly class InspectionPipeline
         }
 
         if (!$options->dryRun) {
-            $this->writeGroupPages($directory, $workflows, $orphans, $options, $report);
+            $this->writeGroupPages($directory, $workflows, [...$orphans, ...$pruned], $options, $report);
         }
 
         $progress->finish();
@@ -817,7 +823,18 @@ final readonly class InspectionPipeline
             }
         }
 
-        new Filesystem()->remove(array_values(array_diff_key($dead, $groups)));
+        $files = array_values(array_diff_key($dead, $groups));
+        new Filesystem()->remove($files);
+
+        // The directory of a group that lost every route goes with its README: an empty folder in the
+        // documentation is a question the next reader has to answer for nothing.
+        foreach ($files as $file) {
+            $folder = \dirname($file);
+
+            if (is_dir($folder) && [] === (glob($folder.'/*') ?: [])) {
+                new Filesystem()->remove($folder);
+            }
+        }
     }
 
     /**

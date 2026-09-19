@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="ui.cart-summary" type="ui" schema-version="1">
   <title>CartSummary</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
+  <source vcs="git" commit="f815420d31f9d5855dcfc2492de52193b10367b4" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="component" name="App\Twig\Components\CartSummary" role="main">
       <declared-in path="src/Twig/Components/CartSummary.php" role="component"/>
@@ -19,10 +19,15 @@
   <packages>
     <package name="symfony/ux-live-component" version="2.36.0"/>
   </packages>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="f815420d31f9d5855dcfc2492de52193b10367b4" reason="rédaction initiale"/>
   </history>
 </workflow>

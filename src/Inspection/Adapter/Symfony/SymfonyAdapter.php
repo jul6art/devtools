@@ -174,7 +174,7 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $decisions = new DecisionExtractor($extractor);
         $attachments = [];
 
-        foreach ($console instanceof ConsoleIntrospection ? $console->listeners : $scanner->listeners() as $class => $listens) {
+        foreach (self::listeners($console, $scanner) as $class => $listens) {
             $file = $scanner->fileOf($class);
 
             if (!$file instanceof FileRef) {
@@ -198,6 +198,36 @@ final readonly class SymfonyAdapter implements AdapterInterface
         }
 
         return $attachments;
+    }
+
+    /**
+     * The console knows what the dispatcher holds; the attributes know what Doctrine holds. Neither
+     * alone is the whole truth, so the two are merged — the console wins on an event both describe,
+     * because it reports the priority the container actually compiled.
+     *
+     * @return array<string, list<array{event: string, method: string, priority: int|null}>>
+     */
+    private static function listeners(?ConsoleIntrospection $console, StaticSymfonyScanner $scanner): array
+    {
+        $declared = $scanner->listeners();
+
+        if (!$console instanceof ConsoleIntrospection) {
+            return $declared;
+        }
+
+        $merged = $console->listeners;
+
+        foreach ($declared as $class => $listens) {
+            $known = array_flip(array_map(static fn (array $listen): string => $listen['event'], $merged[$class] ?? []));
+
+            foreach ($listens as $listen) {
+                if (!isset($known[$listen['event']])) {
+                    $merged[$class][] = $listen;
+                }
+            }
+        }
+
+        return $merged;
     }
 
     /**

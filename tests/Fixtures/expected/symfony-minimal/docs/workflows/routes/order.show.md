@@ -34,6 +34,7 @@
 | Mécanisme | Événement | Priorité | Écrit |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
+| `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
 ## Points d'attention
 

@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
@@ -44,6 +45,32 @@ final class StaticSymfonyScanner
     private const string LISTENER = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
 
     private const string ENTITY_LISTENER = 'Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener';
+
+    /**
+     * ⚠️ A Doctrine listener is NOT in `debug:event-dispatcher`: it is registered on Doctrine's own
+     * event manager. Only the attribute says it exists, so it is read statically even when the console
+     * answers — a project can delete one without anything noticing otherwise.
+     */
+    private const string DOCTRINE_LISTENER = 'Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener';
+
+    /**
+     * The constants a static scan cannot resolve and that a project writes every day. Doctrine's are
+     * absent on purpose: there, the name of the constant is its value.
+     */
+    private const array SYMFONY_EVENTS = [
+        'KernelEvents::REQUEST' => 'kernel.request',
+        'KernelEvents::CONTROLLER' => 'kernel.controller',
+        'KernelEvents::CONTROLLER_ARGUMENTS' => 'kernel.controller_arguments',
+        'KernelEvents::VIEW' => 'kernel.view',
+        'KernelEvents::RESPONSE' => 'kernel.response',
+        'KernelEvents::FINISH_REQUEST' => 'kernel.finish_request',
+        'KernelEvents::TERMINATE' => 'kernel.terminate',
+        'KernelEvents::EXCEPTION' => 'kernel.exception',
+        'ConsoleEvents::COMMAND' => 'console.command',
+        'ConsoleEvents::TERMINATE' => 'console.terminate',
+        'ConsoleEvents::ERROR' => 'console.error',
+        'ConsoleEvents::SIGNAL' => 'console.signal',
+    ];
 
     private const string IS_GRANTED = 'Symfony\Component\Security\Http\Attribute\IsGranted';
 
@@ -145,7 +172,7 @@ final class StaticSymfonyScanner
         $listeners = [];
 
         foreach ($this->classes() as $name => ['class' => $class]) {
-            foreach ($this->attributes($class->attrGroups, [self::LISTENER, self::ENTITY_LISTENER]) as $attribute) {
+            foreach ($this->attributes($class->attrGroups, [self::LISTENER, self::ENTITY_LISTENER, self::DOCTRINE_LISTENER]) as $attribute) {
                 $event = self::stringArgument($attribute, 0, 'event');
 
                 if (null !== $event) {
@@ -421,7 +448,24 @@ final class StaticSymfonyScanner
     {
         $value = self::argument($attribute, $position, $name);
 
-        return $value instanceof String_ ? $value->value : null;
+        if ($value instanceof String_) {
+            return $value->value;
+        }
+
+        // ⚠️ `#[AsDoctrineListener(event: Events::prePersist)]` — the event is a class constant, and
+        // Doctrine's own convention is that the constant's value IS its name. Symfony's are not, so
+        // they are listed: guessing `REQUEST` for `kernel.request` would name an event nobody listens to.
+        if ($value instanceof ClassConstFetch && $value->name instanceof Identifier) {
+            $constant = $value->name->toString();
+            $class = $value->class instanceof Name ? $value->class->getLast() : '';
+
+            return match (true) {
+                'Events' === $class => $constant,
+                default => self::SYMFONY_EVENTS[$class.'::'.$constant] ?? null,
+            };
+        }
+
+        return null;
     }
 
     /**

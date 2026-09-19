@@ -1,5 +1,5 @@
 # GET /orders
-`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : d15a772
+`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : f815420
 
 ## Résumé
 
@@ -41,6 +41,7 @@ flowchart LR
 | Mécanisme | Événement | Priorité | Écrit |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
+| `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
 ## Points d'attention
 
@@ -55,4 +56,4 @@ flowchart LR
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d15a772 | initial |
+| 2026-09-16 | f815420 | initial |

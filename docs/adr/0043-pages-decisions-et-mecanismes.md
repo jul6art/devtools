@@ -188,6 +188,20 @@ l'ADR-0008 reconduite).
       quelconque) avant d'être utilisés — journal 2026-09-16
 - [x] La matrice de bout en bout rejouée sur les quatre projets-fixtures, snapshots régénérés
 
+## Amendement du 2026-09-19 — les listeners Doctrine
+
+⚠️ **Un listener Doctrine n'est pas dans `debug:event-dispatcher`** : il vit sur le gestionnaire
+d'événements de Doctrine, pas sur le répartiteur de Symfony. La console était la seule source des
+mécanismes quand elle répondait, et deux listeners de cereezer — qui écrivent des totaux avant chaque
+`persist` — n'apparaissaient sur aucune page. Les supprimer ne changeait rien à la documentation.
+
+Les deux sources sont désormais **fusionnées** : la console pour ce que le conteneur a compilé (elle
+seule connaît la priorité réelle), les attributs pour ce qu'elle ignore. Et `#[AsDoctrineListener(event:
+Events::prePersist)]` nomme son événement par une constante de classe : la valeur d'une constante de
+`Events` est son propre nom, ce qui se résout sans autoload ; celles de Symfony ne le sont pas, et sont
+donc listées une à une — deviner « REQUEST » pour `kernel.request` nommerait un événement que personne
+n'écoute.
+
 ## Conséquences
 
 - **Changement cassant du gabarit.** Toutes les pages existantes sont réécrites une fois, y compris

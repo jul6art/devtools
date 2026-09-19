@@ -112,6 +112,35 @@ Usage
     nothing when git is absent.
 -->
 
+### Which command, and when
+
+| Moment | Command | What it does | Writes |
+| --- | --- | --- | --- |
+| **Setting a project up** (once) | `devtools init` | creates `.devtools/` and the `config.xml` you then edit | `.devtools/` |
+| | `devtools stack:detect` | writes what the project is built with; `init` and `inspect` do it too | `stack.xml` |
+| | `devtools claude:install` | installs the Claude Code skill that writes the pages | `.claude/skills/` |
+| | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
+| **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
+| | *Claude writes the drafts* | one draft per brief, in `.devtools/pending/` | drafts |
+| | `devtools workflows:apply` | checks each draft and rebuilds its page | pages, tracking |
+| **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
+| | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
+| **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
+| | `devtools workflows:review` | fact by fact: accept, refuse, skip | pages of accepted facts |
+| | `devtools workflows:accept <fact>` | the change was wanted: the pages follow | pages, tracking, briefs |
+| | `devtools workflows:reject <fact>` | it was not: prints the `git restore`; runs it with `--restore` | nothing, or the code |
+| **Occasionally** | `devtools workflows:inspect --prune` | after deleting code: removes the pages of gone workflows | deletes pages |
+| | `devtools workflows:inspect --force` | rewrites every page's facts, whatever the freshness says | every page |
+| | `devtools knowledge:list` / `knowledge:promote` | the stack knowledge shared between projects | the library |
+
+The order matters twice, and only twice: `init` before anything else, and a brief before the draft
+that answers it. Everything else is idempotent — a command run twice on an unchanged project does
+nothing the second time.
+
+⚠️ **`--prune` deletes**, and `workflows:reject --restore` is the only thing here that touches a
+project's own code. Everything else either writes inside `.devtools/` and the documentation directory,
+or writes nothing at all.
+
 ### `devtools init [path]`
 
 Creates the `.devtools/` folder of a project — the current directory when no path is given:
@@ -324,9 +353,22 @@ Fails when the documentation no longer matches the code, and **writes nothing**:
 ⚠️ **A file whose bytes changed without changing a fact is not a cause.** That is the whole difference
 with the freshness: the gate does not stop anyone for a comment added to a traversed file.
 
+It is still **counted**, on the last line, because the model holds assignments and nothing else: a
+condition rewritten inside a method, a constant renamed, a voter that now returns another permission,
+a default value flipped — none of these is a fact, and each can make a page's prose false.
+
+```
+ ✔ rien à signaler · 731 fichiers parcourus
+ 3 workflows ont vu leur code changer sans qu'aucun fait ne bouge : leur prose peut être périmée (--strict pour en faire une cause)
+```
+
+`--strict` turns them into causes. Use it on a project where the pages are read as a contract; leave it
+off where the gate has to stay quiet on a refactoring.
+
 | Option | |
 | --- | --- |
 | `--require-ai` | fail as well on a page that only holds facts |
+| `--strict` | fail as well on a workflow whose code changed without changing a fact |
 | `--only=routes` | one type of workflow |
 | `--format=github` | `::error file=…,line=…::` annotations, so the pull request shows the line |
 

@@ -235,6 +235,27 @@ final class InspectionPipelineTest extends TestCase
         self::assertStringContainsString('regroupement : la page change de dossier', (string) file_get_contents($project.'/docs/workflows/routes/order/new.md'), 'The move is one line of the history.');
     }
 
+    /**
+     * ⚠️ A controller whose last route was deleted leaves a README listing nothing, and a directory
+     * with it. Found by deleting a probe route on a real project: `--prune` removed the page and the
+     * tracking file, and the folder stayed — the pruned workflows never reached the group pages.
+     */
+    public function testPruningTheLastRouteOfAControllerRemovesItsReadmeAndItsDirectory(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        self::groupByController($project);
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        self::assertFileExists($project.'/docs/workflows/routes/health/README.md');
+
+        $this->pipeline(new FakeAdapter(['app_health']))->run(new InspectionOptions($project, prune: true));
+
+        self::assertFileDoesNotExist($project.'/docs/workflows/routes/health/index.md', 'The page of the route goes.');
+        self::assertFileDoesNotExist($project.'/docs/workflows/routes/health/README.md', 'The README of the emptied controller goes with it.');
+        self::assertDirectoryDoesNotExist($project.'/docs/workflows/routes/health', 'And so does the directory: an empty folder is a question for nothing.');
+        self::assertFileExists($project.'/docs/workflows/routes/order/README.md', 'A controller that still has routes is left alone.');
+    }
+
     public function testASecondRunOfAGroupedProjectRewritesNothing(): void
     {
         $project = $this->copyFixtureProject('symfony-minimal');

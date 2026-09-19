@@ -40,6 +40,11 @@
     <decision target="App\Entity\Order::status" value="'quoted'" condition="null === $order-&gt;total" file="src/Service/OrderPricing.php" line="24" confidence="high"/>
     <decision target="App\Entity\Order::status" value="'priced'" condition="!('' === $order-&gt;customer || null === $order-&gt;total)" file="src/Service/OrderPricing.php" line="26" confidence="high"/>
   </decisions>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>

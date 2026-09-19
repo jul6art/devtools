@@ -93,6 +93,28 @@ final class WorkflowsCheckCommandTest extends TestCase
         self::assertStringContainsString('jamais rédigé', $tester->getDisplay());
     }
 
+    /**
+     * ⚠️ The safety net of ADR-0017: the model only holds assignments, so a condition rewritten inside
+     * a method, a constant renamed or a default value flipped changes no fact. The gate says how many
+     * workflows are in that state — and fails on them only with `--strict`.
+     */
+    public function testCodeThatChangedWithoutChangingAFactIsReportedButDoesNotFail(): void
+    {
+        $project = $this->inspected();
+        $pricing = $project.'/src/Service/OrderPricing.php';
+        file_put_contents($pricing, str_replace('public function discount(', "public function unused(): void\n    {\n    }\n\n    public function discount(", (string) file_get_contents($pricing)));
+
+        $tester = self::tester();
+
+        self::assertSame(0, $tester->execute(['path' => $project]));
+        self::assertStringContainsString('sans qu\'aucun fait ne bouge', $tester->getDisplay());
+
+        $strict = self::tester();
+
+        self::assertSame(1, $strict->execute(['path' => $project, '--strict' => true]));
+        self::assertStringContainsString('code changé, aucun fait', $strict->getDisplay());
+    }
+
     public function testTheGithubFormatAnnotatesTheFileAndTheLine(): void
     {
         $project = $this->inspected();

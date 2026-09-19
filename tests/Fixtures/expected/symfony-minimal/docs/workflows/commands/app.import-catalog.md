@@ -31,7 +31,9 @@
 
 ## Mécanismes transverses
 
-—
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
 ## Points d'attention
 

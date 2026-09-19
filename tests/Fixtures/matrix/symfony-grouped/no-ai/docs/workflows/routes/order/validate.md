@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : d15a772
+`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : f815420
 
 ## Résumé
 
@@ -49,6 +49,7 @@ stateDiagram-v2
 | Mécanisme | Événement | Priorité | Écrit |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
+| `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
 ## Points d'attention
 
@@ -62,4 +63,4 @@ stateDiagram-v2
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d15a772 | initial |
+| 2026-09-16 | f815420 | initial |

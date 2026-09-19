@@ -37,5 +37,6 @@ Aucun workflow trouvé pour : Intégrations.
 ## Non couvert
 
 - `src/EventListener/LocaleListener.php` — aucun workflow ne référence ce fichier
+- `src/EventListener/TotalsListener.php` — aucun workflow ne référence ce fichier
 - `src/Kernel.php` — aucun workflow ne référence ce fichier
 - `src/Util/StringHelper.php` — aucun workflow ne référence ce fichier

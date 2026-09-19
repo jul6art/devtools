@@ -97,23 +97,40 @@ final class SymfonyAdapterTest extends TestCase
     /**
      * A kernel listener runs inside every route, so it is a mechanism of each of them — not a workflow
      * of its own with a page nobody opens (ADR-0043).
+     *
+     * ⚠️ A Doctrine listener runs inside every workflow that reaches an entity, and the console never
+     * mentions it: it lives on Doctrine's event manager, not on the dispatcher. It is read from its
+     * attribute even when the console answers — found on a real project, where deleting one changed
+     * nothing in the documentation.
      */
-    public function testEveryRouteCarriesTheProjectsKernelListenersAsMechanisms(): void
+    public function testEveryRouteCarriesTheProjectsListenersAsMechanisms(): void
     {
         [$result] = $this->inspect(new RecordedConsoleRunner());
 
         foreach ($result->workflows as $workflow) {
-            if ('routes' === $workflow->type->name) {
-                self::assertSame(
-                    ['App\\EventListener\\LocaleListener'],
-                    array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $workflow->mechanisms),
-                    (string) $workflow->id,
-                );
-                self::assertSame('kernel.request', $workflow->mechanisms[0]->event);
+            if ('routes' !== $workflow->type->name) {
+                continue;
             }
+
+            $names = array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $workflow->mechanisms);
+
+            self::assertContains('App\\EventListener\\LocaleListener', $names, (string) $workflow->id);
+            self::assertSame('kernel.request', $workflow->mechanisms[0]->event);
         }
 
-        self::assertSame([], $this->workflow($result, 'command.app.import-catalog')->mechanisms, 'A kernel listener does not run inside a command.');
+        $touchesAnEntity = $this->workflow($result, 'route.order.new');
+
+        self::assertContains(
+            'App\\EventListener\\TotalsListener',
+            array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $touchesAnEntity->mechanisms),
+            'The Doctrine listener comes from its attribute, not from the console.',
+        );
+
+        self::assertSame(
+            ['App\\EventListener\\TotalsListener'],
+            array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $this->workflow($result, 'command.app.import-catalog')->mechanisms),
+            'A kernel listener does not run inside a command — a Doctrine one does, as soon as the command reaches an entity.',
+        );
     }
 
     public function testNoWorkflowOfTypeEventsIsProducedAnyMore(): void

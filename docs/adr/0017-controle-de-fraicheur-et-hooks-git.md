@@ -48,8 +48,14 @@ Une seule commande de contrôle, en **lecture seule**, dont l'échec se lit :
 | `--require-ai` : une page jamais rédigée (`mode="no-ai"`) | `jamais rédigé` |
 
 ⚠️ **Un fichier modifié sans fait changé n'est PAS une cause d'échec.** C'est la différence avec la
-fraîcheur, et elle est délibérée : la gate ne réveille personne pour un commentaire ajouté. La prose peut
-devenir fausse sans qu'un fait bouge — c'est l'affaire de la revue (ADR-0047), pas d'une gate.
+fraîcheur, et elle est délibérée : la gate ne réveille personne pour un commentaire ajouté.
+
+⚠️ **Il est en revanche COMPTÉ**, et `--strict` en fait une cause. Éprouvé sur cereezer le
+2026-09-19 : le modèle ne retient que les affectations, donc une condition réécrite dans une méthode,
+une constante renommée, un voter qui rend une autre permission ou une valeur par défaut inversée ne
+changent aucun fait — et rendent pourtant la prose d'une page fausse. Les capturer toutes comme des
+décisions coûterait 143 nouvelles cibles sur ce seul projet, donc autant de diagrammes à redessiner :
+le filet est le bon compromis, la capture ne l'est pas.
 
 Codes de sortie : `0` rien à signaler ; `1` au moins une cause ; `2` le projet n'a pas pu être inspecté.
 

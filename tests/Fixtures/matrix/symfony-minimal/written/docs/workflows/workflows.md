@@ -1,6 +1,6 @@
 # Workflows — acme/symfony-minimal
 
-Stack : Symfony 8.1 · 9 workflows · dernier scan : 2026-09-16 (commit d15a772)
+Stack : Symfony 8.1 · 9 workflows · dernier scan : 2026-09-16 (commit f815420)
 
 [Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-8](../../.devtools/knowledge/symfony-8.md)
 
@@ -37,5 +37,6 @@ Aucun workflow trouvé pour : Intégrations.
 ## Non couvert
 
 - `src/EventListener/LocaleListener.php` — aucun workflow ne référence ce fichier
+- `src/EventListener/TotalsListener.php` — aucun workflow ne référence ce fichier
 - `src/Kernel.php` — aucun workflow ne référence ce fichier
 - `src/Util/StringHelper.php` — aucun workflow ne référence ce fichier

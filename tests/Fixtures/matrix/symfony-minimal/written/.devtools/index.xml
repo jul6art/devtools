@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
-  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
+  <source vcs="git" commit="f815420d31f9d5855dcfc2492de52193b10367b4" branch="main" dirty="true"/>
   <workflow id="async.order-created" type="async" title="OrderCreated" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="async/order-created.md"/>
   <workflow id="command.app.import-catalog" type="commands" title="app:import-catalog" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="commands/app.import-catalog.md"/>
   <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="data/migrations.md"/>

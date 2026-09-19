@@ -21,6 +21,11 @@
   <packages>
     <package name="symfony/console" version="8.1.7"/>
   </packages>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
+  </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>

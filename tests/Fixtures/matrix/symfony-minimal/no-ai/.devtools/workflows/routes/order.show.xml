@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.show" type="routes" schema-version="1">
   <title>GET /orders/{id}</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
-  <source vcs="git" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" branch="main" dirty="true"/>
+  <source vcs="git" commit="f815420d31f9d5855dcfc2492de52193b10367b4" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="app_order_show" role="main">
       <declared-in path="src/Controller/OrderController.php" role="controller"/>
@@ -32,11 +32,14 @@
     <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
       <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
     </mechanism>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
   </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="d15a772741df109ae1bc0621cae3cee795f8b78a" reason="initial"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="f815420d31f9d5855dcfc2492de52193b10367b4" reason="initial"/>
   </history>
 </workflow>

@@ -32,6 +32,9 @@
     <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
       <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
     </mechanism>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
   </mechanisms>
   <confidence>high</confidence>
   <producer>native:symfony</producer>

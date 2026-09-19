@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : d15a772
+`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : f815420
 
 ## Résumé
 
@@ -31,7 +31,9 @@
 
 ## Mécanismes transverses
 
-—
+| Mécanisme | Événement | Priorité | Écrit |
+|---|---|---|---|
+| `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
 ## Points d'attention
 
@@ -45,4 +47,4 @@
 
 | Date | Commit | Changement |
 |---|---|---|
-| 2026-09-16 | d15a772 | initial |
+| 2026-09-16 | f815420 | initial |

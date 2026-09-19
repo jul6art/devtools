@@ -17,12 +17,35 @@ use Jul6Art\DevTools\Inspection\InspectionReport;
 final readonly class CheckRenderer
 {
     /**
+     * The workflows whose files changed without changing a single fact (ADR-0017).
+     *
+     * ⚠️ Not a cause of failure by default, and reported all the same: the prose of a page can become
+     * false without any fact moving — a condition rewritten inside a method, a constant renamed, a
+     * default value flipped. The gate says how many, `--strict` makes them fail.
+     *
+     * @return list<string>
+     */
+    public static function silent(InspectionReport $report): array
+    {
+        $silent = [];
+
+        foreach ($report->decisions as $id => $decision) {
+            if (DecisionKind::Rewrite === $decision->kind && !isset($report->changes[$id])) {
+                $silent[] = $id;
+            }
+        }
+
+        return $silent;
+    }
+
+    /**
      * @param list<ChangeGroup> $groups
      * @param list<string>      $undocumented workflows whose page was never written by Claude
+     * @param list<string>      $silent       workflows whose code changed without changing a fact, when --strict asks for them
      *
      * @return list<string> one line per cause, empty when there is nothing to report
      */
-    public static function causes(InspectionReport $report, array $groups, array $undocumented = []): array
+    public static function causes(InspectionReport $report, array $groups, array $undocumented = [], array $silent = []): array
     {
         $lines = [];
 
@@ -36,6 +59,10 @@ final readonly class CheckRenderer
 
         foreach ($undocumented as $id) {
             $lines[] = \sprintf('%s jamais rédigé', self::pad($id));
+        }
+
+        foreach ($silent as $id) {
+            $lines[] = \sprintf('%s code changé, aucun fait', self::pad($id));
         }
 
         foreach ($groups as $group) {
@@ -59,10 +86,11 @@ final readonly class CheckRenderer
      *
      * @param list<ChangeGroup> $groups
      * @param list<string>      $undocumented
+     * @param list<string>      $silent
      *
      * @return list<string>
      */
-    public static function annotations(InspectionReport $report, array $groups, array $undocumented = []): array
+    public static function annotations(InspectionReport $report, array $groups, array $undocumented = [], array $silent = []): array
     {
         $lines = [];
 
@@ -81,6 +109,10 @@ final readonly class CheckRenderer
 
         foreach ($undocumented as $id) {
             $lines[] = self::annotation(\sprintf('%s has never been written: only its facts are documented.', $id), $report->entryFiles[$id] ?? null, null);
+        }
+
+        foreach ($silent as $id) {
+            $lines[] = self::annotation(\sprintf('%s: its files changed without changing a documented fact; its prose may be stale.', $id), $report->entryFiles[$id] ?? null, null);
         }
 
         foreach ($groups as $group) {
