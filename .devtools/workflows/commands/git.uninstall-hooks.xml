@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.git.uninstall-hooks" type="commands" schema-version="1">
   <title>git:uninstall-hooks</title>
-  <generated at="2026-09-19T11:14:45+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <generated at="2026-09-19T11:17:29+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
   <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="git:uninstall-hooks" role="main">
@@ -40,6 +40,6 @@
   <producer>native:generic-php</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="initial"/>
+    <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="Rédaction initiale."/>
   </history>
 </workflow>
