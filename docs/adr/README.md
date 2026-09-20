@@ -66,6 +66,7 @@
 | [0046](0046-diff-type-des-workflows.md) | Diff typé des workflows : ce qui a changé, pas seulement que ça a changé | MVP+ — Retours d'usage | Accepted | — |
 | [0047](0047-accepter-ou-refuser-un-changement.md) | Accepter un changement, ou le refuser : la revue | MVP+ — Retours d'usage | Accepted | — |
 | [0048](0048-regle-phpstan-de-derive.md) | La dérive se voit là où on écrit le code : une règle PHPStan | MVP+ — Retours d'usage | Accepted | — |
+| [0049](0049-sommaire-apres-apply.md) | Le sommaire ment jusqu'à la prochaine inspection | MVP+ — Retours d'usage | Proposed | — |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 

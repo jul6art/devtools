@@ -545,3 +545,13 @@
 - **Un test qui passe avec et sans le correctif ne teste rien.** Le premier test de `restrictTo` était
   vert dans les deux cas parce que le second workflow ne traversait pas le fichier modifié. Vérifier par
   mutation, toujours, avant de croire un test de non-régression.
+- **Une commande qui consomme un état doit rafraîchir ce qui l'affiche.** `workflows:apply` fait
+  disparaître les briefs et réécrit `index.xml`, mais pas `workflows.md` : après une campagne de 951
+  pages sur superp, le sommaire réclamait encore la rédaction des 951. Le fichier lu par la machine
+  était juste, celui lu par l'humain mentait — et rien ne le signalait. ⚠️ Tant que l'ADR-0049 n'est
+  pas acceptée, **relancer `workflows:inspect` après une campagne de rédaction** : c'est le seul
+  chemin qui réécrit le sommaire.
+- **Une page régénérée ne perd pas sa prose.** Devant 14 briefs rouverts pour un simple fichier
+  modifié, le réflexe est de tout réécrire ; le diff montrait deux lignes d'en-tête. Lire le diff du
+  CODE depuis le commit de la doc (`git diff <commit du suivi>..HEAD -- src/`) dit lesquelles des
+  pages ont vraiment bougé — ici deux sur quatorze — et les douze autres se réémettent telles quelles.
