@@ -1,5 +1,5 @@
 # workflows:inspect
-`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
+`command.workflows.inspect` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
 
 ## Résumé
 
@@ -127,6 +127,9 @@ Aucun listener : c'est une commande console. Le verrou `ProjectLock` interdit de
 
 Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `method`, `truncated` sont des états internes de l'extracteur, pas du métier. C'est la limite de l'extraction : elle trouve toute la logique conditionnelle atteinte, sans savoir laquelle intéresse un lecteur. Sur un projet applicatif, ce sont les champs d'entités qui remontent.
 
+- **`--prune` emporte le dossier avec le README** : un contrôleur dont la dernière route disparaît ne laisse plus derrière lui un répertoire vide qui ne liste rien. Les workflows élagués sont désormais passés aux pages de groupe au lieu d'être écartés en cours de boucle.
+- **Les écouteurs Doctrine entrent dans les mécanismes** : ils vivent sur le gestionnaire d'événements de Doctrine et non sur le répartiteur, donc la console ne les mentionnait jamais. Les deux sources sont fusionnées, et un écouteur déclaré par attribut est résolu.
+
 ## Workflows liés
 
 —
@@ -137,3 +140,4 @@ Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `me
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Bridge/PHPStan/WorkflowDriftTest.php (+3) |
+| 2026-09-20 | 9e40da9 | Deux trous comblés dans le pipeline, trouvés en passant le système à l'épreuve : l'élagage laissait derrière lui le dossier d'un groupe vidé, et les écouteurs Doctrine n'apparaissaient sur aucune page. Le reste de la commande est inchangé. (files changed: src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php) |

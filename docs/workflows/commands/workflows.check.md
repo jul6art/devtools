@@ -1,5 +1,5 @@
 # workflows:check
-`command.workflows.check` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
+`command.workflows.check` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
 
 ## Résumé
 
@@ -22,14 +22,15 @@ sequenceDiagram
   participant P as InspectionPipeline
   participant R as CheckRenderer
 
-  U->>C: workflows:check [--require-ai] [--format=github]
+  U->>C: workflows:check [--require-ai] [--strict] [--format=github]
   C->>P: inspection en lecture seule
   P-->>C: décisions de fraîcheur et faits changés
   C->>R: les causes, une ligne chacune
+  R-->>C: et, à part, les workflows dont le code a changé sans qu'aucun fait ne bouge
   alt aucune cause
-    C-->>U: 0 — rien à signaler
+    C-->>U: 0 — rien à signaler, et leur nombre
   else
-    C-->>U: 1, et ce qu'il faut relire
+    C-->>U: 1, ce qu'il faut relire, et leur nombre
   end
 ```
 
@@ -136,6 +137,7 @@ Lecture : les suivis et le code. Aucune écriture.
 - **Un fichier modifié sans fait changé n'est pas une cause** : c'est toute la différence avec la fraîcheur, et elle est délibérée — une gate qui réveille pour un commentaire ajouté est une gate qu'on désactive.
 - **`--require-ai` est une exigence distincte** : une page qui ne porte que des faits est juste, mais elle n'explique rien ; les projets qui veulent la prose l'exigent explicitement.
 - **Le format GitHub annote le fichier et la ligne**, pour que la pull request montre l'endroit plutôt qu'un résumé.
+- **Un code changé sans fait changé est COMPTÉ, pas bloquant** : la gate dit combien de workflows sont dans ce cas, parce que leur prose peut être fausse — une condition réécrite dans une méthode, une constante renommée, une valeur par défaut inversée. `--strict` en fait une cause d'échec, pour les projets qui veulent relire à chaque fois.
 
 ## Workflows liés
 
@@ -146,3 +148,4 @@ Lecture : les suivis et le code. Aucune écriture.
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
+| 2026-09-20 | 9e40da9 | La commande gagne `--strict` et une ligne de compte. Ce qui était tu — un fichier modifié sans fait changé — est maintenant dit, sans faire échouer : la gate annonce le nombre, et `--strict` le transforme en cause. Le format GitHub porte la même annotation. (files changed: src/Command/WorkflowsCheckCommand.php, src/Console/CheckRenderer.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php) |

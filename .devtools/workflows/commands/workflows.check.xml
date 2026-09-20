@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.check" type="commands" schema-version="1">
   <title>workflows:check</title>
-  <generated at="2026-09-19T11:16:38+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
+  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:check" role="main">
       <declared-in path="src/Command/WorkflowsCheckCommand.php" role="other"/>
@@ -16,13 +16,13 @@
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="3e3f54b9d24172998397e70b86c25a639e1237e98211684e45a6042ccafd0973"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
-    <file path="src/Command/WorkflowsCheckCommand.php" role="other" sha256="48184f899efdc67bf4723e7bbc859798805fa933911da13c1cb94c3d80e64780"/>
+    <file path="src/Command/WorkflowsCheckCommand.php" role="other" sha256="33ba4f15034aeee9c635ee0d22d47566b2e5092c161c1af2141549f95dbd238f"/>
     <file path="src/Config/Config.php" role="other" sha256="dd73cf356e4b9d738a893448b578dc61d916ca4ab72d75c3f1384bcec28b1362"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
     <file path="src/Console/ChangeRenderer.php" role="other" sha256="a6c8cd4fd1abeff3bd8a9fadfa318e1e414680c40647cebe6917dc5524dd5900"/>
-    <file path="src/Console/CheckRenderer.php" role="other" sha256="c6d635b0b48e763ebc50438f140e78d34bf976c290f927f28fcf32567c9e7ac6"/>
+    <file path="src/Console/CheckRenderer.php" role="other" sha256="2781f5185c8f5e942b90f6c7622943ccccd38f457409405139cc80eca6c17481"/>
     <file path="src/Inspection/Adapter/AdapterInterface.php" role="other" sha256="75f0f6887c4e2b0f62c7e96f97ceef8812a2148e715bed3ddca32670ae688303"/>
     <file path="src/Inspection/Adapter/AdapterResult.php" role="other" sha256="bcc9e52822b5b0489d35887f5680d2db11b830594b308a6c5b997305a70b2e09"/>
     <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php" role="other" sha256="da3e506e2905d5dd1095f1ae0c446b61260ea766559563475e01c74f30ed9ede"/>
@@ -30,7 +30,7 @@
     <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php" role="other" sha256="0a8a74bcb184945bfb6c474f08ce81ad864a1cdc14ceabcee147045944209ef0"/>
     <file path="src/Inspection/Adapter/Claude/XmlDiscoveryBriefStore.php" role="other" sha256="26c18cc5b42d2b29f9af2f6555ff404a94be5bd28cec21038035acdebdf6267d"/>
     <file path="src/Inspection/Adapter/GenericPhp/GenericPhpAdapter.php" role="other" sha256="a64a8b6356f8020dbfdc3facee9e815cbe4040a925a200299a8c92b876dfbb79"/>
-    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="d2ed6c10da45084e760b8f904b0dcb5d08aac449e2477d2fcafcf17988059dc2"/>
+    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="5fabe417630247e75b38a80d8c00344919b39587f7f0884b56b441ffa609b92d"/>
     <file path="src/Inspection/AdapterResolver.php" role="other" sha256="55aad7dbdc401540fa7063e36f417c196cfab2fef6271662799c95ec61fb359e"/>
     <file path="src/Inspection/Diff/ChangeGroup.php" role="other" sha256="6619c7fa9d7bbab89d1c37a8cea43cb66388bd1682f6093fa3acbe520177e45d"/>
     <file path="src/Inspection/Diff/ChangeNature.php" role="other" sha256="893b788981e83b70d69ae37bb926792f4be2017a24d21fc21c59332f4304f1f0"/>
@@ -58,7 +58,7 @@
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="53b03418c05cf978ab29b80c20af7b8caf98413c023f8cbd8855618bd232809b"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="0f0238b02e9b36d6d26596bdcba598c4c94e1c22cea0eab9498ada4e1853a96c"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="353df6823f4a2bbbdb9e2e90122fd5598d6dae93f5f7a81449ad83a1d9ad239d"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="ab1ac6a0fb3cbf68f072ea2fb6d8ef811c4dbafa578d5e83a8bdf544ab568e2d"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/DecisionPoint.php" role="other" sha256="93d577e5c1e304ca27baf58991abd560b08a35424f3d9dd8a4fccbf8974ffec0"/>
@@ -175,11 +175,11 @@
   </packages>
   <decisions>
     <decision target="DateTimeImmutable::timezone" value="new \DateTimeZone(date_default_timezone_get())" condition="\is_string($epoch) &amp;&amp; 1 === preg_match('/^\d+$/', $epoch)" file="src/Clock/SystemClock.php" line="18" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/WorkflowsCheckCommand.php" line="55" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!\in_array($format, ['text', 'github'], true)" file="src/Command/WorkflowsCheckCommand.php" line="63" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="[] !== $report-&gt;errors" file="src/Command/WorkflowsCheckCommand.php" line="74" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" condition="[] === $causes" file="src/Command/WorkflowsCheckCommand.php" line="98" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" file="src/Command/WorkflowsCheckCommand.php" line="112" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/WorkflowsCheckCommand.php" line="68" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!\in_array($format, ['text', 'github'], true)" file="src/Command/WorkflowsCheckCommand.php" line="76" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="[] !== $report-&gt;errors" file="src/Command/WorkflowsCheckCommand.php" line="87" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" condition="[] === $causes" file="src/Command/WorkflowsCheckCommand.php" line="117" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" file="src/Command/WorkflowsCheckCommand.php" line="132" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::method" value="''" file="src/Inspection/Graph/DecisionExtractor.php" line="121" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::method" value="$node-&gt;name-&gt;toString()" condition="$node instanceof \PhpParser\Node\Stmt\ClassMethod" file="src/Inspection/Graph/DecisionExtractor.php" line="197" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::scope" value="''" file="src/Inspection/Graph/DecisionExtractor.php" line="120" confidence="high"/>
@@ -202,5 +202,6 @@
   <status>fresh</status>
   <history>
     <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="Rédaction initiale."/>
+    <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="La commande gagne `--strict` et une ligne de compte. Ce qui était tu — un fichier modifié sans fait changé — est maintenant dit, sans faire échouer : la gate annonce le nombre, et `--strict` le transforme en cause. Le format GitHub porte la même annotation. (files changed: src/Command/WorkflowsCheckCommand.php, src/Console/CheckRenderer.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php)"/>
   </history>
 </workflow>

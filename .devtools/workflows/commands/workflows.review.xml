@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.review" type="commands" schema-version="1">
   <title>workflows:review</title>
-  <generated at="2026-09-19T11:17:08+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
+  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:review" role="main">
       <declared-in path="src/Command/WorkflowsReviewCommand.php" role="other"/>
@@ -41,7 +41,7 @@
     <file path="src/Inspection/Graph/PhpReferenceExtractor.php" role="other" sha256="dfc4ce88b8a13698d375948eaea99a3422db8b9ea7e719ee42230e4cf1f530b7"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="53b03418c05cf978ab29b80c20af7b8caf98413c023f8cbd8855618bd232809b"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="0f0238b02e9b36d6d26596bdcba598c4c94e1c22cea0eab9498ada4e1853a96c"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="353df6823f4a2bbbdb9e2e90122fd5598d6dae93f5f7a81449ad83a1d9ad239d"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="ab1ac6a0fb3cbf68f072ea2fb6d8ef811c4dbafa578d5e83a8bdf544ab568e2d"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
@@ -147,5 +147,6 @@
   <status>fresh</status>
   <history>
     <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="Rédaction initiale."/>
+    <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php)"/>
   </history>
 </workflow>

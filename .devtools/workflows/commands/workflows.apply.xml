@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-19T11:14:18+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
+  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -107,6 +107,7 @@
     <file path="tests/Console/ProgressAndCountersTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php" role="test"/>
     <file path="tests/Project/GitHooksTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
@@ -135,5 +136,6 @@
   <history>
     <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
     <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Project/GitHooksTest.php"/>
+    <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
   </history>
 </workflow>

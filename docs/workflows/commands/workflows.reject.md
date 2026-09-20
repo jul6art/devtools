@@ -1,5 +1,5 @@
 # workflows:reject
-`command.workflows.reject` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
+`command.workflows.reject` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
 
 ## Résumé
 
@@ -150,3 +150,4 @@ Aucune écriture dans la documentation. Avec `--restore`, le code des fichiers r
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
+| 2026-09-20 | 9e40da9 | Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php) |

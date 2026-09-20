@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.diff" type="commands" schema-version="1">
   <title>workflows:diff</title>
-  <generated at="2026-09-19T11:16:38+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" branch="master" dirty="false"/>
+  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:diff" role="main">
       <declared-in path="src/Command/WorkflowsDiffCommand.php" role="other"/>
@@ -29,7 +29,7 @@
     <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php" role="other" sha256="0a8a74bcb184945bfb6c474f08ce81ad864a1cdc14ceabcee147045944209ef0"/>
     <file path="src/Inspection/Adapter/Claude/XmlDiscoveryBriefStore.php" role="other" sha256="26c18cc5b42d2b29f9af2f6555ff404a94be5bd28cec21038035acdebdf6267d"/>
     <file path="src/Inspection/Adapter/GenericPhp/GenericPhpAdapter.php" role="other" sha256="a64a8b6356f8020dbfdc3facee9e815cbe4040a925a200299a8c92b876dfbb79"/>
-    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="d2ed6c10da45084e760b8f904b0dcb5d08aac449e2477d2fcafcf17988059dc2"/>
+    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="5fabe417630247e75b38a80d8c00344919b39587f7f0884b56b441ffa609b92d"/>
     <file path="src/Inspection/AdapterResolver.php" role="other" sha256="55aad7dbdc401540fa7063e36f417c196cfab2fef6271662799c95ec61fb359e"/>
     <file path="src/Inspection/Diff/ChangeGroup.php" role="other" sha256="6619c7fa9d7bbab89d1c37a8cea43cb66388bd1682f6093fa3acbe520177e45d"/>
     <file path="src/Inspection/Diff/ChangeNature.php" role="other" sha256="893b788981e83b70d69ae37bb926792f4be2017a24d21fc21c59332f4304f1f0"/>
@@ -57,7 +57,7 @@
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="53b03418c05cf978ab29b80c20af7b8caf98413c023f8cbd8855618bd232809b"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="0f0238b02e9b36d6d26596bdcba598c4c94e1c22cea0eab9498ada4e1853a96c"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="353df6823f4a2bbbdb9e2e90122fd5598d6dae93f5f7a81449ad83a1d9ad239d"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="ab1ac6a0fb3cbf68f072ea2fb6d8ef811c4dbafa578d5e83a8bdf544ab568e2d"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/DecisionPoint.php" role="other" sha256="93d577e5c1e304ca27baf58991abd560b08a35424f3d9dd8a4fccbf8974ffec0"/>
@@ -199,5 +199,6 @@
   <status>fresh</status>
   <history>
     <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="Rédaction initiale."/>
+    <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : l'adaptateur Symfony fusionne désormais deux sources de mécanismes, ce qui enrichit le modèle sans rien changer à la façon dont le diff le compare. La prose a été relue contre le code et tient. (files changed: src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php)"/>
   </history>
 </workflow>

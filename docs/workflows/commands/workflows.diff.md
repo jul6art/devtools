@@ -1,5 +1,5 @@
 # workflows:diff
-`command.workflows.diff` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
+`command.workflows.diff` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
 
 ## Résumé
 
@@ -145,3 +145,4 @@ Lecture : les fichiers de suivi et le code du projet. Aucune écriture — pas m
 | Date | Commit | Changement |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
+| 2026-09-20 | 9e40da9 | Aucun changement de fond : l'adaptateur Symfony fusionne désormais deux sources de mécanismes, ce qui enrichit le modèle sans rien changer à la façon dont le diff le compare. La prose a été relue contre le code et tient. (files changed: src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php) |

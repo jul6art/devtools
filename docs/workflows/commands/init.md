@@ -1,5 +1,5 @@
 # init
-`command.init` · type : commands · dernière mise à jour : 2026-09-19 · commit : d9d6b8f
+`command.init` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
 
 ## Résumé
 
@@ -68,3 +68,4 @@ Le `.gitignore` appartient au projet : `init` y ajoute deux lignes et ne le ré�
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
+| 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
