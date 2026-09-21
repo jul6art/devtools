@@ -221,6 +221,10 @@ final readonly class InspectionPipeline
                 $documents[] = $old;
                 $report->record($workflow->type->name, 'unchanged');
 
+                if ($written($workflow)) {
+                    $this->migrateTemplate($directory, $workflow, $old, $context, $report);
+                }
+
                 continue;
             }
 
@@ -854,6 +858,42 @@ final readonly class InspectionPipeline
     /**
      * The current page, when Claude wrote parts of it: a factual rewrite keeps them.
      */
+    /**
+     * A page written under the template before v3 — French section titles — rewritten in the current one.
+     *
+     * ⚠️ **Nothing else changes**: same facts, same prose, same tracking file. It is not a documentation
+     * event. A revision would add a line nobody can act on to every history of every project, and setting
+     * the tracking to `no-ai` would ask Claude to confirm a prose that was carried over verbatim. The file
+     * changes; what the file says does not.
+     *
+     * ⚠️ It happens here, on the pages the freshness leaves alone, because those are exactly the ones a
+     * lazy migration never reaches: a workflow whose code never moves keeps the old headings for ever.
+     */
+    private function migrateTemplate(DevToolsDirectory $directory, Workflow $workflow, TrackingDocument $old, RenderingContext $context, InspectionReport $report): void
+    {
+        $pageFile = $directory->pageFile($workflow->type, $workflow->id, $workflow->group?->directory);
+
+        if (!is_file($pageFile)) {
+            return;
+        }
+
+        $parsed = new PageParser()->parse((string) file_get_contents($pageFile));
+
+        if (!$parsed->usesLegacyHeadings()) {
+            return;
+        }
+
+        // The same rule as a factual rewrite: a page whose summary is a dash holds no prose of Claude's,
+        // and is rendered from the model alone.
+        $written = MarkdownWriter::EMPTY === $parsed->section(PageSection::Summary) ? null : $parsed;
+        $page = new PageRenderer()->render($workflow, $old->history, $context, $written);
+
+        if ($this->writer->write($pageFile, $page)) {
+            ++$report->pagesWritten;
+            $report->bytesWritten += \strlen($page);
+        }
+    }
+
     private static function writtenPage(string $pageFile): ?ParsedPage
     {
         if (!is_file($pageFile)) {

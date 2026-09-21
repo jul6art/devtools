@@ -552,9 +552,10 @@ Claude writes: `Summary`, `Routes` (the table), `States`.
 
 ⚠️ **These headings were French until v3** (`Résumé`, `Déclencheur`, `Parcours`…). A page written by an
 older DevTools is read through a map of the old headings to the new ones, so the prose Claude wrote comes
-back where it belongs and the page is rewritten in English at its next rewrite. Nothing to run to upgrade:
-the pages of a project switch one by one, as their facts change, and a project that never re-inspects keeps
-reading exactly what it has.
+back where it belongs, and **the next inspection rewrites the page in the current template** — every page,
+not only the ones a fact makes it rewrite. The migration changes nothing else: same facts, same prose, and
+the tracking file is not touched, so no revision is added and no brief is opened. One `workflows:inspect`
+and a project is migrated.
 
 ⚠️ **The page lists neither the files nor the tests of the workflow.** They live in its tracking file,
 `.devtools/workflows/<type>/<id>.xml`, which is what links the workflow to its code and what freshness

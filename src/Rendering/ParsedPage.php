@@ -41,6 +41,18 @@ final readonly class ParsedPage
     }
 
     /**
+     * Whether this page still carries the headings of the template before v3.
+     *
+     * What the inspection does with it: rewrite the FILE in the current template, and nothing else — same
+     * facts, same prose, same tracking. A page nobody touches otherwise never migrates on its own, and a
+     * documentation half in one template and half in the other is worse than either.
+     */
+    public function usesLegacyHeadings(): bool
+    {
+        return array_any(array_keys($this->sections), static fn (string $title): bool => isset(self::LEGACY_HEADINGS[$title]));
+    }
+
+    /**
      * The content of a section by its title, falling back to the French heading a page written before v3
      * carries for it.
      */

@@ -12,6 +12,7 @@ use Jul6Art\DevTools\Inspection\InspectionReport;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectLock;
 use Jul6Art\DevTools\Rendering\PageParser;
+use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Tests\Support\CopiesFixtureProjects;
 use Jul6Art\DevTools\Tracking\IndexGroup;
 use Jul6Art\DevTools\Tracking\TrackingStatus;
@@ -45,6 +46,43 @@ final class InspectionPipelineTest extends TestCase
         self::assertStringContainsString('## Routes (4)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
         self::assertNotNull($report->path, 'A report is written.');
         self::assertFileExists($report->path);
+    }
+
+    /**
+     * ⚠️ **A page nobody touches never migrates on its own.** The switch to English headings (v3) carried
+     * the prose of the pages a fact made DevTools rewrite; the others kept the French template — on two
+     * real projects, 22 pages of 133 and 29 of 114, a documentation half in one template and half in the
+     * other. The inspection now rewrites them where it finds them, and changes nothing else.
+     */
+    public function testAPageLeftInTheOldTemplateIsMigratedWithoutTouchingItsTracking(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        $page = $project.'/docs/workflows/routes/order.new.md';
+        $tracking = $project.'/.devtools/workflows/routes/order.new.xml';
+        file_put_contents($page, strtr((string) file_get_contents($page), [
+            '## Summary' => '## Résumé',
+            '## Trigger' => '## Déclencheur',
+            '## Journey' => '## Parcours',
+            '## Navigation / states' => '## Navigation / états',
+            '## Decisions' => '## Décisions',
+            '## Data' => '## Données',
+            '## Cross-cutting mechanisms' => '## Mécanismes transverses',
+            '## Points of attention' => "## Points d'attention",
+            '## Related workflows' => '## Workflows liés',
+            '## History' => '## Historique',
+            '| Preconditions |' => '| Préconditions |',
+        ]));
+        $before = (string) file_get_contents($tracking);
+
+        $report = $this->pipeline()->run(new InspectionOptions($project));
+        $migrated = new PageParser()->parse((string) file_get_contents($page));
+
+        self::assertSame(0, $report->count('updated'), 'No fact moved: the workflow is unchanged.');
+        self::assertSame([], $migrated->conformityProblems(), 'The page came back in the current template.');
+        self::assertStringContainsString('| Preconditions |', (string) $migrated->section(PageSection::Trigger));
+        self::assertSame($before, (string) file_get_contents($tracking), 'A template migration is not a documentation event: no revision, no change of mode.');
     }
 
     public function testEveryWrittenDocumentIsValidAndEveryPageConforms(): void
