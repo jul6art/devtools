@@ -51,18 +51,18 @@ final readonly class CheckRenderer
 
         foreach ($report->decisions as $id => $decision) {
             $lines[] = match ($decision->kind) {
-                DecisionKind::Create => \sprintf('%s non documenté', self::pad($id)),
-                DecisionKind::Orphan => \sprintf('%s orphelin', self::pad($id)),
+                DecisionKind::Create => \sprintf('%s not documented', self::pad($id)),
+                DecisionKind::Orphan => \sprintf('%s orphaned', self::pad($id)),
                 default => null,
             };
         }
 
         foreach ($undocumented as $id) {
-            $lines[] = \sprintf('%s jamais rédigé', self::pad($id));
+            $lines[] = \sprintf('%s never written', self::pad($id));
         }
 
         foreach ($silent as $id) {
-            $lines[] = \sprintf('%s code changé, aucun fait', self::pad($id));
+            $lines[] = \sprintf('%s code changed, no fact', self::pad($id));
         }
 
         foreach ($groups as $group) {

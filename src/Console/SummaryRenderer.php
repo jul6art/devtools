@@ -27,7 +27,7 @@ final class SummaryRenderer
 
         $total = array_sum(array_map(static fn (string $outcome): int => $report->count($outcome), InspectionReport::OUTCOMES));
         $io->writeln(\sprintf(
-            ' %s %s workflows      %s créés · %s mis à jour · %s inchangés · %s orphelins',
+            ' %s %s workflows      %s created · %s updated · %s unchanged · %s orphaned',
             $mark,
             self::number($total),
             self::number($report->count('created')),
@@ -36,7 +36,7 @@ final class SummaryRenderer
             self::number($report->count('orphaned')),
         ));
         $io->writeln(\sprintf(
-            ' %s %s fichiers parcourus · %s hachés · %s processus git · %s appels console',
+            ' %s %s files parsed · %s hashed · %s git processes · %s console calls',
             $mark,
             self::number($report->filesParsed),
             self::number($report->filesHashed),
@@ -46,7 +46,7 @@ final class SummaryRenderer
 
         if (0 < $report->briefsWritten) {
             $io->writeln(\sprintf(
-                ' %s %s briefs écrits pour Claude · %s (~%s tokens estimés)',
+                ' %s %s briefs written for Claude · %s (~%s tokens estimated)',
                 $mark,
                 self::number($report->briefsWritten),
                 self::bytes($report->briefBytes),
@@ -55,15 +55,15 @@ final class SummaryRenderer
         }
 
         foreach ($report->fallbacks as $fallback) {
-            $io->writeln(\sprintf(' <comment>⚠</comment> repli statique (%s)', $fallback['stack']));
+            $io->writeln(\sprintf(' <comment>⚠</comment> static fallback (%s)', $fallback['stack']));
         }
 
         $io->newLine();
         $io->writeln(\sprintf(
-            ' Durée %s s · mémoire %s%s',
-            number_format($report->seconds, 1, ',', ' '),
+            ' Duration %s s · memory %s%s',
+            number_format($report->seconds, 1, '.', ','),
             self::bytes($report->peakMemoryBytes),
-            null === $report->path ? '' : ' · rapport '.$report->path,
+            null === $report->path ? '' : ' · report '.$report->path,
         ));
         $io->newLine();
     }
@@ -73,13 +73,13 @@ final class SummaryRenderer
         $mark = self::mark([] !== $result->refused ? 2 : ([] !== $result->warnings ? 1 : 0));
         $io->newLine();
         $io->writeln(\sprintf(
-            ' %s %s brouillons appliqués · %s refusés · %s fiches déposées',
+            ' %s %s drafts applied · %s refused · %s sheets deposited',
             $mark,
             self::number(\count($result->accepted)),
             self::number(\count($result->refused)),
             self::number(\count($result->deposited)),
         ));
-        $io->writeln(\sprintf(' Durée %s s', number_format($seconds, 1, ',', ' ')));
+        $io->writeln(\sprintf(' Duration %s s', number_format($seconds, 1, '.', ',')));
         $io->newLine();
     }
 
@@ -97,15 +97,15 @@ final class SummaryRenderer
 
     private static function number(int $value): string
     {
-        return number_format($value, 0, ',', ' ');
+        return number_format($value, 0, '.', ',');
     }
 
     private static function bytes(int $value): string
     {
         return match (true) {
-            $value >= 1048576 => number_format($value / 1048576, 0, ',', ' ').' Mo',
-            $value >= 1024 => number_format($value / 1024, 0, ',', ' ').' Ko',
-            default => $value.' o',
+            $value >= 1048576 => number_format($value / 1048576, 0, '.', ',').' MB',
+            $value >= 1024 => number_format($value / 1024, 0, '.', ',').' KB',
+            default => $value.' B',
         };
     }
 }

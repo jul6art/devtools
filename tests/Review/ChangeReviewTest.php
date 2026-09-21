@@ -152,7 +152,7 @@ final class ChangeReviewTest extends TestCase
         $tester = new CommandTester(new WorkflowsRejectCommand(self::review()));
 
         self::assertSame(0, $tester->execute(['target' => ['App\Entity\Order::status'], '--path' => $project, '--restore' => true]));
-        self::assertStringContainsString('ramené', $tester->getDisplay());
+        self::assertStringContainsString('restored', $tester->getDisplay());
         self::assertStringContainsString("'quoted'", (string) file_get_contents($project.'/src/Service/OrderPricing.php'));
     }
 
@@ -182,7 +182,7 @@ final class ChangeReviewTest extends TestCase
         $tester->setInputs(['a']);
 
         self::assertSame(0, $tester->execute(['--path' => $project]));
-        self::assertStringContainsString('accepté', $tester->getDisplay());
+        self::assertStringContainsString('accepted', $tester->getDisplay());
         self::assertStringContainsString('modified decision App\Entity\Order::status', (string) file_get_contents($project.'/docs/workflows/routes/order.new.md'));
     }
 

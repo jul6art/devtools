@@ -67,7 +67,7 @@ final class WorkflowsRejectCommand extends Command
         }
 
         if ([] === $groups) {
-            $io->success('Aucun fait n\'a changé : il n\'y a rien à refuser.');
+            $io->success('No fact changed: there is nothing to refuse.');
 
             return Command::SUCCESS;
         }
@@ -105,7 +105,7 @@ final class WorkflowsRejectCommand extends Command
                 return Command::SUCCESS;
             }
 
-            $io->writeln(' <options=bold>À lancer pour ramener le code :</>');
+            $io->writeln(' <options=bold>Run this to bring the code back:</>');
             $io->newLine();
 
             foreach ($commands as $command) {
@@ -120,11 +120,11 @@ final class WorkflowsRejectCommand extends Command
         [$restored, $left] = $this->review->restore($path, $report, $refused, $groups);
 
         foreach ($restored as $file) {
-            $io->writeln(\sprintf(' <info>↩</info> %s ramené', $file));
+            $io->writeln(\sprintf(' <info>↩</info> %s restored', $file));
         }
 
         foreach ($left as $file) {
-            $io->writeln(\sprintf(' <comment>⚠</comment> %s porte un autre fait changé : à vous de voir', $file));
+            $io->writeln(\sprintf(' <comment>⚠</comment> %s carries another changed fact: yours to decide', $file));
         }
 
         $io->newLine();

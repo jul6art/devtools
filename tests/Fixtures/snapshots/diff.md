@@ -1,8 +1,8 @@
-# Workflows — ce qui a changé
+# Workflows — what changed
 
-1 fait changé · 1 workflow.
+1 fact changed · 1 workflow.
 
-## modifié décision `App\Entity\Order::status`
+## modified decision `App\Entity\Order::status`
 
 `src/Service/OrderPricing.php:24`
 

@@ -138,7 +138,7 @@ final readonly class InspectionPipeline
 
     private function inspect(DevToolsDirectory $directory, InspectionOptions $options, InspectionReport $report, ProgressReporter $progress): void
     {
-        $progress->stage('Configuration et stack');
+        $progress->stage('Configuration and stack');
         $config = new XmlConfigReader()->read($directory->configFile());
         $types = new WorkflowTypeRegistry($config->customTypes);
 
@@ -160,7 +160,7 @@ final readonly class InspectionPipeline
             return;
         }
 
-        $progress->stage('Fraîcheur');
+        $progress->stage('Freshness');
         $now = $this->clock->now();
         $this->hasher->reset();
         $tracking = new XmlTrackingStore($types, $this->writer);
@@ -175,7 +175,7 @@ final readonly class InspectionPipeline
         $documents = [];
         $written = static fn (Workflow|TrackingDocument $workflow): bool => !$options->dryRun && (null === $options->only || $options->only === $workflow->type->name);
 
-        $progress->stage('Rendu des pages', \count($workflows));
+        $progress->stage('Rendering pages', \count($workflows));
 
         foreach ($workflows as $workflow) {
             $progress->advance($workflow->id->value);
@@ -227,7 +227,7 @@ final readonly class InspectionPipeline
             $history = match (true) {
                 DecisionKind::Create === $decision->kind => [new Revision($now, $vcs->commit, 'initial')],
                 DecisionKind::ManualStale === $decision->kind => $old->history ?? [],
-                DecisionKind::Keep === $decision->kind => [...($old->history ?? []), new Revision($now, $vcs->commit, 'regroupement : la page change de dossier')],
+                DecisionKind::Keep === $decision->kind => [...($old->history ?? []), new Revision($now, $vcs->commit, 'grouping: the page moved to another directory')],
                 default => [...($old->history ?? []), new Revision($now, $vcs->commit, self::why($decision, $report->changes[$workflow->id->value] ?? []))],
             };
             $document = $this->trackingOf($directory->root, $workflow, $old, $now, $vcs, $history);
@@ -308,7 +308,7 @@ final readonly class InspectionPipeline
             return;
         }
 
-        $progress->stage('Connaissances et briefs');
+        $progress->stage('Knowledge and briefs');
         $knowledge = $this->knowledge($directory, $stacks, $config, $options, $report);
 
         if (!$options->noAi) {
@@ -316,7 +316,7 @@ final readonly class InspectionPipeline
         }
         $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options, $report);
 
-        $progress->stage('Index, menu et graphe');
+        $progress->stage('Index, menu and graph');
         $indexStore = new XmlIndexStore($types, $this->writer);
         $index = Index::fromTracking($now, $vcs, [...$documents, ...$orphans], $directory->docs);
 

@@ -73,7 +73,7 @@ final class WorkflowsReviewCommand extends Command
         }
 
         if ([] === $groups) {
-            $io->success('Aucun fait n\'a changé.');
+            $io->success('No fact changed.');
 
             return Command::SUCCESS;
         }
@@ -88,11 +88,11 @@ final class WorkflowsReviewCommand extends Command
 
             // ⚠️ A ChoiceQuestion with keys answers with the KEY, not the label: matching the label
             // silently skipped every answer, and the review accepted nothing.
-            $answer = $io->askQuestion(new ChoiceQuestion('  accepter, refuser ou passer ?', ['a' => 'accepter', 'r' => 'refuser', 'p' => 'passer'], 'p'));
+            $answer = $io->askQuestion(new ChoiceQuestion('  accept, refuse or skip?', ['a' => 'accept', 'r' => 'refuse', 's' => 'skip'], 's'));
 
             match ($answer) {
-                'a', 'accepter' => $accepted[] = $group,
-                'r', 'refuser' => $refused[] = $group,
+                'a', 'accept' => $accepted[] = $group,
+                'r', 'refuse' => $refused[] = $group,
                 default => null,
             };
         }
@@ -101,7 +101,7 @@ final class WorkflowsReviewCommand extends Command
 
         if ([] !== $accepted) {
             $written = $this->review->accept($path, $accepted, true === $input->getOption('no-ai'), \is_string($only) ? $only : null);
-            $io->writeln(\sprintf(' <info>✓</info> %d fait%s accepté%s · %d page%s réécrite%s', \count($accepted), 1 === \count($accepted) ? '' : 's', 1 === \count($accepted) ? '' : 's', $written->count('updated'), 1 === $written->count('updated') ? '' : 's', 1 === $written->count('updated') ? '' : 's'));
+            $io->writeln(\sprintf(' <info>✓</info> %d fact%s accepted · %d page%s rewritten', \count($accepted), 1 === \count($accepted) ? '' : 's', $written->count('updated'), 1 === $written->count('updated') ? '' : 's'));
         }
 
         foreach ($this->review->restoreCommands($report, $refused) as $command) {

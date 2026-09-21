@@ -13,5 +13,5 @@ parameters:
         - tests/Fixtures/projects/*
     treatPhpDocTypesAsCertain: false
 
-    # Le niveau max dès le premier jour, et sans baseline : une brique extraite avec une
-    # baseline arrive avec sa dette déjà tolérée, et personne ne la reprend ensuite.
+    # Level max from day one, and no baseline: a brick extracted with a baseline arrives with its
+    # debt already tolerated, and nobody ever picks it up again.

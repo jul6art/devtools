@@ -232,7 +232,7 @@ final class InspectionPipelineTest extends TestCase
         self::assertFileDoesNotExist($project.'/docs/workflows/routes/order.new.md', 'The page it left is removed.');
         self::assertFileExists($project.'/docs/workflows/routes/order/new.md');
         self::assertFileExists($project.'/docs/workflows/routes/order/README.md');
-        self::assertStringContainsString('regroupement : la page change de dossier', (string) file_get_contents($project.'/docs/workflows/routes/order/new.md'), 'The move is one line of the history.');
+        self::assertStringContainsString('grouping: the page moved to another directory', (string) file_get_contents($project.'/docs/workflows/routes/order/new.md'), 'The move is one line of the history.');
     }
 
     /**

@@ -31,7 +31,7 @@ final readonly class ChangeRenderer
     {
         $lines = [
             '',
-            \sprintf(' <options=bold>DevTools — %s</>   diff des workflows', $report->projectName),
+            \sprintf(' <options=bold>DevTools — %s</>   workflow diff', $report->projectName),
             '',
             \sprintf(
                 ' %s %s · %s',
@@ -39,12 +39,12 @@ final readonly class ChangeRenderer
                 self::factCount(\count($groups)),
                 self::workflowCount(\count($report->changes)),
             ),
-            \sprintf(' <fg=gray>%d fichiers parcourus · %d hachés</>', $report->filesParsed, $report->filesHashed),
+            \sprintf(' <fg=gray>%d files parsed · %d hashed</>', $report->filesParsed, $report->filesHashed),
             '',
         ];
 
         if ([] === $groups) {
-            $lines[] = ' <info>Aucun fait n\'a changé.</info>';
+            $lines[] = ' <info>No fact changed.</info>';
         }
 
         $diffs = $code ? $this->diffs($report, $groups, $path) : [];
@@ -90,10 +90,10 @@ final readonly class ChangeRenderer
      */
     public function markdown(InspectionReport $report, array $groups, string $path, bool $code = false): string
     {
-        $lines = ['# Workflows — ce qui a changé', '', \sprintf('%s · %s.', self::factCount(\count($groups)), self::workflowCount(\count($report->changes))), ''];
+        $lines = ['# Workflows — what changed', '', \sprintf('%s · %s.', self::factCount(\count($groups)), self::workflowCount(\count($report->changes))), ''];
 
         if ([] === $groups) {
-            $lines[] = 'Aucun fait n\'a changé.';
+            $lines[] = 'No fact changed.';
         }
 
         $diffs = $code ? $this->diffs($report, $groups, $path) : [];
@@ -214,8 +214,8 @@ final readonly class ChangeRenderer
 
         foreach ($report->decisions as $id => $decision) {
             $lines[] = match ($decision->kind) {
-                DecisionKind::Create => \sprintf('<info>nouveau</info> %s', $id),
-                DecisionKind::Orphan => \sprintf('<fg=red>disparu</> %s', $id),
+                DecisionKind::Create => \sprintf('<info>new</info> %s', $id),
+                DecisionKind::Orphan => \sprintf('<fg=red>gone</> %s', $id),
                 default => null,
             };
         }
@@ -242,7 +242,7 @@ final readonly class ChangeRenderer
 
     private static function factCount(int $count): string
     {
-        return 0 === $count ? 'aucun fait changé' : \sprintf('%d fait%s changé%s', $count, 1 === $count ? '' : 's', 1 === $count ? '' : 's');
+        return 0 === $count ? 'no fact changed' : \sprintf('%d fact%s changed', $count, 1 === $count ? '' : 's');
     }
 
     private static function workflowCount(int $count): string
@@ -253,22 +253,22 @@ final readonly class ChangeRenderer
     public static function natureOf(ChangeNature $nature): string
     {
         return match ($nature) {
-            ChangeNature::Added => 'ajouté',
-            ChangeNature::Removed => 'retiré',
-            ChangeNature::Modified => 'modifié',
+            ChangeNature::Added => 'added',
+            ChangeNature::Removed => 'removed',
+            ChangeNature::Modified => 'modified',
         };
     }
 
     public static function subjectOf(ChangeSubject $subject): string
     {
         return match ($subject) {
-            ChangeSubject::EntryPoint => 'point d\'entrée',
-            ChangeSubject::Attribute => 'attribut',
-            ChangeSubject::Decision => 'décision',
-            ChangeSubject::Mechanism => 'mécanisme',
-            ChangeSubject::Dependency => 'dépendance',
+            ChangeSubject::EntryPoint => 'entry point',
+            ChangeSubject::Attribute => 'attribute',
+            ChangeSubject::Decision => 'decision',
+            ChangeSubject::Mechanism => 'mechanism',
+            ChangeSubject::Dependency => 'dependency',
             ChangeSubject::Test => 'test',
-            ChangeSubject::Package => 'paquet',
+            ChangeSubject::Package => 'package',
         };
     }
 }

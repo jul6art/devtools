@@ -49,7 +49,7 @@ final class WorkflowsCheckCommand extends Command
     private static function stale(array $quiet): string
     {
         return [] === $quiet ? '' : \sprintf(
-            ' <fg=gray>%d workflow%s ont vu leur code changer sans qu\'aucun fait ne bouge : leur prose peut être périmée (--strict pour en faire une cause)</>',
+            ' <fg=gray>%d workflow%s saw their code change without a single fact moving: their prose may be stale (--strict to make it a cause)</>',
             \count($quiet),
             1 === \count($quiet) ? '' : 's',
         );
@@ -106,11 +106,11 @@ final class WorkflowsCheckCommand extends Command
         $causes = CheckRenderer::causes($report, $groups, $undocumented, $silent);
 
         $output->writeln('');
-        $output->writeln(\sprintf(' <options=bold>DevTools — %s</>   contrôle des workflows', $report->projectName));
+        $output->writeln(\sprintf(' <options=bold>DevTools — %s</>   workflow check', $report->projectName));
         $output->writeln('');
 
         if ([] === $causes) {
-            $output->writeln(\sprintf(' <info>✔</info> rien à signaler · %d fichiers parcourus', $report->filesParsed));
+            $output->writeln(\sprintf(' <info>✔</info> nothing to report · %d files parsed', $report->filesParsed));
             $output->writeln(self::stale($quiet));
             $output->writeln('');
 
@@ -126,7 +126,7 @@ final class WorkflowsCheckCommand extends Command
 
         $output->writeln(self::stale([] === $silent ? $quiet : []));
         $output->writeln('');
-        $output->writeln(' <fg=gray>devtools workflows:diff --code pour le détail · workflows:inspect pour régénérer</>');
+        $output->writeln(' <fg=gray>devtools workflows:diff --code for the detail · workflows:inspect to regenerate</>');
         $output->writeln('');
 
         return Command::FAILURE;

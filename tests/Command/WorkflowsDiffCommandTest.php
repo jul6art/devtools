@@ -33,7 +33,7 @@ final class WorkflowsDiffCommandTest extends TestCase
         $tester = self::tester();
 
         self::assertSame(0, $tester->execute(['path' => $project]));
-        self::assertStringContainsString('Aucun fait n\'a changé', $tester->getDisplay());
+        self::assertStringContainsString('No fact changed', $tester->getDisplay());
     }
 
     public function testAChangedValueIsOneFactWithTheWorkflowsItTouches(): void
@@ -67,8 +67,8 @@ final class WorkflowsDiffCommandTest extends TestCase
         $tester = self::tester();
         $tester->execute(['path' => $project]);
 
-        self::assertStringContainsString('Aucun fait n\'a changé', $tester->getDisplay());
-        self::assertStringContainsString('fichier', $tester->getDisplay(), 'The files it did look at are still counted.');
+        self::assertStringContainsString('No fact changed', $tester->getDisplay());
+        self::assertStringContainsString('files parsed', $tester->getDisplay(), 'The files it did look at are still counted.');
     }
 
     public function testExitCodeTurnsAChangeIntoAFailure(): void
@@ -124,8 +124,8 @@ final class WorkflowsDiffCommandTest extends TestCase
         $tester = self::tester(new FakeAdapter(['app_health']));
         $tester->execute(['path' => $project]);
 
-        self::assertStringContainsString('disparu route.health', $tester->getDisplay());
-        self::assertStringNotContainsString('décision', $tester->getDisplay(), 'Its facts are not listed one by one.');
+        self::assertStringContainsString('gone route.health', $tester->getDisplay());
+        self::assertStringNotContainsString('decision', $tester->getDisplay(), 'Its facts are not listed one by one.');
 
         // And the other way round: a project documented without it sees it appear.
         $fresh = $this->copyFixtureProject('symfony-minimal');
@@ -134,7 +134,7 @@ final class WorkflowsDiffCommandTest extends TestCase
         $tester = self::tester();
         $tester->execute(['path' => $fresh]);
 
-        self::assertStringContainsString('nouveau route.health', $tester->getDisplay());
+        self::assertStringContainsString('new route.health', $tester->getDisplay());
     }
 
     /**

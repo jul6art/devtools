@@ -66,7 +66,7 @@ final class WorkflowsAcceptCommand extends Command
         }
 
         if ([] === $groups) {
-            $io->success('Aucun fait n\'a changé : il n\'y a rien à accepter.');
+            $io->success('No fact changed: there is nothing to accept.');
 
             return Command::SUCCESS;
         }
@@ -99,9 +99,8 @@ final class WorkflowsAcceptCommand extends Command
 
         $io->newLine();
         $io->writeln(\sprintf(
-            ' %d page%s réécrite%s · %d brief%s pour Claude',
+            ' %d page%s rewritten · %d brief%s for Claude',
             $written->count('updated'),
-            1 === $written->count('updated') ? '' : 's',
             1 === $written->count('updated') ? '' : 's',
             $written->briefsWritten,
             1 === $written->briefsWritten ? '' : 's',

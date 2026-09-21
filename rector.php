@@ -31,10 +31,10 @@ return RectorConfig::configure()
     ->withSkip([
         // Real mini-projects DevTools analyses: rewriting them would change what the tests observe.
         __DIR__.'/tests/Fixtures/projects',
-        // Ce déplacement de namespace vise `Symfony\Component\DependencyInjection\Kernel\BundleInterface`,
-        // qui n'existe pas en Symfony 8.1 — et le bundle déclare `^7.4 || ^8.0`, donc il ne peut
-        // pas s'appuyer sur une classe présente d'un seul côté. `HttpKernel\Bundle\BundleInterface`
-        // existe sur les deux branches : c'est celle-là qu'on garde.
+        // This namespace move targets `Symfony\Component\DependencyInjection\Kernel\BundleInterface`,
+        // which does not exist in Symfony 8.1 — and the bundle declares `^7.4 || ^8.0`, so it cannot
+        // rely on a class present on one branch only. `HttpKernel\Bundle\BundleInterface` exists on
+        // both branches: that is the one we keep.
         RenameClassRector::class => [
             __DIR__.'/tests/Fixtures/TestKernel.php',
         ],

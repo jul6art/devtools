@@ -121,7 +121,7 @@ Usage
 | | `devtools claude:install` | installs the Claude Code skill that writes the pages | `.claude/skills/` |
 | | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
-| | *Claude writes the drafts* | one draft per brief, in `.devtools/pending/` | drafts |
+| | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
 | | `devtools workflows:apply` | checks each draft and rebuilds its page | pages, tracking |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
@@ -170,7 +170,7 @@ docs/workflows/    the documentation — what a human opens
 └── reports/       one report per run — ignored by git
 ```
 
-The pages go to `docs/workflows/` by default; `--docs=documentation/flux` on `workflows:inspect`, or
+The pages go to `docs/workflows/` by default; `--docs=documentation/workflows` on `workflows:inspect`, or
 `devtools.docs_dir` in the bundle, puts them anywhere else in the project. `index.xml` records the choice, so
 `workflows:apply` and the next run find them without being told.
 
@@ -226,12 +226,12 @@ bin/console devtools:workflows:inspect           # through the bundle, the appli
 ```
  DevTools — cereezer                                        Symfony 7.4
 
- ✔ 84 workflows      12 créés · 3 mis à jour · 69 inchangés · 0 orphelins
- ✔ 1 247 fichiers parcourus · 412 hachés · 3 processus git · 4 appels console
- ✔ 15 briefs écrits pour Claude · 152 Ko (~38 000 tokens estimés)
- ⚠ 1 repli statique (symfony @ .)
+ ✔ 84 workflows      12 created · 3 updated · 69 unchanged · 0 orphaned
+ ✔ 1,247 files parsed · 412 hashed · 3 git processes · 4 console calls
+ ✔ 15 briefs written for Claude · 152 KB (~38,000 tokens estimated)
+ ⚠ 1 static fallback (symfony @ .)
 
- Durée 12,4 s · mémoire 214 Mo · rapport .devtools/reports/inspect-2026-09-16-150000.md
+ Duration 12.4 s · memory 214 MB · report .devtools/reports/inspect-2026-09-16-150000.md
 ```
 
 A progress bar shows each stage while it runs, and the summary is green, yellow or red — the colour of
@@ -275,7 +275,7 @@ higher, or unlimited, is left alone.
 
 `--force` naming a workflow that does not exist is a warning, not a silent no-op.
 
-⚠️ **An entry point that disappeared is marked *orphelin*** and listed under *À vérifier*; its page is
+⚠️ **An entry point that disappeared is marked as orphaned** and listed under the menu's *to check*; its page is
 only deleted with `--prune`. A workflow whose tracking file says `<status>manual</status>` is never
 rewritten: when its code changes, the run warns instead.
 
@@ -293,12 +293,12 @@ What changed **in the workflows** since their pages were written — not that so
 fact, what it said, and what it says now:
 
 ```
- DevTools — cereezer   diff des workflows
+ DevTools — cereezer   workflow diff
 
- ⚠ 1 fait changé · 87 workflows
- 731 fichiers parcourus · 532 hachés
+ ⚠ 1 fact changed · 87 workflows
+ 731 files parsed · 532 hashed
 
- modifié décision App\Entity\User::deactivatedAt  src/Entity/User.php:366
+ modified decision App\Entity\User::deactivatedAt  src/Entity/User.php:366
    - new \DateTimeImmutable()
    + new \DateTimeImmutable('now')
    87 workflows · async.field-device-stale, command.app.dev.login-link, route.admin.user.index (+84)
@@ -327,7 +327,7 @@ code `0`, `1` with `--exit-code` when a fact changed, `2` when the project could
 `--code` costs one git process per distinct reference, not one per fact: the tracking files of a project
 almost always share the same commit.
 
-A workflow that did not exist is named *nouveau*, one that no longer does *disparu* — neither is unfolded
+A workflow that did not exist is named *new*, one that no longer does *gone* — neither is unfolded
 into its facts.
 
 ### `devtools workflows:check [path]` — the gate
@@ -335,20 +335,20 @@ into its facts.
 Fails when the documentation no longer matches the code, and **writes nothing**:
 
 ```
- DevTools — cereezer   contrôle des workflows
+ DevTools — cereezer   workflow check
 
  ✖ 2 causes
 
- route.order.export                        non documenté
- modifié attribut app_order_new#security   ROLE_USER → ROLE_ADMIN   3 workflows
+ route.order.export                        not documented
+ modified attribute app_order_new#security   ROLE_USER → ROLE_ADMIN   3 workflows
 ```
 
 | Cause of failure | |
 | --- | --- |
-| an entry point with no page | `non documenté` |
-| a page whose workflow is gone | `orphelin` |
+| an entry point with no page | `not documented` |
+| a page whose workflow is gone | `orphaned` |
 | a fact changed since the pages were written | the fact, grouped, with its reach |
-| `--require-ai`, a page never written by Claude | `jamais rédigé` |
+| `--require-ai`, a page never written by Claude | `never written` |
 
 ⚠️ **A file whose bytes changed without changing a fact is not a cause.** That is the whole difference
 with the freshness: the gate does not stop anyone for a comment added to a traversed file.
@@ -358,8 +358,8 @@ condition rewritten inside a method, a constant renamed, a voter that now return
 a default value flipped — none of these is a fact, and each can make a page's prose false.
 
 ```
- ✔ rien à signaler · 731 fichiers parcourus
- 3 workflows ont vu leur code changer sans qu'aucun fait ne bouge : leur prose peut être périmée (--strict pour en faire une cause)
+ ✔ nothing to report · 731 files parsed
+ 3 workflows saw their code change without a single fact moving: their prose may be stale (--strict to make it a cause)
 ```
 
 `--strict` turns them into causes. Use it on a project where the pages are read as a contract; leave it
@@ -413,9 +413,9 @@ brief Claude receives carries it too, so the prose is reread where it matters ra
 back to the state the page was written from:
 
 ```
- ✗ modifié décision App\Entity\User::email
+ ✗ modified decision App\Entity\User::email
 
- À lancer pour ramener le code :
+ Run this to bring the code back:
 
    git restore --source=8f3c21a -- src/Entity/User.php
 ```
@@ -520,7 +520,7 @@ Existing tests are the test files that use the entry point or a file of its firs
 the same method are one workflow; `<groups>` in `config.xml` joins others.
 
 ⚠️ **What is wired at runtime is not seen**: a service fetched from the container by name, a template
-whose name is computed, a class built from a string. Such files appear under "Non couvert" in the menu
+whose name is computed, a class built from a string. Such files appear under *not covered* in the menu
 — the analysis says what it missed rather than pretending.
 
 The pages
@@ -599,7 +599,8 @@ rewritten by the run, or never written — and validates the **draft** Claude wr
 vendor/bin/devtools claude:install        # once: .claude/skills/devtools-inspect/SKILL.md, commit it
 ```
 
-Then ask Claude Code to *document the workflows*. The skill runs the loop:
+Then run **`/devtools-inspect`** in Claude Code — or simply ask it to *document the workflows*. The skill
+runs the loop:
 
 1. `workflows:inspect` writes `.devtools/pending/page.<id>.brief.xml` — the workflow's model, the current
    page, why it changed, the language, and the versioned prompt to follow;
@@ -695,7 +696,7 @@ A page's **navigation** comes from its literal `href`, `action` and `header('Loc
 of the web directory. The binary of a console application is not a workflow of its own: its commands are.
 
 ⚠️ **A home-made router is one route.** A single front controller dispatching a table of routes shows as
-`route.index`, the rest under *Non couvert*. Document it through Claude instead, by pinning the adapter in
+`route.index`, the rest under *not covered*. Document it through Claude instead, by pinning the adapter in
 `stack.xml`: `<adapter locked="true">claude</adapter>`.
 
 Projects without a native adapter

@@ -113,7 +113,7 @@ final class ProgressAndCountersTest extends TestCase
         self::assertStringNotContainsString("\033[", $display);
         self::assertStringNotContainsString("\r", $display);
         self::assertStringContainsString('workflows', $display);
-        self::assertStringContainsString('Durée', $display);
+        self::assertStringContainsString('Duration', $display);
     }
 
     /**
@@ -189,7 +189,7 @@ final class ProgressAndCountersTest extends TestCase
         $this->pipeline()->run(new InspectionOptions(path: $this->copyFixtureProject('symfony-minimal')), $recorder);
 
         self::assertSame(
-            ['Configuration et stack', 'Extraction', 'Fraîcheur', 'Rendu des pages', 'Connaissances et briefs', 'Index, menu et graphe'],
+            ['Configuration and stack', 'Extraction', 'Freshness', 'Rendering pages', 'Knowledge and briefs', 'Index, menu and graph'],
             $recorder->stages,
         );
         self::assertGreaterThan(0, $recorder->steps, 'One step per stack extracted and per page rendered.');
@@ -205,12 +205,12 @@ final class ProgressAndCountersTest extends TestCase
 
         $verbose = new BufferedOutput(OutputInterface::VERBOSITY_VERBOSE);
         $reporter = new ConsoleProgressReporter(new SymfonyStyle(new ArrayInput([]), $verbose));
-        $reporter->stage('Rendu', 3);
+        $reporter->stage('Rendering', 3);
         $reporter->advance('route.order.new');
         $reporter->finish();
 
         self::assertSame('', $normal->fetch());
-        self::assertStringContainsString('Rendu (3)', $verbose->fetch());
+        self::assertStringContainsString('Rendering (3)', $verbose->fetch());
         self::assertSame('', $reporter->current(), 'A closed stage is no longer current.');
     }
 

@@ -32,7 +32,7 @@ final class WorkflowsCheckCommandTest extends TestCase
         $tester = self::tester();
 
         self::assertSame(0, $tester->execute(['path' => $this->inspected()]));
-        self::assertStringContainsString('rien à signaler', $tester->getDisplay());
+        self::assertStringContainsString('nothing to report', $tester->getDisplay());
     }
 
     /**
@@ -48,7 +48,7 @@ final class WorkflowsCheckCommandTest extends TestCase
         $tester = self::tester();
 
         self::assertSame(0, $tester->execute(['path' => $project]));
-        self::assertStringContainsString('rien à signaler', $tester->getDisplay());
+        self::assertStringContainsString('nothing to report', $tester->getDisplay());
     }
 
     public function testAChangedFactFailsAndIsNamed(): void
@@ -72,13 +72,13 @@ final class WorkflowsCheckCommandTest extends TestCase
 
         self::assertSame(1, $tester->execute(['path' => $project]));
         self::assertStringContainsString('route.health', $tester->getDisplay());
-        self::assertStringContainsString('non documenté', $tester->getDisplay());
+        self::assertStringContainsString('not documented', $tester->getDisplay());
 
         $documented = $this->inspected();
         $tester = self::tester(new FakeAdapter(['app_health']));
 
         self::assertSame(1, $tester->execute(['path' => $documented]));
-        self::assertStringContainsString('orphelin', $tester->getDisplay());
+        self::assertStringContainsString('orphaned', $tester->getDisplay());
     }
 
     public function testRequireAiFailsOnAPageThatWasNeverWritten(): void
@@ -90,7 +90,7 @@ final class WorkflowsCheckCommandTest extends TestCase
         $tester = self::tester();
 
         self::assertSame(1, $tester->execute(['path' => $project, '--require-ai' => true]));
-        self::assertStringContainsString('jamais rédigé', $tester->getDisplay());
+        self::assertStringContainsString('never written', $tester->getDisplay());
     }
 
     /**
@@ -107,12 +107,12 @@ final class WorkflowsCheckCommandTest extends TestCase
         $tester = self::tester();
 
         self::assertSame(0, $tester->execute(['path' => $project]));
-        self::assertStringContainsString('sans qu\'aucun fait ne bouge', $tester->getDisplay());
+        self::assertStringContainsString('without a single fact moving', $tester->getDisplay());
 
         $strict = self::tester();
 
         self::assertSame(1, $strict->execute(['path' => $project, '--strict' => true]));
-        self::assertStringContainsString('code changé, aucun fait', $strict->getDisplay());
+        self::assertStringContainsString('code changed, no fact', $strict->getDisplay());
     }
 
     public function testTheGithubFormatAnnotatesTheFileAndTheLine(): void

@@ -146,7 +146,7 @@ final readonly class GitHooks
             // documentation gate that blocks a commit is the first thing a team disables.
             'pre-commit' => $strict
                 ? "\$DEVTOOLS workflows:check || exit 1\n"
-                : "\$DEVTOOLS workflows:check || echo '/!\\ la documentation des workflows a dérivé : devtools workflows:diff' >&2\nexit 0\n",
+                : "\$DEVTOOLS workflows:check || echo '/!\\ the workflow documentation has drifted: devtools workflows:diff' >&2\nexit 0\n",
             default => "\$DEVTOOLS workflows:inspect --no-ai >/dev/null 2>&1 || true\nexit 0\n",
         };
     }
