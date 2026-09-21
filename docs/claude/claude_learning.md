@@ -555,3 +555,32 @@
   modifié, le réflexe est de tout réécrire ; le diff montrait deux lignes d'en-tête. Lire le diff du
   CODE depuis le commit de la doc (`git diff <commit du suivi>..HEAD -- src/`) dit lesquelles des
   pages ont vraiment bougé — ici deux sur quatorze — et les douze autres se réémettent telles quelles.
+
+### 2026-09-21 — L'outil passe en anglais, y compris ses pages, et un titre de section est un FORMAT
+
+- ⚠️ **Décision humaine, prise contre mon avis, et elle avait raison : tout l'outil parle anglais.**
+  J'avais traduit le README et les logs, puis argumenté pour garder les titres de pages en français
+  parce que les traduire était cassant. Le cassant n'est pas un argument contre, c'est un argument
+  pour l'accompagner : `jul6art/devtools` est un paquet public sous licence MIT, et un outil dont la
+  sortie n'est lisible que par une équipe n'est adopté que par elle.
+- ⚠️ **Un titre de section n'est pas du texte, c'est une clé.** `PageRenderer` reconstruit une page à
+  partir du modèle PLUS les sections que Claude a écrites dans la page COURANTE, relues par leur
+  titre. Renommer `Résumé` en `Summary` sans rien d'autre aurait donc vidé chaque page de chaque
+  projet à la première inspection — **en silence**, puisqu'une réécriture annonce une réécriture dans
+  les deux cas. `ParsedPage::LEGACY_HEADINGS` fait le pont, la ligne de préconditions se lit sous les
+  deux libellés, et `testAPageWrittenBeforeTheEnglishTemplateKeepsItsProse` tient la garde — vérifié
+  par mutation. Éprouvé ensuite sur 85 pages réelles de devinlive et 111 de cegeta.
+- ⚠️ **Le même raisonnement vaut pour le canevas des fiches de connaissance** (`KnowledgeCanvas`) : ses
+  sections sont relues à la validation d'un brouillon. Traduites, elles vont avec une montée de la
+  version du prompt — `page/3`, `group/2`, `knowledge/2` —, parce que le CONTRAT que le prompt décrit
+  a changé et que le suivi enregistre sous quel contrat chaque page a été écrite.
+- ⚠️ **La langue des PAGES et la langue du PRODUIT sont deux choses.** `<language pages="fr"/>` décide
+  de la prose ; les titres, les en-têtes de tableaux et le sommaire sont la structure, et ils sont
+  anglais quoi qu'il arrive. Une page de cegeta le montre bien : titres anglais, phrases françaises.
+- ⚠️ **Une expression qui normalise une sortie doit être renommée AVEC elle.** `/Durée .*/` neutralisait
+  la ligne de durée avant la comparaison de deux exécutions ; « Duration » traduit, l'expression ne
+  correspondait plus et le test comparait deux chronos réels. Vert ce jour-là, faux le lendemain.
+- ⚠️ **Un brief mécanisable se juge sur sa RAISON autant que sur ses faits.** Chez devinlive, 24 briefs
+  ne portaient aucun `<fact>` mais leur raison nommait un écouteur ajouté. Les amender comme une simple
+  montée de paquet aurait signé une prose non relue ; la règle exige désormais la raison ET, quand elle
+  nomme un fait du parcours, la preuve que la page le dit déjà (24 pages sur 24, ici).
