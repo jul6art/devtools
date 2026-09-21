@@ -1,19 +1,19 @@
 # workflows:check
-`command.workflows.check` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.workflows.check` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 La gate. Elle échoue quand la documentation ne correspond plus au code — un fait changé, un workflow sans page, une page sans workflow — et **elle n'écrit rien du tout**. La version qu'elle remplace régénérait les pages avant de prévenir : au moment où on lisait l'avertissement, il n'y avait plus rien à comparer.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `workflows:check` (command) |
-| Sécurité | — |
-| Préconditions | Le projet porte un `.devtools/` déjà inspecté. |
+| Entry point | `workflows:check` (command) |
+| Security | — |
+| Preconditions | Le projet porte un `.devtools/` déjà inspecté. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -34,11 +34,11 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`DateTimeImmutable::timezone`**
 
@@ -124,28 +124,30 @@ flowchart TD
   d1 -->|non| v2["null : l'arête n'est pas étiquetée"]
 ```
 
-## Données
+## Data
 
 Lecture : les suivis et le code. Aucune écriture.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 - **Un fichier modifié sans fait changé n'est pas une cause** : c'est toute la différence avec la fraîcheur, et elle est délibérée — une gate qui réveille pour un commentaire ajouté est une gate qu'on désactive.
 - **`--require-ai` est une exigence distincte** : une page qui ne porte que des faits est juste, mais elle n'explique rien ; les projets qui veulent la prose l'exigent explicitement.
 - **Le format GitHub annote le fichier et la ligne**, pour que la pull request montre l'endroit plutôt qu'un résumé.
 - **Un code changé sans fait changé est COMPTÉ, pas bloquant** : la gate dit combien de workflows sont dans ce cas, parce que leur prose peut être fausse — une condition réécrite dans une méthode, une constante renommée, une valeur par défaut inversée. `--strict` en fait une cause d'échec, pour les projets qui veulent relire à chaque fois.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
 | 2026-09-20 | 9e40da9 | La commande gagne `--strict` et une ligne de compte. Ce qui était tu — un fichier modifié sans fait changé — est maintenant dit, sans faire échouer : la gate annonce le nombre, et `--strict` le transforme en cause. Le format GitHub porte la même annotation. (files changed: src/Command/WorkflowsCheckCommand.php, src/Console/CheckRenderer.php, src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsCheckCommand.php, src/Console/ChangeRenderer.php, src/Console/CheckRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/Labels.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
+| 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |

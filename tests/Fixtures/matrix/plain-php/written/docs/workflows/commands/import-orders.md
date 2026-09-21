@@ -56,6 +56,6 @@ des commandes sans client.
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 2620449 | rédaction initiale |

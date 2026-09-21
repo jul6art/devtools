@@ -58,6 +58,6 @@ que `refresh` n'a pas été appelé.
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f815420 | rédaction initiale |

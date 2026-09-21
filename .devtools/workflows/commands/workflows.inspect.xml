@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.inspect" type="commands" schema-version="1">
   <title>workflows:inspect</title>
-  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
+  <generated at="2026-09-21T21:19:53+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/3"/>
+  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:inspect" role="main">
       <declared-in path="src/Command/WorkflowsInspectCommand.php" role="other"/>
@@ -12,7 +12,7 @@
     <file path="src/Ai/ApplyResult.php" role="other" sha256="809bd235b446ccf522f33d5501a602f90fc948691c926b99afceb100cb6662b7"/>
     <file path="src/Ai/GroupBrief.php" role="other" sha256="23b03f77d6a1026fb8c05c80cfb921287387a99eb49ef1e00b1cbc7b04dd5470"/>
     <file path="src/Ai/PageBrief.php" role="other" sha256="6b6867f6eb4d858e73e02bb8f0d1d7bba3ec05cb13188de3b06c84a4743899d4"/>
-    <file path="src/Ai/PageDraft.php" role="other" sha256="b3f7cf7698ba86d1489eb8ffaff81a93781d6cd80371040bc1bb4fc02543e9dd"/>
+    <file path="src/Ai/PageDraft.php" role="other" sha256="f17467b6f740abcc2d2b77c6fb30e0e495978acd46232b8ddb45b44e3bd54996"/>
     <file path="src/Ai/XmlGroupBriefStore.php" role="other" sha256="bef1b5cd7120cf638509568b4266d93351162e74254be59823f50bb33066caaf"/>
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="3e3f54b9d24172998397e70b86c25a639e1237e98211684e45a6042ccafd0973"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
@@ -24,7 +24,7 @@
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
     <file path="src/Console/ConsoleProgressReporter.php" role="other" sha256="95bdfd0c2ff3c39264f081c40a63e791b4496290605eb6611f5c5dca35792089"/>
     <file path="src/Console/MemoryLimit.php" role="other" sha256="70658987866e633268aad0bd71820acfe418015cd894698fed64258d6d233bcb"/>
-    <file path="src/Console/SummaryRenderer.php" role="other" sha256="e15e12cf42f142d1d925a66745c387fdf6576ba198ba9a7414ace816c397e2bd"/>
+    <file path="src/Console/SummaryRenderer.php" role="other" sha256="5d61d84934fa059d556111de8e1a9fc8062122a51b36db5329d7f3b02a364b56"/>
     <file path="src/Inspection/Adapter/AdapterInterface.php" role="other" sha256="75f0f6887c4e2b0f62c7e96f97ceef8812a2148e715bed3ddca32670ae688303"/>
     <file path="src/Inspection/Adapter/AdapterResult.php" role="other" sha256="bcc9e52822b5b0489d35887f5680d2db11b830594b308a6c5b997305a70b2e09"/>
     <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php" role="other" sha256="da3e506e2905d5dd1095f1ae0c446b61260ea766559563475e01c74f30ed9ede"/>
@@ -60,7 +60,7 @@
     <file path="src/Inspection/Graph/TwigReferenceExtractor.php" role="other" sha256="35358533a50fd2cac298d7de9af7f4880a328f165796de3aa716e575e8e4ad74"/>
     <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="53b03418c05cf978ab29b80c20af7b8caf98413c023f8cbd8855618bd232809b"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="353df6823f4a2bbbdb9e2e90122fd5598d6dae93f5f7a81449ad83a1d9ad239d"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="05123b652695fd115f0f20ec867c1c9e3511ed52b411a4c80a169d09ab1c9b3b"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="ab1ac6a0fb3cbf68f072ea2fb6d8ef811c4dbafa578d5e83a8bdf544ab568e2d"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/DecisionPoint.php" role="other" sha256="93d577e5c1e304ca27baf58991abd560b08a35424f3d9dd8a4fccbf8974ffec0"/>
@@ -93,16 +93,16 @@
     <file path="src/Project/ProjectLock.php" role="other" sha256="4b74c9ffd931f935e7596970d8fb81f62a693a99c56dde47f84224e1be8522e8"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
     <file path="src/Rendering/GraphRenderer.php" role="other" sha256="29b42321478b49b2b7d8e69d434bab1b4540d488281bf888a6bc3128d4398619"/>
-    <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="02b93744e21fef7f924bd3a361817d3222a71cc900e4a3528600aeff7330c5ba"/>
-    <file path="src/Rendering/GroupPageSection.php" role="other" sha256="9c9adb7a2b4bd52750ad7e11dfdf551a5e543f2e8ac13a39eeed682c9f3b1ec8"/>
-    <file path="src/Rendering/Labels.php" role="other" sha256="3b762c500b7454554b73eebc72b64dfaed7248728006612c729c5a0a677ee427"/>
+    <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="df2e219c4ee1a8a37632d88992b2b1e08bb56fb5b2f63d9e37d36128c96a6749"/>
+    <file path="src/Rendering/GroupPageSection.php" role="other" sha256="61e8a37c69cf52d70686aac050c7fe5d8f520f46fbd91d88fb8a0c2bf35922a7"/>
+    <file path="src/Rendering/Labels.php" role="other" sha256="24926c41174e88d1b142a4c32d26aaf2f101d493c73c4e2913f81ba83e5e7c51"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
-    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="58d3c5d0ddca28a89dd95c08b949a8c46308efd9dcf25925a4fd665c6c3a6d15"/>
+    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="2711a3da47d908940d7007db11753ebcf8c905dec34694e456cc23eee653171d"/>
     <file path="src/Rendering/MermaidWriter.php" role="other" sha256="819c384e9d1075e7e37bdcd7ca2e1722d1ef990c97d0b4a8fa2a0e490d9d3302"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
-    <file path="src/Rendering/PageRenderer.php" role="other" sha256="a1154d47adcdf0fa26295545c6015b3f5c21f278da2984f6327ba61c16c9693a"/>
-    <file path="src/Rendering/PageSection.php" role="other" sha256="e6c4fbe9597ed9ce6a0115463badd24ba237ce4b325641e4b75efd526ebf8c14"/>
-    <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
+    <file path="src/Rendering/PageRenderer.php" role="other" sha256="59ea67146f8938e9b7841ceb069ec60591ae5b692693b87ca1e30e3be93e245e"/>
+    <file path="src/Rendering/PageSection.php" role="other" sha256="72731f989521539bc02804047e1d228690396935dddda8e4f29ab2c39043c371"/>
+    <file path="src/Rendering/ParsedPage.php" role="other" sha256="7f57c8ae6f54d194cc1f2b5cfd1dc12ba1012fcbaf5a5848ee744cc67edc3939"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="de077ce6d59cbad6ec31ae45d8248034500f02c9a2a9979ef7bf6575aad7dd46"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Stack/Detector/ComposerDetector.php" role="other" sha256="1d60998f43793345c1435f95949ebf724435e42638a6d7b7c9cb0203f9aa9860"/>
@@ -111,11 +111,11 @@
     <file path="src/Stack/Detector/StackDetectorInterface.php" role="other" sha256="551e1b1de7ea5f4ca99b287451f76add2d44a4e21bcb7cf14b358a1edda379f0"/>
     <file path="src/Stack/Knowledge/DepositOutcome.php" role="other" sha256="b5960860a59b3caead90903b300988eaca9bc227d2ba39af36b5114eb2c23005"/>
     <file path="src/Stack/Knowledge/KnowledgeBrief.php" role="other" sha256="04e60f81ad1e88dd9485758897148622e014d877682ec1d1094525d763eb578a"/>
-    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="1c6bf65d2aa2f2e01194f730c67877b8e33f5eeaaaebeb7d0fa7fb04983a6c4b"/>
+    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="62c327e63acc158cb4f79210cc51081bfe0a0f93a8f9f1b035a0f25ffdcbab0d"/>
     <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="2414179d85e5038390d1bc75b303dc39f37a53074f9843aafa01a93502755c81"/>
     <file path="src/Stack/Knowledge/KnowledgeProvider.php" role="other" sha256="2286681d4a6e89ba6bb9d73a29ec1b20e47dbd19b185f8215d87337b555138a6"/>
     <file path="src/Stack/Knowledge/LibraryEntry.php" role="other" sha256="c9391caf7927c28cd247391c76164c71b0fec89e681072dc19f50d5cf56e44a6"/>
-    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="c576f15a061e0c9c74e4d46fe52a6f0655391d7d9a19a86663b146f6b6c05445"/>
+    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="a96ac1e8ff041e0912387e7b26d25be1533cb217a1d0370e5bdae03321ec2b4e"/>
     <file path="src/Stack/StackDetectionFailed.php" role="other" sha256="64103014694438f7fa0f503a331bc30c063a04e7f703f6401b7e4b36bfa3e44f"/>
     <file path="src/Stack/StackDetector.php" role="other" sha256="a7383a37516a144e0f29310336b5c902f49c04e8dfdfd3f185e6a67294a194e2"/>
     <file path="src/Stack/StackDocument.php" role="other" sha256="d074c3b3869c5f55c2d3f2b91799cac06a373b17d788d78c7202909cb1df3b3f"/>
@@ -141,7 +141,7 @@
     <file path="src/Tracking/TrackedFile.php" role="other" sha256="ed52f17ae8539422474b3857ecd6b1a2d5415d4883f6d80724ace29729afb9ae"/>
     <file path="src/Tracking/TrackingDocument.php" role="other" sha256="7c3f8d9908b13599a39d4eb105d6a8d370c6eb16e78b5ce1be08f7170e8fc113"/>
     <file path="src/Tracking/TrackingReaderInterface.php" role="other" sha256="8afab2f007e6c603bcf4445ef1c28634433b59e7a11b03e927f5da6f38281690"/>
-    <file path="src/Tracking/TrackingStatus.php" role="other" sha256="b0884e960099897248e79cf6d71040805e57c7dda42b8b33d676a4a355018dfb"/>
+    <file path="src/Tracking/TrackingStatus.php" role="other" sha256="9ee0c322594fe0d0a032612b8efe749dc056c2e2e50901c4171b0c9a279ea67c"/>
     <file path="src/Tracking/TrackingWriterInterface.php" role="other" sha256="b3f9705e59a3a2f015413c231b194335982d5ca65699a5bf723e815ed5f3a738"/>
     <file path="src/Tracking/VcsState.php" role="other" sha256="3d3df0f857f296d9633415fb3758711c75698dd206bbf1fd79144dcc122dd459"/>
     <file path="src/Tracking/VcsXml.php" role="other" sha256="d692f042fda2360ec6f42735e8af369041c8819b14defc02fa405e95ca3db17b"/>
@@ -206,5 +206,7 @@
     <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
     <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Bridge/PHPStan/WorkflowDriftTest.php (+3)"/>
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Deux trous comblés dans le pipeline, trouvés en passant le système à l'épreuve : l'élagage laissait derrière lui le dossier d'un groupe vidé, et les écouteurs Doctrine n'apparaissaient sur aucune page. Le reste de la commande est inchangé. (files changed: src/Inspection/Adapter/Symfony/SymfonyAdapter.php, src/Inspection/InspectionPipeline.php)"/>
+    <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Console/SummaryRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/Labels.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php)"/>
+    <revision at="2026-09-21T21:19:02+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'inspection remet une page restée sous un gabarit antérieur dans le gabarit courant (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php)"/>
   </history>
 </workflow>

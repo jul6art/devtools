@@ -54,6 +54,6 @@ Les réponses ne sont pas validées : le typage `Order` est une promesse, pas un
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 973d403 | rédaction initiale |

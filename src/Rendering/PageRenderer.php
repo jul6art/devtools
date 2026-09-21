@@ -180,7 +180,7 @@ final class PageRenderer
      */
     private function history(array $history): string
     {
-        return MarkdownWriter::table(['Date', 'Commit', 'Changement'], array_map(
+        return MarkdownWriter::table(['Date', 'Commit', 'Change'], array_map(
             static fn (Revision $revision): array => [$revision->at->format('Y-m-d'), null === $revision->commit ? MarkdownWriter::EMPTY : substr($revision->commit, 0, 7), $revision->reason],
             $history,
         ));

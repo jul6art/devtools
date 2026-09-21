@@ -54,6 +54,6 @@ erreur sur `req.body.customer`. Aucun test ne couvre la création.
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f2bd976 | rédaction initiale |

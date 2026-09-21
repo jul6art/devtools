@@ -1,19 +1,19 @@
 # knowledge:list
-`command.knowledge.list` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.knowledge.list` · type: commands · last updated: 2026-09-20 · commit: 9e40da9
 
-## Résumé
+## Summary
 
 Dit où vit la bibliothèque de connaissances de stack partagée par tous les projets de la machine, si elle est accessible en écriture, ce qu'elle contient et d'où chaque fiche vient. Les fiches que DevTools embarque et que la bibliothèque ne couvre pas sont nommées à la suite : on voit d'un coup ce qui sera demandé à Claude au prochain projet.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `knowledge:list` (command) |
-| Sécurité | — |
-| Préconditions | Aucune : sans projet ni configuration, la bibliothèque par défaut est listée. |
+| Entry point | `knowledge:list` (command) |
+| Security | — |
+| Preconditions | Aucune : sans projet ni configuration, la bibliothèque par défaut est listée. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -29,11 +29,11 @@ sequenceDiagram
   C-->>U: chemin, écriture possible, table
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit`**
 
@@ -55,25 +55,25 @@ flowchart TD
   d1 -->|non| v2["l'élément reste vide"]
 ```
 
-## Données
+## Data
 
 Lit `library.xml` de la bibliothèque et les fiches présentes sur le disque ; lit la configuration du projet quand un chemin est donné. N'écrit rien.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun.
 
-## Points d'attention
+## Points of attention
 
 Une fiche déposée à la main dans le dossier est listée même si `library.xml` l'ignore : le disque fait foi sur ce qui existe, l'index sur ce qui vient d'où.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

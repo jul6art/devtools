@@ -1,19 +1,19 @@
 # stack:detect
-`command.stack.detect` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.stack.detect` · type: commands · last updated: 2026-09-20 · commit: 9e40da9
 
-## Résumé
+## Summary
 
 Lit les manifestes d'un projet — `composer.json`, `package.json`, `go.mod`… — et écrit le fichier de stack : la langue, le framework et sa version majeure, le gestionnaire de paquets, l'adaptateur qui trouvera les points d'entrée, la clé de connaissance et les dossiers de sources. Un monorepo est reconnu en lisant la racine et ses sous-dossiers immédiats, jamais en parcourant l'arborescence.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `stack:detect` (command) |
-| Sécurité | — |
-| Préconditions | Le chemin donné est un dossier existant contenant au moins un manifeste reconnu. |
+| Entry point | `stack:detect` (command) |
+| Security | — |
+| Preconditions | Le chemin donné est un dossier existant contenant au moins un manifeste reconnu. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -29,11 +29,11 @@ sequenceDiagram
   C-->>U: la table des stacks trouvées
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`Jul6Art\DevTools\Command\StackDetectCommand::execute`**
 
@@ -62,25 +62,25 @@ flowchart TD
   d1 -->|non| v2["l'élément reste vide"]
 ```
 
-## Données
+## Data
 
 Lit les manifestes et les verrous de dépendances ; écrit le fichier de stack, validé par son XSD.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun.
 
-## Points d'attention
+## Points of attention
 
 Un `package.json` sans framework à côté d'un projet Symfony est de l'outillage, pas une stack : sinon la voie Claude se lancerait sur les assets. Le nom du projet est verrouillable dans `stack.xml`, et une détection suivante ne l'écrase plus.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

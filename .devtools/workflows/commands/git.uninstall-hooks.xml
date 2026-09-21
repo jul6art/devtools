@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.git.uninstall-hooks" type="commands" schema-version="1">
   <title>git:uninstall-hooks</title>
-  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
+  <generated at="2026-09-21T21:19:01+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/3"/>
+  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="git:uninstall-hooks" role="main">
       <declared-in path="src/Command/GitUninstallHooksCommand.php" role="other"/>
@@ -13,7 +13,7 @@
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
     <file path="src/Inspection/Model/InvalidModel.php" role="other" sha256="ea5d752b174d526cd64e79f3c4c3ac2a8f3bdbaaeb77a17934591b2373174e0c"/>
-    <file path="src/Project/GitHooks.php" role="other" sha256="eb456fbec139a5492cb2c8ca2ac04213c6ab1bc9cb5ab6b1ce93e88786290305"/>
+    <file path="src/Project/GitHooks.php" role="other" sha256="44fb6df44a5095813bc354236a04234f79e8af86ffbfc016378f3a3a2fa1637c"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
   </files>
@@ -43,5 +43,6 @@
   <history>
     <revision at="2026-09-19T11:14:45+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="Rédaction initiale."/>
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
+    <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Project/GitHooks.php)"/>
   </history>
 </workflow>

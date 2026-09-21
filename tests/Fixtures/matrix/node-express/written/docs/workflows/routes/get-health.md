@@ -49,6 +49,6 @@ La réponse ne vérifie aucune dépendance : elle reste « ok » même si le ser
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f2bd976 | rédaction initiale |

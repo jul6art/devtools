@@ -60,6 +60,6 @@ stateDiagram-v2
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 65429e2 | initial |

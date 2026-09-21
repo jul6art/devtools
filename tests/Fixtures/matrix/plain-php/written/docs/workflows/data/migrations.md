@@ -47,6 +47,6 @@ Rien n'indique quelles migrations ont été jouées sur une base existante.
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 2620449 | rédaction initiale |

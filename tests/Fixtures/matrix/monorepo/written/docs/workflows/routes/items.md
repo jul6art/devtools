@@ -51,6 +51,6 @@ Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 6ecdbd0 | rédaction initiale |

@@ -1,19 +1,19 @@
 # workflows:reject
-`command.workflows.reject` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.workflows.reject` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 Le changement n'était pas voulu : **la documentation ne bouge pas, et c'est le code qui revient**. Sans `--restore`, la commande n'écrit rien du tout — elle imprime le `git restore` qui ramène le fichier à l'état où la page a été écrite. Avec, elle l'exécute : c'est la seule chose de tout DevTools qui touche au code d'un projet.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `workflows:reject` (command) |
-| Sécurité | — |
-| Préconditions | Le projet porte un `.devtools/` déjà inspecté, et les cibles nommées désignent des faits qui ont changé. |
+| Entry point | `workflows:reject` (command) |
+| Security | — |
+| Preconditions | Le projet porte un `.devtools/` déjà inspecté, et les cibles nommées désignent des faits qui ont changé. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -39,11 +39,11 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`DateTimeImmutable::timezone`**
 
@@ -127,27 +127,29 @@ flowchart TD
   d1 -->|non| v2["les détecteurs natifs, dans l'ordre : Composer, Node, puis le repli par langage"]
 ```
 
-## Données
+## Data
 
 Aucune écriture dans la documentation. Avec `--restore`, le code des fichiers refusés revient à son état d'origine.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 - **Un fichier qui porte un autre fait changé n'est pas restauré** : le ramener effacerait en silence un changement que personne n'a refusé.
 - **La restauration ramène le fichier entier**, au commit d'où la page a été écrite : un fait accepté mais non commité repart avec lui.
 - **Refuser ne fait pas taire le contrôle** : tant que le code n'est pas revenu, la dérive reste visible — c'est ce qui distingue un refus d'un « ignore ».
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsRejectCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
+| 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |

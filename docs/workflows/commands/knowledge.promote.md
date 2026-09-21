@@ -1,19 +1,19 @@
 # knowledge:promote
-`command.knowledge.promote` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.knowledge.promote` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 Copie une fiche de connaissance — de la bibliothèque partagée, ou du `.devtools/knowledge/` d'un projet avec `--from` — dans `resources/knowledge/` de DevTools, pour qu'elle parte avec le paquet publié. Le dépôt dans la bibliothèque est automatique ; l'embarquer dans le paquet ne l'est pas : cette commande prépare la pull request, un humain la relit.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `knowledge:promote` (command) |
-| Sécurité | — |
-| Préconditions | DevTools tourne depuis une copie source, et la fiche existe quelque part. |
+| Entry point | `knowledge:promote` (command) |
+| Security | — |
+| Preconditions | DevTools tourne depuis une copie source, et la fiche existe quelque part. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -31,11 +31,11 @@ sequenceDiagram
   C-->>U: à committer
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`Jul6Art\DevTools\Command\KnowledgePromoteCommand::execute`**
 
@@ -70,26 +70,27 @@ flowchart TD
   d1 -->|non| v2["l'élément reste vide"]
 ```
 
-## Données
+## Data
 
 Lit une fiche Markdown et la configuration du projet ; écrit dans `resources/knowledge/` du paquet.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun.
 
-## Points d'attention
+## Points of attention
 
 La promotion ne vérifie que le canevas, pas la justesse : une fiche fausse promue fausse toutes les rédactions de la stack. C'est la relecture de la pull request qui tranche.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Stack/Knowledge/KnowledgeCanvas.php) |

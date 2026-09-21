@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
+  <generated at="2026-09-21T21:19:53+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/3"/>
+  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -10,11 +10,11 @@
   </entrypoints>
   <files>
     <file path="src/Ai/ApplyResult.php" role="other" sha256="809bd235b446ccf522f33d5501a602f90fc948691c926b99afceb100cb6662b7"/>
-    <file path="src/Ai/DraftApplier.php" role="other" sha256="19573de513c9d3af3c20f9e91771a956272d9e0a97b05b8de0aea97fcea73bf4"/>
+    <file path="src/Ai/DraftApplier.php" role="other" sha256="63260839ceb4dc64a19ee9fe6adc4c62cc1e78402eb264ac4ab2764fa51ce121"/>
     <file path="src/Ai/GroupBrief.php" role="other" sha256="23b03f77d6a1026fb8c05c80cfb921287387a99eb49ef1e00b1cbc7b04dd5470"/>
     <file path="src/Ai/PageBrief.php" role="other" sha256="6b6867f6eb4d858e73e02bb8f0d1d7bba3ec05cb13188de3b06c84a4743899d4"/>
-    <file path="src/Ai/PageDraft.php" role="other" sha256="b3f7cf7698ba86d1489eb8ffaff81a93781d6cd80371040bc1bb4fc02543e9dd"/>
-    <file path="src/Ai/PageDraftValidator.php" role="other" sha256="bb878b28458f888d900ad49ef3c75eb746a2a4c648a69e53f5b06633b3eb86ce"/>
+    <file path="src/Ai/PageDraft.php" role="other" sha256="f17467b6f740abcc2d2b77c6fb30e0e495978acd46232b8ddb45b44e3bd54996"/>
+    <file path="src/Ai/PageDraftValidator.php" role="other" sha256="0571f401870c1b76af732412c8766722174a288685c2945bbe820a2753cf1ef8"/>
     <file path="src/Ai/XmlGroupBriefStore.php" role="other" sha256="bef1b5cd7120cf638509568b4266d93351162e74254be59823f50bb33066caaf"/>
     <file path="src/Ai/XmlPageBriefStore.php" role="other" sha256="3e3f54b9d24172998397e70b86c25a639e1237e98211684e45a6042ccafd0973"/>
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
@@ -24,7 +24,7 @@
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
     <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
-    <file path="src/Console/SummaryRenderer.php" role="other" sha256="e15e12cf42f142d1d925a66745c387fdf6576ba198ba9a7414ace816c397e2bd"/>
+    <file path="src/Console/SummaryRenderer.php" role="other" sha256="5d61d84934fa059d556111de8e1a9fc8062122a51b36db5329d7f3b02a364b56"/>
     <file path="src/Inspection/Adapter/Claude/Discovery.php" role="other" sha256="4679a5bea91159d351aa7612c11ef3dfc30e6b935e55f6e45ce8ff569c726f64"/>
     <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php" role="other" sha256="0a8a74bcb184945bfb6c474f08ce81ad864a1cdc14ceabcee147045944209ef0"/>
     <file path="src/Inspection/Adapter/Claude/XmlDiscoveryBriefStore.php" role="other" sha256="26c18cc5b42d2b29f9af2f6555ff404a94be5bd28cec21038035acdebdf6267d"/>
@@ -59,22 +59,22 @@
     <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
-    <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="02b93744e21fef7f924bd3a361817d3222a71cc900e4a3528600aeff7330c5ba"/>
-    <file path="src/Rendering/GroupPageSection.php" role="other" sha256="9c9adb7a2b4bd52750ad7e11dfdf551a5e543f2e8ac13a39eeed682c9f3b1ec8"/>
+    <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="df2e219c4ee1a8a37632d88992b2b1e08bb56fb5b2f63d9e37d36128c96a6749"/>
+    <file path="src/Rendering/GroupPageSection.php" role="other" sha256="61e8a37c69cf52d70686aac050c7fe5d8f520f46fbd91d88fb8a0c2bf35922a7"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
     <file path="src/Rendering/MermaidWriter.php" role="other" sha256="819c384e9d1075e7e37bdcd7ca2e1722d1ef990c97d0b4a8fa2a0e490d9d3302"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
-    <file path="src/Rendering/PageRenderer.php" role="other" sha256="a1154d47adcdf0fa26295545c6015b3f5c21f278da2984f6327ba61c16c9693a"/>
-    <file path="src/Rendering/PageSection.php" role="other" sha256="e6c4fbe9597ed9ce6a0115463badd24ba237ce4b325641e4b75efd526ebf8c14"/>
-    <file path="src/Rendering/ParsedPage.php" role="other" sha256="4289447fd04bbb0d345f8b5431147e91421e2cbc66ab87d47054266ef13ec7d9"/>
+    <file path="src/Rendering/PageRenderer.php" role="other" sha256="59ea67146f8938e9b7841ceb069ec60591ae5b692693b87ca1e30e3be93e245e"/>
+    <file path="src/Rendering/PageSection.php" role="other" sha256="72731f989521539bc02804047e1d228690396935dddda8e4f29ab2c39043c371"/>
+    <file path="src/Rendering/ParsedPage.php" role="other" sha256="7f57c8ae6f54d194cc1f2b5cfd1dc12ba1012fcbaf5a5848ee744cc67edc3939"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="de077ce6d59cbad6ec31ae45d8248034500f02c9a2a9979ef7bf6575aad7dd46"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Stack/Knowledge/DepositOutcome.php" role="other" sha256="b5960860a59b3caead90903b300988eaca9bc227d2ba39af36b5114eb2c23005"/>
     <file path="src/Stack/Knowledge/KnowledgeBrief.php" role="other" sha256="04e60f81ad1e88dd9485758897148622e014d877682ec1d1094525d763eb578a"/>
-    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="1c6bf65d2aa2f2e01194f730c67877b8e33f5eeaaaebeb7d0fa7fb04983a6c4b"/>
+    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="62c327e63acc158cb4f79210cc51081bfe0a0f93a8f9f1b035a0f25ffdcbab0d"/>
     <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="2414179d85e5038390d1bc75b303dc39f37a53074f9843aafa01a93502755c81"/>
     <file path="src/Stack/Knowledge/LibraryEntry.php" role="other" sha256="c9391caf7927c28cd247391c76164c71b0fec89e681072dc19f50d5cf56e44a6"/>
-    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="c576f15a061e0c9c74e4d46fe52a6f0655391d7d9a19a86663b146f6b6c05445"/>
+    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="a96ac1e8ff041e0912387e7b26d25be1533cb217a1d0370e5bdae03321ec2b4e"/>
     <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
     <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="e32c0b7840c745103bba7c093c63c681d892304fa78e06ce3081cc1309c985b1"/>
@@ -90,7 +90,7 @@
     <file path="src/Tracking/TrackedFile.php" role="other" sha256="ed52f17ae8539422474b3857ecd6b1a2d5415d4883f6d80724ace29729afb9ae"/>
     <file path="src/Tracking/TrackingDocument.php" role="other" sha256="7c3f8d9908b13599a39d4eb105d6a8d370c6eb16e78b5ce1be08f7170e8fc113"/>
     <file path="src/Tracking/TrackingReaderInterface.php" role="other" sha256="8afab2f007e6c603bcf4445ef1c28634433b59e7a11b03e927f5da6f38281690"/>
-    <file path="src/Tracking/TrackingStatus.php" role="other" sha256="b0884e960099897248e79cf6d71040805e57c7dda42b8b33d676a4a355018dfb"/>
+    <file path="src/Tracking/TrackingStatus.php" role="other" sha256="9ee0c322594fe0d0a032612b8efe749dc056c2e2e50901c4171b0c9a279ea67c"/>
     <file path="src/Tracking/TrackingWriterInterface.php" role="other" sha256="b3f9705e59a3a2f015413c231b194335982d5ca65699a5bf723e815ed5f3a738"/>
     <file path="src/Tracking/VcsState.php" role="other" sha256="3d3df0f857f296d9633415fb3758711c75698dd206bbf1fd79144dcc122dd459"/>
     <file path="src/Tracking/VcsXml.php" role="other" sha256="d692f042fda2360ec6f42735e8af369041c8819b14defc02fa405e95ca3db17b"/>
@@ -137,5 +137,7 @@
     <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
     <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Project/GitHooksTest.php"/>
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
+    <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/DraftApplier.php, src/Ai/PageDraft.php, src/Ai/PageDraftValidator.php, src/Console/SummaryRenderer.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php)"/>
+    <revision at="2026-09-21T21:19:02+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Rendering/PageRenderer.php)"/>
   </history>
 </workflow>

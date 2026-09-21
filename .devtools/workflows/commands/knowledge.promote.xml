@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.knowledge.promote" type="commands" schema-version="1">
   <title>knowledge:promote</title>
-  <generated at="2026-09-20T09:59:03+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/2"/>
-  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
+  <generated at="2026-09-21T21:19:01+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/3"/>
+  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="false"/>
   <entrypoints>
     <entrypoint kind="command" name="knowledge:promote" role="main">
       <declared-in path="src/Command/KnowledgePromoteCommand.php" role="other"/>
@@ -26,7 +26,7 @@
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Stack/Knowledge/DepositOutcome.php" role="other" sha256="b5960860a59b3caead90903b300988eaca9bc227d2ba39af36b5114eb2c23005"/>
-    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="1c6bf65d2aa2f2e01194f730c67877b8e33f5eeaaaebeb7d0fa7fb04983a6c4b"/>
+    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="62c327e63acc158cb4f79210cc51081bfe0a0f93a8f9f1b035a0f25ffdcbab0d"/>
     <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="2414179d85e5038390d1bc75b303dc39f37a53074f9843aafa01a93502755c81"/>
     <file path="src/Stack/Knowledge/LibraryEntry.php" role="other" sha256="c9391caf7927c28cd247391c76164c71b0fec89e681072dc19f50d5cf56e44a6"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
@@ -72,5 +72,6 @@
     <revision at="2026-09-18T11:33:54+00:00" commit="b8049a45399cc9adc6f2c3c0665a7f31e3a49fcc" reason="rédaction initiale"/>
     <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Project/GitHooksTest.php"/>
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
+    <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Stack/Knowledge/KnowledgeCanvas.php)"/>
   </history>
 </workflow>

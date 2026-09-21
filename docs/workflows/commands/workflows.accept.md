@@ -1,19 +1,19 @@
 # workflows:accept
-`command.workflows.accept` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.workflows.accept` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 Le changement était voulu : la documentation suit. Les pages des workflows portant les faits acceptés sont réécrites — **et elles seules** —, leur historique nomme le fait plutôt que le fichier, et le brief de rédaction le porte aussi, pour que Claude relise là où il faut plutôt que partout.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `workflows:accept` (command) |
-| Sécurité | — |
-| Préconditions | Le projet porte un `.devtools/` déjà inspecté, et les cibles nommées désignent des faits qui ont changé. |
+| Entry point | `workflows:accept` (command) |
+| Security | — |
+| Preconditions | Le projet porte un `.devtools/` déjà inspecté, et les cibles nommées désignent des faits qui ont changé. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -33,11 +33,11 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`DateTimeImmutable::timezone`**
 
@@ -119,27 +119,29 @@ flowchart TD
   d1 -->|non| v2["les détecteurs natifs, dans l'ordre : Composer, Node, puis le repli par langage"]
 ```
 
-## Données
+## Data
 
 Écriture : les pages, les suivis et les briefs des workflows portant les faits acceptés.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 - **`--force` seul ne suffisait pas** : il rend un workflow périmé, il n'empêche pas les autres de l'être. Sans la restriction, accepter la sécurité d'une route réécrivait les quatre autres du même contrôleur — vu sur un projet réel.
 - **Ce qui n'est pas accepté reste en dérive** : son suivi n'est pas écrit, donc le contrôle continue de le signaler.
 - **`--no-ai` accepte les faits sans demander la prose** : la page redevient juste tout de suite, sa rédaction attend.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsAcceptCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
+| 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |

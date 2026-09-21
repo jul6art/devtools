@@ -859,34 +859,37 @@ final readonly class InspectionPipeline
      * The current page, when Claude wrote parts of it: a factual rewrite keeps them.
      */
     /**
-     * A page written under the template before v3 — French section titles — rewritten in the current one.
+     * Brings a page back in step with the current template, when the freshness found nothing to rewrite.
+     *
+     * ⚠️ **The comparison is the detection.** The decision is `Keep`, so the facts are unchanged by
+     * definition: rendering the workflow again must give back the file byte for byte. When it does not,
+     * the file was written by another version of the template — French section titles before v3, a French
+     * history header before v3.1 — and it is the file that is behind. Listing the labels that changed
+     * would have been whack-a-mole; two of them had already escaped.
      *
      * ⚠️ **Nothing else changes**: same facts, same prose, same tracking file. It is not a documentation
      * event. A revision would add a line nobody can act on to every history of every project, and setting
-     * the tracking to `no-ai` would ask Claude to confirm a prose that was carried over verbatim. The file
-     * changes; what the file says does not.
+     * the tracking to `no-ai` would ask Claude to confirm a prose that was carried over verbatim.
      *
      * ⚠️ It happens here, on the pages the freshness leaves alone, because those are exactly the ones a
-     * lazy migration never reaches: a workflow whose code never moves keeps the old headings for ever.
+     * lazy migration never reaches: a workflow whose code never moves keeps the old template for ever —
+     * 22 pages of 133 on one real project, 29 of 114 on another.
+     *
+     * ⚠️ A page marked `manual` is left alone, as it is everywhere else: its owner took it over.
      */
     private function migrateTemplate(DevToolsDirectory $directory, Workflow $workflow, TrackingDocument $old, RenderingContext $context, InspectionReport $report): void
     {
         $pageFile = $directory->pageFile($workflow->type, $workflow->id, $workflow->group?->directory);
 
-        if (!is_file($pageFile)) {
+        if (TrackingStatus::Manual === $old->status || !is_file($pageFile)) {
             return;
         }
 
-        $parsed = new PageParser()->parse((string) file_get_contents($pageFile));
+        $page = new PageRenderer()->render($workflow, $old->history, $context, self::writtenPage($pageFile));
 
-        if (!$parsed->usesLegacyHeadings()) {
+        if ($page === file_get_contents($pageFile)) {
             return;
         }
-
-        // The same rule as a factual rewrite: a page whose summary is a dash holds no prose of Claude's,
-        // and is rendered from the model alone.
-        $written = MarkdownWriter::EMPTY === $parsed->section(PageSection::Summary) ? null : $parsed;
-        $page = new PageRenderer()->render($workflow, $old->history, $context, $written);
 
         if ($this->writer->write($pageFile, $page)) {
             ++$report->pagesWritten;

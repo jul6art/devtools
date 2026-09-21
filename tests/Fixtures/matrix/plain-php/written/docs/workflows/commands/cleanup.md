@@ -51,6 +51,6 @@ tolérance, d'autres bases y verraient un nom de colonne. Rien n'est affiché ni
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 2620449 | rédaction initiale |

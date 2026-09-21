@@ -61,6 +61,6 @@ Aucun état de chargement ni de gestion d'erreur : si l'API échoue, la liste re
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 973d403 | rédaction initiale |

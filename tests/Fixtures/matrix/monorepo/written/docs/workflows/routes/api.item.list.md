@@ -50,6 +50,6 @@ Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du mono
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 6ecdbd0 | rédaction initiale |

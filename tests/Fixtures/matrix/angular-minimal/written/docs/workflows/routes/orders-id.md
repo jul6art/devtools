@@ -57,6 +57,6 @@ composant n'actualise pas la commande. Un identifiant non numérique donne `NaN`
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 973d403 | rédaction initiale |

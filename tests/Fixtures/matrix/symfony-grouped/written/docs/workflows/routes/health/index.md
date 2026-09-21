@@ -52,6 +52,6 @@ fonctionne.
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f815420 | rédaction initiale |

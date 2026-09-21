@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-20T09:57:23+00:00" docs="docs/workflows">
-  <source vcs="git" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" branch="master" dirty="false"/>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-21T21:19:02+00:00" docs="docs/workflows">
+  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="true"/>
   <workflow id="command.claude.install" type="commands" title="claude:install" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/claude.install.md"/>
-  <workflow id="command.git.install-hooks" type="commands" title="git:install-hooks" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/git.install-hooks.md"/>
-  <workflow id="command.git.uninstall-hooks" type="commands" title="git:uninstall-hooks" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/git.uninstall-hooks.md"/>
+  <workflow id="command.git.install-hooks" type="commands" title="git:install-hooks" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:15:01+00:00" page="commands/git.install-hooks.md"/>
+  <workflow id="command.git.uninstall-hooks" type="commands" title="git:uninstall-hooks" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:15:01+00:00" page="commands/git.uninstall-hooks.md"/>
   <workflow id="command.init" type="commands" title="init" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/init.md"/>
   <workflow id="command.knowledge.list" type="commands" title="knowledge:list" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/knowledge.list.md"/>
-  <workflow id="command.knowledge.promote" type="commands" title="knowledge:promote" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/knowledge.promote.md"/>
+  <workflow id="command.knowledge.promote" type="commands" title="knowledge:promote" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:15:01+00:00" page="commands/knowledge.promote.md"/>
   <workflow id="command.stack.detect" type="commands" title="stack:detect" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/stack.detect.md"/>
-  <workflow id="command.workflows.accept" type="commands" title="workflows:accept" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.accept.md"/>
-  <workflow id="command.workflows.apply" type="commands" title="workflows:apply" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.apply.md"/>
-  <workflow id="command.workflows.check" type="commands" title="workflows:check" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.check.md"/>
-  <workflow id="command.workflows.diff" type="commands" title="workflows:diff" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.diff.md"/>
-  <workflow id="command.workflows.inspect" type="commands" title="workflows:inspect" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.inspect.md"/>
-  <workflow id="command.workflows.reject" type="commands" title="workflows:reject" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.reject.md"/>
-  <workflow id="command.workflows.review" type="commands" title="workflows:review" status="fresh" confidence="high" mode="ai" updated="2026-09-20T09:57:23+00:00" page="commands/workflows.review.md"/>
+  <workflow id="command.workflows.accept" type="commands" title="workflows:accept" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.accept.md"/>
+  <workflow id="command.workflows.apply" type="commands" title="workflows:apply" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.apply.md"/>
+  <workflow id="command.workflows.check" type="commands" title="workflows:check" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.check.md"/>
+  <workflow id="command.workflows.diff" type="commands" title="workflows:diff" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.diff.md"/>
+  <workflow id="command.workflows.inspect" type="commands" title="workflows:inspect" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.inspect.md"/>
+  <workflow id="command.workflows.reject" type="commands" title="workflows:reject" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.reject.md"/>
+  <workflow id="command.workflows.review" type="commands" title="workflows:review" status="fresh" confidence="high" mode="ai" updated="2026-09-21T21:19:02+00:00" page="commands/workflows.review.md"/>
 </index>

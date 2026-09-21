@@ -54,6 +54,6 @@ Le stockage est en mémoire : la liste est vide à chaque redémarrage et n'est 
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f2bd976 | rédaction initiale |

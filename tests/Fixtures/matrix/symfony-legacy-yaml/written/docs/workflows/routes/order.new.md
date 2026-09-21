@@ -91,6 +91,6 @@ Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le rensei
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | 65429e2 | rédaction initiale |

@@ -1,19 +1,19 @@
 # git:install-hooks
-`command.git.install-hooks` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.git.install-hooks` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 Installe les hooks git du projet : le contrôle sur `pre-commit`, les faits rafraîchis sur `post-merge` et `post-checkout`. **Un hook existant n'est jamais écrasé** — le bloc s'ajoute entre deux marqueurs — et aucun hook ne bloque un commit pour une raison technique.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `git:install-hooks` (command) |
-| Sécurité | — |
-| Préconditions | Le chemin est un dépôt git ; `core.hooksPath` est respecté quand le projet en configure un. |
+| Entry point | `git:install-hooks` (command) |
+| Security | — |
+| Preconditions | Le chemin est un dépôt git ; `core.hooksPath` est respecté quand le projet en configure un. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -35,11 +35,11 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`Jul6Art\DevTools\Command\GitInstallHooksCommand::execute`**
 
@@ -52,27 +52,28 @@ flowchart TD
   d2 -->|oui| v3["SUCCESS, avec les hooks écrits"]
 ```
 
-## Données
+## Data
 
 Écriture : les trois fichiers de hooks, rendus exécutables.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 - **Le hook laisse passer le commit quand DevTools n'est pas là**, ou quand le projet n'a pas de `.devtools/` : une gate qui bloque le travail à cause d'elle-même est une gate qu'on désinstalle, et avec elle la seule chose qui tenait la documentation à jour.
 - **`--strict` refuse le commit** au lieu d'avertir : c'est un choix d'équipe, pas le défaut.
 - **Installer deux fois remplace le bloc** au lieu de l'empiler.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Project/GitHooks.php) |

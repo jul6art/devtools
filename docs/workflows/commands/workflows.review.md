@@ -1,19 +1,19 @@
 # workflows:review
-`command.workflows.review` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.workflows.review` · type: commands · last updated: 2026-09-21 · commit: e5a6438
 
-## Résumé
+## Summary
 
 La revue, fait par fait : le changement, son diff de code, et une question à trois réponses — accepter, refuser, passer. **Rien n'est écrit avant la dernière réponse** : une revue interrompue laisse le projet exactement comme il était. Sans terminal, la commande refuse de deviner et renvoie vers le contrôle.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `workflows:review` (command) |
-| Sécurité | — |
-| Préconditions | Le projet porte un `.devtools/` déjà inspecté, et la sortie est un terminal. |
+| Entry point | `workflows:review` (command) |
+| Security | — |
+| Preconditions | Le projet porte un `.devtools/` déjà inspecté, et la sortie est un terminal. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -36,11 +36,11 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`DateTimeImmutable::timezone`**
 
@@ -120,26 +120,28 @@ flowchart TD
   d1 -->|non| v2["les détecteurs natifs, dans l'ordre : Composer, Node, puis le repli par langage"]
 ```
 
-## Données
+## Data
 
 Écriture, seulement pour les faits acceptés : les pages et les suivis des workflows qui les portent.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 - **Une seule inspection à la fin, quel que soit le nombre de faits acceptés** : deux passes ajouteraient deux révisions à la même page pour la même revue.
 - **Refuser n'écrit rien ici non plus** : la commande imprime ce qu'il faut lancer, et c'est `workflows:reject --restore` qui exécute, jamais la revue.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-19 | d9d6b8f | Rédaction initiale. |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php) |
+| 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsReviewCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
+| 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |

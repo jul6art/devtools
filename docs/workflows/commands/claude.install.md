@@ -1,19 +1,19 @@
 # claude:install
-`command.claude.install` · type : commands · dernière mise à jour : 2026-09-20 · commit : 9e40da9
+`command.claude.install` · type: commands · last updated: 2026-09-20 · commit: 9e40da9
 
-## Résumé
+## Summary
 
 Copie dans le projet le skill Claude Code que DevTools embarque, `.claude/skills/devtools-inspect/` : la boucle inspecter → rédiger → appliquer que Claude suit pour documenter les workflows. Le fichier se committe ; l'installer une seconde fois ne change rien tant qu'il n'a pas été modifié à la main.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `claude:install` (command) |
-| Sécurité | — |
-| Préconditions | Le chemin donné est un dossier existant. |
+| Entry point | `claude:install` (command) |
+| Security | — |
+| Preconditions | Le chemin donné est un dossier existant. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -27,11 +27,11 @@ sequenceDiagram
   C-->>U: installé, à jour, ou modifié à la main
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 **`Jul6Art\DevTools\Command\ClaudeInstallCommand::execute`**
 
@@ -44,25 +44,25 @@ flowchart TD
   d2 -->|non| v3["SUCCESS — installé ou déjà identique"]
 ```
 
-## Données
+## Data
 
 Lit le skill embarqué, écrit son homologue dans le projet.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun.
 
-## Points d'attention
+## Points of attention
 
 Un skill modifié à la main n'est jamais écrasé sans `--force` : c'est le fichier de l'équipe, comme une fiche de connaissance.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |

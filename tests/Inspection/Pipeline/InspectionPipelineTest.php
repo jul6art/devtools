@@ -83,6 +83,14 @@ final class InspectionPipelineTest extends TestCase
         self::assertSame([], $migrated->conformityProblems(), 'The page came back in the current template.');
         self::assertStringContainsString('| Preconditions |', (string) $migrated->section(PageSection::Trigger));
         self::assertSame($before, (string) file_get_contents($tracking), 'A template migration is not a documentation event: no revision, no change of mode.');
+
+        // ⚠️ A label inside a section DevTools owns counts too: the history header was French one version
+        // longer than the titles were, and a detection listing the headings would have walked past it.
+        file_put_contents($page, str_replace('| Date | Commit | Change |', '| Date | Commit | Changement |', (string) file_get_contents($page)));
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        self::assertStringContainsString('| Date | Commit | Change |', (string) file_get_contents($page));
+        self::assertSame($before, (string) file_get_contents($tracking));
     }
 
     public function testEveryWrittenDocumentIsValidAndEveryPageConforms(): void

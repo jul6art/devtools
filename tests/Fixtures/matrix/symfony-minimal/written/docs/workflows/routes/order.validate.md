@@ -73,6 +73,6 @@ déjà validée) lève une exception non interceptée : réponse 500 au lieu d'u
 
 ## History
 
-| Date | Commit | Changement |
+| Date | Commit | Change |
 |---|---|---|
 | 2026-09-16 | f815420 | rédaction initiale |
