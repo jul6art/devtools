@@ -54,8 +54,8 @@ abstract class AbstractFunctionalTestCase extends TestCase
             $bundleConfig,
         ])), 0, 12);
 
-        // Arguments nommés : une brique absente retire son paramètre du kernel, et un appel
-        // positionnel se décalerait silencieusement.
+        // Named arguments: a missing brick removes its parameter from the kernel, and a positional
+        // call would silently shift.
         $this->kernel = new TestKernel(
             $environment,
             $bundleConfig,

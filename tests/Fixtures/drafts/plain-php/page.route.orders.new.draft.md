@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Crée une commande : en GET, affiche un formulaire avec le nom du client ; en POST, enregistre la commande par
 `OrderRepository::add()` puis redirige vers `/index.php`.
 
-## Préconditions
+## Preconditions
 
 La table `orders` existe.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -28,23 +28,23 @@ sequenceDiagram
   P-->>U: Location: /index.php
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit une ligne dans `orders` (colonne `customer`), par une requête préparée.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 Aucune validation : un nom vide est enregistré (c'est ce que `bin/cleanup` supprime ensuite), et aucun
 jeton CSRF ne protège le formulaire.
 
-## Changement
+## Change
 
 rédaction initiale

@@ -1,48 +1,48 @@
 # OrderCreated
-`async.order-created` · type : async · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`async.order-created` · type: async · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
+| Entry point | `App\MessageHandler\OrderCreatedHandler` (message-handler) |
 | Message | `App\Message\OrderCreated` |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

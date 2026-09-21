@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 `GET /health` répond `{"status": "ok"}` pour signaler que le processus tourne.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -21,22 +21,22 @@ sequenceDiagram
   A-->>M: 200 {"status": "ok"}
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Déclarée directement sur `app`, hors de tout routeur.
 
-## Points d'attention
+## Points of attention
 
 La réponse ne vérifie aucune dépendance : elle reste « ok » même si le service de commandes est cassé.
 
-## Changement
+## Change
 
 rédaction initiale

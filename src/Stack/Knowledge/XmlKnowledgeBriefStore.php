@@ -30,7 +30,7 @@ final readonly class XmlKnowledgeBriefStore
         $xml = $this->dom->document();
         $root = $this->dom->element($xml, 'knowledge-brief', ['schema-version' => (string) self::SCHEMA_VERSION, 'key' => $brief->key]);
         $this->dom->element($root, 'stack', array_filter(['language' => $brief->language, 'framework' => $brief->framework, 'version' => $brief->version], static fn (?string $value): bool => null !== $value));
-        $this->dom->element($root, 'prompt', ['version' => 'knowledge/1', 'path' => $brief->promptPath]);
+        $this->dom->element($root, 'prompt', ['version' => 'knowledge/2', 'path' => $brief->promptPath]);
         $this->dom->element($root, 'canvas', ['path' => $brief->canvasPath]);
         $this->dom->element($root, 'draft', ['path' => $brief->draftPath]);
 

@@ -413,7 +413,7 @@ final readonly class DraftApplier
             }
         }
 
-        $sections[PageSection::Trigger->value] = '| Préconditions | '.str_replace('|', '\|', (string) $draft->content(PageDraft::PRECONDITIONS)).' |';
+        $sections[PageSection::Trigger->value] = '| Preconditions | '.str_replace('|', '\|', (string) $draft->content(PageDraft::PRECONDITIONS)).' |';
 
         return new ParsedPage('', '', $sections);
     }

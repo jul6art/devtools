@@ -1,20 +1,20 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 Valide une commande : applique la transition `validate` de la machine à états `order`, qui fait passer la
 commande de `draft` à `validated`, puis redirige vers sa fiche.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `POST /orders/{id}/validate` (`app_order_validate`) |
-| Sécurité | `ROLE_USER`, `ROLE_MANAGER` |
-| Préconditions | Commande à l'état draft ; utilisateur avec ROLE_MANAGER. |
+| Entry point | `POST /orders/{id}/validate` (`app_order_validate`) |
+| Security | `ROLE_USER`, `ROLE_MANAGER` |
+| Preconditions | Commande à l'état draft ; utilisateur avec ROLE_MANAGER. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -30,7 +30,7 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -49,29 +49,29 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit l'`Order` et modifie sa propriété `status` (marking store `method`) ; la machine est déclarée dans
 `config/packages/framework.yaml`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request` ; access_control ROLE_USER, puis `#[IsGranted]` ROLE_MANAGER.
 
-## Points d'attention
+## Points of attention
 
 La commande modifiée n'est pas ré-enregistrée (`save` n'est pas appelé). Une transition impossible (commande
 déjà validée) lève une exception non interceptée : réponse 500 au lieu d'un message.
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.show`](order.show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Point de santé de l'application, joignable sur `/health` et sur `/status` : répond `{"status": "ok"}` en JSON,
 sans authentification, pour la supervision.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -22,23 +22,23 @@ sequenceDiagram
   C-->>S: 200 {"status": "ok"}
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune donnée lue ni écrite.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request`, sans effet sur une réponse JSON ; aucune règle d'accès.
 
-## Points d'attention
+## Points of attention
 
 Répond « ok » sans rien vérifier (ni dépendance, ni stockage) : il dit que PHP répond, pas que l'application
 fonctionne.
 
-## Changement
+## Change
 
 rédaction initiale

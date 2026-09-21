@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 `GET /orders` renvoie en JSON toutes les commandes connues de `orderService`.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -26,22 +26,22 @@ sequenceDiagram
   R-->>C: 200 JSON
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit le tableau `orders` gardé en mémoire par `src/services/orderService.js`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `express.json()` est monté sur toute l'application avant les routeurs.
 
-## Points d'attention
+## Points of attention
 
 Le stockage est en mémoire : la liste est vide à chaque redémarrage et n'est pas partagée entre processus.
 
-## Changement
+## Change
 
 rédaction initiale

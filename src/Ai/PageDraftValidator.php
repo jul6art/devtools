@@ -158,7 +158,7 @@ final class PageDraftValidator
     }
 
     /**
-     * "Décisions" draws one flowchart per decided field (ADR-0043). What is checked is mechanical: a
+     * "Decisions" draws one flowchart per decided field (ADR-0043). What is checked is mechanical: a
      * diagram is there, every field named exists in the model, and no decided field is left out.
      *
      * The **conditions** are deliberately not compared: rewriting them in business language is the work

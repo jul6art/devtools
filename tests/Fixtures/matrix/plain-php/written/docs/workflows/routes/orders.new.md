@@ -1,20 +1,20 @@
 # /orders/new.php
-`route.orders.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : 2620449
+`route.orders.new` · type: routes · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 Crée une commande : en GET, affiche un formulaire avec le nom du client ; en POST, enregistre la commande par
 `OrderRepository::add()` puis redirige vers `/index.php`.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/orders/new.php` (`orders.new`) |
-| Sécurité | — |
-| Préconditions | La table `orders` existe. |
+| Entry point | `/orders/new.php` (`orders.new`) |
+| Security | — |
+| Preconditions | La table `orders` existe. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -30,7 +30,7 @@ sequenceDiagram
   P-->>U: Location: /index.php
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -41,28 +41,28 @@ flowchart LR
   n1 -->|"redirect"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit une ligne dans `orders` (colonne `customer`), par une requête préparée.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 Aucune validation : un nom vide est enregistré (c'est ce que `bin/cleanup` supprime ensuite), et aucun
 jeton CSRF ne protège le formulaire.
 
-## Workflows liés
+## Related workflows
 
 - [`route.index`](index.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -1,21 +1,21 @@
 # OrderService → /api/orders
-`integration.orderservice` · type : integrations · dernière mise à jour : 2026-09-16 · commit : 973d403
+`integration.orderservice` · type: integrations · last updated: 2026-09-16 · commit: 973d403
 
-## Résumé
+## Summary
 
 `OrderService` est le seul point d'accès aux commandes : un service Angular fourni à la racine qui
 appelle l'API REST des commandes avec `HttpClient`.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `OrderService` (integration) |
+| Entry point | `OrderService` (integration) |
 | Calls | `GET /api/orders, GET /api/orders/{id}` |
-| Sécurité | — |
-| Préconditions | `HttpClient` est fourni à l'application (`provideHttpClient`). |
+| Security | — |
+| Preconditions | `HttpClient` est fourni à l'application (`provideHttpClient`). |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -28,31 +28,31 @@ sequenceDiagram
   S-->>C: Observable<Order[]> / Observable<Order>
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit `Order` (`id: number`, `customer: string`) ; l'interface est déclarée dans le service.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun : ni intercepteur, ni cache, ni reprise sur erreur.
 
-## Points d'attention
+## Points of attention
 
 Les réponses ne sont pas validées : le typage `Order` est une promesse, pas un contrôle.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

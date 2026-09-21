@@ -1,20 +1,20 @@
 # /orders
-`order` · type : routes · 4 routes · `src/Controller/OrderController.php`
+`order` · type: routes · 4 routes · `src/Controller/OrderController.php`
 
-## Résumé
+## Summary
 
 —
 
 ## Routes
 
-| Route | Chemin | Méthodes | Sécurité |
+| Route | Path | Methods | Security |
 |---|---|---|---|
 | [`app_order_index`](index.md) | `/orders` | `GET` | `ROLE_USER` |
 | [`app_order_new`](new.md) | `/orders/new` | `GET\|POST` | `ROLE_USER`, `ROLE_OPERATOR` |
 | [`app_order_show`](show.md) | `/orders/{id}` | `GET` | `ROLE_USER` |
 | [`app_order_validate`](validate.md) | `/orders/{id}/validate` | `POST` | `ROLE_USER`, `ROLE_MANAGER` |
 
-## États
+## States
 
 ```mermaid
 stateDiagram-v2

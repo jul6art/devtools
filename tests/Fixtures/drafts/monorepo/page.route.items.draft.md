@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Page `/items` du front Angular : la route rend `ItemListComponent`, qui n'affiche pour l'instant qu'un titre.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -23,22 +23,22 @@ sequenceDiagram
   L-->>U: « Items »
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune : le composant ne charge rien.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun garde ni intercepteur n'est déclaré dans `front/src/app`.
 
-## Points d'attention
+## Points of attention
 
 Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est un squelette.
 
-## Changement
+## Change
 
 rédaction initiale

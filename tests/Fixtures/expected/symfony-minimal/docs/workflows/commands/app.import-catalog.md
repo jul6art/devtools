@@ -1,49 +1,49 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : —
+`command.app.import-catalog` · type: commands · last updated: 2026-09-16 · commit: —
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `app:import-catalog` (command) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `app:import-catalog` (command) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
-| Mécanisme | Événement | Priorité | Écrit |
+—
+
+## Cross-cutting mechanisms
+
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

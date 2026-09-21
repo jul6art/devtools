@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Affiche la fiche d'une commande identifiée par son `id` : le client de la commande.
 
-## Préconditions
+## Preconditions
 
 Utilisateur authentifié (ROLE_USER).
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -24,23 +24,23 @@ sequenceDiagram
   C-->>U: order/show.html.twig
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit une `Order` dans `src/Repository/OrderRepository.php`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request` ; access_control ROLE_USER sur `^/orders`.
 
-## Points d'attention
+## Points of attention
 
 Un identifiant inconnu n'est pas traité : `get()` renvoie null et le template lit `order.customer` sur une
 valeur nulle, au lieu d'une réponse 404.
 
-## Changement
+## Change
 
 rédaction initiale

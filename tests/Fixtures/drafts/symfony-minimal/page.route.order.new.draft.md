@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Crée une commande à partir du formulaire `OrderType` : un opérateur saisit le client et le produit, la
 commande est tarifée par `OrderPricing` puis enregistrée, et l'opérateur est redirigé vers sa fiche.
 
-## Préconditions
+## Preconditions
 
 Le catalogue de produits est chargé.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -29,7 +29,7 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Décisions
+## Decisions
 
 **`App\Entity\Order::status`**
 
@@ -52,18 +52,18 @@ flowchart TD
   d1 -->|tout autre pays| v3["currency = EUR"]
 ```
 
-## Données
+## Data
 
 Écrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` fixe la locale à chaque requête avant le contrôleur.
 
-## Points d'attention
+## Points of attention
 
 Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le renseigne.
 
-## Changement
+## Change
 
 rédaction initiale

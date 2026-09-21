@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Valide une commande : applique la transition `validate` de la machine à états `order`, qui fait passer la
 commande de `draft` à `validated`, puis redirige vers sa fiche.
 
-## Préconditions
+## Preconditions
 
 Commande à l'état draft ; utilisateur avec ROLE_MANAGER.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -28,24 +28,24 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit l'`Order` et modifie sa propriété `status` (marking store `method`) ; la machine est déclarée dans
 `config/packages/framework.yaml`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request` ; access_control ROLE_USER, puis `#[IsGranted]` ROLE_MANAGER.
 
-## Points d'attention
+## Points of attention
 
 La commande modifiée n'est pas ré-enregistrée (`save` n'est pas appelé). Une transition impossible (commande
 déjà validée) lève une exception non interceptée : réponse 500 au lieu d'un message.
 
-## Changement
+## Change
 
 rédaction initiale

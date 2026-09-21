@@ -1,19 +1,19 @@
 # cleanup
-`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
+`command.cleanup` · type: commands · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 `bin/cleanup`, déclaré dans `bin` de `composer.json`, supprime les commandes dont le client est vide.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `cleanup` (command) |
-| Sécurité | — |
-| Préconditions | La table `orders` existe. |
+| Entry point | `cleanup` (command) |
+| Security | — |
+| Preconditions | La table `orders` existe. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -24,32 +24,32 @@ sequenceDiagram
   S->>B: DELETE FROM orders WHERE customer = ""
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Supprime des lignes de `orders`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 La condition `customer = ""` utilise des guillemets doubles : SQLite les accepte comme chaîne par
 tolérance, d'autres bases y verraient un nom de colonne. Rien n'est affiché ni journalisé.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

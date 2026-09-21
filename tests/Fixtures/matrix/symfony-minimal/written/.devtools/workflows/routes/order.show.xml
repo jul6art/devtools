@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.show" type="routes" schema-version="1">
   <title>GET /orders/{id}</title>
-  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/3"/>
   <source vcs="git" commit="f815420d31f9d5855dcfc2492de52193b10367b4" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="app_order_show" role="main">

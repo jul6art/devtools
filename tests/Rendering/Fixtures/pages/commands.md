@@ -1,47 +1,47 @@
 # Catalog import
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : a1b2c3d
+`command.app.import-catalog` · type: commands · last updated: 2026-09-16 · commit: a1b2c3d
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `app:import-catalog` (command) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `app:import-catalog` (command) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

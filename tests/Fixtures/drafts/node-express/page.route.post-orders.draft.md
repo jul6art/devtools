@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 `POST /orders` crée une commande à partir de `customer` et `product` du corps JSON et la renvoie avec le
 statut 201.
 
-## Préconditions
+## Preconditions
 
 Corps de requête en JSON (`Content-Type: application/json`).
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -25,23 +25,23 @@ sequenceDiagram
   R-->>C: 201 JSON
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Ajoute une commande au tableau en mémoire ; l'identifiant vaut la taille du tableau plus un.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `express.json()` analyse le corps avant le routeur.
 
-## Points d'attention
+## Points of attention
 
 Aucune validation : un corps sans `customer` crée une commande incomplète, et un corps absent lève une
 erreur sur `req.body.customer`. Aucun test ne couvre la création.
 
-## Changement
+## Change
 
 rédaction initiale

@@ -1,51 +1,51 @@
 # Migrations
-`data.migrations` · type : data · dernière mise à jour : 2026-09-16 · commit : 2620449
+`data.migrations` · type: data · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 Schéma de la base : une seule migration SQL crée la table `orders` (`id`, `customer`).
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `migrations` (migration) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `migrations` (migration) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 flowchart LR
   M["001_create_orders.sql"] --> T[("orders")]
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Table `orders` : `id INTEGER PRIMARY KEY`, `customer TEXT NOT NULL`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun outil de migration : le fichier est exécuté à la main, et par `OrderRepositoryTest` sur une base en
 mémoire.
 
-## Points d'attention
+## Points of attention
 
 Rien n'indique quelles migrations ont été jouées sur une base existante.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

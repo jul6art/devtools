@@ -1,29 +1,29 @@
 # Workflows — acme/plain-php
 
-Stack : Php · 5 workflows · dernier scan : 2026-09-16 (commit 2620449)
+Stack: Php · 5 workflows · last scan: 2026-09-16 (commit 2620449)
 
-[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances php-8](../../.devtools/knowledge/php-8.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge php-8](../../.devtools/knowledge/php-8.md)
 
 ## Routes (2)
 
-- [/index.php](routes/index.md) — `route.index` · MAJ 2026-09-16
-- [/orders/new.php](routes/orders.new.md) — `route.orders.new` · MAJ 2026-09-16
+- [/index.php](routes/index.md) — `route.index` · updated 2026-09-16
+- [/orders/new.php](routes/orders.new.md) — `route.orders.new` · updated 2026-09-16
 
-## Commandes (2)
+## Commands (2)
 
-- [cleanup](commands/cleanup.md) — `command.cleanup` · MAJ 2026-09-16
-- [import-orders](commands/import-orders.md) — `command.import-orders` · MAJ 2026-09-16
+- [cleanup](commands/cleanup.md) — `command.cleanup` · updated 2026-09-16
+- [import-orders](commands/import-orders.md) — `command.import-orders` · updated 2026-09-16
 
-## Données (1)
+## Data (1)
 
-- [Migrations](data/migrations.md) — `data.migrations` · MAJ 2026-09-16
+- [Migrations](data/migrations.md) — `data.migrations` · updated 2026-09-16
 
-Aucun workflow trouvé pour : Asynchrone, Interface, Intégrations.
+No workflow found for: Async, UI, Integrations.
 
-## À vérifier
+## To check
 
 —
 
-## Non couvert
+## Not covered
 
-- `lib/Mailer.php` — aucun workflow ne référence ce fichier
+- `lib/Mailer.php` — no workflow references this file

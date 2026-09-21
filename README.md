@@ -98,6 +98,11 @@ devtools:
 `<language pages="…"/>` of `.devtools/config.xml`, then this key, then English. The option is what a one-off
 run uses; the file is what the team commits.
 
+⚠️ **It decides the PROSE, not the template.** Section titles, table headers and the menu are English
+whatever the language: they are read back — by the draft validator, and by the inspection that keeps what
+Claude wrote — so they are part of the format, like the name of an XML element. A French project gets
+French sentences under English headings, which is what it already got from `Trigger` or `Routes`.
+
 These two keys are the bridge's only configuration, on purpose. What DevTools inspects, excludes and
 generates is configured in `.devtools/config.xml`, which both modes read — a setting that existed only
 in `config/packages/` would silently not apply to a standalone run.
@@ -275,7 +280,7 @@ higher, or unlimited, is left alone.
 
 `--force` naming a workflow that does not exist is a warning, not a silent no-op.
 
-⚠️ **An entry point that disappeared is marked as orphaned** and listed under the menu's *to check*; its page is
+⚠️ **An entry point that disappeared is marked *orphaned*** and listed under *To check* in the menu; its page is
 only deleted with `--prune`. A workflow whose tracking file says `<status>manual</status>` is never
 rewritten: when its code changes, the run warns instead.
 
@@ -482,7 +487,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
 | `<routes group="controller"/>` | `entry-point` | one page per route at the root of `routes/`, or the same pages laid out under a directory per controller, with an index |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
-| `<language pages="fr"/>` | `en` | language of the pages Claude writes; `--locale` wins over it |
+| `<language pages="fr"/>` | `en` | language Claude writes the prose of the pages in; `--locale` wins over it |
 | `<knowledge library="…" share="true"/>` | see *Knowledge* | where the shared stack knowledge lives, and whether a new sheet is deposited there |
 
 What a workflow contains
@@ -520,7 +525,7 @@ Existing tests are the test files that use the entry point or a file of its firs
 the same method are one workflow; `<groups>` in `config.xml` joins others.
 
 ⚠️ **What is wired at runtime is not seen**: a service fetched from the container by name, a template
-whose name is computed, a class built from a string. Such files appear under *not covered* in the menu
+whose name is computed, a class built from a string. Such files appear under *Not covered* in the menu
 — the analysis says what it missed rather than pretending.
 
 The pages
@@ -545,6 +550,12 @@ Claude writes: `Summary`, `Routes` (the table), `States`.
 | Related workflows | DevTools | dependencies and navigation, linked |
 | History | DevTools | one line per rewrite, never rewritten |
 
+⚠️ **These headings were French until v3** (`Résumé`, `Déclencheur`, `Parcours`…). A page written by an
+older DevTools is read through a map of the old headings to the new ones, so the prose Claude wrote comes
+back where it belongs and the page is rewritten in English at its next rewrite. Nothing to run to upgrade:
+the pages of a project switch one by one, as their facts change, and a project that never re-inspects keeps
+reading exactly what it has.
+
 ⚠️ **The page lists neither the files nor the tests of the workflow.** They live in its tracking file,
 `.devtools/workflows/<type>/<id>.xml`, which is what links the workflow to its code and what freshness
 reads. On a real project those two tables were 250 of a page's 344 lines.
@@ -552,7 +563,7 @@ reads. On a real project those two tables were 250 of a page's 344 lines.
 ⚠️ **A section DevTools writes is regenerated from the code on every rewrite** — a fact corrected by hand
 there is lost; fix it where it comes from. What Claude wrote survives factual rewrites. `workflows.md`
 lists every workflow by type with its counter, names in one line the types with no workflow at all, then
-two sections that are never hidden: *to check* (stale, orphaned, waiting for Claude) and *not covered*
+two sections that are never hidden: *To check* (stale, orphaned, waiting for Claude) and *Not covered*
 (source files no workflow reaches).
 
 ### Decisions — the diagram that answers "why this value?"
@@ -696,7 +707,7 @@ A page's **navigation** comes from its literal `href`, `action` and `header('Loc
 of the web directory. The binary of a console application is not a workflow of its own: its commands are.
 
 ⚠️ **A home-made router is one route.** A single front controller dispatching a table of routes shows as
-`route.index`, the rest under *not covered*. Document it through Claude instead, by pinning the adapter in
+`route.index`, the rest under *Not covered*. Document it through Claude instead, by pinning the adapter in
 `stack.xml`: `<adapter locked="true">claude</adapter>`.
 
 Projects without a native adapter

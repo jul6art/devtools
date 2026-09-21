@@ -118,7 +118,7 @@ final class InspectionPipelineTest extends TestCase
         self::assertSame(1, $report->count('orphaned'));
         self::assertFileExists($project.'/docs/workflows/routes/order.show.md');
         self::assertSame(TrackingStatus::Orphaned, new XmlTrackingStore(new WorkflowTypeRegistry())->read($project.'/.devtools/workflows/routes/order.show.xml')->status);
-        self::assertStringContainsString('[`route.order.show`](routes/order.show.md) — orphelin', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
+        self::assertStringContainsString('[`route.order.show`](routes/order.show.md) — orphaned', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }
 
     public function testASecondRunConcurrentWithTheFirstIsRefused(): void
@@ -192,7 +192,7 @@ final class InspectionPipelineTest extends TestCase
 
         self::assertStringContainsString('## Routes', $readme);
         self::assertStringContainsString('(new.md)', $readme, 'The table links to the page of each route.');
-        self::assertStringContainsString('## Résumé
+        self::assertStringContainsString('## Summary
 
 —', $readme, 'Without Claude the summary stays empty.');
 

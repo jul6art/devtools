@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 `bin/cleanup`, déclaré dans `bin` de `composer.json`, supprime les commandes dont le client est vide.
 
-## Préconditions
+## Preconditions
 
 La table `orders` existe.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -22,23 +22,23 @@ sequenceDiagram
   S->>B: DELETE FROM orders WHERE customer = ""
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Supprime des lignes de `orders`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 La condition `customer = ""` utilise des guillemets doubles : SQLite les accepte comme chaîne par
 tolérance, d'autres bases y verraient un nom de colonne. Rien n'est affiché ni journalisé.
 
-## Changement
+## Change
 
 rédaction initiale

@@ -16,7 +16,7 @@ enum TrackingStatus: string
     case Manual = 'manual';
 
     /**
-     * Whether the workflow belongs in the "À vérifier" section of the menu.
+     * Whether the workflow belongs in the "To check" section of the menu.
      */
     public function needsAttention(): bool
     {

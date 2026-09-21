@@ -13,9 +13,9 @@ namespace Jul6Art\DevTools\Rendering;
  */
 enum GroupPageSection: string
 {
-    case Summary = 'Résumé';
+    case Summary = 'Summary';
     case Routes = 'Routes';
-    case States = 'États';
+    case States = 'States';
 
     /**
      * Claude writes it; in factual mode it holds "—".

@@ -11,9 +11,9 @@ use Jul6Art\DevTools\Rendering\PageSection;
  */
 final readonly class PageDraft
 {
-    public const string PRECONDITIONS = 'Préconditions';
+    public const string PRECONDITIONS = 'Preconditions';
 
-    public const string CHANGE = 'Changement';
+    public const string CHANGE = 'Change';
 
     /**
      * @param array<string, string>                            $metadata front-matter

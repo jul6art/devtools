@@ -1,6 +1,6 @@
 # Symfony 8
 
-## Cycle d'entrée
+## Entry cycle
 
 **HTTP.** `public/index.php` hands the request to the Runtime component, which boots the `Kernel`
 (`MicroKernelTrait`) and calls `HttpKernel::handle()`:
@@ -23,7 +23,7 @@ services tagged `console.command`, loaded lazily. Events: `console.command`, `co
 envelope to a transport according to `framework.messenger.routing`, or `HandleMessageMiddleware` calls the
 handlers synchronously. Workers (`messenger:consume`) receive and handle asynchronously.
 
-## Mécanismes d'extension
+## Extension mechanisms
 
 - **Event listeners and subscribers** — `#[AsEventListener]` on a class or a method, or a class
   implementing `EventSubscriberInterface`. Higher priority runs first; Symfony's own listeners sit at known
@@ -35,7 +35,7 @@ handlers synchronously. Workers (`messenger:consume`) receive and handle asynchr
 - **Twig extensions and components** — `#[AsTwigFilter]` / `#[AsTwigFunction]`, `#[AsTwigComponent]`,
   `#[AsLiveComponent]` (Symfony UX).
 
-## Injection de dépendances et conventions de nommage
+## Dependency injection and naming conventions
 
 `config/services.yaml` (or `.php`) declares `App\` from `src/` with `autowire` and `autoconfigure`:
 constructor arguments are injected by type, and interfaces or attributes add tags automatically
@@ -44,7 +44,7 @@ never autowired: bind them (`#[Autowire('%env(X)%')]`, `bind:`). Several impleme
 are chosen by argument name (`WorkflowInterface $orderStateMachine` → the `order` state machine) or
 `#[Target]`. Services are private by default; only the container itself and tests reach them.
 
-## Points d'entrée par type
+## Entry points by type
 
 ### routes
 `#[Route]` on controller methods (and on the class for a prefix), imported by `config/routes.yaml`
@@ -78,7 +78,7 @@ Doctrine migrations (`migrations/`), fixtures (`src/DataFixtures/`), imports usu
 (`static::getContainer()`, private services included); `WebTestCase` adds `createClient()` and response
 assertions; Panther drives a real browser. The `test` environment reads `.env.test`.
 
-## Pièges connus
+## Known traps
 
 - **XML configuration no longer exists** in Symfony 8 for services and routes: YAML, PHP or attributes only.
 - **A listener's priority decides what it sees**: before the router (priority > 32) there is no route yet;

@@ -1,47 +1,47 @@
 # GET /orders
-`route.get-orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : —
+`route.get-orders` · type: routes · last updated: 2026-09-16 · commit: —
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /orders` (`GET /orders`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `GET /orders` (`GET /orders`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

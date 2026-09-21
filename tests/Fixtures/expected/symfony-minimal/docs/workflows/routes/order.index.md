@@ -1,23 +1,23 @@
 # GET /orders
-`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : —
+`route.order.index` · type: routes · last updated: 2026-09-16 · commit: —
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /orders` (`app_order_index`) |
-| Sécurité | `ROLE_USER` |
-| Préconditions | — |
+| Entry point | `GET /orders` (`app_order_index`) |
+| Security | `ROLE_USER` |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 —
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -28,31 +28,31 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
-| Mécanisme | Événement | Priorité | Écrit |
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.new`](order.new.md) — navigation
 - [`route.order.show`](order.show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

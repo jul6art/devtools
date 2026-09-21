@@ -66,7 +66,7 @@ final class ClaudeDrivenTest extends TestCase
 
         self::assertSame(['route.get-health', 'route.get-orders', 'route.post-orders'], $this->ids($project));
         self::assertSame(3, $report->count('created'));
-        self::assertStringContainsString('confiance moyenne', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
+        self::assertStringContainsString('confidence medium', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
 
         foreach (glob($project.'/.devtools/workflows/*/*.md') ?: [] as $page) {
             self::assertSame([], new PageParser()->parse((string) file_get_contents($page))->conformityProblems(), $page);

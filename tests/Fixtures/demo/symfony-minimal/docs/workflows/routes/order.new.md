@@ -1,20 +1,20 @@
 # GET|POST /orders/new
-`route.order.new` · type : routes · dernière mise à jour : 2026-09-17 · commit : —
+`route.order.new` · type: routes · last updated: 2026-09-17 · commit: —
 
-## Résumé
+## Summary
 
 Crée une commande à partir du formulaire `OrderType` : un opérateur saisit le client et le produit, la
 commande est tarifée par `OrderPricing` puis enregistrée, et l'opérateur est redirigé vers sa fiche.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET\|POST /orders/new` (`app_order_new`) |
-| Sécurité | `ROLE_USER`, `ROLE_OPERATOR` |
-| Préconditions | Le catalogue de produits est chargé. |
+| Entry point | `GET\|POST /orders/new` (`app_order_new`) |
+| Security | `ROLE_USER`, `ROLE_OPERATOR` |
+| Preconditions | Le catalogue de produits est chargé. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -31,7 +31,7 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -50,7 +50,7 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Décisions
+## Decisions
 
 **`App\Entity\Order::status`**
 
@@ -73,23 +73,23 @@ flowchart TD
   d1 -->|tout autre pays| v3["currency = EUR"]
 ```
 
-## Données
+## Data
 
 Écrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` fixe la locale à chaque requête avant le contrôleur.
 
-## Points d'attention
+## Points of attention
 
 Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le renseigne.
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.show`](order.show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

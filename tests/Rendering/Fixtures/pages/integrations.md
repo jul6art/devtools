@@ -1,47 +1,47 @@
 # stripe
-`integration.stripe` · type : integrations · dernière mise à jour : 2026-09-16 · commit : a1b2c3d
+`integration.stripe` · type: integrations · last updated: 2026-09-16 · commit: a1b2c3d
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `stripe` (integration) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `stripe` (integration) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

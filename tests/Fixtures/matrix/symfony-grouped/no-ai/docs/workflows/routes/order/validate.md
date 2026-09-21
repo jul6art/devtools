@@ -1,23 +1,23 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type : routes · dernière mise à jour : 2026-09-16 · commit : f815420
+`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: f815420
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `POST /orders/{id}/validate` (`app_order_validate`) |
-| Sécurité | `ROLE_USER`, `ROLE_MANAGER` |
-| Préconditions | — |
+| Entry point | `POST /orders/{id}/validate` (`app_order_validate`) |
+| Security | `ROLE_USER`, `ROLE_MANAGER` |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 —
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -36,30 +36,30 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
-| Mécanisme | Événement | Priorité | Écrit |
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.show`](show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

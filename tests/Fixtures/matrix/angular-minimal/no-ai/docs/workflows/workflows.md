@@ -1,15 +1,15 @@
 # Workflows — acme-back-office
 
-Stack : Angular 18.2 · 0 workflows · dernier scan : 2026-09-16 (commit 973d403)
+Stack: Angular 18.2 · 0 workflows · last scan: 2026-09-16 (commit 973d403)
 
-[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances angular-18](../../.devtools/knowledge/angular-18.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge angular-18](../../.devtools/knowledge/angular-18.md)
 
-Aucun workflow trouvé pour : Routes, Commandes, Asynchrone, Interface, Intégrations, Données.
+No workflow found for: Routes, Commands, Async, UI, Integrations, Data.
 
-## À vérifier
+## To check
 
 —
 
-## Non couvert
+## Not covered
 
 —

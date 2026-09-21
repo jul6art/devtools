@@ -103,7 +103,7 @@ final class KnowledgeTest extends TestCase
     public static function invalidKnowledge(): iterable
     {
         yield 'no title' => [static fn (string $file): string => (string) preg_replace('/^# Symfony 8\n/', '', $file), 'title'];
-        yield 'missing section' => [static fn (string $file): string => (string) preg_replace('/## Tests\n.*?(?=## Pièges)/s', '', $file), '"Tests" is missing'];
+        yield 'missing section' => [static fn (string $file): string => (string) preg_replace('/## Tests\n.*?(?=## Known traps)/s', '', $file), '"Tests" is missing'];
         yield 'empty sources' => [static fn (string $file): string => (string) preg_replace('/## Sources\n.*$/s', "## Sources\n\n—\n", $file), 'Sources'];
         yield 'sources without a link' => [static fn (string $file): string => (string) preg_replace('/## Sources\n.*$/s', "## Sources\n\nThe official documentation, from memory.\n", $file), 'one URL per line'];
     }
@@ -134,7 +134,7 @@ final class KnowledgeTest extends TestCase
 
         self::assertCount(5, glob($project.'/.devtools/pending/page.*.brief.xml') ?: []);
         self::assertSame('.devtools/knowledge/symfony-99.md', new XmlPageBriefStore()->read($project.'/.devtools/pending/page.route.order.new.brief.xml')->knowledgePath);
-        self::assertStringContainsString('[Connaissances symfony-99](../../.devtools/knowledge/symfony-99.md)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
+        self::assertStringContainsString('[Knowledge symfony-99](../../.devtools/knowledge/symfony-99.md)', (string) file_get_contents($project.'/docs/workflows/workflows.md'));
     }
 
     public function testAKnowledgeDraftBreakingTheCanvasIsRefused(): void
@@ -147,7 +147,7 @@ final class KnowledgeTest extends TestCase
 
         $result = new DraftApplier()->apply(new ProjectRoot($project));
 
-        self::assertStringContainsString('"Cycle d\'entrée" is missing', implode("\n", $result->refused['knowledge.symfony-99'] ?? []));
+        self::assertStringContainsString('"Entry cycle" is missing', implode("\n", $result->refused['knowledge.symfony-99'] ?? []));
         self::assertFileDoesNotExist($project.'/.devtools/knowledge/symfony-99.md');
     }
 

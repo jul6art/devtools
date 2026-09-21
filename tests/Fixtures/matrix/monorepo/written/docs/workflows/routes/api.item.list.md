@@ -1,20 +1,20 @@
 # GET /api/items
-`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
+`route.api.item.list` · type: routes · last updated: 2026-09-16 · commit: 6ecdbd0
 
-## Résumé
+## Summary
 
 Point d'API `GET /api/items` de l'application `api` : `ItemController::list()` répond une liste JSON,
 aujourd'hui toujours vide.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /api/items` (`api_item_list`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `GET /api/items` (`api_item_list`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -24,31 +24,31 @@ sequenceDiagram
   I-->>C: 200 []
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune : la réponse est un tableau vide construit en dur.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun listener ni règle de sécurité n'est déclaré dans `api/`.
 
-## Points d'attention
+## Points of attention
 
 Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du monorepo ne sont pas reliés.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

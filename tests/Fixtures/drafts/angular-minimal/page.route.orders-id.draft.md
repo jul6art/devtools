@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Affiche une commande : `OrderDetailComponent` lit l'identifiant dans l'URL et charge la commande via
 `OrderService.get(id)`, puis affiche le nom du client.
 
-## Préconditions
+## Preconditions
 
 La commande existe côté API ; on arrive en général depuis la liste `/orders`.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -28,23 +28,23 @@ sequenceDiagram
   D-->>U: nom du client
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit une `Order` (`id`, `customer`) depuis l'API HTTP ; aucune écriture.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun intercepteur HTTP ni garde de route n'est déclaré dans `src/app`.
 
-## Points d'attention
+## Points of attention
 
 L'identifiant est lu dans le snapshot de la route : naviguer d'une fiche à une autre sans recréer le
 composant n'actualise pas la commande. Un identifiant non numérique donne `NaN` et appelle `/api/orders/NaN`.
 
-## Changement
+## Change
 
 rédaction initiale

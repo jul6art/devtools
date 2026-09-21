@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Point d'API `GET /api/items` de l'application `api` : `ItemController::list()` répond une liste JSON,
 aujourd'hui toujours vide.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -22,22 +22,22 @@ sequenceDiagram
   I-->>C: 200 []
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune : la réponse est un tableau vide construit en dur.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun listener ni règle de sécurité n'est déclaré dans `api/`.
 
-## Points d'attention
+## Points of attention
 
 Le front `/items` n'appelle pas encore ce point d'API : les deux côtés du monorepo ne sont pas reliés.
 
-## Changement
+## Change
 
 rédaction initiale

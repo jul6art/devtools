@@ -1,21 +1,21 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-17 · commit : —
+`ui.cart-summary` · type: ui · last updated: 2026-09-17 · commit: —
 
-## Résumé
+## Summary
 
 Composant live `CartSummary` : affiche le nombre de commandes et le recalcule à la demande, par l'action live
 `refresh`, sans recharger la page.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `App\Twig\Components\CartSummary` (component) |
+| Entry point | `App\Twig\Components\CartSummary` (component) |
 | Live | `true` |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -30,33 +30,33 @@ sequenceDiagram
   C-->>U: rendu de components/CartSummary.html.twig
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit les commandes dans `src/Repository/OrderRepository.php` ; la propriété `count` est une LiveProp modifiable
 côté client.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Route `/_components/{_live_component}/{_live_action}` fournie par LiveComponentBundle.
 
-## Points d'attention
+## Points of attention
 
 `count` est `writable` : le client peut le modifier sans passer par `refresh`. Au premier rendu il vaut 0 tant
 que `refresh` n'a pas été appelé.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -20,7 +20,7 @@ use Jul6Art\DevTools\Tracking\TrackingStatus;
  * Renders `workflows.md`, the home page and menu of the documentation (specs § 4.7, ADR-0043).
  *
  * A type with no workflow is named in one line at the end rather than given an empty section of its own.
- * "À vérifier" and "Non couvert" are always present, at zero too: they are the guard rails that make
+ * "To check" and "Not covered" are always present, at zero too: they are the guard rails that make
  * visible what the analysis did not understand.
  */
 final class MenuRenderer
@@ -43,7 +43,7 @@ final class MenuRenderer
             '# Workflows — '.$stacks->projectName,
             '',
             \sprintf(
-                'Stack : %s · %d workflows · dernier scan : %s%s',
+                'Stack: %s · %d workflows · last scan: %s%s',
                 implode(' + ', array_map(self::stack(...), $stacks->stacks)),
                 \count($index->entries),
                 $index->scannedAt->format('Y-m-d'),
@@ -51,9 +51,9 @@ final class MenuRenderer
             ),
             '',
             implode(' · ', [
-                MarkdownWriter::link('Vue d\'ensemble', $machinery('graph/workflows.mermaid')),
+                MarkdownWriter::link('Overview', $machinery('graph/workflows.mermaid')),
                 MarkdownWriter::link('Stack', $machinery('stack.xml')),
-                ...array_map(static fn (StackProfile $stack): string => MarkdownWriter::link('Connaissances '.$stack->knowledgeKey, $machinery('knowledge/'.$stack->knowledgeKey.'.md')), array_values(array_filter($stacks->stacks, static fn (StackProfile $stack): bool => null !== $stack->knowledgeKey))),
+                ...array_map(static fn (StackProfile $stack): string => MarkdownWriter::link('Knowledge '.$stack->knowledgeKey, $machinery('knowledge/'.$stack->knowledgeKey.'.md')), array_values(array_filter($stacks->stacks, static fn (StackProfile $stack): bool => null !== $stack->knowledgeKey))),
             ]),
         ];
 
@@ -77,7 +77,7 @@ final class MenuRenderer
         }
 
         if ([] !== $empty) {
-            $lines = [...$lines, '', \sprintf('Aucun workflow trouvé pour : %s.', implode(', ', $empty))];
+            $lines = [...$lines, '', \sprintf('No workflow found for: %s.', implode(', ', $empty))];
         }
 
         $pending = array_map(static fn (WorkflowId $id): string => $id->value, $pendingRedaction);
@@ -87,15 +87,15 @@ final class MenuRenderer
             $reasons = [];
 
             if (TrackingStatus::Stale === $entry->status) {
-                $reasons[] = 'périmé';
+                $reasons[] = 'stale';
             }
 
             if (TrackingStatus::Orphaned === $entry->status) {
-                $reasons[] = 'orphelin : le point d\'entrée a disparu';
+                $reasons[] = 'orphaned: the entry point is gone';
             }
 
             if (\in_array($entry->id->value, $pending, true)) {
-                $reasons[] = 'rédaction en attente';
+                $reasons[] = 'waiting for Claude';
             }
 
             if ([] !== $reasons) {
@@ -103,11 +103,11 @@ final class MenuRenderer
             }
         }
 
-        $lines = [...$lines, '', '## À vérifier', '', ...([] === $attention ? [MarkdownWriter::EMPTY] : $attention)];
+        $lines = [...$lines, '', '## To check', '', ...([] === $attention ? [MarkdownWriter::EMPTY] : $attention)];
 
         $uncoveredPaths = array_map(static fn (FileRef $file): string => $file->path, $uncovered);
         sort($uncoveredPaths, \SORT_STRING);
-        $lines = [...$lines, '', '## Non couvert', '', ...([] === $uncoveredPaths ? [MarkdownWriter::EMPTY] : array_map(static fn (string $path): string => '- '.MarkdownWriter::code($path).' — aucun workflow ne référence ce fichier', $uncoveredPaths))];
+        $lines = [...$lines, '', '## Not covered', '', ...([] === $uncoveredPaths ? [MarkdownWriter::EMPTY] : array_map(static fn (string $path): string => '- '.MarkdownWriter::code($path).' — no workflow references this file', $uncoveredPaths))];
 
         return implode("\n", $lines)."\n";
     }
@@ -185,7 +185,7 @@ final class MenuRenderer
         }
 
         return \sprintf(
-            '- %s — %s · %d %s · MAJ %s',
+            '- %s — %s · %d %s · updated %s',
             MarkdownWriter::link($group->title, $group->page()),
             MarkdownWriter::code($group->directory),
             \count($members),
@@ -206,11 +206,11 @@ final class MenuRenderer
     private static function entry(IndexEntry $entry): string
     {
         return \sprintf(
-            '- %s — %s · MAJ %s%s',
+            '- %s — %s · updated %s%s',
             MarkdownWriter::link($entry->title, $entry->page()),
             MarkdownWriter::code($entry->id->value),
             $entry->updated->format('Y-m-d'),
-            Confidence::High === $entry->confidence ? '' : ' · confiance '.(Confidence::Medium === $entry->confidence ? 'moyenne' : 'faible'),
+            Confidence::High === $entry->confidence ? '' : ' · confidence '.(Confidence::Medium === $entry->confidence ? 'medium' : 'low'),
         );
     }
 }

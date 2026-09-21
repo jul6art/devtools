@@ -1,19 +1,19 @@
 # /items
-`route.items` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
+`route.items` · type: routes · last updated: 2026-09-16 · commit: 6ecdbd0
 
-## Résumé
+## Summary
 
 Page `/items` du front Angular : la route rend `ItemListComponent`, qui n'affiche pour l'instant qu'un titre.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/items` (`items`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `/items` (`items`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -25,31 +25,31 @@ sequenceDiagram
   L-->>U: « Items »
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune : le composant ne charge rien.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun garde ni intercepteur n'est déclaré dans `front/src/app`.
 
-## Points d'attention
+## Points of attention
 
 Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est un squelette.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

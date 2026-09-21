@@ -1,20 +1,20 @@
 # /index.php
-`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 2620449
+`route.index` · type: routes · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 Page d'accueil du back-office : liste le client de chaque commande, lue par `OrderRepository::all()`, et
 propose de créer une commande (bouton de formulaire et lien vers `/orders/new.php`).
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/index.php` (`index`) |
-| Sécurité | — |
-| Préconditions | La base SQLite var/app.sqlite existe et contient la table `orders` (migration `001_create_orders.sql`). |
+| Entry point | `/index.php` (`index`) |
+| Security | — |
+| Preconditions | La base SQLite var/app.sqlite existe et contient la table `orders` (migration `001_create_orders.sql`). |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -32,7 +32,7 @@ sequenceDiagram
   P-->>U: liste + accès à /orders/new.php
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -43,28 +43,28 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit la colonne `customer` de la table `orders` ; aucune écriture.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit une connexion PDO unique par requête (variable statique de `db()`).
 
-## Points d'attention
+## Points of attention
 
 La connexion vise var/app.sqlite en dur : aucune configuration par environnement. Aucune pagination ni
 tri, et aucune authentification ne protège la page.
 
-## Workflows liés
+## Related workflows
 
 - [`route.orders.new`](orders.new.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

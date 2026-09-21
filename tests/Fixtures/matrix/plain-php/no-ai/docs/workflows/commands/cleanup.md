@@ -1,47 +1,47 @@
 # cleanup
-`command.cleanup` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
+`command.cleanup` · type: commands · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `cleanup` (command) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `cleanup` (command) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

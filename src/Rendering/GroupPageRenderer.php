@@ -34,7 +34,7 @@ final class GroupPageRenderer
         $lines = [
             '# '.$group->title,
             \sprintf(
-                '%s · type : %s · %d %s · %s',
+                '%s · type: %s · %d %s · %s',
                 MarkdownWriter::code($group->directory),
                 $workflows[0]->type->name,
                 \count($workflows),
@@ -46,7 +46,7 @@ final class GroupPageRenderer
         foreach (GroupPageSection::cases() as $section) {
             $content = $factual[$section->value];
 
-            if ($section->writtenByClaude() && null !== ($sections = $written?->sections[$section->value] ?? null)) {
+            if ($section->writtenByClaude() && null !== ($sections = $written?->sectionNamed($section->value))) {
                 $content = $sections;
             }
 
@@ -71,7 +71,7 @@ final class GroupPageRenderer
         $lines = ['# '.$page->title, $page->header];
 
         foreach (GroupPageSection::cases() as $section) {
-            $content = GroupPageSection::Summary === $section ? $summary : ($page->sections[$section->value] ?? MarkdownWriter::EMPTY);
+            $content = GroupPageSection::Summary === $section ? $summary : ($page->sectionNamed($section->value) ?? MarkdownWriter::EMPTY);
 
             $lines[] = '';
             $lines[] = '## '.$section->value;
@@ -105,7 +105,7 @@ final class GroupPageRenderer
             ];
         }
 
-        return MarkdownWriter::table(['Route', 'Chemin', 'Méthodes', 'Sécurité'], $rows);
+        return MarkdownWriter::table(['Route', 'Path', 'Methods', 'Security'], $rows);
     }
 
     /**

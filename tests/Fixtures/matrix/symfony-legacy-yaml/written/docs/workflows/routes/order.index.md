@@ -1,20 +1,20 @@
 # GET /orders
-`route.order.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`route.order.index` · type: routes · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 Liste les commandes existantes. La page affiche le résumé du panier (composant live `CartSummary`), un lien de
 création et, pour chaque commande, un lien vers sa fiche.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /orders` (`app_order_index`) |
-| Sécurité | `ROLE_USER` |
-| Préconditions | Utilisateur authentifié (ROLE_USER, imposé par access_control sur ^/orders). |
+| Entry point | `GET /orders` (`app_order_index`) |
+| Security | `ROLE_USER` |
+| Preconditions | Utilisateur authentifié (ROLE_USER, imposé par access_control sur ^/orders). |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -29,7 +29,7 @@ sequenceDiagram
   T-->>U: liste, liens app_order_new et app_order_show
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -40,29 +40,29 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit toutes les `Order` du dépôt en mémoire `src/Repository/OrderRepository.php`. N'écrit rien.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request` ; access_control ROLE_USER sur `^/orders`.
 
-## Points d'attention
+## Points of attention
 
 Pas de pagination : le dépôt renvoie toutes les commandes. Le composant `CartSummary` rendu dans la page a son
 propre workflow (`ui.cart-summary`).
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.new`](order.new.md) — navigation
 - [`route.order.show`](order.show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

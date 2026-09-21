@@ -108,7 +108,7 @@ final class PageRendererTest extends TestCase
         self::assertSame([], $parsed->conformityProblems());
         self::assertSame(array_map(static fn (PageSection $section): string => $section->value, PageSection::cases()), array_keys($parsed->sections));
         self::assertStringStartsWith('# ', $page);
-        self::assertMatchesRegularExpression('/^`[a-z0-9.-]+` · type : [a-z]+ · dernière mise à jour : \d{4}-\d{2}-\d{2} · commit : [0-9a-f]{7}$/m', $page);
+        self::assertMatchesRegularExpression('/^`[a-z0-9.-]+` · type: [a-z]+ · last updated: \d{4}-\d{2}-\d{2} · commit: [0-9a-f]{7}$/m', $page);
 
         foreach ($parsed->sections as $name => $content) {
             self::assertNotSame('', trim($content), \sprintf('The section "%s" is never empty: it holds "—".', $name));
@@ -118,11 +118,11 @@ final class PageRendererTest extends TestCase
     public function testSectionsOutOfOrderAreAConformityProblem(): void
     {
         $page = new PageRenderer()->render(RenderingFixtures::workflows()['commands'], RenderingFixtures::history(), RenderingFixtures::context());
-        $swapped = str_replace(["## Données\n", "## Résumé\n"], ["## __TMP__\n", "## Données\n"], $page);
-        $swapped = str_replace('## __TMP__', '## Résumé', $swapped);
+        $swapped = str_replace(["## Data\n", "## Summary\n"], ["## __TMP__\n", "## Data\n"], $page);
+        $swapped = str_replace('## __TMP__', '## Summary', $swapped);
 
         self::assertSame(['The sections are not in the order of the template.'], new PageParser()->parse($swapped)->conformityProblems());
-        self::assertSame(['The section "Historique" is missing.'], new PageParser()->parse(substr($page, 0, (int) strpos($page, '## Historique')))->conformityProblems());
+        self::assertSame(['The section "History" is missing.'], new PageParser()->parse(substr($page, 0, (int) strpos($page, '## History')))->conformityProblems());
     }
 
     /**
@@ -130,11 +130,11 @@ final class PageRendererTest extends TestCase
      */
     public function testAHeadingInsideACodeBlockIsContentNotASection(): void
     {
-        $page = str_replace("## Données\n\n—", "## Données\n\n```php\n## not a section\n```", new PageRenderer()->render(RenderingFixtures::workflows()['commands'], RenderingFixtures::history(), RenderingFixtures::context()));
+        $page = str_replace("## Data\n\n—", "## Data\n\n```php\n## not a section\n```", new PageRenderer()->render(RenderingFixtures::workflows()['commands'], RenderingFixtures::history(), RenderingFixtures::context()));
         $parsed = new PageParser()->parse($page);
 
         self::assertSame([], $parsed->conformityProblems());
-        self::assertSame("```php\n## not a section\n```", $parsed->sections['Données']);
+        self::assertSame("```php\n## not a section\n```", $parsed->sections['Data']);
     }
 
     public function testParsingARenderedPageGivesBackEverySection(): void
@@ -142,9 +142,9 @@ final class PageRendererTest extends TestCase
         $page = new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
         $parsed = new PageParser()->parse($page);
 
-        self::assertSame('—', $parsed->sections['Résumé']);
-        self::assertStringContainsString('| Point d\'entrée | `GET\|POST /orders/new` (`app_order_new`) |', $parsed->sections['Déclencheur']);
-        self::assertSame('`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : a1b2c3d', $parsed->header);
+        self::assertSame('—', $parsed->sections['Summary']);
+        self::assertStringContainsString('| Entry point | `GET\|POST /orders/new` (`app_order_new`) |', $parsed->sections['Trigger']);
+        self::assertSame('`route.order.new` · type: routes · last updated: 2026-09-16 · commit: a1b2c3d', $parsed->header);
     }
 
     public function testAHandEditInADevToolsSectionIsDetected(): void
@@ -152,7 +152,7 @@ final class PageRendererTest extends TestCase
         $renderer = new PageRenderer();
         $page = $renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
         $edited = str_replace('n3["app_order_show"]', 'n3["app_order_elsewhere"]', $page);
-        $edited = str_replace("## Résumé\n\n—", "## Résumé\n\nWritten by Claude.", $edited);
+        $edited = str_replace("## Summary\n\n—", "## Summary\n\nWritten by Claude.", $edited);
 
         self::assertSame([PageSection::Navigation], new PageParser()->parse($edited)->devToolsSectionsDifferingFrom(new PageParser()->parse($page)));
     }
@@ -161,10 +161,10 @@ final class PageRendererTest extends TestCase
     {
         $renderer = new PageRenderer();
         $written = new PageParser()->parse(strtr($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context()), [
-            "## Résumé\n\n—" => "## Résumé\n\nCrée une commande.",
-            "## Données\n\n—" => "## Données\n\nÉcrit `Order`.",
-            "## Points d'attention\n\n—" => "## Points d'attention\n\nLe prix est recalculé.",
-            '| Préconditions | — |' => '| Préconditions | catalogue chargé |',
+            "## Summary\n\n—" => "## Summary\n\nCrée une commande.",
+            "## Data\n\n—" => "## Data\n\nÉcrit `Order`.",
+            "## Points of attention\n\n—" => "## Points of attention\n\nLe prix est recalculé.",
+            '| Preconditions | — |' => '| Preconditions | catalogue chargé |',
         ]));
         $written = $written->withSection(PageSection::Journey, "```mermaid\nsequenceDiagram\n  U->>C: POST /orders/new\n```");
         $written = $written->withSection(PageSection::Decisions, "**`App\\Entity\\Order::status`**\n\n```mermaid\nflowchart TD\n  d1{\"sans référence\"}\n```");
@@ -176,20 +176,58 @@ final class PageRendererTest extends TestCase
             self::assertSame($written->sections[$section->value], $rewritten->sections[$section->value], $section->value);
         }
 
-        self::assertStringContainsString('| Préconditions | catalogue chargé |', $rewritten->sections['Déclencheur']);
+        self::assertStringContainsString('| Preconditions | catalogue chargé |', $rewritten->sections['Trigger']);
     }
 
     /**
-     * Without Claude, "Parcours" and "Décisions" hold "—": a flowchart of the files reached restated the
+     * ⚠️ **A page written before v3 carries French headings, and its prose must survive the upgrade.**
+     * Re-rendering reads the sections of the CURRENT page: a heading nobody recognises is a section that
+     * comes back empty, so without the legacy map the first inspection after the upgrade would have
+     * emptied every page of every project — silently, since a rewrite reports a rewrite either way.
+     */
+    public function testAPageWrittenBeforeTheEnglishTemplateKeepsItsProse(): void
+    {
+        $renderer = new PageRenderer();
+
+        // La prose d'abord, les titres ensuite : `strtr` ne repasse jamais sur ce qu'il vient d'écrire.
+        $written = strtr($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context()), [
+            "## Summary\n\n—" => "## Summary\n\nCrée une commande.",
+            "## Data\n\n—" => "## Data\n\nÉcrit `Order`.",
+            '| Preconditions | — |' => '| Preconditions | catalogue chargé |',
+        ]);
+        $legacy = new PageParser()->parse(strtr($written, [
+            '## Summary' => '## Résumé',
+            '## Trigger' => '## Déclencheur',
+            '## Journey' => '## Parcours',
+            '## Navigation / states' => '## Navigation / états',
+            '## Decisions' => '## Décisions',
+            '## Data' => '## Données',
+            '## Cross-cutting mechanisms' => '## Mécanismes transverses',
+            '## Points of attention' => "## Points d'attention",
+            '## Related workflows' => '## Workflows liés',
+            '## History' => '## Historique',
+            '| Preconditions |' => '| Préconditions |',
+        ]));
+
+        $rewritten = new PageParser()->parse($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $legacy));
+
+        self::assertSame(array_map(static fn (PageSection $section): string => $section->value, PageSection::cases()), array_keys($rewritten->sections), 'The page comes back with the English headings.');
+        self::assertSame('Crée une commande.', $rewritten->sections['Summary']);
+        self::assertSame('Écrit `Order`.', $rewritten->sections['Data']);
+        self::assertStringContainsString('| Preconditions | catalogue chargé |', $rewritten->sections['Trigger'], 'The preconditions cell is read from the French row and written back under the English label.');
+    }
+
+    /**
+     * Without Claude, "Journey" and "Decisions" hold "—": a flowchart of the files reached restated the
      * table this ADR removed, and a decision diagram is Claude's to draw (ADR-0043).
      */
     public function testWithoutAWrittenPageTheSectionsClaudeOwnsAreEmpty(): void
     {
         $parsed = new PageParser()->parse(new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context()));
 
-        self::assertSame('—', $parsed->sections['Parcours']);
-        self::assertSame('—', $parsed->sections['Décisions']);
-        self::assertStringContainsString('stateDiagram-v2', $parsed->sections['Navigation / états'], 'The state machine stays factual.');
+        self::assertSame('—', $parsed->sections['Journey']);
+        self::assertSame('—', $parsed->sections['Decisions']);
+        self::assertStringContainsString('stateDiagram-v2', $parsed->sections['Navigation / states'], 'The state machine stays factual.');
     }
 
     /**
@@ -298,7 +336,7 @@ final class PageRendererTest extends TestCase
         $workflow = new Workflow(new WorkflowId('command.app.purge'), WorkflowType::commands(), 'app:purge', new EntryPoint('command', 'app:purge', new FileRef('src/Command/PurgeCommand.php')));
         $parsed = new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingContext::of([$workflow])));
 
-        self::assertSame('—', $parsed->sections['Navigation / états']);
-        self::assertSame('—', $parsed->sections['Mécanismes transverses']);
+        self::assertSame('—', $parsed->sections['Navigation / states']);
+        self::assertSame('—', $parsed->sections['Cross-cutting mechanisms']);
     }
 }

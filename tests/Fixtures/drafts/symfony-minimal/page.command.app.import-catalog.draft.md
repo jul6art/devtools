@@ -3,15 +3,15 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Commande console d'import du catalogue : ajoute le produit « Widget XL » au dépôt des produits.
 
-## Préconditions
+## Preconditions
 
 —
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -23,23 +23,23 @@ sequenceDiagram
   C-->>O: code de sortie 0
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit un `Product` dans `src/Repository/ProductRepository.php`, en mémoire.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun effet durable. Le produit est
 écrit en dur ; aucun fichier de catalogue n'est lu.
 
-## Changement
+## Change
 
 rédaction initiale

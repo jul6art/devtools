@@ -1,47 +1,47 @@
 # GET /api/items
-`route.api.item.list` · type : routes · dernière mise à jour : 2026-09-16 · commit : 6ecdbd0
+`route.api.item.list` · type: routes · last updated: 2026-09-16 · commit: 6ecdbd0
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /api/items` (`api_item_list`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `GET /api/items` (`api_item_list`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

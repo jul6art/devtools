@@ -1,21 +1,21 @@
 # GET /health
-`route.health` · type : routes · dernière mise à jour : 2026-09-17 · commit : —
+`route.health` · type: routes · last updated: 2026-09-17 · commit: —
 
-## Résumé
+## Summary
 
 Point de santé de l'application, joignable sur `/health` et sur `/status` : répond `{"status": "ok"}` en JSON,
 sans authentification, pour la supervision.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /health` (`app_health`) |
+| Entry point | `GET /health` (`app_health`) |
 | Satellite | `GET /status` (`app_status`) |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -25,32 +25,32 @@ sequenceDiagram
   C-->>S: 200 {"status": "ok"}
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune donnée lue ni écrite.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request`, sans effet sur une réponse JSON ; aucune règle d'accès.
 
-## Points d'attention
+## Points of attention
 
 Répond « ok » sans rien vérifier (ni dépendance, ni stockage) : il dit que PHP répond, pas que l'application
 fonctionne.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -1,23 +1,23 @@
 # /index.php
-`route.index` · type : routes · dernière mise à jour : 2026-09-16 · commit : 2620449
+`route.index` · type: routes · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/index.php` (`index`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `/index.php` (`index`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 —
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -28,27 +28,27 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 - [`route.orders.new`](orders.new.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

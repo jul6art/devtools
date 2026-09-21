@@ -28,9 +28,9 @@ final class GroupPageRendererTest extends TestCase
     {
         $page = new GroupPageRenderer()->render(self::group(), self::workflows());
 
-        self::assertSame(['Résumé', 'Routes', 'États'], array_keys(new PageParser()->parse($page)->sections));
+        self::assertSame(['Summary', 'Routes', 'States'], array_keys(new PageParser()->parse($page)->sections));
         self::assertStringStartsWith("# /admin/users\n", $page);
-        self::assertStringContainsString('`admin.user` · type : routes · 2 routes · `src/Controller/Admin/UserController.php`', $page);
+        self::assertStringContainsString('`admin.user` · type: routes · 2 routes · `src/Controller/Admin/UserController.php`', $page);
     }
 
     public function testEveryRouteIsOneLineOfTheTableAndLinksToItsOwnPage(): void
@@ -47,17 +47,17 @@ final class GroupPageRendererTest extends TestCase
      */
     public function testWithoutASummaryTheSectionHoldsADash(): void
     {
-        self::assertStringContainsString("## Résumé\n\n—\n", new GroupPageRenderer()->render(self::group(), self::workflows()));
+        self::assertStringContainsString("## Summary\n\n—\n", new GroupPageRenderer()->render(self::group(), self::workflows()));
     }
 
     public function testASummaryWrittenByClaudeSurvivesAFactualRewrite(): void
     {
         $written = new PageParser()->parse(new GroupPageRenderer()->render(self::group(), self::workflows()));
-        $written = new ParsedPage($written->title, $written->header, [...$written->sections, 'Résumé' => 'Le CRUD des comptes.']);
+        $written = new ParsedPage($written->title, $written->header, [...$written->sections, 'Summary' => 'Le CRUD des comptes.']);
 
         $page = new GroupPageRenderer()->render(self::group(), self::workflows(), $written);
 
-        self::assertStringContainsString("## Résumé\n\nLe CRUD des comptes.\n", $page);
+        self::assertStringContainsString("## Summary\n\nLe CRUD des comptes.\n", $page);
         self::assertStringContainsString('| [`admin_user_index`](index.md) |', $page, 'The facts are rewritten from the model.');
     }
 
@@ -72,7 +72,7 @@ final class GroupPageRendererTest extends TestCase
 
     public function testWithoutAStateMachineTheSectionHoldsADash(): void
     {
-        self::assertStringContainsString("## États\n\n—\n", new GroupPageRenderer()->render(self::group(), self::workflows()));
+        self::assertStringContainsString("## States\n\n—\n", new GroupPageRenderer()->render(self::group(), self::workflows()));
     }
 
     public function testTwoRenderingsOfAnUnchangedGroupProduceTheSameBytes(): void

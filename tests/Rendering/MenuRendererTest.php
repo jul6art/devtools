@@ -38,14 +38,14 @@ final class MenuRendererTest extends TestCase
     {
         $menu = $this->menu();
 
-        foreach (['## Routes (1)', '## Commandes (1)'] as $heading) {
+        foreach (['## Routes (1)', '## Commands (1)'] as $heading) {
             self::assertStringContainsString($heading, $menu);
         }
 
         // A type with no workflow does not take an empty section any more (ADR-0043); it is still named,
         // so "none found" stays distinguishable from "not looked for".
-        self::assertStringNotContainsString('## Asynchrone', $menu);
-        self::assertStringContainsString('Aucun workflow trouvé pour : Asynchrone, Interface, Intégrations, Données.', $menu);
+        self::assertStringNotContainsString('## Async', $menu);
+        self::assertStringContainsString('No workflow found for: Async, UI, Integrations, Data.', $menu);
 
         self::assertStringContainsString('2 workflows', $menu);
     }
@@ -54,8 +54,8 @@ final class MenuRendererTest extends TestCase
     {
         $menu = $this->menu();
 
-        self::assertStringContainsString("## À vérifier\n\n- ⚠ [`command.app.import-catalog`](commands/app.import-catalog.md) — rédaction en attente\n- ⚠ [`route.order.new`](routes/order.new.md) — périmé", $menu);
-        self::assertStringContainsString("## Non couvert\n\n- `src/A.php` — aucun workflow ne référence ce fichier\n- `src/Util/StringHelper.php`", $menu);
+        self::assertStringContainsString("## To check\n\n- ⚠ [`command.app.import-catalog`](commands/app.import-catalog.md) — waiting for Claude\n- ⚠ [`route.order.new`](routes/order.new.md) — stale", $menu);
+        self::assertStringContainsString("## Not covered\n\n- `src/A.php` — no workflow references this file\n- `src/Util/StringHelper.php`", $menu);
     }
 
     public function testTheOverviewGroupsWorkflowsByTypeWithTheirDependencies(): void
@@ -121,7 +121,7 @@ final class MenuRendererTest extends TestCase
         );
 
         self::assertStringContainsString('## Routes (3)', $menu, 'The count is of workflows, never of groups.');
-        self::assertStringContainsString('- [/admin/users](routes/admin.user/README.md) — `admin.user` · 2 routes · MAJ 2026-09-16', $menu);
+        self::assertStringContainsString('- [/admin/users](routes/admin.user/README.md) — `admin.user` · 2 routes · updated 2026-09-16', $menu);
         self::assertStringNotContainsString('routes/admin.user/edit.md', $menu, 'A grouped route is listed on the page of its group.');
         self::assertStringContainsString('- [/health](routes/health.md)', $menu, 'A workflow outside any group keeps its line.');
     }

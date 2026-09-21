@@ -10,10 +10,49 @@ namespace Jul6Art\DevTools\Rendering;
 final readonly class ParsedPage
 {
     /**
+     * The French headings pages carried before v3, mapped to the ones they became.
+     *
+     * ⚠️ **Reading them is what keeps the prose.** A page is re-rendered from the model plus the sections
+     * Claude wrote in the CURRENT page: a heading the reader does not recognise is a section that comes
+     * back empty, so renaming the template without this map would have emptied every page of every project
+     * at its next inspection — silently, since a rewrite reports a rewrite either way.
+     *
+     * Nothing writes these headings any more; they are only ever read.
+     */
+    private const array LEGACY_HEADINGS = [
+        'Résumé' => 'Summary',
+        'Déclencheur' => 'Trigger',
+        'Parcours' => 'Journey',
+        'Navigation / états' => 'Navigation / states',
+        'Décisions' => 'Decisions',
+        'Données' => 'Data',
+        'Mécanismes transverses' => 'Cross-cutting mechanisms',
+        "Points d'attention" => 'Points of attention',
+        'Workflows liés' => 'Related workflows',
+        'Historique' => 'History',
+        'États' => 'States',
+    ];
+
+    /**
      * @param array<string, string> $sections title => content, in the order of the page
      */
     public function __construct(public string $title, public string $header, public array $sections)
     {
+    }
+
+    /**
+     * The content of a section by its title, falling back to the French heading a page written before v3
+     * carries for it.
+     */
+    public function sectionNamed(string $title): ?string
+    {
+        if (isset($this->sections[$title])) {
+            return $this->sections[$title];
+        }
+
+        $legacy = array_search($title, self::LEGACY_HEADINGS, true);
+
+        return \is_string($legacy) ? $this->sections[$legacy] ?? null : null;
     }
 
     /**
@@ -48,7 +87,7 @@ final readonly class ParsedPage
 
     public function section(PageSection $section): ?string
     {
-        return $this->sections[$section->value] ?? null;
+        return $this->sectionNamed($section->value);
     }
 
     public function withSection(PageSection $section, string $content): self
@@ -57,11 +96,11 @@ final readonly class ParsedPage
     }
 
     /**
-     * The value of the "Préconditions" row of the trigger table — the one cell of a DevTools section Claude fills.
+     * The value of the "Preconditions" row of the trigger table — the one cell of a DevTools section Claude fills.
      */
     public function preconditions(): ?string
     {
-        return 1 === preg_match('/^\| Préconditions \| (.*) \|$/m', $this->section(PageSection::Trigger) ?? '', $matches) ? $matches[1] : null;
+        return 1 === preg_match('/^\| Pr(?:é|e)conditions \| (.*) \|$/m', $this->section(PageSection::Trigger) ?? '', $matches) ? $matches[1] : null;
     }
 
     /**
@@ -88,6 +127,6 @@ final readonly class ParsedPage
         $content = $page->section($section);
 
         // The preconditions cell belongs to Claude even inside the trigger table.
-        return null === $content ? null : (string) preg_replace('/^\| Préconditions \| .* \|$/m', '| Préconditions |', $content);
+        return null === $content ? null : (string) preg_replace('/^\| Pr(?:é|e)conditions \| .* \|$/m', '| Preconditions |', $content);
     }
 }

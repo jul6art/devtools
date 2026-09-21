@@ -1,19 +1,19 @@
 # GET /orders/{id}
-`route.order.show` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`route.order.show` · type: routes · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 Affiche la fiche d'une commande identifiée par son `id` : le client de la commande.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /orders/{id}` (`app_order_show`) |
-| Sécurité | `ROLE_USER` |
-| Préconditions | Utilisateur authentifié (ROLE_USER). |
+| Entry point | `GET /orders/{id}` (`app_order_show`) |
+| Security | `ROLE_USER` |
+| Preconditions | Utilisateur authentifié (ROLE_USER). |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -26,32 +26,32 @@ sequenceDiagram
   C-->>U: order/show.html.twig
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit une `Order` dans `src/Repository/OrderRepository.php`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `LocaleListener` sur `kernel.request` ; access_control ROLE_USER sur `^/orders`.
 
-## Points d'attention
+## Points of attention
 
 Un identifiant inconnu n'est pas traité : `get()` renvoie null et le template lit `order.customer` sur une
 valeur nulle, au lieu d'une réponse 404.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

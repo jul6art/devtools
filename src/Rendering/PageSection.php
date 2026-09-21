@@ -12,20 +12,20 @@ namespace Jul6Art\DevTools\Rendering;
  *
  * ⚠️ "Composants impliqués" and "Tests existants" are **gone**, against the § 4.5 of the specs which
  * lists them: on a real project they were 250 of a page's 344 lines, and they are already in the XML
- * tracking file, which is the one that links the workflow to its files. "Décisions" takes their place.
+ * tracking file, which is the one that links the workflow to its files. "Decisions" takes their place.
  */
 enum PageSection: string
 {
-    case Summary = 'Résumé';
-    case Trigger = 'Déclencheur';
-    case Journey = 'Parcours';
-    case Navigation = 'Navigation / états';
-    case Decisions = 'Décisions';
-    case Data = 'Données';
-    case CrossCutting = 'Mécanismes transverses';
-    case Attention = "Points d'attention";
-    case Related = 'Workflows liés';
-    case History = 'Historique';
+    case Summary = 'Summary';
+    case Trigger = 'Trigger';
+    case Journey = 'Journey';
+    case Navigation = 'Navigation / states';
+    case Decisions = 'Decisions';
+    case Data = 'Data';
+    case CrossCutting = 'Cross-cutting mechanisms';
+    case Attention = 'Points of attention';
+    case Related = 'Related workflows';
+    case History = 'History';
 
     /**
      * Claude writes it; in factual mode it holds "—", except the cross-cutting mechanisms, which DevTools

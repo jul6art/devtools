@@ -12,12 +12,12 @@ use Jul6Art\DevTools\Resources;
 final class KnowledgeCanvas
 {
     public const array SECTIONS = [
-        "Cycle d'entrée",
-        "Mécanismes d'extension",
-        'Injection de dépendances et conventions de nommage',
-        "Points d'entrée par type",
+        'Entry cycle',
+        'Extension mechanisms',
+        'Dependency injection and naming conventions',
+        'Entry points by type',
         'Tests',
-        'Pièges connus',
+        'Known traps',
         'Sources',
     ];
 

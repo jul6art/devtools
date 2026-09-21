@@ -49,7 +49,7 @@ final class PageRenderer
 
         $lines = [
             '# '.$workflow->title,
-            \sprintf('%s · type : %s · dernière mise à jour : %s · commit : %s', MarkdownWriter::code($workflow->id->value), $workflow->type->name, $last->at->format('Y-m-d'), null === $last->commit ? MarkdownWriter::EMPTY : substr($last->commit, 0, 7)),
+            \sprintf('%s · type: %s · last updated: %s · commit: %s', MarkdownWriter::code($workflow->id->value), $workflow->type->name, $last->at->format('Y-m-d'), null === $last->commit ? MarkdownWriter::EMPTY : substr($last->commit, 0, 7)),
         ];
 
         foreach (PageSection::cases() as $section) {
@@ -70,7 +70,7 @@ final class PageRenderer
 
     private function trigger(Workflow $workflow, ?string $preconditions): string
     {
-        $rows = [['Point d\'entrée', self::describe($workflow->main->kind, $workflow->main->name, $workflow->main->attributes)]];
+        $rows = [['Entry point', self::describe($workflow->main->kind, $workflow->main->name, $workflow->main->attributes)]];
 
         foreach ($workflow->satellites as $satellite) {
             $rows[] = ['Satellite', self::describe($satellite->kind, $satellite->name, $satellite->attributes)];
@@ -83,10 +83,10 @@ final class PageRenderer
         }
 
         $security = $workflow->main->attributes['security'] ?? null;
-        $rows[] = ['Sécurité', null === $security ? MarkdownWriter::EMPTY : implode(', ', array_map(MarkdownWriter::code(...), explode(', ', $security)))];
-        $rows[] = ['Préconditions', $preconditions ?? MarkdownWriter::EMPTY];
+        $rows[] = ['Security', null === $security ? MarkdownWriter::EMPTY : implode(', ', array_map(MarkdownWriter::code(...), explode(', ', $security)))];
+        $rows[] = ['Preconditions', $preconditions ?? MarkdownWriter::EMPTY];
 
-        return MarkdownWriter::table(['Élément', 'Valeur'], $rows);
+        return MarkdownWriter::table(['Element', 'Value'], $rows);
     }
 
     /**
@@ -136,7 +136,7 @@ final class PageRenderer
             return MarkdownWriter::EMPTY;
         }
 
-        return MarkdownWriter::table(['Mécanisme', 'Événement', 'Priorité', 'Écrit'], array_map(
+        return MarkdownWriter::table(['Mechanism', 'Event', 'Priority', 'Writes'], array_map(
             static fn (Mechanism $mechanism): array => [
                 MarkdownWriter::code($mechanism->name),
                 MarkdownWriter::code($mechanism->event),
@@ -159,7 +159,7 @@ final class PageRenderer
         $related = [];
 
         foreach ($workflow->dependsOn as $dependency) {
-            $related[$dependency->value] = [$dependency, 'dépend de'];
+            $related[$dependency->value] = [$dependency, 'depends on'];
         }
 
         foreach ($workflow->navigation as $edge) {

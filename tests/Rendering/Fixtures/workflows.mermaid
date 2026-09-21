@@ -2,18 +2,18 @@ flowchart LR
   subgraph routes["Routes"]
     w5["route.order.new"]
   end
-  subgraph commands["Commandes"]
+  subgraph commands["Commands"]
     w2["command.app.import-catalog"]
   end
-  subgraph async["Asynchrone"]
+  subgraph async["Async"]
     w1["async.order-created"]
   end
-  subgraph ui["Interface"]
+  subgraph ui["UI"]
     w6["ui.cart-summary"]
   end
-  subgraph integrations["Intégrations"]
+  subgraph integrations["Integrations"]
     w4["integration.stripe"]
   end
-  subgraph data["Données"]
+  subgraph data["Data"]
     w3["data.migrations"]
   end

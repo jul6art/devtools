@@ -55,14 +55,14 @@ final class PageRedactionTest extends TestCase
 
         $brief = new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml');
         self::assertSame('route.order.new', $brief->workflow->value);
-        self::assertSame('page/2', $brief->promptVersion);
+        self::assertSame('page/3', $brief->promptVersion);
         self::assertFileExists($brief->promptPath);
         self::assertSame('en', $brief->language, 'English unless the project or the caller says otherwise.');
         self::assertSame('.devtools/pending/page.route.order.new.draft.md', $brief->draftPath);
         self::assertFileExists($this->project.'/'.$brief->modelPath);
         self::assertSame('2026-09-16T15:00:00+02:00', $brief->revision->format(\DATE_ATOM));
-        self::assertStringContainsString('rédaction en attente', (string) file_get_contents($this->project.'/docs/workflows/workflows.md'));
-        self::assertSame(['Résumé', 'Préconditions', 'Parcours', 'Décisions', 'Données', 'Mécanismes transverses', "Points d'attention", 'Changement'], $brief->sections, 'The brief carries the closed list of sections, in order.');
+        self::assertStringContainsString('waiting for Claude', (string) file_get_contents($this->project.'/docs/workflows/workflows.md'));
+        self::assertSame(['Summary', 'Preconditions', 'Journey', 'Decisions', 'Data', 'Cross-cutting mechanisms', 'Points of attention', 'Change'], $brief->sections, 'The brief carries the closed list of sections, in order.');
         self::assertSame([], $brief->changes, 'Nothing moved: the page has never been written.');
     }
 
@@ -136,7 +136,7 @@ final class PageRedactionTest extends TestCase
         $tracking = new XmlTrackingStore(new WorkflowTypeRegistry())->read($this->project.'/.devtools/workflows/routes/order.new.xml');
         self::assertSame(GenerationMode::Ai, $tracking->generated->mode);
         self::assertSame('claude-opus-5', $tracking->generated->model);
-        self::assertSame('page/2', $tracking->generated->prompt);
+        self::assertSame('page/3', $tracking->generated->prompt);
         self::assertCount(1, $tracking->history, 'The first writing amends the initial revision instead of adding one.');
 
         self::assertSame([], glob($this->project.'/.devtools/pending/page.route.order.new.*') ?: [], 'Brief, model and draft are removed.');
@@ -200,12 +200,12 @@ final class PageRedactionTest extends TestCase
     public static function refusals(): iterable
     {
         yield 'extra section' => [static fn (string $draft): string => $draft."\n## Composants impliqués\n\n| Rôle | Fichier |\n", 'section "Composants impliqués" is not one a draft may write (line 71)'];
-        yield 'missing section' => [static fn (string $draft): string => str_replace("## Données\n\nÉcrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.\n\n", '', $draft), 'section "Données" is missing'];
-        yield 'journey without mermaid' => [static fn (string $draft): string => (string) preg_replace('/```mermaid.*?```/s', 'Le contrôleur appelle le service.', $draft), '"Parcours" must hold exactly one Mermaid sequenceDiagram or flowchart (line 15)'];
+        yield 'missing section' => [static fn (string $draft): string => str_replace("## Data\n\nÉcrit une `Order` en mémoire via `src/Repository/OrderRepository.php` ; lit le prix des produits.\n\n", '', $draft), 'section "Data" is missing'];
+        yield 'journey without mermaid' => [static fn (string $draft): string => (string) preg_replace('/```mermaid.*?```/s', 'Le contrôleur appelle le service.', $draft), '"Journey" must hold exactly one Mermaid sequenceDiagram or flowchart (line 15)'];
         yield 'invented path' => [static fn (string $draft): string => str_replace('`src/Repository/OrderRepository.php`', '`src/Repository/InvoiceRepository.php`', $draft), '`src/Repository/InvoiceRepository.php` is not a file of the workflow (line 57)'];
         yield 'data file' => [static fn (string $draft): string => str_replace('lit le prix des produits.', 'lit le prix des produits et `var/app.sqlite`.', $draft), '`var/app.sqlite` is not a file of the workflow (line 57)'];
         yield 'outdated' => [static fn (string $draft): string => str_replace('revision: 2026-09-16T15:00:00+02:00', 'revision: 2026-09-01T10:00:00+02:00', $draft), 'outdated'];
-        yield 'two-line preconditions' => [static fn (string $draft): string => str_replace('Le catalogue de produits est chargé.', "Le catalogue est chargé.\nEt l'opérateur connecté.", $draft), '"Préconditions" must be one line (line 11)'];
+        yield 'two-line preconditions' => [static fn (string $draft): string => str_replace('Le catalogue de produits est chargé.', "Le catalogue est chargé.\nEt l'opérateur connecté.", $draft), '"Preconditions" must be one line (line 11)'];
 
         // ADR-0043: the decisions are Claude's to draw, but only from what the model records.
         yield 'invented decision target' => [
@@ -218,11 +218,11 @@ final class PageRedactionTest extends TestCase
         ];
         yield 'decisions without a flowchart' => [
             static fn (string $draft): string => (string) preg_replace('/```mermaid\nflowchart TD.*?```/s', 'Selon le pays.', $draft),
-            '"Décisions" must hold at least one Mermaid flowchart',
+            '"Decisions" must hold at least one Mermaid flowchart',
         ];
         yield 'decisions emptied while the model records some' => [
-            static fn (string $draft): string => (string) preg_replace('/(## Décisions\n\n).*?(\n## Données)/s', '$1—$2', $draft),
-            '"Décisions" is empty while the model records 6 decided value(s)',
+            static fn (string $draft): string => (string) preg_replace('/(## Decisions\n\n).*?(\n## Data)/s', '$1—$2', $draft),
+            '"Decisions" is empty while the model records 6 decided value(s)',
         ];
     }
 
@@ -281,12 +281,12 @@ final class PageRedactionTest extends TestCase
 
         $brief = new XmlGroupBriefStore()->read($this->project.'/.devtools/pending/group.routes.order.brief.xml');
 
-        self::assertSame('group/1', $brief->promptVersion);
+        self::assertSame('group/2', $brief->promptVersion);
         self::assertFileExists($brief->promptPath);
         self::assertSame('docs/workflows/routes/order/README.md', $brief->pagePath);
         self::assertSame(['app_order_index', 'app_order_new', 'app_order_show'], array_map(static fn (array $route): string => $route['route'], $brief->routes));
 
-        file_put_contents($this->project.'/'.$brief->draftPath, "---\nmodel: claude-opus-5\n---\n\n## Résumé\n\nLes commandes, de leur création à leur validation.\n");
+        file_put_contents($this->project.'/'.$brief->draftPath, "---\nmodel: claude-opus-5\n---\n\n## Summary\n\nLes commandes, de leur création à leur validation.\n");
 
         $result = $this->apply();
 
@@ -295,7 +295,7 @@ final class PageRedactionTest extends TestCase
 
         $page = (string) file_get_contents($this->project.'/docs/workflows/routes/order/README.md');
 
-        self::assertStringContainsString("## Résumé\n\nLes commandes, de leur création à leur validation.", $page);
+        self::assertStringContainsString("## Summary\n\nLes commandes, de leur création à leur validation.", $page);
         self::assertStringContainsString('| [`app_order_new`](new.md) |', $page, 'The facts stay exactly as the inspection rendered them.');
         self::assertFileDoesNotExist($this->project.'/'.$brief->draftPath, 'An applied draft is removed.');
         self::assertFileDoesNotExist($this->project.'/.devtools/pending/group.routes.order.brief.xml');
@@ -341,7 +341,7 @@ final class PageRedactionTest extends TestCase
         $this->inspect();
 
         $sentences = str_repeat('Une phrase de plus. ', 6);
-        file_put_contents($this->project.'/.devtools/pending/group.routes.order.draft.md', "---\nmodel: claude-opus-5\n---\n\n## Résumé\n\n".$sentences."\n\n## Routes\n\nrien\n");
+        file_put_contents($this->project.'/.devtools/pending/group.routes.order.draft.md', "---\nmodel: claude-opus-5\n---\n\n## Summary\n\n".$sentences."\n\n## Routes\n\nrien\n");
 
         $result = $this->apply();
 

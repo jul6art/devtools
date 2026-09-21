@@ -1,47 +1,47 @@
 # POST /orders
-`route.post-orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : —
+`route.post-orders` · type: routes · last updated: 2026-09-16 · commit: —
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `POST /orders` (`POST /orders`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `POST /orders` (`POST /orders`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
 —
 
-## Points d'attention
+## Cross-cutting mechanisms
 
 —
 
-## Workflows liés
+## Points of attention
 
 —
 
-## Historique
+## Related workflows
+
+—
+
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 `composer import-orders` importe des commandes depuis un fichier texte, un client par ligne, ou depuis
 l'entrée standard : chaque ligne devient une commande via `OrderRepository::add()`.
 
-## Préconditions
+## Preconditions
 
 La table `orders` existe ; le fichier passé en argument est lisible.
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -27,23 +27,23 @@ sequenceDiagram
   end
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit une ligne dans `orders` par ligne lue.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 Pas de transaction : une erreur au milieu du fichier laisse un import partiel. Les lignes vides deviennent
 des commandes sans client.
 
-## Changement
+## Change
 
 rédaction initiale

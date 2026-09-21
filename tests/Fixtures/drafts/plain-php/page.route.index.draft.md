@@ -3,16 +3,16 @@ model: claude-opus-5
 revision: 2026-09-16T15:00:00+02:00
 ---
 
-## Résumé
+## Summary
 
 Page d'accueil du back-office : liste le client de chaque commande, lue par `OrderRepository::all()`, et
 propose de créer une commande (bouton de formulaire et lien vers `/orders/new.php`).
 
-## Préconditions
+## Preconditions
 
 La base SQLite var/app.sqlite existe et contient la table `orders` (migration `001_create_orders.sql`).
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -30,23 +30,23 @@ sequenceDiagram
   P-->>U: liste + accès à /orders/new.php
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit la colonne `customer` de la table `orders` ; aucune écriture.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit une connexion PDO unique par requête (variable statique de `db()`).
 
-## Points d'attention
+## Points of attention
 
 La connexion vise var/app.sqlite en dur : aucune configuration par environnement. Aucune pagination ni
 tri, et aucune authentification ne protège la page.
 
-## Changement
+## Change
 
 rédaction initiale

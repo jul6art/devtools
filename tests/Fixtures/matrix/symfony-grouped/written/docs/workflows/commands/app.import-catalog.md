@@ -1,19 +1,19 @@
 # app:import-catalog
-`command.app.import-catalog` · type : commands · dernière mise à jour : 2026-09-16 · commit : f815420
+`command.app.import-catalog` · type: commands · last updated: 2026-09-16 · commit: f815420
 
-## Résumé
+## Summary
 
 Commande console d'import du catalogue : ajoute le produit « Widget XL » au dépôt des produits.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `app:import-catalog` (command) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `app:import-catalog` (command) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -25,32 +25,32 @@ sequenceDiagram
   C-->>O: code de sortie 0
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit un `Product` dans `src/Repository/ProductRepository.php`, en mémoire.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun effet durable. Le produit est
 écrit en dur ; aucun fichier de catalogue n'est lu.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

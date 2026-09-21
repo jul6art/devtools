@@ -1,20 +1,20 @@
 # import-orders
-`command.import-orders` · type : commands · dernière mise à jour : 2026-09-16 · commit : 2620449
+`command.import-orders` · type: commands · last updated: 2026-09-16 · commit: 2620449
 
-## Résumé
+## Summary
 
 `composer import-orders` importe des commandes depuis un fichier texte, un client par ligne, ou depuis
 l'entrée standard : chaque ligne devient une commande via `OrderRepository::add()`.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `import-orders` (command) |
-| Sécurité | — |
-| Préconditions | La table `orders` existe ; le fichier passé en argument est lisible. |
+| Entry point | `import-orders` (command) |
+| Security | — |
+| Preconditions | La table `orders` existe ; le fichier passé en argument est lisible. |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -29,32 +29,32 @@ sequenceDiagram
   end
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Écrit une ligne dans `orders` par ligne lue.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `lib/db.php` fournit la connexion PDO.
 
-## Points d'attention
+## Points of attention
 
 Pas de transaction : une erreur au milieu du fichier laisse un import partiel. Les lignes vides deviennent
 des commandes sans client.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

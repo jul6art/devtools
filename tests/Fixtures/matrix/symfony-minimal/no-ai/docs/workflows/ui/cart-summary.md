@@ -1,50 +1,50 @@
 # CartSummary
-`ui.cart-summary` · type : ui · dernière mise à jour : 2026-09-16 · commit : f815420
+`ui.cart-summary` · type: ui · last updated: 2026-09-16 · commit: f815420
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `App\Twig\Components\CartSummary` (component) |
+| Entry point | `App\Twig\Components\CartSummary` (component) |
 | Live | `true` |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
-| Mécanisme | Événement | Priorité | Écrit |
+—
+
+## Cross-cutting mechanisms
+
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

@@ -1,39 +1,39 @@
 # Workflows — acme/symfony-minimal
 
-Stack : Symfony 8.1 · 9 workflows · dernier scan : 2026-09-16 (commit f815420)
+Stack: Symfony 8.1 · 9 workflows · last scan: 2026-09-16 (commit f815420)
 
-[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-8](../../.devtools/knowledge/symfony-8.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-8](../../.devtools/knowledge/symfony-8.md)
 
 ## Routes (5)
 
-- [/health](routes/health/README.md) — `health` · 1 route · MAJ 2026-09-16
-- [/orders](routes/order/README.md) — `order` · 4 routes · MAJ 2026-09-16
+- [/health](routes/health/README.md) — `health` · 1 route · updated 2026-09-16
+- [/orders](routes/order/README.md) — `order` · 4 routes · updated 2026-09-16
 
-## Commandes (1)
+## Commands (1)
 
-- [app:import-catalog](commands/app.import-catalog.md) — `command.app.import-catalog` · MAJ 2026-09-16
+- [app:import-catalog](commands/app.import-catalog.md) — `command.app.import-catalog` · updated 2026-09-16
 
-## Asynchrone (1)
+## Async (1)
 
-- [OrderCreated](async/order-created.md) — `async.order-created` · MAJ 2026-09-16
+- [OrderCreated](async/order-created.md) — `async.order-created` · updated 2026-09-16
 
-## Interface (1)
+## UI (1)
 
-- [CartSummary](ui/cart-summary.md) — `ui.cart-summary` · MAJ 2026-09-16
+- [CartSummary](ui/cart-summary.md) — `ui.cart-summary` · updated 2026-09-16
 
-## Données (1)
+## Data (1)
 
-- [Migrations](data/migrations.md) — `data.migrations` · MAJ 2026-09-16
+- [Migrations](data/migrations.md) — `data.migrations` · updated 2026-09-16
 
-Aucun workflow trouvé pour : Intégrations.
+No workflow found for: Integrations.
 
-## À vérifier
+## To check
 
 —
 
-## Non couvert
+## Not covered
 
-- `src/EventListener/LocaleListener.php` — aucun workflow ne référence ce fichier
-- `src/EventListener/TotalsListener.php` — aucun workflow ne référence ce fichier
-- `src/Kernel.php` — aucun workflow ne référence ce fichier
-- `src/Util/StringHelper.php` — aucun workflow ne référence ce fichier
+- `src/EventListener/LocaleListener.php` — no workflow references this file
+- `src/EventListener/TotalsListener.php` — no workflow references this file
+- `src/Kernel.php` — no workflow references this file
+- `src/Util/StringHelper.php` — no workflow references this file

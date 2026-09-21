@@ -1,23 +1,23 @@
 # /orders/new.php
-`route.orders.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : —
+`route.orders.new` · type: routes · last updated: 2026-09-16 · commit: —
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/orders/new.php` (`orders.new`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `/orders/new.php` (`orders.new`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 —
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -28,27 +28,27 @@ flowchart LR
   n1 -->|"redirect"| n3
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 - [`route.index`](index.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

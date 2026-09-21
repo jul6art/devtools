@@ -1,20 +1,20 @@
 # App\EventListener\LocaleListener
-`event.locale-listener` · type : events · dernière mise à jour : 2026-09-16 · commit : a1b2c3d
+`event.locale-listener` · type: events · last updated: 2026-09-16 · commit: a1b2c3d
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `App\EventListener\LocaleListener` (listener) |
+| Entry point | `App\EventListener\LocaleListener` (listener) |
 | Events | `kernel.request` |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 flowchart TD
@@ -23,7 +23,7 @@ flowchart TD
   n1 --> n2
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
@@ -33,15 +33,15 @@ flowchart TD
 |---|---|---|
 | Listener | `src/EventListener/LocaleListener.php` | point d'entrée |
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 —
 
-## Points d'attention
+## Points of attention
 
 —
 
@@ -49,11 +49,11 @@ flowchart TD
 
 —
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

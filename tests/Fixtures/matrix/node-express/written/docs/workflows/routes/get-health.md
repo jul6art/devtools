@@ -1,19 +1,19 @@
 # GET /health
-`route.get-health` · type : routes · dernière mise à jour : 2026-09-16 · commit : f2bd976
+`route.get-health` · type: routes · last updated: 2026-09-16 · commit: f2bd976
 
-## Résumé
+## Summary
 
 `GET /health` répond `{"status": "ok"}` pour signaler que le processus tourne.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /health` (`GET /health`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `GET /health` (`GET /health`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -23,31 +23,31 @@ sequenceDiagram
   A-->>M: 200 {"status": "ok"}
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Aucune.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Déclarée directement sur `app`, hors de tout routeur.
 
-## Points d'attention
+## Points of attention
 
 La réponse ne vérifie aucune dépendance : elle reste « ok » même si le service de commandes est cassé.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

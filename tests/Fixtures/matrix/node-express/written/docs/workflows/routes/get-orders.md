@@ -1,19 +1,19 @@
 # GET /orders
-`route.get-orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : f2bd976
+`route.get-orders` · type: routes · last updated: 2026-09-16 · commit: f2bd976
 
-## Résumé
+## Summary
 
 `GET /orders` renvoie en JSON toutes les commandes connues de `orderService`.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /orders` (`GET /orders`) |
-| Sécurité | — |
-| Préconditions | — |
+| Entry point | `GET /orders` (`GET /orders`) |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -28,31 +28,31 @@ sequenceDiagram
   R-->>C: 200 JSON
 ```
 
-## Navigation / états
+## Navigation / states
 
 —
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit le tableau `orders` gardé en mémoire par `src/services/orderService.js`.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 `express.json()` est monté sur toute l'application avant les routeurs.
 
-## Points d'attention
+## Points of attention
 
 Le stockage est en mémoire : la liste est vide à chaque redémarrage et n'est pas partagée entre processus.
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

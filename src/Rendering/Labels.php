@@ -16,11 +16,11 @@ final class Labels
 {
     private const array TYPES = [
         'routes' => 'Routes',
-        'commands' => 'Commandes',
-        'async' => 'Asynchrone',
-        'ui' => 'Interface',
-        'integrations' => 'Intégrations',
-        'data' => 'Données',
+        'commands' => 'Commands',
+        'async' => 'Async',
+        'ui' => 'UI',
+        'integrations' => 'Integrations',
+        'data' => 'Data',
     ];
 
     public static function type(WorkflowType $type): string
@@ -31,19 +31,19 @@ final class Labels
     public static function role(FileRole $role): string
     {
         return match ($role) {
-            FileRole::Controller => 'Contrôleur',
+            FileRole::Controller => 'Controller',
             FileRole::Service => 'Service',
-            FileRole::Form => 'Formulaire',
+            FileRole::Form => 'Form',
             FileRole::Template => 'Template',
-            FileRole::Entity => 'Entité',
+            FileRole::Entity => 'Entity',
             FileRole::Repository => 'Repository',
             FileRole::Config => 'Configuration',
             FileRole::Listener => 'Listener',
             FileRole::Message => 'Message',
             FileRole::Handler => 'Handler',
-            FileRole::Component => 'Composant',
+            FileRole::Component => 'Component',
             FileRole::Test => 'Test',
-            FileRole::Other => 'Autre',
+            FileRole::Other => 'Other',
         };
     }
 }

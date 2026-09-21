@@ -615,8 +615,8 @@ final readonly class InspectionPipeline
                 // The last revision is still DevTools' own until Claude writes it: the writing completes it,
                 // however many inspections ran in between (a brief must not change from one run to the next).
                 amend: GenerationMode::NoAi === $document->generated->mode,
-                promptVersion: 'page/2',
-                promptPath: Resources::path('prompts/page/v2.md'),
+                promptVersion: 'page/3',
+                promptPath: Resources::path('prompts/page/v3.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
                 pagePath: $directory->pageRelativePath($workflow->type, $workflow->id, $workflow->group?->directory),
@@ -673,8 +673,8 @@ final readonly class InspectionPipeline
                 type: $type,
                 directory: $group->directory,
                 title: $group->title,
-                promptVersion: 'group/1',
-                promptPath: Resources::path('prompts/group/v1.md'),
+                promptVersion: 'group/2',
+                promptPath: Resources::path('prompts/group/v2.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 pagePath: $pagePath,
                 routes: array_map(static fn (Workflow $member): array => [
@@ -720,7 +720,7 @@ final readonly class InspectionPipeline
                     framework: $stack->framework,
                     version: $stack->version,
                     canvasPath: KnowledgeCanvas::path(),
-                    promptPath: Resources::path('prompts/knowledge/v1.md'),
+                    promptPath: Resources::path('prompts/knowledge/v2.md'),
                     draftPath: DevToolsDirectory::NAME.'/pending/'.KnowledgeBrief::fileName($stack->knowledgeKey, 'draft.md'),
                 ));
                 self::countBrief($report, $briefPath);
@@ -848,7 +848,7 @@ final readonly class InspectionPipeline
 
         $page = new PageParser()->parse((string) file_get_contents($pageFile));
 
-        return MarkdownWriter::EMPTY === ($page->sections[GroupPageSection::Summary->value] ?? MarkdownWriter::EMPTY) ? null : $page;
+        return MarkdownWriter::EMPTY === ($page->sectionNamed(GroupPageSection::Summary->value) ?? MarkdownWriter::EMPTY) ? null : $page;
     }
 
     /**

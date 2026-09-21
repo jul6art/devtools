@@ -1,20 +1,20 @@
 # Workflows — monorepo
 
-Stack : Symfony 7.4 (api) + Angular 22.0 (front) · 2 workflows · dernier scan : 2026-09-16 (commit 6ecdbd0)
+Stack: Symfony 7.4 (api) + Angular 22.0 (front) · 2 workflows · last scan: 2026-09-16 (commit 6ecdbd0)
 
-[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-7](../../.devtools/knowledge/symfony-7.md) · [Connaissances angular-22](../../.devtools/knowledge/angular-22.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-7](../../.devtools/knowledge/symfony-7.md) · [Knowledge angular-22](../../.devtools/knowledge/angular-22.md)
 
 ## Routes (2)
 
-- [GET /api/items](routes/api.item.list.md) — `route.api.item.list` · MAJ 2026-09-16 · confiance moyenne
-- [/items](routes/items.md) — `route.items` · MAJ 2026-09-16 · confiance moyenne
+- [GET /api/items](routes/api.item.list.md) — `route.api.item.list` · updated 2026-09-16 · confidence medium
+- [/items](routes/items.md) — `route.items` · updated 2026-09-16 · confidence medium
 
-Aucun workflow trouvé pour : Commandes, Asynchrone, Interface, Intégrations, Données.
+No workflow found for: Commands, Async, UI, Integrations, Data.
 
-## À vérifier
+## To check
 
 —
 
-## Non couvert
+## Not covered
 
 —

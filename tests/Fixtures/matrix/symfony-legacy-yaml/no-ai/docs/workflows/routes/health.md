@@ -1,50 +1,50 @@
 # GET /health
-`route.health` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`route.health` · type: routes · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET /health` (`app_health`) |
+| Entry point | `GET /health` (`app_health`) |
 | Satellite | `GET /status` (`app_status`) |
-| Sécurité | — |
-| Préconditions | — |
+| Security | — |
+| Preconditions | — |
 
-## Parcours
-
-—
-
-## Navigation / états
+## Journey
 
 —
 
-## Décisions
+## Navigation / states
 
 —
 
-## Données
+## Decisions
 
 —
 
-## Mécanismes transverses
+## Data
 
-| Mécanisme | Événement | Priorité | Écrit |
+—
+
+## Cross-cutting mechanisms
+
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 —
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

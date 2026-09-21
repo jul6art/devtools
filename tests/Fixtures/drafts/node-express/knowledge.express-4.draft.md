@@ -1,6 +1,6 @@
 # Express 4
 
-## Cycle d'entrée
+## Entry cycle
 
 An HTTP request reaches the Node `http` server created by `app.listen()`, which hands it to the Express
 application. The application runs its middleware stack in the order of `app.use()` and route declarations:
@@ -9,21 +9,21 @@ mounted with `app.use('/prefix', router)` runs its own stack for paths under tha
 whose method and path match handles the request; if none does, Express answers 404. An error passed to
 `next(err)` skips to the error-handling middlewares, those declared with four arguments `(err, req, res, next)`.
 
-## Mécanismes d'extension
+## Extension mechanisms
 
 - **Middlewares** — `app.use(fn)` or per route (`router.get(path, auth, handler)`), run in declaration order.
 - **Routers** — `express.Router()` groups routes and middlewares, mounted under a prefix.
 - **Error handlers** — middlewares with four arguments, declared after the routes.
 - **Parameter handlers** — `router.param('id', fn)`, run before any route using `:id`.
 
-## Injection de dépendances et conventions de nommage
+## Dependency injection and naming conventions
 
 Express has no container: modules are wired with `require()` or `import`, and dependencies are usually module
 singletons (a service module exporting functions). Conventions, not rules: `src/app.js` builds the application,
 `src/server.js` or `bin/www` listens, `routes/` holds routers, `services/` business logic, `middlewares/`
 cross-cutting functions.
 
-## Points d'entrée par type
+## Entry points by type
 
 ### routes
 `app.<method>(path, …handlers)` and `router.<method>(path, …handlers)`; the full path is the mount prefix of
@@ -53,7 +53,7 @@ Migrations and seeds of the database tool in use (Knex, Prisma, Sequelize).
 Usually `test/` or `__tests__/`, run by Jest, Mocha or Node's test runner through `npm test`. Supertest drives
 the application in-process: `request(app).get('/orders')`.
 
-## Pièges connus
+## Known traps
 
 - **Declaration order is behaviour**: a middleware declared after a route never runs for it.
 - **Express 4 does not catch rejected promises** of async handlers: an unhandled rejection never reaches the

@@ -1,16 +1,16 @@
 # /health
-`health` · type : routes · 1 route · `src/Controller/HealthController.php`
+`health` · type: routes · 1 route · `src/Controller/HealthController.php`
 
-## Résumé
+## Summary
 
 —
 
 ## Routes
 
-| Route | Chemin | Méthodes | Sécurité |
+| Route | Path | Methods | Security |
 |---|---|---|---|
 | [`app_health`](index.md) | `/health` | `GET` | — |
 
-## États
+## States
 
 —

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.items" type="routes" schema-version="1">
   <title>/items</title>
-  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/2"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/3"/>
   <source vcs="git" commit="6ecdbd0eb5bfaa27515152c5df685add41f4592f" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="items" role="main">

@@ -1,20 +1,20 @@
 # /orders — liste des commandes
-`route.orders` · type : routes · dernière mise à jour : 2026-09-16 · commit : 973d403
+`route.orders` · type: routes · last updated: 2026-09-16 · commit: 973d403
 
-## Résumé
+## Summary
 
 Liste les commandes : `OrderListComponent` charge toutes les commandes via `OrderService.list()` et
 affiche pour chacune le nom du client, avec un lien vers sa fiche `/orders/:id`.
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `/orders` (`orders`) |
-| Sécurité | — |
-| Préconditions | L'API `/api/orders` est joignable depuis le navigateur (même origine ou proxy de développement). |
+| Entry point | `/orders` (`orders`) |
+| Security | — |
+| Preconditions | L'API `/api/orders` est joignable depuis le navigateur (même origine ou proxy de développement). |
 
-## Parcours
+## Journey
 
 ```mermaid
 sequenceDiagram
@@ -30,7 +30,7 @@ sequenceDiagram
   L-->>U: un lien par commande vers /orders/:id
 ```
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -39,27 +39,27 @@ flowchart LR
   n1 -->|"link"| n2
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 Lit des `Order` (`id`, `customer`) depuis l'API HTTP ; aucune écriture.
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
 Aucun intercepteur HTTP ni garde de route n'est déclaré dans `src/app`.
 
-## Points d'attention
+## Points of attention
 
 Aucun état de chargement ni de gestion d'erreur : si l'API échoue, la liste reste vide sans message.
 
-## Workflows liés
+## Related workflows
 
 - [`route.orders-id`](orders-id.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

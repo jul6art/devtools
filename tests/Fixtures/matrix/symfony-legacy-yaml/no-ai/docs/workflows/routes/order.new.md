@@ -1,23 +1,23 @@
 # GET|POST /orders/new
-`route.order.new` · type : routes · dernière mise à jour : 2026-09-16 · commit : 65429e2
+`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 65429e2
 
-## Résumé
+## Summary
 
 —
 
-## Déclencheur
+## Trigger
 
-| Élément | Valeur |
+| Element | Value |
 |---|---|
-| Point d'entrée | `GET\|POST /orders/new` (`app_order_new`) |
-| Sécurité | `ROLE_USER`, `ROLE_OPERATOR` |
-| Préconditions | — |
+| Entry point | `GET\|POST /orders/new` (`app_order_new`) |
+| Security | `ROLE_USER`, `ROLE_OPERATOR` |
+| Preconditions | — |
 
-## Parcours
+## Journey
 
 —
 
-## Navigation / états
+## Navigation / states
 
 ```mermaid
 flowchart LR
@@ -36,29 +36,29 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Décisions
+## Decisions
 
 —
 
-## Données
+## Data
 
 —
 
-## Mécanismes transverses
+## Cross-cutting mechanisms
 
-| Mécanisme | Événement | Priorité | Écrit |
+| Mechanism | Event | Priority | Writes |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 
-## Points d'attention
+## Points of attention
 
 —
 
-## Workflows liés
+## Related workflows
 
 - [`route.order.show`](order.show.md) — navigation
 
-## Historique
+## History
 
 | Date | Commit | Changement |
 |---|---|---|

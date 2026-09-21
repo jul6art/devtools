@@ -35,7 +35,7 @@ final class KnowledgeLibraryTest extends TestCase
 {
     use CopiesFixtureProjects;
 
-    private const string SHEET = "# Fictional 9\n\n## Cycle d'entrée\n\nx\n\n## Mécanismes d'extension\n\nx\n\n## Injection de dépendances et conventions de nommage\n\nx\n\n## Points d'entrée par type\n\nx\n\n## Tests\n\nx\n\n## Pièges connus\n\nx\n\n## Sources\n\n- https://example.test/docs\n";
+    private const string SHEET = "# Fictional 9\n\n## Entry cycle\n\nx\n\n## Extension mechanisms\n\nx\n\n## Dependency injection and naming conventions\n\nx\n\n## Entry points by type\n\nx\n\n## Tests\n\nx\n\n## Known traps\n\nx\n\n## Sources\n\n- https://example.test/docs\n";
 
     public function testTheEnvironmentVariableWinsOverEverythingElse(): void
     {
@@ -236,8 +236,8 @@ final class KnowledgeLibraryTest extends TestCase
         ));
         file_put_contents($pending.'/knowledge.fictional-9.brief.xml', \sprintf(
             '<knowledge-brief xmlns="https://github.com/jul6art/devtools/schema/knowledge-brief/1" schema-version="1" key="fictional-9">'
-            .'<stack language="php" framework="fictional" version="9.0"/><prompt version="knowledge/1" path="%s"/><canvas path="%s"/><draft path=".devtools/pending/knowledge.fictional-9.draft.md"/></knowledge-brief>',
-            Resources::path('prompts/knowledge/v1.md'),
+            .'<stack language="php" framework="fictional" version="9.0"/><prompt version="knowledge/2" path="%s"/><canvas path="%s"/><draft path=".devtools/pending/knowledge.fictional-9.draft.md"/></knowledge-brief>',
+            Resources::path('prompts/knowledge/v2.md'),
             Resources::path('knowledge/_canvas.md'),
         ));
         file_put_contents($pending.'/knowledge.fictional-9.draft.md', $draft);

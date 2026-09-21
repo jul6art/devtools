@@ -1,6 +1,6 @@
 # Angular 22
 
-## Cycle d'entrée
+## Entry cycle
 
 `main.ts` bootstraps the application (`bootstrapApplication(AppComponent, appConfig)`); `appConfig`
 registers the providers, among them `provideRouter(routes)` and `provideHttpClient()`. The router matches the
@@ -8,21 +8,21 @@ browser URL against the `Routes` array, resolves guards (`canActivate`, `canMatc
 `loadComponent` / `loadChildren` targets, and renders the matched component into the `<router-outlet>`.
 Components render their template; change detection updates the view when signals, inputs or events change.
 
-## Mécanismes d'extension
+## Extension mechanisms
 
 - **Guards and resolvers** — functions or classes on a route, run before activation.
 - **HTTP interceptors** — `provideHttpClient(withInterceptors([...]))`, around every `HttpClient` call.
 - **Providers** — `providedIn: 'root'` services, or providers on a route or a component.
 - **Directives and pipes** — reusable behaviour and transformations in templates.
 
-## Injection de dépendances et conventions de nommage
+## Dependency injection and naming conventions
 
 Hierarchical injectors: `@Injectable({ providedIn: 'root' })` services are application singletons, obtained
 with `inject(Service)` or constructor parameters. File conventions from the Angular CLI: `name.component.ts`,
 `name.service.ts`, `app.routes.ts`, `app.config.ts`; standalone components declare their dependencies in
 `imports`.
 
-## Points d'entrée par type
+## Entry points by type
 
 ### routes
 The `Routes` arrays (`app.routes.ts`, feature `*.routes.ts`): `path`, `component`, `loadComponent`,
@@ -51,7 +51,7 @@ State stores (NgRx, signals-based stores) when the application has them.
 `*.spec.ts` next to the code, run by Karma/Jasmine or Jest through `ng test`; `TestBed` configures a testing
 module; end-to-end tests in `e2e/` with Cypress or Playwright.
 
-## Pièges connus
+## Known traps
 
 - **Route order matters**: the first matching route wins, and a wildcard `**` must come last.
 - **A lazily loaded path is only known from its literal**: a path computed at runtime is invisible to reading.

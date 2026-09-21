@@ -1,41 +1,41 @@
 # Workflows — acme/symfony-legacy-yaml
 
-Stack : Symfony 7.4 · 9 workflows · dernier scan : 2026-09-16 (commit 65429e2)
+Stack: Symfony 7.4 · 9 workflows · last scan: 2026-09-16 (commit 65429e2)
 
-[Vue d'ensemble](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Connaissances symfony-7](../../.devtools/knowledge/symfony-7.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-7](../../.devtools/knowledge/symfony-7.md)
 
 ## Routes (5)
 
-- [GET /health](routes/health.md) — `route.health` · MAJ 2026-09-16
-- [GET /orders](routes/order.index.md) — `route.order.index` · MAJ 2026-09-16
-- [GET|POST /orders/new](routes/order.new.md) — `route.order.new` · MAJ 2026-09-16
-- [GET /orders/{id}](routes/order.show.md) — `route.order.show` · MAJ 2026-09-16
-- [POST /orders/{id}/validate](routes/order.validate.md) — `route.order.validate` · MAJ 2026-09-16
+- [GET /health](routes/health.md) — `route.health` · updated 2026-09-16
+- [GET /orders](routes/order.index.md) — `route.order.index` · updated 2026-09-16
+- [GET|POST /orders/new](routes/order.new.md) — `route.order.new` · updated 2026-09-16
+- [GET /orders/{id}](routes/order.show.md) — `route.order.show` · updated 2026-09-16
+- [POST /orders/{id}/validate](routes/order.validate.md) — `route.order.validate` · updated 2026-09-16
 
-## Commandes (1)
+## Commands (1)
 
-- [app:import-catalog](commands/app.import-catalog.md) — `command.app.import-catalog` · MAJ 2026-09-16
+- [app:import-catalog](commands/app.import-catalog.md) — `command.app.import-catalog` · updated 2026-09-16
 
-## Asynchrone (1)
+## Async (1)
 
-- [OrderCreated](async/order-created.md) — `async.order-created` · MAJ 2026-09-16
+- [OrderCreated](async/order-created.md) — `async.order-created` · updated 2026-09-16
 
-## Interface (1)
+## UI (1)
 
-- [CartSummary](ui/cart-summary.md) — `ui.cart-summary` · MAJ 2026-09-16
+- [CartSummary](ui/cart-summary.md) — `ui.cart-summary` · updated 2026-09-16
 
-## Données (1)
+## Data (1)
 
-- [Migrations](data/migrations.md) — `data.migrations` · MAJ 2026-09-16
+- [Migrations](data/migrations.md) — `data.migrations` · updated 2026-09-16
 
-Aucun workflow trouvé pour : Intégrations.
+No workflow found for: Integrations.
 
-## À vérifier
+## To check
 
 —
 
-## Non couvert
+## Not covered
 
-- `src/EventListener/LocaleListener.php` — aucun workflow ne référence ce fichier
-- `src/Kernel.php` — aucun workflow ne référence ce fichier
-- `src/Util/StringHelper.php` — aucun workflow ne référence ce fichier
+- `src/EventListener/LocaleListener.php` — no workflow references this file
+- `src/Kernel.php` — no workflow references this file
+- `src/Util/StringHelper.php` — no workflow references this file

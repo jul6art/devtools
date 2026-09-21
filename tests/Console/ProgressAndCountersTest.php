@@ -229,7 +229,7 @@ final class ProgressAndCountersTest extends TestCase
         $start = strrpos($plain, ' DevTools — ');
 
         return (string) preg_replace(
-            ['#/private/var/\S+#', '#/var/folders/\S+#', '/Durée .*/'],
+            ['#/private/var/\S+#', '#/var/folders/\S+#', '/Duration .*/'],
             'x',
             false === $start ? $plain : substr($plain, $start),
         );
