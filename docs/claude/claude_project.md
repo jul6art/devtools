@@ -236,3 +236,7 @@ pour tout XML modifié · README mis à jour pour toute commande, option ou form
     - an intentional and accepted exception
 - If a rule later becomes stable and sufficiently generic → **propose** promoting it to
   `claude_core.md`
+
+## Sous-agents
+
+⚠️ **Ne jamais lancer de sous-agent ; tout faire dans la session principale.**
