@@ -237,6 +237,26 @@ pour tout XML modifié · README mis à jour pour toute commande, option ou form
 - If a rule later becomes stable and sufficiently generic → **propose** promoting it to
   `claude_core.md`
 
+## ⚠️ CI GitHub — COUPÉE, jouée UNE FOIS PAR MOIS
+
+Les GitHub Actions de ce dépôt sont **coupées** en dehors d'un passage mensuel (règle commune aux
+seize dépôts qui ont une CI, décidée par jul6art le 2026-10-01). Dépôt **public** : ses minutes ne
+sont pas décomptées du quota — la coupure suit la règle commune, pas une contrainte de facturation.
+
+- ⚠️ **Une poussée ne déclenche RIEN.** Entre deux passages, le badge et le dernier « ✓ » de GitHub
+  datent du dernier passage, pas du code poussé : la porte locale reste la seule.
+- **Le passage**, dans cet ordre :
+  1. `gh api -X PUT repos/jul6art/devtools/actions/permissions -F enabled=true`
+  2. `gh workflow run ci.yml -R jul6art/devtools`, puis `gh run watch -R jul6art/devtools`
+  3. rouge → corriger et pousser (la poussée relance d'elle-même tant que les Actions sont
+     actives), jusqu'au vert
+  4. `gh api -X PUT repos/jul6art/devtools/actions/permissions -F enabled=false` — **toujours**, même
+     sur un rouge qu'on n'a pas su réparer : on le signale, on ne laisse pas tourner.
+- La date du dernier passage vit dans `~/.claude/CLAUDE.md`, registre unique des seize dépôts qui
+  ont une CI. Passé un mois, le rappeler à l'utilisateur.
+
+---
+
 ## Sous-agents
 
 ⚠️ **Ne jamais lancer de sous-agent ; tout faire dans la session principale.**
