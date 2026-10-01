@@ -3,7 +3,8 @@
 - **Statut** : Proposed
 - **Décideurs** : jul6art
 - **Specs** : § 4.7 (menu)
-- **Dépend de** : ADR-0011 (rédaction par Claude), ADR-0008 puis 0043 (rendu du menu)
+- **Dépend de** : ADR-0011 (rédaction par Claude), ADR-0008 puis 0043 (rendu du menu) ; ADR-0015 pour
+  les planchers de couverture que ce lot reprend (§ « Aussi dans ce lot »)
 
 ## Contexte
 
@@ -77,7 +78,42 @@ après — l'ordre de grandeur est le fichier lui-même.
 - `workflows:accept` et `workflows:reject` (ADR-0047), qui ne consomment pas de brief.
 - Faire échouer quoi que ce soit sur un sommaire périmé.
 
+## Aussi dans ce lot : les planchers de couverture de l'ADR-0015 (ajouté le 2026-10-01)
+
+Le premier passage de la CI (2026-10-01, Actions coupées hors du passage mensuel) a **mesuré pour la
+première fois** ce que l'ADR-0015 exige et qu'aucun poste ne pouvait mesurer, faute de pilote de
+couverture. Deux défauts empêchaient même la mesure ; ils sont corrigés (`ea98f6f`) : le hash de
+commit des fixtures dépendait de `config/reference.php`, et PHPUnit 13 ne découpe plus
+`--exclude-group` sur la virgule — la couverture jouait aussi les tests de bout en bout.
+
+| Plancher (`CoverageThresholds`) | Mesuré | Exigé |
+|---|---|---|
+| `src/` hors `Bridge/` | 82,64 % de 4 747 instructions | 90 % |
+| `src/Inspection/Freshness/` | 88,79 % de 116 | 100 % |
+| `src/Tracking/` | 79,17 % de 360 | 100 % |
+| `src/Inspection/Diff/`, `src/Review/` | atteints | 100 % |
+| Infection (`Freshness/`, `Tracking/`) | MSI du code couvert 72 % — 380 mutants tués, 146 non détectés | « fixé à la valeur atteinte » |
+
+**Décision (jul6art, 2026-10-01) : on ajoute des tests ; les planchers ne baissent pas.** Les tests de
+bout en bout n'y comptent pas, et c'est voulu : ils jouent `bin/devtools` dans un sous-processus, que
+pcov ne mesure pas — le plancher se tient par des tests unitaires de ce qui décide.
+
+⚠️ Le poste n'a toujours pas de pilote de couverture : `pecl install pcov` en local, ou la CI —
+réactiver les Actions, `gh workflow run ci.yml -R jul6art/devtools`, recouper ensuite.
+
 ## Critères d'acceptation
+
+**Planchers de l'ADR-0015 :**
+
+- [ ] `composer coverage` vert : `src/` ≥ 90 %, `Inspection/Freshness/` et `Tracking/` à 100 %, sans que
+      `Inspection/Diff/` ni `Review/` quittent leurs 100 % — par des tests unitaires, aucun plancher abaissé
+- [ ] Infection : chaque mutant survivant de `Freshness/` et `Tracking/` tué ou justifié un par un
+      (critère de l'ADR-0010), puis `minCoveredMsi` fixé dans `infection.json5` à la valeur atteinte
+- [ ] Les jobs « Coverage floors » et « Mutation » verts en CI ; cochées, les deux cases ouvertes de
+      l'ADR-0015 (seuils et MSI en CI, CI verte) et celle de l'ADR-0010 (couverture 100 % et mutants) ;
+      la ligne de l'ADR-0015 dans `docs/adr/README.md` passée à livrée
+
+**Sommaire :**
 
 - [ ] Après `apply` d'un brouillon, `workflows.md` ne liste plus ce workflow en « rédaction en
       attente » — test sur un projet-fixture à deux workflows, un appliqué, un non

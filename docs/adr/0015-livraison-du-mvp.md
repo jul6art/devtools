@@ -79,12 +79,12 @@ publication d'un site de documentation ; tout module postérieur à P1.
 - [x] Matrice de bout en bout verte sur les six fixtures, étapes 1 à 4
 - [x] Les deux modes produisent un `.devtools/` identique sur `symfony-minimal`
 - [x] Les quatre métriques du § 8 mesurées et tenues, chiffres consignés dans le README
-- [ ] Seuils de couverture et MSI appliqués en CI *(seuils de couverture : job CI « Coverage floors » et `composer coverage` ; MSI minimal à fixer à la valeur du premier passage d'Infection — aucun pilote de couverture sur le poste)*
+- [ ] Seuils de couverture et MSI appliqués en CI *(seuils de couverture : job CI « Coverage floors » et `composer coverage` ; MSI minimal à fixer à la valeur du premier passage d'Infection — aucun pilote de couverture sur le poste. **Mesuré en CI le 2026-10-01** : `src/` 82,64 %, `Freshness/` 88,79 %, `Tracking/` 79,17 %, MSI 72 % — **repris par l'ADR-0049**, on ajoute des tests)*
 - [x] `.devtools/` de ce dépôt committé, et `inspect --no-ai` sur ce dépôt ne modifie rien
 - [x] Installation `global` et `require-dev` testées
 - [x] README complet : les deux modes, `init`, `inspect`, `apply`, `claude:install`, options, ce qu'on
       committe, pièges (Docker, console qui ne boote pas, `--prune`)
-- [ ] CI réactivée et verte *(Actions désactivées : décision humaine)* ; `docs/adr/README.md` : 0000 à 0015 marqués livrés
+- [ ] CI réactivée et verte *(Actions désactivées : décision humaine. Depuis le 2026-10-01, jouée une fois par mois ; verte sauf « Coverage floors » — ADR-0049)* ; `docs/adr/README.md` : 0000 à 0015 marqués livrés
 
 ## Conséquences
 
