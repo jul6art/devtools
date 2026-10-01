@@ -12,7 +12,7 @@
     "phpUnit": {
         "configDir": "."
     },
-    "testFrameworkOptions": "--exclude-group=end-to-end,performance",
+    "testFrameworkOptions": "--exclude-group=end-to-end --exclude-group=performance",
     "logs": {
         "text": "var/infection.log",
         "summary": "var/infection-summary.log"

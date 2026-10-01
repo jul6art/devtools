@@ -1,5 +1,5 @@
 # GET /health
-`route.get-health` · type: routes · last updated: 2026-09-16 · commit: f2bd976
+`route.get-health` · type: routes · last updated: 2026-09-16 · commit: 3dc5b8a
 
 ## Summary
 
@@ -51,4 +51,4 @@ La réponse ne vérifie aucune dépendance : elle reste « ok » même si le ser
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | f2bd976 | rédaction initiale |
+| 2026-09-16 | 3dc5b8a | rédaction initiale |

@@ -1,5 +1,5 @@
 # /orders/:id — fiche d'une commande
-`route.orders-id` · type: routes · last updated: 2026-09-16 · commit: 973d403
+`route.orders-id` · type: routes · last updated: 2026-09-16 · commit: 342fdb0
 
 ## Summary
 
@@ -59,4 +59,4 @@ composant n'actualise pas la commande. Un identifiant non numérique donne `NaN`
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 973d403 | rédaction initiale |
+| 2026-09-16 | 342fdb0 | rédaction initiale |

@@ -1,6 +1,6 @@
 # Workflows — monorepo
 
-Stack: Symfony 7.4 (api) + Angular 22.0 (front) · 2 workflows · last scan: 2026-09-16 (commit 6ecdbd0)
+Stack: Symfony 7.4 (api) + Angular 22.0 (front) · 2 workflows · last scan: 2026-09-16 (commit 4f6255c)
 
 [Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-7](../../.devtools/knowledge/symfony-7.md) · [Knowledge angular-22](../../.devtools/knowledge/angular-22.md)
 

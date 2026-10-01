@@ -90,7 +90,7 @@
             "@test"
         ],
         "coverage": [
-            "phpunit --exclude-group=end-to-end,performance --coverage-clover=var/coverage/clover.xml",
+            "phpunit --exclude-group=end-to-end --exclude-group=performance --coverage-clover=var/coverage/clover.xml",
             "php tests/Support/check-coverage.php var/coverage/clover.xml"
         ],
         "infection": "infection --threads=max --show-mutations"

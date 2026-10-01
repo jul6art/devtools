@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="async.order-created" type="async" schema-version="1">
   <title>OrderCreated</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
-  <source vcs="git" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" branch="main" dirty="true"/>
+  <source vcs="git" commit="17774264b403f17965e39ec16e79f2b023431f42" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="message-handler" name="App\MessageHandler\OrderCreatedHandler" role="main">
       <declared-in path="src/MessageHandler/OrderCreatedHandler.php" role="handler"/>
@@ -21,6 +21,6 @@
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="65429e26f27db8d0bd5c8cd70491c0d4cb196103" reason="initial"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="17774264b403f17965e39ec16e79f2b023431f42" reason="initial"/>
   </history>
 </workflow>

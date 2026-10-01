@@ -1,5 +1,5 @@
 # GET /orders/{id}
-`route.order.show` · type: routes · last updated: 2026-09-16 · commit: f815420
+`route.order.show` · type: routes · last updated: 2026-09-16 · commit: 18b210d
 
 ## Summary
 
@@ -55,4 +55,4 @@ valeur nulle, au lieu d'une réponse 404.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | f815420 | rédaction initiale |
+| 2026-09-16 | 18b210d | rédaction initiale |

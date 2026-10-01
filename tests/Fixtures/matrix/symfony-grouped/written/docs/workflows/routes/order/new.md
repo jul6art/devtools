@@ -1,5 +1,5 @@
 # GET|POST /orders/new
-`route.order.new` · type: routes · last updated: 2026-09-16 · commit: f815420
+`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 18b210d
 
 ## Summary
 
@@ -93,4 +93,4 @@ Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le rensei
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | f815420 | rédaction initiale |
+| 2026-09-16 | 18b210d | rédaction initiale |

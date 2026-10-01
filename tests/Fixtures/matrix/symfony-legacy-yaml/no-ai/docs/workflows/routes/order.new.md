@@ -1,5 +1,5 @@
 # GET|POST /orders/new
-`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 65429e2
+`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 1777426
 
 ## Summary
 
@@ -62,4 +62,4 @@ stateDiagram-v2
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 65429e2 | initial |
+| 2026-09-16 | 1777426 | initial |

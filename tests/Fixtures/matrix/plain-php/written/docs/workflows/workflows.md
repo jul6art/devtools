@@ -1,6 +1,6 @@
 # Workflows — acme/plain-php
 
-Stack: Php · 5 workflows · last scan: 2026-09-16 (commit 2620449)
+Stack: Php · 5 workflows · last scan: 2026-09-16 (commit 104228a)
 
 [Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge php-8](../../.devtools/knowledge/php-8.md)
 

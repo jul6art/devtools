@@ -1,5 +1,5 @@
 # /items
-`route.items` · type: routes · last updated: 2026-09-16 · commit: 6ecdbd0
+`route.items` · type: routes · last updated: 2026-09-16 · commit: 4f6255c
 
 ## Summary
 
@@ -53,4 +53,4 @@ Le composant n'utilise pas `GET /api/items` de l'application `api` : la page est
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 6ecdbd0 | rédaction initiale |
+| 2026-09-16 | 4f6255c | rédaction initiale |

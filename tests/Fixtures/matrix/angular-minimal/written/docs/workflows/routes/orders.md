@@ -1,5 +1,5 @@
 # /orders — liste des commandes
-`route.orders` · type: routes · last updated: 2026-09-16 · commit: 973d403
+`route.orders` · type: routes · last updated: 2026-09-16 · commit: 342fdb0
 
 ## Summary
 
@@ -63,4 +63,4 @@ Aucun état de chargement ni de gestion d'erreur : si l'API échoue, la liste re
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 973d403 | rédaction initiale |
+| 2026-09-16 | 342fdb0 | rédaction initiale |

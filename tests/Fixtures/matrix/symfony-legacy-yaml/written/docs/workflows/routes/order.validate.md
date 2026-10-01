@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 65429e2
+`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 1777426
 
 ## Summary
 
@@ -75,4 +75,4 @@ déjà validée) lève une exception non interceptée : réponse 500 au lieu d'u
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 65429e2 | rédaction initiale |
+| 2026-09-16 | 1777426 | rédaction initiale |

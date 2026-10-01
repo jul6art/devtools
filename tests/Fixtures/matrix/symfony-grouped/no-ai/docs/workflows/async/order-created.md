@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type: async · last updated: 2026-09-16 · commit: f815420
+`async.order-created` · type: async · last updated: 2026-09-16 · commit: 18b210d
 
 ## Summary
 
@@ -49,4 +49,4 @@
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | f815420 | initial |
+| 2026-09-16 | 18b210d | initial |

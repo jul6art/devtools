@@ -1,6 +1,6 @@
 # Workflows — acme/symfony-minimal
 
-Stack: Symfony 8.1 · 9 workflows · last scan: 2026-09-16 (commit f815420)
+Stack: Symfony 8.1 · 9 workflows · last scan: 2026-09-16 (commit 18b210d)
 
 [Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-8](../../.devtools/knowledge/symfony-8.md)
 

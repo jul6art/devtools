@@ -1,5 +1,5 @@
 # /orders/new.php
-`route.orders.new` · type: routes · last updated: 2026-09-16 · commit: 2620449
+`route.orders.new` · type: routes · last updated: 2026-09-16 · commit: 104228a
 
 ## Summary
 
@@ -66,4 +66,4 @@ jeton CSRF ne protège le formulaire.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 2620449 | rédaction initiale |
+| 2026-09-16 | 104228a | rédaction initiale |

@@ -1,5 +1,5 @@
 # GET /orders
-`route.order.index` · type: routes · last updated: 2026-09-16 · commit: 65429e2
+`route.order.index` · type: routes · last updated: 2026-09-16 · commit: 1777426
 
 ## Summary
 
@@ -66,4 +66,4 @@ propre workflow (`ui.cart-summary`).
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 65429e2 | rédaction initiale |
+| 2026-09-16 | 1777426 | rédaction initiale |

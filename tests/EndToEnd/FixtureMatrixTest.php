@@ -79,7 +79,10 @@ final class FixtureMatrixTest extends TestCase
 
         // Installed dependencies stay out of the repository: a commit hash — which the pages record — must
         // depend on the fixture's sources only, not on what Composer or npm resolved on this machine.
-        file_put_contents($project.'/.gitignore', "/vendor/\n/var/\n/node_modules/\n");
+        // ⚠️ Nor on `config/reference.php`, which Symfony 7.4 writes the first time a kernel boots: this
+        // repository ignores it, so a fresh clone (and the CI) never has it, while a machine that ran the
+        // fixture's console once does — two hashes for the same sources.
+        file_put_contents($project.'/.gitignore', "/vendor/\n/var/\n/node_modules/\n/config/reference.php\n");
         $repository = GitRepository::initialise($project);
         $repository->commitAll('fixture');
 

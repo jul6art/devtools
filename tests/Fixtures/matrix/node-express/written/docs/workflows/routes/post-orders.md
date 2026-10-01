@@ -1,5 +1,5 @@
 # POST /orders
-`route.post-orders` · type: routes · last updated: 2026-09-16 · commit: f2bd976
+`route.post-orders` · type: routes · last updated: 2026-09-16 · commit: 3dc5b8a
 
 ## Summary
 
@@ -56,4 +56,4 @@ erreur sur `req.body.customer`. Aucun test ne couvre la création.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | f2bd976 | rédaction initiale |
+| 2026-09-16 | 3dc5b8a | rédaction initiale |

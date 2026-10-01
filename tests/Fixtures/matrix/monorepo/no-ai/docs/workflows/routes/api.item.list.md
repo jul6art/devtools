@@ -1,5 +1,5 @@
 # GET /api/items
-`route.api.item.list` · type: routes · last updated: 2026-09-16 · commit: 6ecdbd0
+`route.api.item.list` · type: routes · last updated: 2026-09-16 · commit: 4f6255c
 
 ## Summary
 
@@ -45,4 +45,4 @@
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 6ecdbd0 | initial |
+| 2026-09-16 | 4f6255c | initial |

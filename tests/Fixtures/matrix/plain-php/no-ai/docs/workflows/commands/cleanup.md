@@ -1,5 +1,5 @@
 # cleanup
-`command.cleanup` · type: commands · last updated: 2026-09-16 · commit: 2620449
+`command.cleanup` · type: commands · last updated: 2026-09-16 · commit: 104228a
 
 ## Summary
 
@@ -45,4 +45,4 @@
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 2620449 | initial |
+| 2026-09-16 | 104228a | initial |

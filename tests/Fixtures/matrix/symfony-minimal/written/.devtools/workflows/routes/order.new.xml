@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.new" type="routes" schema-version="1">
   <title>GET|POST /orders/new</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/3"/>
-  <source vcs="git" commit="f815420d31f9d5855dcfc2492de52193b10367b4" branch="main" dirty="true"/>
+  <source vcs="git" commit="18b210d51cded26295e31fdf58ab25a8ce140c31" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="app_order_new" role="main">
       <declared-in path="src/Controller/OrderController.php" role="controller"/>
@@ -60,6 +60,6 @@
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="f815420d31f9d5855dcfc2492de52193b10367b4" reason="rédaction initiale"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="18b210d51cded26295e31fdf58ab25a8ce140c31" reason="rédaction initiale"/>
   </history>
 </workflow>
