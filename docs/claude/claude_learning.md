@@ -584,3 +584,20 @@
   ne portaient aucun `<fact>` mais leur raison nommait un écouteur ajouté. Les amender comme une simple
   montée de paquet aurait signé une prose non relue ; la règle exige désormais la raison ET, quand elle
   nomme un fait du parcours, la preuve que la page le dit déjà (24 pages sur 24, ici).
+
+### 2026-10-01 — premier passage de la CI : ce que le poste ne pouvait pas voir
+
+- ⚠️ **Un fichier IGNORÉ par ce dépôt entre quand même dans le commit d'une fixture.** Le test de
+  matrice recopie la fixture puis la commite avec son propre `.gitignore` ; `config/reference.php`,
+  écrit par Symfony 7.4 au premier démarrage d'un noyau et ignoré ici, y entrait sur un poste qui avait
+  déjà lancé la console de la fixture, jamais sur un clone neuf. Les snapshots portaient donc un hash
+  que la CI ne pouvait pas produire. Tout sous-produit d'exécution s'exclut dans le `.gitignore` de la
+  copie, et un snapshot se régénère depuis un état « clone neuf » (fixture sans fichier ignoré).
+- ⚠️ **PHPUnit 13 ne découpe plus `--exclude-group` sur la virgule.** `end-to-end,performance` nommait
+  un groupe inexistant : la couverture et Infection jouaient les 513 tests au lieu de 498. Répéter
+  l'option (`--exclude-group=end-to-end --exclude-group=performance`) ; le vérifier par
+  `--list-tests`, jamais en lisant la ligne de commande.
+- **Les planchers de l'ADR-0015 mesurés pour la première fois** (pcov, CI) : `src/` 82,64 % pour 90,
+  `Inspection/Freshness/` 88,79 % pour 100, `Tracking/` 79,17 % pour 100 ; Infection : MSI du code
+  couvert 72 % (380 mutants tués, 146 non détectés). Le job « Coverage floors » reste rouge tant que ce
+  critère de l'ADR n'est pas tenu — c'est la première mesure, pas une régression.
