@@ -207,8 +207,12 @@ vendor/bin/devtools stack:detect
  ------ ------------ ------------- --------- ------------ -----------------------------
 ```
 
-A monorepo gets one stack per directory holding a framework. A framework version comes from the lock
-file when there is one, from the constraint otherwise. The adapter says who finds the workflows:
+A monorepo gets one stack per directory holding a framework — or a Node application without one: a
+`package.json` with an entry point (`bin`, `main` or a `start` script) AND runtime `dependencies` is
+reported as framework `node`, and the directories of its entry points join its sources. The
+`package.json` of a build tool (Webpack Encore beside a Symfony application) has neither, and stays
+tooling. A `tsconfig.json` with `checkJs` keeps the language `javascript`. A framework version comes
+from the lock file when there is one, from the constraint otherwise. The adapter says who finds the workflows:
 `symfony` and `generic-php` are native; everything else goes to Claude.
 
 ⚠️ **A wrong detection is corrected in `stack.xml`, not with an option.** Mark the element

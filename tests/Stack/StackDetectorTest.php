@@ -40,7 +40,7 @@ final class StackDetectorTest extends TestCase
      */
     public static function fixtureProjects(): iterable
     {
-        foreach (['symfony-minimal', 'plain-php', 'node-express', 'angular-minimal', 'monorepo'] as $project) {
+        foreach (['symfony-minimal', 'plain-php', 'node-express', 'angular-minimal', 'monorepo', 'node-app-monorepo'] as $project) {
             yield $project => [$project];
         }
     }
@@ -84,6 +84,84 @@ final class StackDetectorTest extends TestCase
         file_put_contents($project.'/package.json', '{"name": "assets", "devDependencies": {"@symfony/webpack-encore": "^5.0"}}');
 
         self::assertCount(1, new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks);
+    }
+
+    /** ADR-0050: an application Node package next to a back office is a stack; the Encore package.json is not. */
+    public function testAFrameworklessNodeApplicationNextToASymfonyProjectIsAStack(): void
+    {
+        $document = new StackDetector()->detect(new ProjectRoot(self::PROJECTS.'/node-app-monorepo'), new Config());
+
+        self::assertSame(['.', 'worker'], array_map(static fn (StackProfile $stack): string => $stack->root, $document->stacks));
+        $worker = $document->stacks[1];
+        self::assertSame('node', $worker->framework);
+        self::assertSame('javascript', $worker->language, 'checkJs: JavaScript that tsc checks, not TypeScript.');
+        self::assertSame('24.1', $worker->version);
+        self::assertSame('node-24', $worker->knowledgeKey);
+        self::assertSame('claude', $worker->adapter);
+        self::assertSame(['bin', 'src'], $worker->sourceDirs, 'The directory of the entry point is a source.');
+        self::assertSame(['test'], $worker->testDirs);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>}>
+     */
+    public static function toolingManifests(): iterable
+    {
+        yield 'an entry point without runtime dependencies' => [['name' => 'tool', 'main' => 'bin/worker.js', 'devDependencies' => ['eslint' => '^9.0']]];
+        yield 'runtime dependencies without an entry point' => [['name' => 'lib', 'dependencies' => ['mysql2' => '^3.11']]];
+    }
+
+    /**
+     * @param array<string, mixed> $manifest
+     */
+    #[DataProvider('toolingManifests')]
+    public function testAFrameworklessPackageNeedsAnEntryPointAndRuntimeDependenciesToBeAnApplication(array $manifest): void
+    {
+        $project = $this->copyOf('node-app-monorepo');
+        file_put_contents($project.'/worker/package.json', json_encode($manifest, \JSON_THROW_ON_ERROR));
+
+        self::assertSame(['.'], array_map(static fn (StackProfile $stack): string => $stack->root, new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks));
+    }
+
+    public function testAStartScriptIsAnEntryPointAndABinMapNamesSources(): void
+    {
+        $project = $this->copyOf('node-app-monorepo');
+        mkdir($project.'/worker/cli');
+        file_put_contents($project.'/worker/package.json', json_encode(['name' => 'acme-worker', 'bin' => ['acme' => './cli/acme.js'], 'scripts' => ['start' => 'node cli/acme.js'], 'dependencies' => ['mysql2' => '^3.11']], \JSON_THROW_ON_ERROR));
+
+        $worker = new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks[1];
+
+        self::assertSame(['cli', 'src'], $worker->sourceDirs);
+    }
+
+    public function testTheNodeVersionComesFromTheEnginesThenTheNvmrcThenNowhere(): void
+    {
+        $project = $this->copyOf('node-app-monorepo');
+        $manifest = json_decode((string) file_get_contents($project.'/worker/package.json'), true, 512, \JSON_THROW_ON_ERROR);
+        self::assertIsArray($manifest);
+        unset($manifest['engines']);
+        file_put_contents($project.'/worker/package.json', json_encode($manifest, \JSON_THROW_ON_ERROR));
+        file_put_contents($project.'/worker/.nvmrc', "v24.3.0\n");
+
+        $worker = new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks[1];
+        self::assertSame('24.3', $worker->version);
+
+        unlink($project.'/worker/.nvmrc');
+        $worker = new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks[1];
+        self::assertNull($worker->version);
+        self::assertSame('node', $worker->knowledgeKey);
+    }
+
+    public function testATsconfigWithoutCheckJsOrUnreadableMeansTypeScript(): void
+    {
+        $project = $this->copyOf('node-app-monorepo');
+
+        file_put_contents($project.'/worker/tsconfig.json', '{"compilerOptions": {"strict": true}}');
+        self::assertSame('typescript', new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks[1]->language);
+
+        // Comments are common in a tsconfig: the file keeps the verdict its presence gave, and nothing throws.
+        file_put_contents($project.'/worker/tsconfig.json', "// generated\n{\"compilerOptions\": {\"checkJs\": true}}");
+        self::assertSame('typescript', new StackDetector()->detect(new ProjectRoot($project), new Config())->stacks[1]->language);
     }
 
     public function testAProjectWithoutAKnownManifestIsLeftToClaude(): void

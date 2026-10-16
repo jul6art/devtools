@@ -601,3 +601,16 @@
   `Inspection/Freshness/` 88,79 % pour 100, `Tracking/` 79,17 % pour 100 ; Infection : MSI du code
   couvert 72 % (380 mutants tués, 146 non détectés). Le job « Coverage floors » reste rouge tant que ce
   critère de l'ADR n'est pas tenu — c'est la première mesure, pas une régression.
+
+### 2026-10-17 — une application Node sans framework devient une stack (ADR-0050)
+
+- ⚠️ **La règle des sous-dossiers écartait une application entière.** « Un sous-dossier ne compte, à
+  côté d'une stack à la racine, que s'il porte un framework » protégeait du `package.json` d'Encore,
+  mais faisait disparaître le runtime Node de Tradebot (`bot/`) : aucune erreur, une stack de moins
+  dans le tableau. Le critère qui sépare les deux est dans le manifeste : un point d'entrée ET des
+  dépendances d'exécution.
+- ⚠️ **Un `tsconfig.json` porte souvent des commentaires** : le lire avec `json()` (strict, qui lève)
+  aurait fait échouer la détection d'un projet TypeScript qui marchait la veille. Lecture tolérante,
+  et l'ancien verdict quand elle échoue.
+- Vérifié par mutation (la condition des dépendances, celle de `checkJs`) ; jeu `lowest` vert dans une
+  copie hors du dépôt (Symfony 7.4.0, 520 tests).

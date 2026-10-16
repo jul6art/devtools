@@ -67,6 +67,7 @@
 | [0047](0047-accepter-ou-refuser-un-changement.md) | Accepter un changement, ou le refuser : la revue | MVP+ — Retours d'usage | Accepted | — |
 | [0048](0048-regle-phpstan-de-derive.md) | La dérive se voit là où on écrit le code : une règle PHPStan | MVP+ — Retours d'usage | Accepted | — |
 | [0049](0049-sommaire-apres-apply.md) | Le sommaire ment jusqu'à la prochaine inspection — et les planchers de couverture de l'ADR-0015 | MVP+ — Retours d'usage | Proposed | — |
+| [0050](0050-application-node-sans-framework.md) | Une application Node sans framework est une stack | MVP+ — Retours d'usage | Accepted | 2026-10-17 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 

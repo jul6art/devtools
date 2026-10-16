@@ -1,0 +1,10 @@
+{
+    "name": "acme-shop-assets",
+    "private": true,
+    "devDependencies": {
+        "@symfony/webpack-encore": "^5.0"
+    },
+    "scripts": {
+        "build": "encore production"
+    }
+}
