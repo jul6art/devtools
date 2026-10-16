@@ -83,7 +83,7 @@ le projet écrit du JavaScript que `tsc` vérifie, et sa langue reste `javascrip
 - [x] Sur Tradebot : `bot` apparaît, `javascript`, `node`, adaptateur `claude`, sources `src`, `bin`.
 - [x] Les fixtures existantes gardent leur `stack.xml` attendu, sauf la ligne du § 2 pour une
       application Node à la racine.
-- [ ] `composer qa` vert, jeux `highest` et `lowest`.
+- [x] `composer qa` vert (520 tests), jeux `highest` et `lowest` (Symfony 7.4.0, dans une copie).
 
 ## Conséquences
 
