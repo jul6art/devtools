@@ -10,6 +10,7 @@ use Jul6Art\DevTools\Command\InitCommand;
 use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
+use Jul6Art\DevTools\Command\ScenariosGenerateCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
 use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
@@ -51,6 +52,7 @@ class DevToolsExtension extends Extension
         KnowledgePromoteCommand::class => 'knowledge:promote',
         KnowledgeAmendCommand::class => 'knowledge:amend',
         WorkflowsImpactCommand::class => 'workflows:impact',
+        ScenariosGenerateCommand::class => 'scenarios:generate',
     ];
 
     #[\Override]

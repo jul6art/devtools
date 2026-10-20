@@ -31,11 +31,12 @@ final class MenuRenderer
     private const int FLAT_ENTRIES = 12;
 
     /**
-     * @param list<FileRef>      $uncovered
-     * @param list<WorkflowId>   $pendingRedaction workflows with a draft waiting for Claude (ADR-0011)
-     * @param list<WorkflowType> $customTypes
+     * @param list<FileRef>         $uncovered
+     * @param list<WorkflowId>      $pendingRedaction workflows with a draft waiting for Claude (ADR-0011)
+     * @param list<WorkflowType>    $customTypes
+     * @param array<string, string> $scenarios        scenario => why it needs a look (ADR-0020)
      */
-    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = [], string $docs = DevToolsDirectory::DEFAULT_DOCS): string
+    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = [], string $docs = DevToolsDirectory::DEFAULT_DOCS, array $scenarios = []): string
     {
         // The menu lives with the pages; everything it links to outside them lives in .devtools/.
         $machinery = static fn (string $path): string => DevToolsDirectory::machineryLink($docs, $path);
@@ -101,6 +102,11 @@ final class MenuRenderer
             if ([] !== $reasons) {
                 $attention[] = '- ⚠ '.MarkdownWriter::link(MarkdownWriter::code($entry->id->value), $entry->page()).' — '.implode(', ', $reasons);
             }
+        }
+
+        // A scenario whose workflow was rewritten is listed, never deleted: what it checks may still hold.
+        foreach ($scenarios as $scenario => $reason) {
+            $attention[] = '- ⚠ scenario '.MarkdownWriter::link(MarkdownWriter::code($scenario), $machinery('scenarios/'.$scenario.'.xml')).' — '.$reason;
         }
 
         $lines = [...$lines, '', '## To check', '', ...([] === $attention ? [MarkdownWriter::EMPTY] : $attention)];

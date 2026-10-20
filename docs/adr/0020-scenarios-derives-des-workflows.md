@@ -1,6 +1,6 @@
 # ADR-0020 — Scénarios reproductibles dérivés des workflows
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-20 (proposée le 2026-09-16 ; phase 1 lancée par jul6art) · Livré le 2026-10-20
 - **Décideurs** : jul6art
 - **Specs** : § 1.2, § 1.3 (biais de l'auteur), § 3.1 (module Scenarios), § 5.2, § 9 (phase 1)
 
@@ -61,6 +61,34 @@ pas de `symfony/yaml` dans le cœur. Claude les écrit ; un humain les lit dans 
 Un workflow réécrit (ADR-0010) marque ses scénarios **à revoir** (listés dans le menu) ; ils ne sont
 pas supprimés.
 
+### Précisions à l'acceptation (2026-10-20)
+
+- **Vocabulaire livré** : les douze actions génériques et une seule action métier, `select2` — celle de
+  l'exemple. `datatable-filter` et `modal-confirm` viendront une par une, chacune avec son implémentation
+  dans le runner (ADR-0021). `goto` prend ses paramètres de route en enfants `<param name value>` ; `click`
+  désigne un `text` **ou** un `selector`, ce que DevTools vérifie à la lecture (XSD 1.0 ne sait pas le dire).
+- **Un brouillon** est `<scenarios>` (un ou plusieurs `<scenario>`, même schéma) dans
+  `pending/scenario.<id>.draft.xml`, à côté de son brief ; prompt `resources/prompts/scenario/v1.md`.
+- **Squelette** : seulement pour une route `GET` **sans paramètre** — une valeur de paramètre ne se
+  devine pas, et un squelette doit se rejouer tel quel. Nommé `smoke` ; rôle = le dernier `ROLE_*` que la
+  sécurité nomme (`ROLE_USER, ROLE_OPERATOR` → `ROLE_OPERATOR`), à défaut `IS_AUTHENTICATED_*`, sinon
+  aucun `login`. Les autres routes et les composants sont nommés en sortie (`--no-ai`), ou briefés (IA).
+  En mode IA, le squelette est écrit **et** le brief : rejouable tout de suite, puis complété.
+- **Index** `scenarios/index.xml` (`scenario-index.xsd`) : par scénario, `origin` (`skeleton`, `claude`,
+  `human`), `sha256` du fichier tel qu'enregistré, `revision` du workflow contre laquelle il a été écrit.
+  Un fichier dont le hash ne correspond plus devient `human` ; un fichier écrit à la main est inscrit
+  `human` ; un fichier disparu quitte l'index. `workflows:apply` refuse un brouillon qui récrirait un
+  scénario humain, même modifié depuis le dernier `scenarios:generate`.
+- **« À revoir »** se calcule, il ne s'écrit pas : un scénario est à revoir quand la dernière révision de
+  son workflow (`index.xml`) est postérieure à la sienne. Un squelette est réécrit par le `generate`
+  suivant, ceux de Claude re-briefés ; un scénario humain reste tel quel jusqu'à
+  `scenarios:generate --reviewed=<id>`, qui enregistre la relecture — et rend le scénario humain s'il ne
+  l'était pas.
+- **Orphelin** : workflow absent de l'index ou `orphaned` — ligne du menu et avertissement de `inspect`
+  (code de sortie 1, comme tout avertissement).
+- Brief : raison, page, fichier de suivi, knowledge de la stack, vocabulaire, routes du workflow, rôle,
+  scénarios existants avec leur origine. Un brief que plus rien ne justifie est supprimé.
+
 ## Budget d'exécution
 
 Génération : une tâche IA par workflow sans scénario ou marqué à revoir ; zéro sinon.
@@ -72,13 +100,17 @@ handlers asynchrones (routes et `ui` seulement) ; enregistrement d'un scénario 
 
 ## Critères d'acceptation
 
-- [ ] `scenario.xsd` : exemple ci-dessus valide ; action inconnue, workflow absent, identifiant mal
-      formé rejetés
-- [ ] `--no-ai` sur `symfony-minimal` : un squelette par route GET, rôle inclus (snapshot)
-- [ ] Brouillon enregistré appliqué ; brouillon référant une route inconnue refusé
-- [ ] Scénario modifié à la main non régénéré
-- [ ] Workflow réécrit → scénarios « à revoir » au menu ; workflow orphelin → scénario signalé
-- [ ] README : section « Scénarios »
+- [x] `scenario.xsd` : exemple ci-dessus valide ; action inconnue, workflow absent, identifiant mal
+      formé rejetés *(aussi : un identifiant d'un autre workflow, un `click` sur rien ou sur deux cibles)*
+- [x] `--no-ai` sur `symfony-minimal` : un squelette par route GET, rôle inclus (snapshot) *(par route
+      GET sans paramètre : `route.health`, `route.order.index`, `route.order.new` —
+      `tests/Fixtures/snapshots/scenarios/skeletons.xml`)*
+- [x] Brouillon enregistré appliqué ; brouillon référant une route inconnue refusé *(aussi : un autre
+      workflow, sans brief, invalide, périmé)*
+- [x] Scénario modifié à la main non régénéré *(ni par `generate`, ni par un brouillon)*
+- [x] Workflow réécrit → scénarios « à revoir » au menu ; workflow orphelin → scénario signalé *(menu
+      et avertissement d'`inspect`)*
+- [x] README : section « Scénarios » *(« Scenarios »)*
 
 ## Conséquences
 

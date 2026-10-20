@@ -31,6 +31,9 @@ use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Rendering\ParsedPage;
 use Jul6Art\DevTools\Rendering\RenderingContext;
+use Jul6Art\DevTools\Scenario\ScenarioDraftApplier;
+use Jul6Art\DevTools\Scenario\ScenarioReview;
+use Jul6Art\DevTools\Scenario\XmlScenarioIndexStore;
 use Jul6Art\DevTools\Stack\Knowledge\DepositOutcome;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
@@ -93,13 +96,23 @@ final readonly class DraftApplier
             $this->applyGroup($directory, $draftFile, $result);
         }
 
+        $types = new WorkflowTypeRegistry($config->customTypes);
+
+        // Then the scenarios (ADR-0020): they need the index and the routes, never a page.
+        $scenarios = new ScenarioDraftApplier($this->writer)->apply($directory, $types);
+        $result->accepted = [...$result->accepted, ...$scenarios['accepted']];
+        $result->refused = [...$result->refused, ...$scenarios['refused']];
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
 
         if ([] === $drafts) {
+            // The menu lists the scenarios to review: one Claude rewrote leaves the list.
+            if ([] !== $scenarios['accepted']) {
+                $this->refreshMenu($directory, new XmlIndexStore($types)->read($directory->indexFile()), $config);
+            }
+
             return $result;
         }
 
-        $types = new WorkflowTypeRegistry($config->customTypes);
         $tracking = new XmlTrackingStore($types, $this->writer);
         $documents = [];
 
@@ -503,7 +516,8 @@ final readonly class DraftApplier
         $uncovered = MenuRenderer::uncoveredIn((string) file_get_contents($directory->menuFile()));
         $pending = array_map(static fn (string $brief): WorkflowId => new WorkflowId(substr(basename($brief), \strlen('page.'), -\strlen('.brief.xml'))), glob($directory->path('pending/page.*.brief.xml')) ?: []);
         $stacks = new XmlStackStore()->read($directory->stackFile());
+        $scenarios = ScenarioReview::attention(new XmlScenarioIndexStore()->read($directory->scenarioIndexFile()), $index);
 
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs));
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios));
     }
 }

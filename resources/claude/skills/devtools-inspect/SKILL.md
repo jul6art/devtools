@@ -37,6 +37,10 @@ through files, and DevTools validates everything you write before it reaches `.d
    - read the model, the current page, the knowledge file, and the files the model lists;
    - write the draft at the brief's `<draft path>`.
 
+   **Scenario briefs** (`scenario.*.brief.xml`) exist only when someone ran `scenarios:generate`: follow
+   the prompt each names (`resources/prompts/scenario/v1.md`), write the XML draft at its `<draft path>` —
+   never a scenario whose origin is `human` — and apply with the pages.
+
 4. Apply the drafts:
 
    ```shell

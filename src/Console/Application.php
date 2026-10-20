@@ -14,6 +14,7 @@ use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\McpServeCommand;
+use Jul6Art\DevTools\Command\ScenariosGenerateCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\WorkflowsAcceptCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
@@ -65,6 +66,7 @@ final class Application extends BaseApplication
             new WorkflowsReviewCommand(),
             new WorkflowsAcceptCommand(),
             new WorkflowsRejectCommand(),
+            new ScenariosGenerateCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

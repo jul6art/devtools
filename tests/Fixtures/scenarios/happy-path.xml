@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The example of ADR-0020, as written there. -->
+<scenario xmlns="https://github.com/jul6art/devtools/schema/scenario/1" schema-version="1"
+          id="route.order.new/happy-path" workflow="route.order.new">
+  <given>
+    <login role="ROLE_OPERATOR"/>              <!-- résolu par un LoginProvider du projet -->
+    <fixture name="catalog-loaded"/>           <!-- résolu par un FixtureProvider du projet -->
+  </given>
+  <steps>
+    <goto route="app_order_new"/>
+    <fill field="order[customer]" value="ACME"/>
+    <select2 field="order[product]" search="Widget" pick="Widget XL"/>
+    <click text="Enregistrer"/>
+    <assert-route name="app_order_show"/>
+    <assert-visible selector=".flash-success"/>
+    <screenshot name="after-save"/>
+  </steps>
+</scenario>

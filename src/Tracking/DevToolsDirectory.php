@@ -125,6 +125,20 @@ final readonly class DevToolsDirectory
         return str_repeat('../', substr_count(trim($docs, '/'), '/') + 1).self::NAME.'/'.$inside;
     }
 
+    /**
+     * `.devtools/scenarios/route.order.new/happy-path.xml` (ADR-0020): one directory per workflow, its
+     * identifier as is — it is already safe as a file name.
+     */
+    public function scenarioFile(WorkflowId $workflow, string $name): string
+    {
+        return $this->path(\sprintf('scenarios/%s/%s.xml', $workflow->value, $name));
+    }
+
+    public function scenarioIndexFile(): string
+    {
+        return $this->path('scenarios/index.xml');
+    }
+
     public function trackingFile(WorkflowType $type, WorkflowId $id): string
     {
         return $this->path(\sprintf('workflows/%s/%s.xml', $type->name, $id->pageName()));

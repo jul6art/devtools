@@ -54,6 +54,8 @@ use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Rendering\ParsedPage;
 use Jul6Art\DevTools\Rendering\RenderingContext;
 use Jul6Art\DevTools\Resources;
+use Jul6Art\DevTools\Scenario\ScenarioReview;
+use Jul6Art\DevTools\Scenario\XmlScenarioIndexStore;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeBrief;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
@@ -341,7 +343,13 @@ final readonly class InspectionPipeline
 
         $indexStore->write($directory->indexFile(), $index);
         new XmlFilesToWorkflowsStore($this->writer)->write($directory->filesToWorkflowsFile(), FilesToWorkflows::fromTracking($documents));
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs));
+        $scenarios = ScenarioReview::attention(new XmlScenarioIndexStore()->read($directory->scenarioIndexFile()), $index);
+
+        foreach (ScenarioReview::orphans($scenarios) as $scenario => $reason) {
+            $report->warnings[] = \sprintf('The scenario %s is %s.', $scenario, $reason);
+        }
+
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios));
         $this->writer->write($directory->overviewFile(), new GraphRenderer()->render($workflows));
     }
 

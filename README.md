@@ -132,6 +132,7 @@ Usage
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
 | | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
 | **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages | nothing |
+| **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -739,6 +740,57 @@ did not write, unless `--force`. Claude Code asks each teammate to approve a ser
 ⚠️ **Without the SDK, `mcp:serve` does not exist**: asked for anyway, it answers with the line that
 installs it. The SDK is not 1.0 yet — DevTools follows one minor version at a time.
 
+Scenarios
+---------
+
+"I checked it in the browser" is neither reproducible nor verifiable. A scenario is: written, versioned, and
+replayed by a runner — what a person does, step by step, and what the application must show.
+
+```shell
+vendor/bin/devtools scenarios:generate                    # every route and component
+vendor/bin/devtools scenarios:generate route.order.new    # one workflow
+vendor/bin/devtools scenarios:generate --no-ai            # skeletons only
+```
+
+```xml
+<scenario xmlns="https://github.com/jul6art/devtools/schema/scenario/1" schema-version="1"
+          id="route.order.new/happy-path" workflow="route.order.new">
+  <given>
+    <login role="ROLE_OPERATOR"/>
+    <fixture name="catalog-loaded"/>
+  </given>
+  <steps>
+    <goto route="app_order_new"/>
+    <fill field="order[customer]" value="ACME"/>
+    <select2 field="order[product]" search="Widget" pick="Widget XL"/>
+    <click text="Save"/>
+    <assert-route name="app_order_show"/>
+    <assert-visible selector=".flash-success"/>
+    <screenshot name="after-save"/>
+  </steps>
+</scenario>
+```
+
+Each one lives in `.devtools/scenarios/<workflow>/<name>.xml` and follows `scenario.xsd`, whose vocabulary is
+**closed**: `goto` (with `<param>` for a route's parameters), `fill`, `select`, `check`, `click` (a `text` or
+a `selector`), `submit`, `wait-for`, `assert-route`, `assert-visible`, `assert-text`, `assert-count`,
+`screenshot`, and the business action `select2`. `login` and `fixture` are **names** the project resolves:
+a scenario holds neither a password nor data.
+
+- **Without AI**, a route that answers GET without a parameter gets a `smoke` skeleton — visit, assert the
+  route, capture — as the role its security asks for. It can be replayed at once. The others are named.
+- **With AI**, each route and component without a scenario of its own gets a brief in `.devtools/pending/`;
+  Claude writes the draft, and `workflows:apply` checks it — the schema, its own workflow only, routes the
+  project has, no scenario a human wrote — or refuses it whole.
+- **A scenario written or modified by hand is never regenerated.** `.devtools/scenarios/index.xml` records
+  who wrote each one and its hash: a file that no longer matches is yours.
+- **A rewritten workflow puts its scenarios to review**, in the menu's « To check »: listed, never deleted.
+  A skeleton follows its facts on the next `scenarios:generate`; Claude's are briefed again; yours stay as
+  they are until `scenarios:generate --reviewed=<scenario>` records that you looked. A scenario whose
+  workflow is gone is listed too, and the inspection warns about it.
+
+Routes and components only: a command or a message has no browser to replay.
+
 Writing with Claude Code
 ------------------------
 
@@ -911,8 +963,8 @@ src/
 ├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
-│                            claude:uninstall, claude:hook, mcp:serve, knowledge:list,
-│                            knowledge:promote, knowledge:amend
+│                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
+│                            knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
@@ -929,6 +981,7 @@ src/
 ├── Impact/                  the workflows a change reaches, read from the graph
 ├── Claude/                  the hooks Claude Code runs, and the configuration files DevTools merges into
 ├── Mcp/                     the MCP server — the only directory that knows the MCP SDK
+├── Scenario/                scenarios: their format, skeletons, briefs, drafts, what to review
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else

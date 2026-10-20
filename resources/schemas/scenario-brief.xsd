@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to write the scenarios of a workflow: .devtools/pending/scenario.<id>.brief.xml (ADR-0020).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/scenario-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/scenario-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="scenario-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="reason" type="t:nonEmpty"/>
+                <xs:element name="page" type="t:pathElement"/>
+                <xs:element name="tracking" type="t:pathElement"/>
+                <xs:element name="knowledge" type="t:pathElement" minOccurs="0"/>
+                <xs:element name="vocabulary" type="t:pathElement"/>
+                <!-- The routes it may go to and assert: its own entry points and where it leads. -->
+                <xs:element name="route" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty"/>
+                        <xs:attribute name="methods" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="login" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="role" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The scenarios that exist; those written by hand are context, never to rewrite. -->
+                <xs:element name="scenario" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="origin" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft" type="t:pathElement"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="workflow" type="t:nonEmpty" use="required"/>
+            <xs:attribute name="revision" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
