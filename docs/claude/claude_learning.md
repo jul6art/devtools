@@ -655,3 +655,15 @@
   les deux acceptent ; et s'attendre à la même dérive dans les autres dépôts `jul6art/*` au prochain
   passage mensuel. Le passage du 2026-10-20 (hors cycle) a ensuite été vert sur ses six jobs, décomptes
   lus : l'ADR-0015 est livrée.
+
+### 2026-10-20 — toute analyse relève la limite mémoire, `workflows:check` compris
+
+- ⚠️ **`workflows:check` gardait la limite du PHP de la machine** (128 M sans réglage) : seul
+  `workflows:inspect` appelait `MemoryLimit::raiseTo()`, alors que `check`, `diff`, `review`, `accept` et
+  `reject` font la même analyse. Signalé depuis cegeta : `check` mourait dans `nikic/php-parser`, et les
+  hooks des projets ont dû poser `php -d memory_limit=1G` devant lui. **Règle :** le relèvement vit dans
+  `InspectionPipeline::run()`, par où passe toute analyse ; une analyse écrite hors du pipeline le relève
+  elle-même.
+- **Le plancher passe de 512 M à 1 G.** Mesure sur superp (2 073 fichiers, `check`) : 404 Mo de pic PHP avec
+  la version en cours, 79 % de 512 M — trop peu de marge pour un projet qui grandit et une analyse qui en
+  apprend davantage. La v3.1.2 y passait encore à 512 M.

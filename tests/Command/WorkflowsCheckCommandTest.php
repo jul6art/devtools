@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Tests\Command;
 use Jul6Art\DevTools\Clock\FrozenClock;
 use Jul6Art\DevTools\Command\WorkflowsCheckCommand;
 use Jul6Art\DevTools\Console\CheckRenderer;
+use Jul6Art\DevTools\Console\MemoryLimit;
 use Jul6Art\DevTools\Inspection\AdapterResolver;
 use Jul6Art\DevTools\Inspection\InspectionOptions;
 use Jul6Art\DevTools\Inspection\InspectionPipeline;
@@ -135,6 +136,26 @@ final class WorkflowsCheckCommandTest extends TestCase
         self::tester()->execute(['path' => $project]);
 
         self::assertSame($before, self::snapshotOf($project), 'A gate reads, it does not write.');
+    }
+
+    /**
+     * The check analyses the code as much as an inspection: it raises the limit too, instead of dying at the
+     * machine's 128 MB in someone's hook.
+     */
+    public function testTheMemoryLimitIsRaisedAsForAnInspection(): void
+    {
+        $project = $this->inspected();
+        $limit = \ini_get('memory_limit');
+        ini_set('memory_limit', '256M');
+
+        try {
+            self::tester()->execute(['path' => $project]);
+            $raised = \ini_get('memory_limit');
+        } finally {
+            ini_set('memory_limit', $limit);
+        }
+
+        self::assertSame(MemoryLimit::MINIMUM, $raised);
     }
 
     public function testAnUnknownFormatAndAMissingPathAreRefused(): void

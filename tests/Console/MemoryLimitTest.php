@@ -49,8 +49,8 @@ final class MemoryLimitTest extends TestCase
     {
         ini_set('memory_limit', '128M');
 
-        self::assertSame('512M', MemoryLimit::raiseTo());
-        self::assertSame('512M', \ini_get('memory_limit'));
+        self::assertSame('1G', MemoryLimit::raiseTo());
+        self::assertSame('1G', \ini_get('memory_limit'));
     }
 
     public function testAHigherLimitIsLeftAlone(): void

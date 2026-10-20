@@ -14,6 +14,7 @@ use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Config\XmlConfigReader;
+use Jul6Art\DevTools\Console\MemoryLimit;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\DiscoveryBrief;
@@ -103,6 +104,9 @@ final readonly class InspectionPipeline
 
     public function run(InspectionOptions $options, ProgressReporter $progress = new NullProgressReporter()): InspectionReport
     {
+        // Every command that analyses the code comes through here: none keeps the machine's 128 MB.
+        MemoryLimit::raiseTo();
+
         $report = new InspectionReport($this->clock->now());
         $started = microtime(true);
         $lock = null;

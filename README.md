@@ -278,9 +278,10 @@ archive, a rewritten history — every file is hashed and the decisions are the 
 A second run on an unchanged project modifies no file: committing the documentation does not make it
 change again. On a 300-route project, that re-scan takes well under a second.
 
-**Memory.** An inspection raises PHP's limit to 512 MB when it is lower, and says so — documenting a few
-hundred workflows needs it, and through the bundle the booted kernel is already in memory. A limit that is
-higher, or unlimited, is left alone.
+**Memory.** Every command that analyses the code — `inspect`, `check`, `diff`, `review`, `accept`,
+`reject` — raises PHP's limit to 1 GB when it is lower, and `inspect` says so: a project of two thousand files
+peaks around 400 MB, and through the bundle the booted kernel is already in memory. A limit that is higher, or
+unlimited, is left alone. A hook therefore needs no `php -d memory_limit` in front of `workflows:check`.
 
 `--force` naming a workflow that does not exist is a warning, not a silent no-op.
 

@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Console;
 
 /**
- * Raises PHP's memory limit for an inspection, the way Composer and PHPStan do.
+ * Raises PHP's memory limit for an analysis of the code, the way Composer and PHPStan do — whichever command
+ * runs it: `inspect`, and `check`, `diff`, `review`, `accept`, `reject`, which analyse the code as much.
  *
- * Documenting a repository of a few hundred workflows needs more than the 128 MB a default PHP gives a
- * script, and through the bundle the booted kernel is already in memory: DevTools died inside a real
- * project while the same scan passed standalone. A limit already higher — or unlimited — is left alone,
- * and so is one the machine refuses to change.
+ * Analysing a repository of a few hundred workflows needs more than the 128 MB a default PHP gives a script,
+ * and through the bundle the booted kernel is already in memory: DevTools died inside a real project while
+ * the same scan passed standalone, and `workflows:check` died in the hooks of others, at the machine's limit.
+ * A limit already higher — or unlimited — is left alone, and so is one the machine refuses to change.
  */
 final class MemoryLimit
 {
-    public const string MINIMUM = '512M';
+    /**
+     * The largest project measured — 2,073 files, `check` — peaks at 404 MB: 512 MB left a fifth of margin to
+     * a project that grows and an analysis that learns more.
+     */
+    public const string MINIMUM = '1G';
 
     /**
      * @return string|null the limit as it now is, null when nothing was changed
