@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Tracking;
 use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
+use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
 
 /**
@@ -43,6 +44,17 @@ final readonly class DevToolsDirectory
         }
 
         $this->docs = $docs;
+    }
+
+    /**
+     * The directory of a project already inspected, its pages where the last inspection wrote them: every
+     * command but `inspect` reads it from the index instead of guessing (ADR-0016, ADR-0019).
+     */
+    public static function documented(ProjectRoot $root): self
+    {
+        $index = new self($root)->indexFile();
+
+        return new self($root, is_file($index) ? new XmlIndexStore(new WorkflowTypeRegistry())->read($index)->docs : null);
     }
 
     public function path(string $relative = ''): string

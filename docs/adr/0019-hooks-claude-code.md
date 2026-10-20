@@ -1,6 +1,6 @@
 # ADR-0019 — Hooks Claude Code : l'impact avant la modification
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-20 (proposée le 2026-09-16 ; phase 1 lancée par jul6art)
 - **Décideurs** : jul6art
 - **Specs** : § 3 (hooks et skills), § 4.8 (carte d'impact via `PreToolUse`), § 5.1, § 9 (phase 1)
 
@@ -41,6 +41,31 @@ ce qui permet à `claude:uninstall --hooks` de retirer exactement celles-là.
 ⚠️ Le format exact des entrées et de la réponse attendue est lu dans la documentation Claude Code **au
 moment d'implémenter** et figé par des fixtures ; il n'est pas recopié ici pour ne pas le figer faux.
 
+### Format lu à l'acceptation (2026-10-20, code.claude.com/docs/en/hooks)
+
+- **Configuration** : `hooks` → événement → groupes `{matcher, hooks: [{type: "command", command,
+  timeout}]}` ; `matcher` exact (`Edit|Write|MultiEdit`) ou expression régulière ; le binaire se nomme
+  par `${CLAUDE_PROJECT_DIR}`, exporté à la commande.
+- **Entrée** (stdin) : `hook_event_name`, `cwd`, `session_id`… ; `PreToolUse` y ajoute `tool_name` et
+  `tool_input`, dont `file_path`, **toujours absolu** pour `Edit` et `Write` ; `Stop` ajoute
+  `stop_hook_active`.
+- **Réponse** : `PreToolUse` et `SessionStart` ajoutent du contexte par
+  `{"hookSpecificOutput": {"hookEventName": …, "additionalContext": …}}` ; sans `permissionDecision`, la
+  permission suit son cours — le hook ne bloque jamais. `Stop` bloque par
+  `{"decision": "block", "reason": …}` (ADR-0023).
+- **Code de sortie** : 0 et JSON sur la sortie standard ; Claude ne voit jamais la sortie d'erreur d'un
+  hook sorti en 0 — c'est donc là que va la cause d'une panne, et rien n'est injecté.
+
+### Précisions à l'acceptation
+
+- `claude:hook` trouve le projet par `--path`, sinon `CLAUDE_PROJECT_DIR`, sinon le `cwd` reçu.
+- `claude:install --hooks` écrit `"${CLAUDE_PROJECT_DIR}/vendor/bin/devtools" claude:hook <Événement>`
+  quand le projet installe DevTools, `devtools claude:hook <Événement>` sinon (installation globale) ;
+  délai de 10 s. Sans option, `claude:install` installe le skill, comme avant.
+- `claude:uninstall --hooks` est une commande nouvelle. Le JSON est relu en objets : un `{}` du projet
+  reste `{}`, et un fichier qui ne contient plus rien est supprimé.
+- Les tests d'un workflow viennent de la même carte (`relation="test"`) : aucune lecture de plus.
+
 ## Budget d'exécution
 
 `PreToolUse` : **< 300 ms de bout en bout**, démarrage PHP compris — il s'exécute à chaque
@@ -53,14 +78,21 @@ lectures de fichiers ; configuration utilisateur globale (`~/.claude`).
 
 ## Critères d'acceptation
 
-- [ ] Fixtures d'entrée JSON par événement ; réponses figées en snapshot
-- [ ] `Edit` d'un service partagé → contexte listant ses workflows et pages
-- [ ] Fichier non couvert → une ligne ; fichier couvert sans impact → rien
-- [ ] Index absent ou XML corrompu → sortie 0, rien injecté, cause sur stderr
-- [ ] Installation qui fusionne un `settings.json` existant ; désinstallation qui le restaure
-- [ ] < 300 ms mesurés sur le projet généré de 300 routes
-- [ ] Session réelle vérifiée une fois dans Claude Code
-- [ ] README : section « Hooks Claude Code »
+- [x] Fixtures d'entrée JSON par événement ; réponses figées en snapshot *(`tests/Fixtures/claude/hooks/`,
+      `tests/Fixtures/snapshots/hooks/`)*
+- [x] `Edit` d'un service partagé → contexte listant ses workflows et pages *(et trois de leurs tests au
+      plus, le nombre restant entre parenthèses)*
+- [x] Fichier non couvert → une ligne ; fichier couvert sans impact → rien *(aussi : un outil qui
+      n'écrit pas de fichier, un fichier hors du projet)*
+- [x] Index absent ou XML corrompu → sortie 0, rien injecté, cause sur stderr *(et une entrée qui n'est
+      pas du JSON, un événement que DevTools ne traite pas)*
+- [x] Installation qui fusionne un `settings.json` existant ; désinstallation qui le restaure *(un `{}`
+      reste un objet ; un fichier qui ne tenait que les hooks de DevTools disparaît avec eux)*
+- [x] < 300 ms mesurés sur le projet généré de 300 routes *(74 ms de bout en bout, PHP démarré)*
+- [ ] Session réelle vérifiée une fois dans Claude Code *(non faite : elle demande une session ouverte
+      après l'installation des hooks, ce que la session qui les a écrits ne peut pas être ; à faire une
+      fois par un humain)*
+- [x] README : section « Hooks Claude Code » *(« Claude Code hooks »)*
 
 ## Conséquences
 

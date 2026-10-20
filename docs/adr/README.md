@@ -36,7 +36,7 @@
 | [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Accepted | 2026-10-20 |
 | [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Accepted | 2026-09-18 |
 | [0018](0018-serveur-mcp.md) | Serveur MCP `devtools` | 1 — Impact, MCP, gate | Proposed | — |
-| [0019](0019-hooks-claude-code.md) | Hooks Claude Code : l'impact avant la modification | 1 — Impact, MCP, gate | Proposed | — |
+| [0019](0019-hooks-claude-code.md) | Hooks Claude Code : l'impact avant la modification | 1 — Impact, MCP, gate | Accepted | — |
 | [0020](0020-scenarios-derives-des-workflows.md) | Scénarios reproductibles dérivés des workflows | 1 — Impact, MCP, gate | Proposed | — |
 | [0021](0021-runner-de-scenarios.md) | Runner de scénarios (Panther) | 1 — Impact, MCP, gate | Proposed | — |
 | [0022](0022-captures-baselines-et-diff-visuel.md) | Captures, baselines et diff visuel | 1 — Impact, MCP, gate | Proposed | — |

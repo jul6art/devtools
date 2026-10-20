@@ -15,7 +15,6 @@ use Jul6Art\DevTools\Project\PathOutsideProject;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Stack\XmlStackStore;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
-use Jul6Art\DevTools\Tracking\XmlIndexStore;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -102,7 +101,7 @@ final class WorkflowsImpactCommand extends Command
             return Command::FAILURE;
         }
 
-        $directory = self::directory($root);
+        $directory = DevToolsDirectory::documented($root);
 
         try {
             $impact = new ImpactResolver(new WorkflowTypeRegistry(new XmlConfigReader()->read($directory->configFile())->customTypes))->resolve($directory, $files, (int) $depth);
@@ -119,16 +118,6 @@ final class WorkflowsImpactCommand extends Command
         };
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * Where the pages were written, as the index remembers it.
-     */
-    private static function directory(ProjectRoot $root): DevToolsDirectory
-    {
-        $index = new DevToolsDirectory($root)->indexFile();
-
-        return new DevToolsDirectory($root, is_file($index) ? new XmlIndexStore(new WorkflowTypeRegistry())->read($index)->docs : null);
     }
 
     private static function projectName(DevToolsDirectory $directory): string

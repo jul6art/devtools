@@ -1,0 +1,11 @@
+{
+    "session_id": "abc123",
+    "cwd": "{PROJECT}",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Write",
+    "tool_input": {
+        "file_path": "{PROJECT}/src/Service/Invoicing.php",
+        "content": "<?php\n"
+    },
+    "tool_use_id": "toolu_01ABC124"
+}

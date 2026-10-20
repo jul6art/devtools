@@ -1,0 +1,1 @@
+{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"DevTools documents the workflows of this project: 10 workflows, menu in docs/workflows/workflows.md.\nBefore changing a file, devtools workflows:impact <file> names the workflows it reaches; a hook adds that to your context on every edit."}}

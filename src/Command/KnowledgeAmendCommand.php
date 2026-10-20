@@ -19,7 +19,6 @@ use Jul6Art\DevTools\Stack\StackProfile;
 use Jul6Art\DevTools\Stack\XmlStackStore;
 use Jul6Art\DevTools\Tracking\AtomicFileWriter;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
-use Jul6Art\DevTools\Tracking\XmlIndexStore;
 use Jul6Art\DevTools\Tracking\XmlTrackingStore;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -69,8 +68,7 @@ final class KnowledgeAmendCommand extends Command
         }
 
         $root = new ProjectRoot($path);
-        $index = new DevToolsDirectory($root)->indexFile();
-        $directory = new DevToolsDirectory($root, is_file($index) ? new XmlIndexStore(new WorkflowTypeRegistry())->read($index)->docs : null);
+        $directory = DevToolsDirectory::documented($root);
         $config = new XmlConfigReader()->read($directory->configFile());
         $current = new KnowledgeProvider($this->writer, KnowledgeLibrary::forProject($root, $config, $this->writer))->provide($directory, $key);
 

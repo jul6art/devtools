@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Console;
 
+use Jul6Art\DevTools\Command\ClaudeHookCommand;
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
+use Jul6Art\DevTools\Command\ClaudeUninstallCommand;
 use Jul6Art\DevTools\Command\GitInstallHooksCommand;
 use Jul6Art\DevTools\Command\GitUninstallHooksCommand;
 use Jul6Art\DevTools\Command\InitCommand;
@@ -52,6 +54,8 @@ final class Application extends BaseApplication
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),
+            new ClaudeUninstallCommand(),
+            new ClaudeHookCommand(),
             new KnowledgeListCommand(),
             new KnowledgePromoteCommand(),
             new KnowledgeAmendCommand(),

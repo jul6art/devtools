@@ -1,0 +1,15 @@
+{
+    "session_id": "abc123",
+    "transcript_path": "/home/user/.claude/projects/x/abc123.jsonl",
+    "cwd": "{PROJECT}",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+        "file_path": "{PROJECT}/src/Repository/OrderRepository.php",
+        "old_string": "private array $orders = [];",
+        "new_string": "private array $orders = [];\n    private int $saved = 0;",
+        "replace_all": false
+    },
+    "tool_use_id": "toolu_01ABC123"
+}

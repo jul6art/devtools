@@ -43,6 +43,21 @@ final class DevToolsDirectoryTest extends TestCase
         self::assertSame('docs/workflows', new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()))->docs);
     }
 
+    /**
+     * Every command but `inspect` finds the pages where the last inspection wrote them.
+     */
+    public function testAnInspectedProjectIsDocumentedWhereItsIndexSays(): void
+    {
+        $root = new ProjectRoot($this->temporaryDirectory());
+
+        self::assertSame('docs/workflows', DevToolsDirectory::documented($root)->docs, 'Never inspected: the default.');
+
+        mkdir($root->path.'/.devtools');
+        file_put_contents($root->path.'/.devtools/index.xml', '<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="2" scanned-at="2026-09-16T12:00:00+00:00" docs="documentation/flux"><source vcs="none"/></index>');
+
+        self::assertSame('documentation/flux', DevToolsDirectory::documented($root)->docs);
+    }
+
     public function testAPageAndItsTrackingFileAreNamedAfterTheIdentifier(): void
     {
         $root = $this->temporaryDirectory();

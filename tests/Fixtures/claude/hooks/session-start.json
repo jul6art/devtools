@@ -1,0 +1,7 @@
+{
+    "session_id": "abc123",
+    "cwd": "{PROJECT}",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "model": "claude-opus-5-5"
+}

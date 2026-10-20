@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Bridge\Symfony\DependencyInjection;
 
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
+use Jul6Art\DevTools\Command\ClaudeUninstallCommand;
 use Jul6Art\DevTools\Command\InitCommand;
 use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
@@ -45,6 +46,7 @@ class DevToolsExtension extends Extension
         WorkflowsInspectCommand::class => 'workflows:inspect',
         WorkflowsApplyCommand::class => 'workflows:apply',
         ClaudeInstallCommand::class => 'claude:install',
+        ClaudeUninstallCommand::class => 'claude:uninstall',
         KnowledgeListCommand::class => 'knowledge:list',
         KnowledgePromoteCommand::class => 'knowledge:promote',
         KnowledgeAmendCommand::class => 'knowledge:amend',

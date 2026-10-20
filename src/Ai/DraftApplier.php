@@ -68,7 +68,7 @@ final readonly class DraftApplier
     public function apply(ProjectRoot $root, bool $share = true): ApplyResult
     {
         $result = new ApplyResult();
-        $directory = new DevToolsDirectory($root, self::documentedIn($root));
+        $directory = DevToolsDirectory::documented($root);
         $config = new XmlConfigReader()->read($directory->configFile());
         $library = KnowledgeLibrary::forProject($root, $config, $this->writer);
 
@@ -167,16 +167,6 @@ final readonly class DraftApplier
 
         new Filesystem()->remove([$draftFile, $directory->path('pending/'.$id.'.brief.xml')]);
         $result->accepted[] = $id;
-    }
-
-    /**
-     * Where the last inspection wrote the pages: `apply` never guesses, it reads the index.
-     */
-    private static function documentedIn(ProjectRoot $root): ?string
-    {
-        $index = new DevToolsDirectory($root)->indexFile();
-
-        return is_file($index) ? new XmlIndexStore(new WorkflowTypeRegistry())->read($index)->docs : null;
     }
 
     /**
