@@ -48,8 +48,40 @@
                         </xs:attribute>
                     </xs:complexType>
                 </xs:element>
+                <!-- ADR-0044, an amendment only: the sheet rewritten whole, and what the inspection met without
+                     understanding it. -->
+                <xs:element name="current" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="not-understood" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="uncovered" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="fallback" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="without-adapter" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="root" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="kind" default="create">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="create"/>
+                        <xs:enumeration value="amend"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
             <xs:attribute name="key" use="required">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">

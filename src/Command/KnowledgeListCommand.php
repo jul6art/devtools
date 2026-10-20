@@ -52,14 +52,22 @@ final class KnowledgeListCommand extends Command
 
         $entries = $library->entries();
         $rows = array_map(
-            static fn (string $key): array => [$key, $entries[$key]->project ?? '—', ($entries[$key] ?? null) instanceof LibraryEntry ? $entries[$key]->at->format('Y-m-d') : '—'],
+            static function (string $key) use ($entries): array {
+                // The latest revision is the sheet a project reads (ADR-0044).
+                $latest = array_reduce(
+                    array_filter($entries, static fn (LibraryEntry $entry): bool => $entry->key === $key),
+                    static fn (?LibraryEntry $carry, LibraryEntry $entry): LibraryEntry => !$carry instanceof LibraryEntry || $entry->revision > $carry->revision ? $entry : $carry,
+                );
+
+                return [$key, $latest->project ?? '—', $latest instanceof LibraryEntry ? $latest->at->format('Y-m-d') : '—', $latest instanceof LibraryEntry ? (string) $latest->revision : '1'];
+            },
             $library->keys(),
         );
 
         if ([] === $rows) {
             $io->text('The library is empty.');
         } else {
-            $io->table(['Key', 'From', 'Added'], $rows);
+            $io->table(['Key', 'From', 'Added', 'Revision'], $rows);
         }
 
         $embedded = array_values(array_diff(self::embeddedKeys(), $library->keys()));

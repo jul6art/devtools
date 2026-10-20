@@ -71,4 +71,48 @@ final class KnowledgeCanvas
 
         return array_values(array_unique($problems));
     }
+
+    /**
+     * ADR-0044: an amendment adds — a section shorter than in the sheet it replaces is a correction made by
+     * deleting, which nobody reading the next project can see. Whitespace does not count.
+     *
+     * @return list<string>
+     */
+    public function shrunk(string $before, string $after): array
+    {
+        $previous = self::sectionsOf($before);
+        $next = self::sectionsOf($after);
+        $problems = [];
+
+        foreach (self::SECTIONS as $section) {
+            $was = \strlen((string) preg_replace('/\s+/', ' ', trim($previous[$section] ?? '')));
+            $is = \strlen((string) preg_replace('/\s+/', ' ', trim($next[$section] ?? '')));
+
+            if ($is < $was) {
+                $problems[] = \sprintf('The section "%s" is shorter than in the current sheet (%d → %d characters): an amendment adds, it does not cut.', $section, $was, $is);
+            }
+        }
+
+        return $problems;
+    }
+
+    /**
+     * @return array<string, string> title => content
+     */
+    private static function sectionsOf(string $markdown): array
+    {
+        $sections = [];
+        $current = null;
+
+        foreach (explode("\n", str_replace("\r\n", "\n", $markdown)) as $line) {
+            if (str_starts_with($line, '## ')) {
+                $current = trim(substr($line, 3));
+                $sections[$current] = '';
+            } elseif (null !== $current) {
+                $sections[$current] .= $line."\n";
+            }
+        }
+
+        return $sections;
+    }
 }

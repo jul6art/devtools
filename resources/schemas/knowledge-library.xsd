@@ -19,14 +19,25 @@
                         <xs:attribute name="at" type="xs:dateTime" use="required"/>
                         <xs:attribute name="tool" type="t:nonEmpty" use="required"/>
                         <xs:attribute name="sha256" type="t:sha256" use="required"/>
+                        <!-- ADR-0044: an amendment of the sheet, from 2 up; absent on the sheet as first deposited. -->
+                        <xs:attribute name="revision">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:positiveInteger">
+                                    <xs:minInclusive value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
         </xs:complexType>
-        <xs:unique name="uniqueKey">
+        <!-- One line per revision of a key. A schema cannot test an absent attribute, so the original sheet
+             (no revision) is held unique by the code, which keys the index by file name. -->
+        <xs:unique name="uniqueRevision">
             <xs:selector xpath="t:entry"/>
             <xs:field xpath="@key"/>
+            <xs:field xpath="@revision"/>
         </xs:unique>
     </xs:element>
 

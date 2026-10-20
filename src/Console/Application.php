@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\GitInstallHooksCommand;
 use Jul6Art\DevTools\Command\GitUninstallHooksCommand;
 use Jul6Art\DevTools\Command\InitCommand;
+use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
@@ -51,6 +52,7 @@ final class Application extends BaseApplication
             new ClaudeInstallCommand(),
             new KnowledgeListCommand(),
             new KnowledgePromoteCommand(),
+            new KnowledgeAmendCommand(),
         ]);
     }
 }

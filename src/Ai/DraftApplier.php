@@ -77,6 +77,11 @@ final readonly class DraftApplier
             $this->applyKnowledge($directory, $draftFile, $result, $library, $share && $config->shareKnowledge);
         }
 
+        // An amendment someone asked for with knowledge:amend (ADR-0044).
+        foreach (glob($directory->path('pending/knowledge-amend.*.draft.md')) ?: [] as $draftFile) {
+            $this->applyAmendment($directory, $draftFile, $result, $library, $share && $config->shareKnowledge);
+        }
+
         // Then discoveries: pages of the Claude path only exist once a discovery says what they are.
         foreach (glob($directory->path('pending/discovery.*.draft.xml')) ?: [] as $draftFile) {
             $this->applyDiscovery($directory, $draftFile, $result, $config);
@@ -404,6 +409,50 @@ final readonly class DraftApplier
 
         if (DepositOutcome::NotWritable === $outcome) {
             $result->warnings[] = \sprintf('The knowledge library "%s" cannot be written: "%s" stays in this project only.', $library->path, $brief->key);
+        }
+
+        new Filesystem()->remove([$draftFile, $directory->path('pending/'.$id.'.brief.xml')]);
+        $result->accepted[] = $id;
+    }
+
+    /**
+     * The whole sheet rewritten (ADR-0044): under the canvas like a first writing, with one rule more — no
+     * section shrinks. It replaces the project's sheet, and reaches the library as a revision of the one it
+     * holds, never over it.
+     */
+    private function applyAmendment(DevToolsDirectory $directory, string $draftFile, ApplyResult $result, KnowledgeLibrary $library, bool $share): void
+    {
+        $id = basename($draftFile, '.draft.md');
+
+        try {
+            $brief = new XmlKnowledgeBriefStore($this->writer)->read($directory->path('pending/'.$id.'.brief.xml'));
+        } catch (InvalidXml $invalid) {
+            $result->refused[$id] = [$invalid->getMessage()];
+
+            return;
+        }
+
+        $draft = (string) file_get_contents($draftFile);
+        $currentFile = null === $brief->currentPath ? null : $directory->root->absolute($brief->currentPath);
+        $current = null !== $currentFile && is_file($currentFile) ? file_get_contents($currentFile) : false;
+        $canvas = new KnowledgeCanvas();
+        $problems = [...$canvas->problems($draft), ...false === $current ? [\sprintf('The sheet being amended (%s) is gone: run knowledge:amend again.', $brief->currentPath ?? '?')] : $canvas->shrunk($current, $draft)];
+
+        if ([] !== $problems) {
+            $result->refused[$id] = $problems;
+
+            return;
+        }
+
+        $this->writer->write($directory->path('knowledge/'.$brief->key.'.md'), $draft);
+        $outcome = $share ? $library->depositRevision($brief->key, $draft, basename($directory->root->path)) : DepositOutcome::Declined;
+
+        if (DepositOutcome::Deposited === $outcome) {
+            $result->deposited[$brief->key] = $library->latestFile($brief->key);
+        }
+
+        if (DepositOutcome::NotWritable === $outcome) {
+            $result->warnings[] = \sprintf('The knowledge library "%s" cannot be written: the amendment of "%s" stays in this project only.', $library->path, $brief->key);
         }
 
         new Filesystem()->remove([$draftFile, $directory->path('pending/'.$id.'.brief.xml')]);

@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Bridge\Symfony\DependencyInjection;
 
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\InitCommand;
+use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
@@ -45,6 +46,7 @@ class DevToolsExtension extends Extension
         ClaudeInstallCommand::class => 'claude:install',
         KnowledgeListCommand::class => 'knowledge:list',
         KnowledgePromoteCommand::class => 'knowledge:promote',
+        KnowledgeAmendCommand::class => 'knowledge:amend',
     ];
 
     #[\Override]

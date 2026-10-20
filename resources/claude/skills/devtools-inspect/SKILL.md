@@ -28,6 +28,10 @@ through files, and DevTools validates everything you write before it reaches `.d
    **Discovery briefs next** (`discovery.*.brief.xml`): a stack without a native adapter needs you to find
    its entry points. Follow the prompt it names, write the XML draft, apply, and inspect again.
 
+   **An amendment brief** (`knowledge-amend.*.brief.xml`) exists only when someone ran
+   `knowledge:amend`: follow its prompt, rewrite the **whole** sheet as its draft — every section kept
+   and completed, none shorter — and apply.
+
 3. For **each** page brief (`page.*.brief.xml`), follow the prompt it names (`<prompt path>`, e.g.
    `vendor/jul6art/devtools/resources/prompts/page/v3.md`) **to the letter**:
    - read the model, the current page, the knowledge file, and the files the model lists;

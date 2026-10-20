@@ -137,6 +137,7 @@ Usage
 | **Occasionally** | `devtools workflows:inspect --prune` | after deleting code: removes the pages of gone workflows | deletes pages |
 | | `devtools workflows:inspect --force` | rewrites every page's facts, whatever the freshness says | every page |
 | | `devtools knowledge:list` / `knowledge:promote` | the stack knowledge shared between projects | the library |
+| | `devtools knowledge:amend <key>` | asks Claude to complete a sheet the project showed to be incomplete | a brief |
 
 The order matters twice, and only twice: `init` before anything else, and a brief before the draft
 that answers it. Everything else is idempotent — a command run twice on an unchanged project does
@@ -665,7 +666,16 @@ installed under `vendor/` is never written to.
 ```shell
 vendor/bin/devtools knowledge:list                 # where the library is, and what it holds
 vendor/bin/devtools knowledge:promote angular-18   # copy a sheet into what DevTools ships, for a PR
+vendor/bin/devtools knowledge:amend symfony-8      # ask Claude to complete a sheet this project outgrew
 ```
+
+**A sheet can be amended**, on demand — an inspection never asks for it, or a sheet would change at every
+scan. `knowledge:amend` writes `.devtools/pending/knowledge-amend.<key>.brief.xml`: the current sheet, and
+what the last inspection met without understanding it — the files no workflow references, the stacks
+whose console could not be asked, those no native adapter reads. Claude rewrites the **whole** sheet;
+`workflows:apply` checks it against the canvas and refuses it when a section shrinks — an amendment adds.
+The project's sheet is replaced, and the library receives it as a **revision** (`symfony-8.r2.md`): the
+original stays, `library.xml` carries both, and the next project reads the latest.
 
 A sheet is deposited only after it passed the canvas, and **a sheet already in the library is never
 overwritten** — correct it where it lives. `<knowledge share="false"/>`, or `workflows:apply --no-share`,
@@ -768,7 +778,7 @@ src/
 ├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
 │                            workflows:review, workflows:accept, workflows:reject, workflows:apply,
 │                            git:install-hooks, git:uninstall-hooks, claude:install,
-│                            knowledge:list, knowledge:promote
+│                            knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read

@@ -112,13 +112,67 @@ final readonly class KnowledgeLibrary
     }
 
     /**
+     * The sheet of a key as the library holds it now: its latest revision (ADR-0044), or the original.
+     *
      * @return string|null the absolute path of the sheet, or null when the library does not hold it
      */
     public function file(string $key): ?string
     {
-        $file = $this->path.'/'.$key.'.md';
+        $revision = $this->latestRevision($key);
+        $file = $this->path.'/'.(1 === $revision ? $key : $key.'.r'.$revision).'.md';
 
         return is_file($file) ? $file : null;
+    }
+
+    /**
+     * Adds an amended sheet as a revision of the one the library holds: the original is never overwritten,
+     * a revision succeeds it (ADR-0044). The first sheet of a key is deposited as any other; a sheet
+     * identical to the latest revision adds nothing.
+     */
+    public function depositRevision(string $key, string $markdown, string $project): DepositOutcome
+    {
+        $latest = $this->file($key);
+
+        if (null === $latest) {
+            return $this->deposit($key, $markdown, $project);
+        }
+
+        if (file_get_contents($latest) === $markdown) {
+            return DepositOutcome::AlreadyPresent;
+        }
+
+        if (!$this->isWritable()) {
+            return DepositOutcome::NotWritable;
+        }
+
+        $entry = new LibraryEntry($key, $project, new \DateTimeImmutable('@'.$this->now()), 'devtools '.Version::current(), hash('sha256', $markdown), $this->latestRevision($key) + 1);
+        $this->writer->write($this->path.'/'.$entry->name().'.md', $markdown);
+        $this->writeIndex([...$this->entries(), $entry->name() => $entry]);
+
+        return DepositOutcome::Deposited;
+    }
+
+    /**
+     * The absolute path a deposit of this key just wrote, or would write: the latest revision's file.
+     */
+    public function latestFile(string $key): string
+    {
+        $revision = $this->latestRevision($key);
+
+        return $this->path.'/'.(1 === $revision ? $key : $key.'.r'.$revision).'.md';
+    }
+
+    /**
+     * The highest revision of a key on disk — a file dropped in by hand counts, as in {@see keys()}.
+     */
+    private function latestRevision(string $key): int
+    {
+        $revisions = array_map(
+            static fn (string $file): int => (int) substr(basename($file, '.md'), \strlen($key) + 2),
+            glob($this->path.'/'.$key.'.r*.md') ?: [],
+        );
+
+        return max([1, ...array_filter($revisions, static fn (int $revision): bool => $revision > 1)]);
     }
 
     public function has(string $key): bool
@@ -162,8 +216,8 @@ final readonly class KnowledgeLibrary
         $entries = [];
 
         foreach ($this->dom->children(DomBuilder::root($this->loader->loadValidated($content, $file, Resources::path('schemas/knowledge-library.xsd'), self::SCHEMA_VERSION)), 'entry') as $entry) {
-            $key = $entry->getAttribute('key');
-            $entries[$key] = new LibraryEntry($key, $entry->getAttribute('project'), new \DateTimeImmutable($entry->getAttribute('at')), $entry->getAttribute('tool'), $entry->getAttribute('sha256'));
+            $read = new LibraryEntry($entry->getAttribute('key'), $entry->getAttribute('project'), new \DateTimeImmutable($entry->getAttribute('at')), $entry->getAttribute('tool'), $entry->getAttribute('sha256'), $entry->hasAttribute('revision') ? (int) $entry->getAttribute('revision') : 1);
+            $entries[$read->name()] = $read;
         }
 
         ksort($entries, \SORT_STRING);
@@ -172,7 +226,8 @@ final readonly class KnowledgeLibrary
     }
 
     /**
-     * The sheets on disk, whether or not the index knows about them: a file dropped in by hand counts.
+     * The sheets on disk, whether or not the index knows about them: a file dropped in by hand counts. A
+     * revision (`symfony-8.r2.md`) is not another stack.
      *
      * @return list<string> keys, sorted
      */
@@ -184,7 +239,7 @@ final readonly class KnowledgeLibrary
         );
         sort($keys, \SORT_STRING);
 
-        return array_values(array_filter($keys, static fn (string $key): bool => '_canvas' !== $key));
+        return array_values(array_filter($keys, static fn (string $key): bool => '_canvas' !== $key && 1 !== preg_match('/\.r\d+$/', $key)));
     }
 
     public function isWritable(): bool
@@ -208,6 +263,7 @@ final readonly class KnowledgeLibrary
                 'at' => $entry->at->format(\DATE_ATOM),
                 'tool' => $entry->tool,
                 'sha256' => $entry->sha256,
+                ...1 === $entry->revision ? [] : ['revision' => (string) $entry->revision],
             ]);
         }
 
