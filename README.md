@@ -41,7 +41,8 @@ Requirements
 - PHP ^8.5
 - Symfony ^7.4 || ^8.0 — the Console component in standalone mode, the framework only for the bridge
 - `mcp/sdk` ^0.9, optional — only for the MCP server, `mcp:serve`
-- `symfony/panther` ^2.4 and Chrome, optional — only to replay the scenarios, `scenarios:run`
+- `symfony/panther` ^2.4 and Chrome, optional — only to replay the scenarios, `scenarios:run`; `ext-gd` to compare
+  their screenshots with the baselines
 
 Installation
 ------------
@@ -135,6 +136,7 @@ Usage
 | **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages | nothing |
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
+| | `devtools baselines:accept <run>` | after looking at them: the screenshots of a run become the baselines | `.devtools/baselines/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -847,6 +849,47 @@ Each run writes `.devtools/runs/<timestamp>/result.xml` (`run.xsd`): a verdict p
 it, with the URL the browser was at. The command exits 1 when a scenario did not pass. Credentials never
 appear in what a run writes: they are masked in messages, URLs and DOMs alike.
 
+### Visual baselines
+
+A green scenario can render a broken screen: a select2 that fell back to a native select, a filter that is
+no longer shown. Every `<screenshot>` is compared with the **baseline** a human accepted, in
+`.devtools/baselines/<scenario>/<name>.png` and `.dom.html`, versioned with the code:
+
+```shell
+vendor/bin/devtools scenarios:run --base-url=…              # "3 captures have no baseline"
+vendor/bin/devtools baselines:accept 2026-10-20-153000      # after looking at them; or "last"
+vendor/bin/devtools baselines:accept last route.order.new   # one workflow, or one scenario
+```
+
+| Verdict | When | The scenario |
+| --- | --- | --- |
+| `identical` | not one pixel differs | passes |
+| `within-threshold` | fewer differ than the threshold allows | passes |
+| `different` | more differ, or the size changed | **fails**, the step says how much and what changed |
+| `no-baseline` | nobody accepted one yet | passes, and the run says so |
+
+The image says **where**: pixel by pixel, with `ext-gd`, and a diff image beside the capture — the baseline
+faded, the differing pixels in red. The DOM says **what**: normalised — attributes sorted, scripts dropped,
+tokens and generated identifiers masked — and compared line by line, so that the step reads
+`<select name="order[product]"> became <input name="order[product]">`. Both land in `result.xml`.
+
+```xml
+<scenarios>
+    <visual threshold="0.1%">
+        <mask selector=".timestamp"/>
+        <mask selector="img.avatar"/>
+    </visual>
+</scenarios>
+```
+
+A **mask** hides what changes on every run before the capture is taken — its place kept, so that nothing
+else moves — and empties it in the DOM. Masks are the only way to keep false positives down.
+
+⚠️ **A baseline exists only once a human accepted it.** Nothing accepts one on its own: a baseline accepted
+by whoever wrote the change would approve exactly what the comparison is there to question. Baselines weigh on
+the repository: past 50 MB, Git LFS is worth it. Without `ext-gd`, the images are not compared — the run warns
+— and the DOM alone decides.
+
 ⚠️ **ChromeDriver must match Chrome**, to the major version. `bdi detect drivers` downloads the right one into
 `drivers/`, which `scenarios:run` uses first — keep it out of git. A CI image updates Chrome on its own
 schedule: install the driver in the job, not once and for all. Without Panther, `scenarios:run` does not exist
@@ -1025,7 +1068,8 @@ src/
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
-│                            scenarios:run, knowledge:list, knowledge:promote, knowledge:amend
+│                            scenarios:run, baselines:accept, knowledge:list, knowledge:promote,
+│                            knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read

@@ -103,6 +103,19 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
                 $this->dom->children($scenarios, 'login'),
             ),
             array_map(static fn (\DOMElement $fixture): FixtureSettings => new FixtureSettings($fixture->getAttribute('name'), $fixture->getAttribute('command')), $this->dom->children($scenarios, 'fixture')),
+            $this->visual($this->dom->optional($scenarios, 'visual')),
+        );
+    }
+
+    private function visual(?\DOMElement $visual): VisualSettings
+    {
+        if (!$visual instanceof \DOMElement) {
+            return new VisualSettings();
+        }
+
+        return new VisualSettings(
+            $visual->hasAttribute('threshold') ? (float) rtrim($visual->getAttribute('threshold'), '%') : VisualSettings::DEFAULT_THRESHOLD,
+            array_map(static fn (\DOMElement $mask): string => $mask->getAttribute('selector'), $this->dom->children($visual, 'mask')),
         );
     }
 }

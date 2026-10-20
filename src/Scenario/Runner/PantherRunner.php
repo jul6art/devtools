@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Scenario\Runner;
 
+use Composer\InstalledVersions;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\TimeoutException;
@@ -28,6 +29,8 @@ use Jul6Art\DevTools\Scenario\Run\StepResult;
 use Jul6Art\DevTools\Scenario\Run\Verdict;
 use Jul6Art\DevTools\Scenario\Scenario;
 use Jul6Art\DevTools\Scenario\Step;
+use Jul6Art\DevTools\Scenario\Visual\VisualComparator;
+use Jul6Art\DevTools\Scenario\Visual\VisualVerdict;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Panther\Client;
 
@@ -44,6 +47,29 @@ final class PantherRunner implements RunnerInterface
     public const string PACKAGE = 'symfony/panther:^2.4';
 
     /**
+     * Hides the masked elements — their place kept, so that nothing else moves.
+     */
+    private const string HIDE = <<<'JS'
+        var style = document.createElement('style');
+        style.id = 'devtools-masks';
+        style.textContent = arguments[0].map(function (selector) { return selector + ' { visibility: hidden !important; }'; }).join('\n');
+        (document.head || document.documentElement).appendChild(style);
+        JS;
+
+    /**
+     * The DOM, the masked elements emptied — in a copy: the page itself is left alone.
+     */
+    private const string DOM = <<<'JS'
+        var copy = document.documentElement.cloneNode(true);
+        arguments[0].forEach(function (selector) {
+            try {
+                copy.querySelectorAll(selector).forEach(function (element) { element.textContent = ''; element.setAttribute('data-devtools-masked', ''); });
+            } catch (error) {}
+        });
+        return '<!DOCTYPE html>\n' + copy.outerHTML;
+        JS;
+
+    /**
      * @var array<string, ActionInterface>
      */
     private array $actions = [];
@@ -52,6 +78,7 @@ final class PantherRunner implements RunnerInterface
 
     /**
      * @param \Closure(): Client         $browser opens the browser, once, when the first scenario needs it
+     * @param VisualComparator|null      $visual  compares each screenshot with its baseline (ADR-0022)
      * @param list<ActionInterface>|null $actions null: the whole vocabulary
      */
     public function __construct(
@@ -61,6 +88,7 @@ final class PantherRunner implements RunnerInterface
         private readonly FixtureProviderInterface $fixtures,
         private readonly Secrets $secrets = new Secrets(),
         private readonly int $timeout = ScenarioSettings::DEFAULT_TIMEOUT,
+        private readonly ?VisualComparator $visual = null,
         ?array $actions = null,
     ) {
         foreach ($actions ?? self::vocabulary() as $action) {
@@ -68,8 +96,16 @@ final class PantherRunner implements RunnerInterface
         }
     }
 
+    /**
+     * Read from the packages Composer installed, without loading Panther: its client pulls BrowserKit in, and
+     * every command would pay for it to learn whether one of them exists.
+     */
     public static function available(): bool
     {
+        if (class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('symfony/panther')) {
+            return true;
+        }
+
         return class_exists(Client::class);
     }
 
@@ -140,8 +176,10 @@ final class PantherRunner implements RunnerInterface
     {
         $started = hrtime(true);
         $captured = [];
-        $capture = function (string $name) use ($client, $scenario, $artifacts, &$captured): void {
-            $captured = $this->capture($client, $artifacts, $scenario->id.'/'.$name);
+        $visual = null;
+        $capture = function (string $name) use ($client, $scenario, $artifacts, &$captured, &$visual): void {
+            $captured = $this->capture($client, $artifacts, $scenario->id.'/'.$name, $this->visual?->masks() ?? []);
+            $visual = $this->visual?->compare($artifacts, $scenario->id.'/'.$name);
         };
         $action = $this->actions[$step->action] ?? null;
 
@@ -151,17 +189,16 @@ final class PantherRunner implements RunnerInterface
             }
 
             $action->perform($client, $step, new ActionContext($this->routes, $this->timeout, $capture));
-            $verdict = Verdict::Passed;
-            $message = null;
+            [$verdict, $message] = VisualVerdict::Different === $visual?->verdict ? [Verdict::Failed, $visual->summary] : [Verdict::Passed, null];
         } catch (StepFailed|NoSuchElementException|TimeoutException|StaleElementReferenceException $failed) {
             [$verdict, $message] = [Verdict::Failed, $failed->getMessage()];
         } catch (\Throwable $error) {
             [$verdict, $message] = [Verdict::Error, $error->getMessage()];
         }
 
-        if (Verdict::Passed !== $verdict) {
+        if (Verdict::Passed !== $verdict && [] === $captured) {
             try {
-                $capture(\sprintf('%02d-%s', $index, $step->action));
+                $captured = $this->capture($client, $artifacts, \sprintf('%s/%02d-%s', $scenario->id, $index, $step->action));
             } catch (\Throwable) {
                 // The browser that failed the step may not answer any more: the verdict stands without its picture.
             }
@@ -176,17 +213,39 @@ final class PantherRunner implements RunnerInterface
             Verdict::Passed === $verdict && [] === $captured ? null : $this->url($client),
             $captured['screenshot'] ?? null,
             $captured['dom'] ?? null,
+            $visual,
         );
     }
 
     /**
+     * The screen and the DOM. With masks — a `screenshot` compared with its baseline — what changes on every run
+     * is hidden from the image and emptied in the DOM, and the page is given back as it was.
+     *
+     * @param list<string>|null $masks CSS selectors; null for the capture of a failure, taken as it is
+     *
      * @return array{screenshot: string, dom: string} relative to the run's directory
      */
-    private function capture(Client $client, string $artifacts, string $name): array
+    private function capture(Client $client, string $artifacts, string $name, ?array $masks = null): array
     {
         new Filesystem()->mkdir(\dirname($artifacts.'/'.$name));
-        $client->takeScreenshot($artifacts.'/'.$name.'.png');
-        file_put_contents($artifacts.'/'.$name.'.html', $this->secrets->redact($client->getPageSource()));
+
+        if (null === $masks) {
+            $client->takeScreenshot($artifacts.'/'.$name.'.png');
+            $dom = $client->getPageSource();
+        } else {
+            $client->executeScript(self::HIDE, [$masks]);
+
+            try {
+                $client->takeScreenshot($artifacts.'/'.$name.'.png');
+            } finally {
+                $client->executeScript('var style = document.getElementById("devtools-masks"); if (style) { style.remove(); }');
+            }
+
+            $dom = $client->executeScript(self::DOM, [$masks]);
+            $dom = \is_string($dom) ? $dom : $client->getPageSource();
+        }
+
+        file_put_contents($artifacts.'/'.$name.'.html', $this->secrets->redact($dom));
 
         return ['screenshot' => $name.'.png', 'dom' => $name.'.html'];
     }

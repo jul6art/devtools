@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Scenario\Run;
 
 use Jul6Art\DevTools\Resources;
+use Jul6Art\DevTools\Scenario\Visual\VisualResult;
 use Jul6Art\DevTools\Tracking\AtomicFileWriter;
 use Jul6Art\DevTools\Xml\DomBuilder;
 use Jul6Art\DevTools\Xml\SafeXmlLoader;
@@ -79,6 +80,15 @@ final readonly class XmlRunWriter
 
         if (null !== $step->dom) {
             $this->dom->element($element, 'dom', ['path' => $step->dom]);
+        }
+
+        if ($step->visual instanceof VisualResult) {
+            $this->dom->element($element, 'visual', array_filter([
+                'verdict' => $step->visual->verdict->value,
+                'difference' => null === $step->visual->difference ? null : (string) $step->visual->difference,
+                'diff' => $step->visual->diffImage,
+                'dom-diff' => $step->visual->domDiff,
+            ], \is_string(...)), $step->visual->summary);
         }
     }
 }

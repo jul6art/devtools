@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Config\FixtureSettings;
 use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Config\LoginSettings;
 use Jul6Art\DevTools\Config\ScenarioSettings;
+use Jul6Art\DevTools\Config\VisualSettings;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Scenario\Run\RunResult;
 use Jul6Art\DevTools\Scenario\Run\ScenarioResult;
@@ -16,6 +17,8 @@ use Jul6Art\DevTools\Scenario\Run\Verdict;
 use Jul6Art\DevTools\Scenario\Run\XmlRunWriter;
 use Jul6Art\DevTools\Scenario\Runner\RouteMap;
 use Jul6Art\DevTools\Scenario\Runner\Secrets;
+use Jul6Art\DevTools\Scenario\Visual\VisualResult;
+use Jul6Art\DevTools\Scenario\Visual\VisualVerdict;
 use Jul6Art\DevTools\Tests\Support\UsesTemporaryDirectory;
 use Jul6Art\DevTools\Xml\InvalidXml;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,6 +40,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(LoginSettings::class)]
 #[CoversClass(FixtureSettings::class)]
 #[CoversClass(XmlConfigReader::class)]
+#[CoversClass(VisualSettings::class)]
 final class RunModelTest extends TestCase
 {
     use UsesTemporaryDirectory;
@@ -126,7 +130,10 @@ final class RunModelTest extends TestCase
     public function testTheResultFollowsItsSchema(): void
     {
         $run = new RunResult(new \DateTimeImmutable('2026-10-20T12:00:00+00:00'), 'http://app.localhost', [
-            new ScenarioResult('route.a/passed', [new StepResult(1, 'screenshot', Verdict::Passed, 12, url: 'http://app.localhost/', screenshot: 'route.a/passed/home.png', dom: 'route.a/passed/home.html')], 40),
+            new ScenarioResult('route.a/passed', [
+                new StepResult(1, 'screenshot', Verdict::Passed, 12, url: 'http://app.localhost/', screenshot: 'route.a/passed/home.png', dom: 'route.a/passed/home.html', visual: new VisualResult(VisualVerdict::NoBaseline)),
+                new StepResult(2, 'screenshot', Verdict::Passed, 12, screenshot: 'route.a/passed/menu.png', dom: 'route.a/passed/menu.html', visual: new VisualResult(VisualVerdict::WithinThreshold, 0.05, 'route.a/passed/menu.diff.png', 'route.a/passed/menu.dom.diff', '0.05 % of the pixels differ.')),
+            ], 40),
             new ScenarioResult('route.a/failed', [new StepResult(1, 'assert-text', Verdict::Failed, 1001, 'Not there.', 'http://app.localhost/x')], 1100),
             new ScenarioResult('route.a/error', [new StepResult(1, 'goto', Verdict::Skipped)], 5, 'Before the first step: no login.'),
         ]);
@@ -140,6 +147,8 @@ final class RunModelTest extends TestCase
         self::assertStringContainsString('passed="1" failed="1" errors="1"', $xml);
         self::assertStringContainsString('<screenshot path="route.a/passed/home.png"/>', $xml);
         self::assertStringContainsString('<message>Before the first step: no login.</message>', $xml);
+        self::assertStringContainsString('<visual verdict="no-baseline"/>', $xml);
+        self::assertStringContainsString('<visual verdict="within-threshold" difference="0.05" diff="route.a/passed/menu.diff.png" dom-diff="route.a/passed/menu.dom.diff">0.05 % of the pixels differ.</visual>', $xml);
         self::assertTrue(new RunResult(new \DateTimeImmutable(), 'http://x', [])->passed());
     }
 
@@ -152,6 +161,7 @@ final class RunModelTest extends TestCase
                     <login role="ROLE_USER" type="form" url="/login" username-env="APP_USER" password-env="APP_PASSWORD" username-field="email" password-field="pw" submit="Log in"/>
                     <login role="ROLE_ADMIN" type="http-basic" username-env="ADMIN_USER" password-env="ADMIN_PASSWORD"/>
                     <fixture name="catalog" command="bin/console app:catalog"/>
+                    <visual threshold="0.5%"><mask selector=".date"/><mask selector="#avatar"/></visual>
                 </scenarios>
             </devtools>
             XML);
@@ -165,6 +175,7 @@ final class RunModelTest extends TestCase
         self::assertNull($settings->login('ROLE_NOBODY'));
         self::assertSame('bin/console app:catalog', $settings->fixture('catalog')?->command);
         self::assertNull($settings->fixture('none'));
+        self::assertEquals(new VisualSettings(0.5, ['.date', '#avatar']), $settings->visual);
         self::assertEquals(new ScenarioSettings(), new XmlConfigReader()->read($this->temporaryDirectory().'/none.xml')->scenarios);
 
         file_put_contents($file, str_replace('username-env="ADMIN_USER"', 'username-env="ADMIN USER"', (string) file_get_contents($file)));

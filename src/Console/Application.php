@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Console;
 
+use Jul6Art\DevTools\Command\BaselinesAcceptCommand;
 use Jul6Art\DevTools\Command\ClaudeHookCommand;
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\ClaudeUninstallCommand;
@@ -80,6 +81,7 @@ final class Application extends BaseApplication
             new WorkflowsAcceptCommand(),
             new WorkflowsRejectCommand(),
             new ScenariosGenerateCommand(),
+            new BaselinesAcceptCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

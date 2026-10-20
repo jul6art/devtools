@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Tests\Scenario\Runner;
 use Jul6Art\DevTools\Config\FixtureSettings;
 use Jul6Art\DevTools\Config\LoginSettings;
 use Jul6Art\DevTools\Config\ScenarioSettings;
+use Jul6Art\DevTools\Config\VisualSettings;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Scenario\Action\AssertCountAction;
@@ -35,6 +36,9 @@ use Jul6Art\DevTools\Scenario\Runner\RouteMap;
 use Jul6Art\DevTools\Scenario\Runner\Secrets;
 use Jul6Art\DevTools\Scenario\Scenario;
 use Jul6Art\DevTools\Scenario\Step;
+use Jul6Art\DevTools\Scenario\Visual\VisualComparator;
+use Jul6Art\DevTools\Scenario\Visual\VisualResult;
+use Jul6Art\DevTools\Scenario\Visual\VisualVerdict;
 use Jul6Art\DevTools\Tests\Support\Browser;
 use Jul6Art\DevTools\Tests\Support\UsesTemporaryDirectory;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -76,7 +80,7 @@ final class PantherRunnerTest extends TestCase
 {
     use UsesTemporaryDirectory;
 
-    private const array ROUTES = ['home' => '/', 'form' => '/form', 'done' => '/done', 'item' => '/items/{id}', 'select2' => '/select2', 'login' => '/login', 'private' => '/private'];
+    private const array ROUTES = ['home' => '/', 'form' => '/form', 'done' => '/done', 'item' => '/items/{id}', 'select2' => '/select2', 'login' => '/login', 'private' => '/private', 'clock' => '/clock'];
 
     private static ?Process $server = null;
 
@@ -357,6 +361,42 @@ final class PantherRunnerTest extends TestCase
     }
 
     /**
+     * ADR-0022: a page that says when it was served differs on every run — unless what changes is masked
+     * before the capture, in the image and in the DOM; and the page is given back as it was.
+     */
+    public function testAMaskedTimestampLeavesTheCaptureIdenticalToItsBaseline(): void
+    {
+        $steps = [new Step('goto', ['route' => 'clock']), new Step('screenshot', ['name' => 'clock']), new Step('assert-visible', ['selector' => '.timestamp'])];
+        $masked = new VisualComparator($this->artifacts.'/masked', new VisualSettings(0.0, ['.timestamp', 'not a [selector']));
+        $bare = new VisualComparator($this->artifacts.'/bare', new VisualSettings(0.0));
+
+        foreach (['masked' => $masked, 'bare' => $bare] as $name => $comparator) {
+            $first = $this->runner(new ScenarioSettings(timeout: 1), new Secrets(), $comparator)->run([new Scenario(new WorkflowId('route.test'), 'clock', $steps)], $this->artifacts.'/first-'.$name)[0];
+            self::assertSame(VisualVerdict::NoBaseline, $first->steps[1]->visual?->verdict);
+            $this->assertPassed($first);
+            mkdir($this->artifacts.'/'.$name.'/route.test/clock', 0o777, true);
+            copy($this->artifacts.'/first-'.$name.'/route.test/clock/clock.png', $this->artifacts.'/'.$name.'/route.test/clock/clock.png');
+            copy($this->artifacts.'/first-'.$name.'/route.test/clock/clock.html', $this->artifacts.'/'.$name.'/route.test/clock/clock.dom.html');
+        }
+
+        self::assertStringContainsString('data-devtools-masked=""></p>', (string) file_get_contents($this->artifacts.'/masked/route.test/clock/clock.dom.html'), 'Emptied in the DOM.');
+        self::assertStringNotContainsString('devtools-masks', (string) file_get_contents($this->artifacts.'/masked/route.test/clock/clock.dom.html'), 'The style that hid it is gone.');
+
+        $again = $this->runner(new ScenarioSettings(timeout: 1), new Secrets(), $masked)->run([new Scenario(new WorkflowId('route.test'), 'clock', $steps)], $this->artifacts.'/second-masked')[0];
+        $this->assertPassed($again);
+        self::assertEquals(new VisualResult(VisualVerdict::Identical, 0.0), $again->steps[1]->visual);
+
+        $changed = $this->runner(new ScenarioSettings(timeout: 1), new Secrets(), $bare)->run([new Scenario(new WorkflowId('route.test'), 'clock', $steps)], $this->artifacts.'/second-bare')[0];
+        $visual = $changed->steps[1]->visual;
+        self::assertInstanceOf(VisualResult::class, $visual);
+        self::assertSame(VisualVerdict::Different, $visual->verdict);
+        self::assertSame(Verdict::Failed, $changed->steps[1]->verdict, 'A different capture fails its step.');
+        self::assertStringContainsString('% of the pixels differ from the baseline (threshold 0 %); the DOM changed: "Generated at', (string) $changed->steps[1]->message);
+        self::assertFileExists($this->artifacts.'/second-bare/'.$visual->diffImage);
+        self::assertSame(Verdict::Skipped, $changed->steps[2]->verdict);
+    }
+
+    /**
      * @param list<Step> $steps
      */
     private function replay(array $steps): ScenarioResult
@@ -364,9 +404,9 @@ final class PantherRunnerTest extends TestCase
         return $this->runner(new ScenarioSettings(timeout: 1), new Secrets())->run([new Scenario(new WorkflowId('route.test'), 'case', $steps)], $this->artifacts)[0];
     }
 
-    private function runner(ScenarioSettings $settings, Secrets $secrets): PantherRunner
+    private function runner(ScenarioSettings $settings, Secrets $secrets, ?VisualComparator $visual = null): PantherRunner
     {
-        return new PantherRunner(fn (): Client => $this->client(), new RouteMap(self::ROUTES), new ConfiguredLoginProvider($settings, $secrets, $settings->timeout), new ConfiguredFixtureProvider($settings, new ProjectRoot($this->artifacts), $secrets), $secrets, $settings->timeout);
+        return new PantherRunner(fn (): Client => $this->client(), new RouteMap(self::ROUTES), new ConfiguredLoginProvider($settings, $secrets, $settings->timeout), new ConfiguredFixtureProvider($settings, new ProjectRoot($this->artifacts), $secrets), $secrets, $settings->timeout, $visual);
     }
 
     /**

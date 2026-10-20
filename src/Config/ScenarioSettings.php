@@ -31,7 +31,7 @@ final readonly class ScenarioSettings
      * @param list<LoginSettings>   $logins
      * @param list<FixtureSettings> $fixtures
      */
-    public function __construct(public ?string $baseUrl = null, public int $timeout = self::DEFAULT_TIMEOUT, array $logins = [], array $fixtures = [])
+    public function __construct(public ?string $baseUrl = null, public int $timeout = self::DEFAULT_TIMEOUT, array $logins = [], array $fixtures = [], public VisualSettings $visual = new VisualSettings())
     {
         if ($timeout <= 0) {
             throw new InvalidConfig('The timeout of a scenario step must be a positive number of seconds.');

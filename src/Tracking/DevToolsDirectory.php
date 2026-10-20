@@ -140,6 +140,14 @@ final readonly class DevToolsDirectory
     }
 
     /**
+     * `.devtools/baselines/`: the captures a human accepted (ADR-0022), versioned.
+     */
+    public function baselinesDirectory(): string
+    {
+        return $this->path('baselines');
+    }
+
+    /**
      * `.devtools/runs/2026-10-20-153000/`: one execution of the scenarios (ADR-0021), never committed.
      */
     public function runDirectory(\DateTimeImmutable $startedAt): string

@@ -126,6 +126,27 @@
                                     <xs:attribute name="command" type="t:nonEmpty" use="required"/>
                                 </xs:complexType>
                             </xs:element>
+                            <!-- How a capture is compared with its baseline (ADR-0022). -->
+                            <xs:element name="visual" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- Hidden before every capture: what changes on every run. -->
+                                        <xs:element name="mask" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <!-- The share of the pixels that may differ: 0.1%. -->
+                                    <xs:attribute name="threshold">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="\d+(\.\d+)?%"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
                         <xs:attribute name="base-url" type="t:nonEmpty"/>
                         <xs:attribute name="timeout" type="xs:positiveInteger"/>

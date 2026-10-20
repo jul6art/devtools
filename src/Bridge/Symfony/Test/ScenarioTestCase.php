@@ -8,7 +8,10 @@ use Jul6Art\DevTools\Config\ScenarioSettings;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
+use Jul6Art\DevTools\Scenario\Run\RunResult;
+use Jul6Art\DevTools\Scenario\Run\ScenarioResult;
 use Jul6Art\DevTools\Scenario\Run\Verdict;
+use Jul6Art\DevTools\Scenario\Run\XmlRunWriter;
 use Jul6Art\DevTools\Scenario\Runner\ConfiguredFixtureProvider;
 use Jul6Art\DevTools\Scenario\Runner\ConfiguredLoginProvider;
 use Jul6Art\DevTools\Scenario\Runner\FixtureProviderInterface;
@@ -16,6 +19,7 @@ use Jul6Art\DevTools\Scenario\Runner\LoginProviderInterface;
 use Jul6Art\DevTools\Scenario\Runner\PantherRunner;
 use Jul6Art\DevTools\Scenario\Runner\RouteMap;
 use Jul6Art\DevTools\Scenario\Runner\Secrets;
+use Jul6Art\DevTools\Scenario\Visual\VisualComparator;
 use Jul6Art\DevTools\Scenario\XmlScenarioStore;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -44,11 +48,29 @@ abstract class ScenarioTestCase extends PantherTestCase
 {
     private static ?Client $browser = null;
 
+    /**
+     * The run all the cases of the class make together: one directory, one `result.xml`, which
+     * `baselines:accept` reads as it reads one of `scenarios:run`.
+     */
+    private static ?\DateTimeImmutable $startedAt = null;
+
+    /**
+     * @var list<ScenarioResult>
+     */
+    private static array $results = [];
+
     #[\Override]
     public static function tearDownAfterClass(): void
     {
         self::$browser?->quit();
         self::$browser = null;
+
+        if (self::$startedAt instanceof \DateTimeImmutable && [] !== self::$results) {
+            new XmlRunWriter()->write(DevToolsDirectory::documented(new ProjectRoot(static::projectDir()))->runDirectory(self::$startedAt).'/result.xml', new RunResult(self::$startedAt, (string) self::$baseUri, self::$results));
+        }
+
+        self::$startedAt = null;
+        self::$results = [];
 
         parent::tearDownAfterClass();
     }
@@ -94,7 +116,9 @@ abstract class ScenarioTestCase extends PantherTestCase
             $this->fixtureProvider($config->scenarios, $root, $secrets),
             $secrets,
             $config->scenarios->timeout,
-        )->run([$scenario], $directory->path('runs/phpunit'))[0];
+            VisualComparator::forBaselines($directory->baselinesDirectory(), $config->scenarios->visual),
+        )->run([$scenario], $directory->runDirectory(self::$startedAt ??= new \DateTimeImmutable()))[0];
+        self::$results[] = $result;
 
         self::assertSame(Verdict::Passed, $result->verdict, (string) $result->failure());
     }

@@ -11,6 +11,7 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Scenario\Run\RunResult;
 use Jul6Art\DevTools\Scenario\Run\ScenarioResult;
+use Jul6Art\DevTools\Scenario\Run\StepResult;
 use Jul6Art\DevTools\Scenario\Run\Verdict;
 use Jul6Art\DevTools\Scenario\Run\XmlRunWriter;
 use Jul6Art\DevTools\Scenario\Runner\ConfiguredFixtureProvider;
@@ -19,6 +20,8 @@ use Jul6Art\DevTools\Scenario\Runner\PantherRunner;
 use Jul6Art\DevTools\Scenario\Runner\RouteMap;
 use Jul6Art\DevTools\Scenario\Runner\Secrets;
 use Jul6Art\DevTools\Scenario\Scenario;
+use Jul6Art\DevTools\Scenario\Visual\VisualComparator;
+use Jul6Art\DevTools\Scenario\Visual\VisualVerdict;
 use Jul6Art\DevTools\Scenario\XmlScenarioStore;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Xml\InvalidXml;
@@ -123,6 +126,7 @@ final class ScenariosRunCommand extends Command
         $startedAt = $this->clock->now();
         $artifacts = $directory->runDirectory($startedAt);
         $secrets = new Secrets();
+        $visual = VisualComparator::forBaselines($directory->baselinesDirectory(), $settings->visual);
         $runner = new PantherRunner(
             self::browser($root, rtrim($baseUrl, '/'), $viewport, true === $input->getOption('headed')),
             RouteMap::fromTracking($directory, new WorkflowTypeRegistry($config->customTypes)),
@@ -130,7 +134,12 @@ final class ScenariosRunCommand extends Command
             new ConfiguredFixtureProvider($settings, $root, $secrets),
             $secrets,
             $timeout,
+            $visual,
         );
+
+        if (null !== $visual->warning()) {
+            $io->warning($visual->warning());
+        }
 
         try {
             $results = $runner->run($scenarios, $artifacts);
@@ -147,6 +156,11 @@ final class ScenariosRunCommand extends Command
 
         $io->newLine();
         $io->text(\sprintf('%d passed, %d failed, %d errors — %s', $run->count(Verdict::Passed), $run->count(Verdict::Failed), $run->count(Verdict::Error), $root->relative($artifacts.'/result.xml')));
+        $unaccepted = \count(array_filter(array_merge(...array_map(static fn (ScenarioResult $result): array => $result->steps, $results)), static fn (StepResult $step): bool => VisualVerdict::NoBaseline === $step->visual?->verdict));
+
+        if ($unaccepted > 0) {
+            $io->text(\sprintf('%d captures have no baseline: look at them, then baselines:accept %s.', $unaccepted, basename($artifacts)));
+        }
 
         return $run->passed() && [] === $invalid ? Command::SUCCESS : Command::FAILURE;
     }

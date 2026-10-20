@@ -48,6 +48,7 @@
              <login role="ROLE_USER" type="form" url="/login" username-env="APP_USER" password-env="APP_USER_PASSWORD"/>
              <login role="ROLE_ADMIN" type="http-basic" username-env="APP_ADMIN" password-env="APP_ADMIN_PASSWORD"/>
              <fixture name="catalog-loaded" command="bin/console app:fixtures:load catalog"/>
+             <visual threshold="0.1%"><mask selector=".timestamp"/></visual>
          </scenarios> -->
 
     <!-- Language of the pages Claude writes, as two lowercase letters. English when nothing says
