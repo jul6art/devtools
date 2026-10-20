@@ -17,7 +17,9 @@
 
 —
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -28,9 +30,7 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 
@@ -38,7 +38,7 @@ flowchart LR
 
 ## Cross-cutting mechanisms
 
-| Mechanism | Event | Priority | Writes |
+| Mechanism | Event | Priority | Decides |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |

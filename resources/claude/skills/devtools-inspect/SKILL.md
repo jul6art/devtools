@@ -33,7 +33,7 @@ through files, and DevTools validates everything you write before it reaches `.d
    and completed, none shorter — and apply.
 
 3. For **each** page brief (`page.*.brief.xml`), follow the prompt it names (`<prompt path>`, e.g.
-   `vendor/jul6art/devtools/resources/prompts/page/v3.md`) **to the letter**:
+   `vendor/jul6art/devtools/resources/prompts/page/v4.md`) **to the letter**:
    - read the model, the current page, the knowledge file, and the files the model lists;
    - write the draft at the brief's `<draft path>`.
 

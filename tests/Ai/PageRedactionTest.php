@@ -58,7 +58,7 @@ final class PageRedactionTest extends TestCase
 
         $brief = new XmlPageBriefStore()->read($this->project.'/.devtools/pending/page.route.order.new.brief.xml');
         self::assertSame('route.order.new', $brief->workflow->value);
-        self::assertSame('page/3', $brief->promptVersion);
+        self::assertSame('page/4', $brief->promptVersion);
         self::assertFileExists($brief->promptPath);
         self::assertSame('en', $brief->language, 'English unless the project or the caller says otherwise.');
         self::assertSame('.devtools/pending/page.route.order.new.draft.md', $brief->draftPath);
@@ -139,7 +139,7 @@ final class PageRedactionTest extends TestCase
         $tracking = new XmlTrackingStore(new WorkflowTypeRegistry())->read($this->project.'/.devtools/workflows/routes/order.new.xml');
         self::assertSame(GenerationMode::Ai, $tracking->generated->mode);
         self::assertSame('claude-opus-5', $tracking->generated->model);
-        self::assertSame('page/3', $tracking->generated->prompt);
+        self::assertSame('page/4', $tracking->generated->prompt);
         self::assertCount(1, $tracking->history, 'The first writing amends the initial revision instead of adding one.');
 
         self::assertSame([], glob($this->project.'/.devtools/pending/page.route.order.new.*') ?: [], 'Brief, model and draft are removed.');
@@ -222,6 +222,15 @@ final class PageRedactionTest extends TestCase
         yield 'decisions without a flowchart' => [
             static fn (string $draft): string => (string) preg_replace('/```mermaid\nflowchart TD.*?```/s', 'Selon le pays.', $draft),
             '"Decisions" must hold at least one Mermaid flowchart',
+        ];
+        // ADR-0044: the state machine is DevTools' to draw, at the top of "Decisions".
+        yield 'state machine redrawn' => [
+            static fn (string $draft): string => str_replace('## Data', "```mermaid\nstateDiagram-v2\n  [*] --> draft\n```\n\n## Data", $draft),
+            '"Decisions" must not draw the state machine: DevTools draws it from the code',
+        ];
+        yield 'separator copied' => [
+            static fn (string $draft): string => str_replace('## Data', PageSection::CLAUDE_BELOW."\n\n## Data", $draft),
+            'must not carry the line that separates DevTools\' diagrams from yours',
         ];
         yield 'decisions emptied while the model records some' => [
             static fn (string $draft): string => (string) preg_replace('/(## Decisions\n\n).*?(\n## Data)/s', '$1—$2', $draft),

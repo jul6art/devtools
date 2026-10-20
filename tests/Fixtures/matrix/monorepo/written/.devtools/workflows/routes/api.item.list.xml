@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.api.item.list" type="routes" schema-version="1">
   <title>GET /api/items</title>
-  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/3"/>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/4"/>
   <source vcs="git" commit="4f6255cb1437ee968a14e5d208b8d1a455ef85a5" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="api_item_list" role="main">

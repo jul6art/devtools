@@ -16,6 +16,23 @@
             "utf8": true
         }
     },
+    "app_customer_edit": {
+        "path": "\/customers\/{id}\/edit",
+        "pathRegex": "{^\/customers\/(?P<id>[^\/]++)\/edit$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET|POST",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\CustomerController::edit"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
     "app_health": {
         "path": "\/health",
         "pathRegex": "{^\/health$}sDu",

@@ -30,10 +30,6 @@ sequenceDiagram
   C-->>U: rendu de components/CartSummary.html.twig
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

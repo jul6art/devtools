@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 1777426
+`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -30,14 +30,9 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Navigation / states
+## Decisions
 
-```mermaid
-flowchart LR
-  n1["app_order_validate"]
-  n2["app_order_show"]
-  n1 -->|"redirect"| n2
-```
+**`marking`** — state machine `order`
 
 ```mermaid
 stateDiagram-v2
@@ -49,9 +44,16 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Decisions
+**Navigation**
 
-—
+```mermaid
+flowchart LR
+  n1["app_order_validate"]
+  n2["app_order_show"]
+  n1 -->|"redirect"| n2
+```
+
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 
@@ -75,4 +77,4 @@ déjà validée) lève une exception non interceptée : réponse 500 au lieu d'u
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | rédaction initiale |
+| 2026-09-16 | 643805e | rédaction initiale |

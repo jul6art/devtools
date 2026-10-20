@@ -20,10 +20,6 @@ flowchart TD
   A[doctrine:migrations:migrate] --> B[Version20260901000000::up]
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

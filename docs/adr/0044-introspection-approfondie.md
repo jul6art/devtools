@@ -1,6 +1,6 @@
 # ADR-0044 — Introspection approfondie : connaissance amendable et logique conditionnelle complète
 
-- **Statut** : Accepted — 2026-09-18 (non démarrée)
+- **Statut** : Accepted — 2026-09-18 · Livré le 2026-10-20
 - **Décideurs** : jul6art
 - **Specs** : § 4.3 étape 2, § 4.5, § 12 question 3
 
@@ -106,26 +106,70 @@ décisions d'un langage autre que PHP ; la résolution d'un `choices` calculé �
 base ; les voters d'un bundle tiers ; la péremption d'une fiche de connaissance ; un format de page
 par type de workflow (§ 12 question 4, tranché en ADR-0008 et reconduit en ADR-0043).
 
+## Ce que la livraison a tranché (2026-10-20)
+
+Écarts pris avec le texte ci-dessus, chacun pour une raison que le code a rencontrée :
+
+- **Le saut d'appel ne suit que les méthodes de la classe lue** (`$this->decide()`, `self::`, `static::`).
+  Un appel sur un autre objet est enregistré tel qu'écrit : deviner sa classe nommerait une décision sur
+  la foi d'un nom. Un `return` dans une boucle n'est pas lu, et l'appel reste alors la valeur. Une branche
+  qui retourne rend la suite conditionnelle à son contraire (`!($order->paid) && …`).
+- **Les conditions sont imprimées avec les noms complets** que la résolution des noms produit
+  (`\Symfony\…\UserInterface`), comme toutes les décisions de l'ADR-0043 ; les réécrire est le travail de
+  Claude.
+- **Une contrainte `Choice` donne un point par valeur admise**, sans condition hors `groups` : c'est ce
+  qui la fait passer le filtre de l'ADR-0043 (un champ à plusieurs valeurs). Une `Expression` donne
+  `valid` sous l'expression et `invalid` sous son contraire ; un `When`, ses contraintes sous l'expression
+  et celles de `otherwise` sous son contraire.
+- **Un champ `required` ou `disabled` conditionnel** est une décision sur le formulaire, nommée
+  `App\Form\CustomerType::site.disabled` ; les `choices` d'un champ sans `data_class` restent sur le
+  formulaire, en confiance moyenne. La condition d'un `choices` calculé est `depends on …` : les services,
+  options et variables qu'il lit.
+- **Un voter est découvert à ce qu'il étend** (`Voter` ou `VoterInterface`), ses attributs lus dans
+  `supports()` et `supportsAttribute()`, constantes du projet résolues. Un voter qui étend un voter du
+  projet n'est pas suivi ; un voter dont aucun attribut ne se lit n'est rattaché à rien et le dit. Sa
+  colonne « Event » porte ses attributs ; la colonne « Écrit », devenue « Decides » depuis le passage à
+  l'anglais, y lit `access`. `denyAccessUnlessGranted()` entre dans la sécurité de la route, `isGranted()`
+  non : il conditionne, il ne ferme pas.
+- **Le brief d'amendement s'appelle `knowledge-amend.<clé>.brief.xml`** : l'inspection efface à chaque
+  passage les briefs `knowledge.*`, et un amendement demandé doit lui survivre. Le schéma est le même,
+  marqué `kind="amend"`. Le repli statique s'y déduit des fichiers de suivi (un workflow d'adaptateur
+  natif en confiance moyenne), pas du rapport d'inspection, qui reste local.
+- **Une révision s'écrit `<clé>.r<N>.md`** et `library.xml` porte `revision="N"` ; l'unicité y est tenue
+  sur le couple clé et révision, celle de l'original par le code — un schéma ne teste pas un attribut absent.
+- **La fixture `symfony-legacy-yaml` porte aussi la fonctionnalité client** : c'est « la même
+  application déclarée à l'ancienne », et le test de la console réelle exige les mêmes workflows.
+- ⚠️ **Le gabarit a changé, et c'est cassant** : toute page est réécrite à la première inspection. Une
+  version majeure est une décision humaine, comme le passage à l'anglais l'a été.
+
 ## Critères d'acceptation
 
-- [ ] `knowledge:amend` : brief de type `amend` portant la fiche actuelle et ce que l'inspection n'a
+- [x] `knowledge:amend` : brief de type `amend` portant la fiche actuelle et ce que l'inspection n'a
       pas compris ; brouillon validé par le canevas ; refus quand une section rétrécit
-- [ ] Une fiche amendée est déposée en **révision** dans la bibliothèque, sans écraser la précédente,
-      et `library.xml` porte les deux
-- [ ] Un voter apparaît en mécanisme des workflows qui portent son attribut, et **pas** des autres
-      (mutant) ; ses décisions sont `granted` / `denied` avec leur condition
-- [ ] Un `EntityType` dont les `choices` dépendent de l'utilisateur produit un point de décision sur
-      la propriété de l'entité, pas sur le formulaire
-- [ ] `Assert\Choice`, `Assert\Expression` et `Assert\When` produisent chacun un point de décision,
-      un test par contrainte
-- [ ] `$order->setStatus($this->decide($order))` enregistre les conditions de `decide()`, préfixées ;
-      un second saut n'est pas suivi (mutant sur `MAX_CALL_DEPTH`)
-- [ ] Le re-scan de 300 routes reste sous dix secondes avec le saut d'appel actif
-- [ ] Le gabarit a **neuf** sections, le `stateDiagram` est dans « Décisions », et une page au gabarit
-      précédent (dix sections) est détectée et réécrite
-- [ ] `PageDraftValidator` refuse un brouillon qui réécrit le `stateDiagram` de DevTools
-- [ ] La matrice de bout en bout rejouée sur les cinq projets-fixtures, snapshots régénérés, et un
-      fixture porte un voter, un formulaire à choix conditionnels et un appel indirect
+      *(`KnowledgeAmendTest` : brief, survie à une inspection, canevas, rétrécissement nommé)*
+- [x] Une fiche amendée est déposée en **révision** dans la bibliothèque, sans écraser la précédente,
+      et `library.xml` porte les deux *(`testAnAcceptedAmendmentRewritesTheSheetAndIsDepositedAsARevision` ;
+      un projet suivant lit la révision ; la même fiche une seconde fois n'en ajoute pas)*
+- [x] Un voter apparaît en mécanisme des workflows qui portent son attribut, et **pas** des autres
+      (mutant) ; ses décisions sont `granted` / `denied` avec leur condition *(`SymfonyAdapterTest`,
+      `MechanismAttachmentTest`, `DecisionExtractorTest::testAVoterDecidesAccessGrantedOrDenied` ; mutants
+      « rattaché partout », « sécurité non transmise » et « corps de route ignoré » tués)*
+- [x] Un `EntityType` dont les `choices` dépendent de l'utilisateur produit un point de décision sur
+      la propriété de l'entité, pas sur le formulaire *(`App\Entity\Customer::site`, test et fixture)*
+- [x] `Assert\Choice`, `Assert\Expression` et `Assert\When` produisent chacun un point de décision,
+      un test par contrainte *(fournisseur `constraints`, un cas chacune, plus `callback` et `otherwise`)*
+- [x] `$order->setStatus($this->decide($order))` enregistre les conditions de `decide()`, préfixées ;
+      un second saut n'est pas suivi (mutant sur `MAX_CALL_DEPTH`) *(mutants 0 et 2 tués)*
+- [x] Le re-scan de 300 routes reste sous dix secondes avec le saut d'appel actif *(0,38 à 0,40 s)*
+- [x] Le gabarit a **neuf** sections, le `stateDiagram` est dans « Décisions », et une page au gabarit
+      précédent (dix sections) est détectée et réécrite *(`PageRendererTest` ; les quinze pages de ce
+      dépôt et les neuf de la démonstration migrées, prose intacte)*
+- [x] `PageDraftValidator` refuse un brouillon qui réécrit le `stateDiagram` de DevTools *(et le
+      séparateur des deux parts ; cas de refus dédiés)*
+- [x] La matrice de bout en bout rejouée sur les cinq projets-fixtures, snapshots régénérés, et un
+      fixture porte un voter, un formulaire à choix conditionnels et un appel indirect *(sept variantes
+      de la matrice, instantanés relus ; `symfony-minimal` et `symfony-legacy-yaml` portent la route
+      `app_customer_edit`)*
 
 ## Conséquences
 

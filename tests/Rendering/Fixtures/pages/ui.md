@@ -18,10 +18,6 @@
 
 —
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

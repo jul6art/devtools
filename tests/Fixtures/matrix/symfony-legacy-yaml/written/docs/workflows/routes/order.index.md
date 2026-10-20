@@ -1,5 +1,5 @@
 # GET /orders
-`route.order.index` · type: routes · last updated: 2026-09-16 · commit: 1777426
+`route.order.index` · type: routes · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -29,7 +29,9 @@ sequenceDiagram
   T-->>U: liste, liens app_order_new et app_order_show
 ```
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -40,9 +42,7 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 
@@ -66,4 +66,4 @@ propre workflow (`ui.cart-summary`).
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | rédaction initiale |
+| 2026-09-16 | 643805e | rédaction initiale |

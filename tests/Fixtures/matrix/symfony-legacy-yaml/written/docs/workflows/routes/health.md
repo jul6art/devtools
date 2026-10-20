@@ -1,5 +1,5 @@
 # GET /health
-`route.health` · type: routes · last updated: 2026-09-16 · commit: 1777426
+`route.health` · type: routes · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -24,10 +24,6 @@ sequenceDiagram
   S->>C: GET /health (ou /status)
   C-->>S: 200 {"status": "ok"}
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -54,4 +50,4 @@ fonctionne.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | rédaction initiale |
+| 2026-09-16 | 643805e | rédaction initiale |

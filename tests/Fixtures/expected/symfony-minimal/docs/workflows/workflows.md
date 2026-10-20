@@ -1,11 +1,12 @@
 # Workflows — acme/symfony-minimal
 
-Stack: Symfony 8.1 · 9 workflows · last scan: 2026-09-16
+Stack: Symfony 8.1 · 10 workflows · last scan: 2026-09-16
 
 [Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-8](../../.devtools/knowledge/symfony-8.md)
 
-## Routes (5)
+## Routes (6)
 
+- [GET|POST /customers/{id}/edit](routes/customer.edit.md) — `route.customer.edit` · updated 2026-09-16
 - [GET /health](routes/health.md) — `route.health` · updated 2026-09-16
 - [GET /orders](routes/order.index.md) — `route.order.index` · updated 2026-09-16
 - [GET|POST /orders/new](routes/order.new.md) — `route.order.new` · updated 2026-09-16

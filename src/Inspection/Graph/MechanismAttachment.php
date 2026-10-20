@@ -23,6 +23,7 @@ final readonly class MechanismAttachment
      * @param list<string> $files        paths a workflow must traverse for it to apply; empty means no such condition
      * @param bool         $anyEntity    true for a mechanism that applies to any workflow reaching an entity
      * @param string|null  $stateMachine the state machine whose transitions it answers
+     * @param list<string> $grants       the security attributes it votes on: it runs inside the workflows asking for one (ADR-0044)
      */
     public function __construct(
         public Mechanism $mechanism,
@@ -30,16 +31,24 @@ final readonly class MechanismAttachment
         public array $files = [],
         public bool $anyEntity = false,
         public ?string $stateMachine = null,
+        public array $grants = [],
     ) {
     }
 
     /**
-     * @param list<FileRef> $files the files the workflow traverses
+     * @param list<FileRef> $files    the files the workflow traverses
+     * @param list<string>  $security the security attributes its entry point asks for
      */
-    public function applies(WorkflowType $type, array $files, ?StateMachine $states = null): bool
+    public function applies(WorkflowType $type, array $files, ?StateMachine $states = null, array $security = []): bool
     {
         if (null !== $this->type && $this->type !== $type->name) {
             return false;
+        }
+
+        // A voter is consulted by the workflows that ask for what it votes on — never by the others, even
+        // when they traverse its file through a constant.
+        if ([] !== $this->grants) {
+            return [] !== array_intersect($this->grants, $security);
         }
 
         if (null !== $this->stateMachine) {

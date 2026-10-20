@@ -17,10 +17,6 @@
 
 —
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

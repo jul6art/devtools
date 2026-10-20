@@ -1,5 +1,5 @@
 # POST /orders/{id}/validate
-`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 1777426
+`route.order.validate` · type: routes · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -17,14 +17,9 @@
 
 —
 
-## Navigation / states
+## Decisions
 
-```mermaid
-flowchart LR
-  n1["app_order_validate"]
-  n2["app_order_show"]
-  n1 -->|"redirect"| n2
-```
+**`marking`** — state machine `order`
 
 ```mermaid
 stateDiagram-v2
@@ -36,9 +31,16 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Decisions
+**Navigation**
 
-—
+```mermaid
+flowchart LR
+  n1["app_order_validate"]
+  n2["app_order_show"]
+  n1 -->|"redirect"| n2
+```
+
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 
@@ -46,7 +48,7 @@ stateDiagram-v2
 
 ## Cross-cutting mechanisms
 
-| Mechanism | Event | Priority | Writes |
+| Mechanism | Event | Priority | Decides |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 20 | — |
 
@@ -62,4 +64,4 @@ stateDiagram-v2
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | initial |
+| 2026-09-16 | 643805e | initial |

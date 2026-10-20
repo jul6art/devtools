@@ -12,7 +12,8 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Tracking\Revision;
 
 /**
- * Renders the page of a workflow in the fixed template of ADR-0043, which replaces the one of ADR-0008.
+ * Renders the page of a workflow in the fixed template of ADR-0044: nine sections, the state machine and the
+ * navigation drawn at the top of "Decisions" (ADR-0043 had ten, ADR-0008 eleven).
  *
  * The sections DevTools owns are always rendered from the model. Those Claude owns hold "—" — except the
  * cross-cutting mechanisms, which DevTools fills from the model — unless a page Claude wrote is given, in
@@ -38,7 +39,6 @@ final class PageRenderer
             PageSection::Summary->value => MarkdownWriter::EMPTY,
             PageSection::Trigger->value => $this->trigger($workflow, $written?->preconditions()),
             PageSection::Journey->value => MarkdownWriter::EMPTY,
-            PageSection::Navigation->value => $this->navigation($workflow),
             PageSection::Decisions->value => MarkdownWriter::EMPTY,
             PageSection::Data->value => MarkdownWriter::EMPTY,
             PageSection::CrossCutting->value => $this->crossCutting($workflow),
@@ -57,6 +57,10 @@ final class PageRenderer
 
             if ($section->writtenByClaude() && null !== $written?->section($section)) {
                 $content = $written->section($section);
+            }
+
+            if (PageSection::Decisions === $section) {
+                $content = $this->decisions($workflow, $content);
             }
 
             $lines[] = '';
@@ -101,32 +105,48 @@ final class PageRenderer
         return MarkdownWriter::code($name).' ('.$kind.')';
     }
 
-    private function navigation(Workflow $workflow): string
+    /**
+     * DevTools' diagrams first — the state machine, a decision on the field `marking`, then where the
+     * workflow leads — and Claude's below the line a parser splits on (ADR-0044). Nothing to draw, no line.
+     */
+    private function decisions(Workflow $workflow, string $claude): string
     {
         $blocks = [];
 
-        if ([] !== $workflow->navigation) {
-            $labels = [$workflow->main->name];
-            $edges = [];
-
-            foreach ($workflow->navigation as $edge) {
-                $labels[] = $edge->target;
-                $edges[] = [0, \count($labels) - 1, $edge->label];
-            }
-
-            $blocks[] = MermaidWriter::flowchart('LR', $labels, $edges);
-        }
-
         if ($workflow->states instanceof StateMachine) {
-            $blocks[] = MermaidWriter::stateDiagram($workflow->states);
+            $blocks[] = \sprintf("**%s** — state machine %s\n\n%s", MarkdownWriter::code('marking'), MarkdownWriter::code($workflow->states->name), MermaidWriter::stateDiagram($workflow->states));
         }
 
-        return [] === $blocks ? MarkdownWriter::EMPTY : implode("\n\n", $blocks);
+        if ([] !== $workflow->navigation) {
+            $blocks[] = "**Navigation**\n\n".$this->navigation($workflow);
+        }
+
+        if ([] === $blocks) {
+            return $claude;
+        }
+
+        $drawn = implode("\n\n", $blocks)."\n\n".PageSection::CLAUDE_BELOW;
+
+        return '' === trim($claude) || MarkdownWriter::EMPTY === trim($claude) ? $drawn : $drawn."\n\n".trim($claude);
+    }
+
+    private function navigation(Workflow $workflow): string
+    {
+        $labels = [$workflow->main->name];
+        $edges = [];
+
+        foreach ($workflow->navigation as $edge) {
+            $labels[] = $edge->target;
+            $edges[] = [0, \count($labels) - 1, $edge->label];
+        }
+
+        return MermaidWriter::flowchart('LR', $labels, $edges);
     }
 
     /**
      * What runs inside this workflow without being one: the listeners it goes through, the event each one
-     * answers, its priority, and the fields it can write while it runs (ADR-0043).
+     * answers, its priority, and the fields it can write while it runs (ADR-0043) — a voter, the attributes
+     * it votes on, and `access` (ADR-0044).
      *
      * A listener used to be a workflow with a page of its own; what a reader wants is this table.
      */
@@ -136,7 +156,7 @@ final class PageRenderer
             return MarkdownWriter::EMPTY;
         }
 
-        return MarkdownWriter::table(['Mechanism', 'Event', 'Priority', 'Writes'], array_map(
+        return MarkdownWriter::table(['Mechanism', 'Event', 'Priority', 'Decides'], array_map(
             static fn (Mechanism $mechanism): array => [
                 MarkdownWriter::code($mechanism->name),
                 MarkdownWriter::code($mechanism->event),

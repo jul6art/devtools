@@ -13,6 +13,7 @@ use Jul6Art\DevTools\Inspection\Adapter\Symfony\SymfonyAdapter;
 use Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor;
 use Jul6Art\DevTools\Inspection\Graph\WorkflowBuilder;
 use Jul6Art\DevTools\Inspection\Model\Confidence;
+use Jul6Art\DevTools\Inspection\Model\DecisionPoint;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
@@ -34,6 +35,7 @@ final class SymfonyAdapterTest extends TestCase
         'async.order-created',
         'command.app.import-catalog',
         'data.migrations',
+        'route.customer.edit',
         'route.health',
         'route.order.index',
         'route.order.new',
@@ -131,6 +133,41 @@ final class SymfonyAdapterTest extends TestCase
             array_map(static fn (Mechanism $mechanism): string => $mechanism->name, $this->workflow($result, 'command.app.import-catalog')->mechanisms),
             'A kernel listener does not run inside a command — a Doctrine one does, as soon as the command reaches an entity.',
         );
+    }
+
+    /**
+     * ADR-0044 § 2: a voter is a mechanism of the routes that ask for one of its attributes — through
+     * `#[IsGranted]`, `denyAccessUnlessGranted()` or `access_control` — and of no other.
+     */
+    public function testAVoterIsAMechanismOfTheRoutesAskingForItsAttributeAndOfNoOther(): void
+    {
+        [$result] = $this->inspect(new RecordedConsoleRunner());
+
+        $voters = array_values(array_filter($this->workflow($result, 'route.customer.edit')->mechanisms, static fn (Mechanism $mechanism): bool => 'voter' === $mechanism->kind));
+
+        self::assertCount(1, $voters);
+        self::assertSame('App\\Security\\CustomerVoter', $voters[0]->name);
+        self::assertSame('CUSTOMER_EDIT', $voters[0]->event, 'What it votes on stands where a listener names its event.');
+        self::assertSame('src/Security/CustomerVoter.php', $voters[0]->declaredIn->path);
+        self::assertSame(['access'], array_values(array_unique(array_map(static fn (DecisionPoint $decision): string => $decision->target, $voters[0]->decisions))));
+        self::assertSame(['denied', 'granted'], array_values(array_unique(array_map(static fn (DecisionPoint $decision): string => $decision->value, $voters[0]->decisions))));
+
+        foreach ($result->workflows as $workflow) {
+            if ('route.customer.edit' !== $workflow->id->value) {
+                self::assertSame([], array_values(array_filter($workflow->mechanisms, static fn (Mechanism $mechanism): bool => 'voter' === $mechanism->kind)), (string) $workflow->id);
+            }
+        }
+    }
+
+    /**
+     * `denyAccessUnlessGranted(CustomerVoter::EDIT, $customer)` in the body of the route is as much its
+     * security as an attribute — and the constant names the attribute, not itself.
+     */
+    public function testSecurityReadsTheBodyOfTheRouteAndTheProjectsConstants(): void
+    {
+        [$result] = $this->inspect(new RecordedConsoleRunner());
+
+        self::assertSame('ROLE_USER, CUSTOMER_EDIT', $this->workflow($result, 'route.customer.edit')->main->attributes['security'] ?? null);
     }
 
     public function testNoWorkflowOfTypeEventsIsProducedAnyMore(): void

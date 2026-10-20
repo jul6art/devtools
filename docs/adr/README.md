@@ -60,8 +60,8 @@
 | [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Proposed | — |
 | [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0042](0042-progression-et-compteurs-en-console.md) | Progression et compteurs de la sortie console | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
-| [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
-| [0044](0044-introspection-approfondie.md) | Introspection approfondie : connaissance amendable, logique conditionnelle complète | MVP+ — Retours d'usage | Accepted | — |
+| [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Superseded by 0044 | 2026-09-18 |
+| [0044](0044-introspection-approfondie.md) | Introspection approfondie : connaissance amendable, logique conditionnelle complète | MVP+ — Retours d'usage | Accepted | 2026-10-20 |
 | [0045](0045-controleur-niveau-de-menu.md) | Le contrôleur est un niveau de menu, pas un workflow | MVP+ — Retours d'usage | Accepted | — |
 | [0046](0046-diff-type-des-workflows.md) | Diff typé des workflows : ce qui a changé, pas seulement que ça a changé | MVP+ — Retours d'usage | Accepted | — |
 | [0047](0047-accepter-ou-refuser-un-changement.md) | Accepter un changement, ou le refuser : la revue | MVP+ — Retours d'usage | Accepted | — |

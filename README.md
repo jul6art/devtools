@@ -161,7 +161,7 @@ docs/workflows/    the documentation — what a human opens
 ├── <type>/<id>.md one page per workflow
 └── routes/<controller>/     with <routes group="controller"/>: one directory per controller
     ├── README.md            its routes, in a table — the page the menu links to
-    └── <route>.md           one page per route, the same ten sections as any other
+    └── <route>.md           one page per route, the same nine sections as any other
 
 .devtools/         the machinery — what DevTools reads back
 ├── config.xml     the project's options — yours, DevTools never rewrites it
@@ -537,7 +537,7 @@ whose name is computed, a class built from a string. Such files appear under *No
 The pages
 ---------
 
-Every workflow page has the same ten sections, in the same order — which is what makes pages parsable,
+Every workflow page has the same nine sections, in the same order — which is what makes pages parsable,
 diffable, and comparable across stacks:
 
 A group page — `routes/<controller>/README.md` — has three of its own, and the summary is the only one
@@ -548,13 +548,18 @@ Claude writes: `Summary`, `Routes` (the table), `States`.
 | Summary | Claude | — |
 | Trigger | DevTools (the *preconditions* row: Claude) | entry point, satellites, security |
 | Journey | Claude | — |
-| Navigation / states | DevTools | where the workflow leads, and its state machine |
-| Decisions | Claude, from the model | — |
+| Decisions | DevTools for the state machine and the navigation, Claude for the fields | the state machine and where the workflow leads |
 | Data | Claude | — |
-| Cross-cutting mechanisms | DevTools, enriched by Claude | the listeners that run inside it, and what they write |
+| Cross-cutting mechanisms | DevTools, enriched by Claude | the listeners and voters that run inside it, and what they decide |
 | Points of attention | Claude | — |
 | Related workflows | DevTools | dependencies and navigation, linked |
 | History | DevTools | one line per rewrite, never rewritten |
+
+⚠️ **"Navigation / states" was a tenth section until ADR-0044.** A state machine *is* a decision, on the
+field `marking`: it opens "Decisions", followed by the navigation, then the field diagrams Claude writes,
+below a Markdown comment a reader does not see and DevTools splits the section on. A page of the
+ten-section template is recognised and rewritten in nine at the next inspection, its prose kept — and a
+draft that draws a `stateDiagram` is refused: that one is DevTools' to draw.
 
 ⚠️ **These headings were French until v3** (`Résumé`, `Déclencheur`, `Parcours`…). A page written by an
 older DevTools is read through a map of the old headings to the new ones, so the prose Claude wrote comes
@@ -592,17 +597,32 @@ the tracking file:
 Claude turns them into one diagram per field, conditions rewritten in business language; a draft is
 refused when it names a field the model does not record, or leaves one out.
 
+Four more places decide a value, and are read the same way (ADR-0044):
+
+| Where | Decides | Recorded as |
+| --- | --- | --- |
+| `$order->setStatus($this->decide($order))` | the field, in `decide()` of the same class | each return of `decide()`, its condition prefixed `decide() : …` — one call, never two |
+| `#[Assert\Choice([...])]`, `#[Assert\Expression(...)]`, `#[Assert\When(...)]` | the annotated property | the admitted values, `valid` / `invalid` under the expression, the constraints under `when` |
+| `->add('site', EntityType::class, ['choices' => …, 'query_builder' => …])` | the property of the form's `data_class` | what the option computes, `depends on` what it reads (`$options['user']`, `$this->sites`) |
+| `['required' => $x]`, `['disabled' => $x]` | the form field itself (`CustomerType::site.disabled`) | `true` under `$x`, `false` under its opposite |
+
 **An assignment written once with no condition is not a decision**, it is a default: only a field whose
 value depends on something is kept. A receiver DevTools cannot type is recorded at `confidence="medium"`
 under the name as written — named, never invented. Extraction stops at three nested conditions and fifty
 points per workflow, and says so rather than pretending the model is whole.
 
-### Listeners are mechanisms, not workflows
+### Listeners and voters are mechanisms, not workflows
 
 A listener has no page of its own: what a reader wants to know is what it can do **during a given
 workflow**. Kernel listeners run inside every route, console listeners inside every command, a Doctrine
 listener targeting an entity inside the workflows that reach it — each with its event, its priority and
 the fields it writes, in *Cross-cutting mechanisms*.
+
+A **voter** runs inside the routes that ask for one of the attributes its `supports()` names — through
+`#[IsGranted]`, `denyAccessUnlessGranted()` or `access_control` — and inside no other. Its column reads
+the attributes it votes on, and what it decides is `access`: granted or denied, under the conditions of
+`voteOnAttribute()`, followed one call into the voter itself. A screen open because a permission code is
+misspelled shows there.
 
 ⚠️ There is therefore **no `events` workflow type**, against the seven of the specs. A project that wants
 such pages declares a custom type in `config.xml`.
@@ -690,7 +710,8 @@ size of the project, and reads what the console does not expose from the attribu
 Twig and Live components, migrations. Standalone or through the bundle, the same questions are asked.
 
 What each workflow gets from it: the route's methods and path; its **security**, from the first matching
-`access_control` rule then `#[IsGranted]`; its **navigation**, from `redirectToRoute()` and the `path()`
+`access_control` rule, then `#[IsGranted]` and `denyAccessUnlessGranted()` — a constant of the project
+read as the attribute it holds; its **navigation**, from `redirectToRoute()` and the `path()`
 links of the templates it renders (not of their layout, whose links belong to every page); the **state
 machine** it drives, found by Symfony's naming convention (`WorkflowInterface $orderStateMachine` →
 `order`); the tests that request its path literally; and a dependency on every project listener of a

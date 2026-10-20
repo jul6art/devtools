@@ -25,10 +25,6 @@ sequenceDiagram
   L-->>U: « Items »
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

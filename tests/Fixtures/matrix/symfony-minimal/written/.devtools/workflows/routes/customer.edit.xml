@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.customer.edit" type="routes" schema-version="1">
+  <title>GET|POST /customers/{id}/edit</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="4290ff5b8d18b578b04ff987aa30c0016ae35dba" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="app_customer_edit" role="main">
+      <declared-in path="src/Controller/CustomerController.php" role="controller"/>
+      <attribute name="methods" value="GET|POST"/>
+      <attribute name="path" value="/customers/{id}/edit"/>
+      <attribute name="security" value="ROLE_USER, CUSTOMER_EDIT"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
+    <file path="config/routes.yaml" role="config" sha256="7a076fce496afa2297a65dbd49c86770a1d0c81c455ea6e77a30452e632e627a"/>
+    <file path="config/routes/ux_live_component.yaml" role="config" sha256="221f0ec3918097d5e57b9585400f7ba3d3563ef64c77cbbddfcdcb61de51e083"/>
+    <file path="config/services.yaml" role="config" sha256="ffb7e71a58d604bb7b7f23356e843fdbfa48beac4a32edbfd16a856ff0856cfb"/>
+    <file path="src/Controller/CustomerController.php" role="controller" sha256="7d59da269b4864c83cf980500f0c6b301949454076b53b128496b731e4c3662c"/>
+    <file path="src/Entity/Customer.php" role="entity" sha256="105d418bae68d30d02e575d451404a95f1bb16e98b67f428d8012ec1b2c1f3ed"/>
+    <file path="src/Entity/Site.php" role="entity" sha256="b32fe92760be1a663b9fea59c1acfbf1a0f77db4bf0534c229be32f44ced7363"/>
+    <file path="src/Form/CustomerType.php" role="form" sha256="cbbebec9c3a7cbff3029c50b695c5138120a52c50494bdec69318a03f1478648"/>
+    <file path="src/Repository/CustomerRepository.php" role="repository" sha256="31a0dae857dbf5b07c6d0d64ab99b8ef556c56c9b1f1bbdd47f00dfd59f49063"/>
+    <file path="src/Repository/SiteRepository.php" role="repository" sha256="b34e70ad9ddf913ad660a828fca8d39ad3f9845c85eda4b105fbf0336bfb600a"/>
+    <file path="src/Security/CustomerVoter.php" role="other" sha256="2d14f6bb78103e545069c572c9e5d75f3241af46c0a83ec4b494c00bc80cb51c"/>
+    <file path="src/Service/CustomerTiering.php" role="service" sha256="1354fde07281609e96e528553b9aa41315ed0ebaa9799d2b50a99b62edee7dca"/>
+    <file path="templates/base.html.twig" role="template" sha256="bbf1ab566005c20e8671ddfbb568ac563316a33694bcbe45b32f105134343944"/>
+    <file path="templates/customer/edit.html.twig" role="template" sha256="f98fcaea286f9b5b2663626db3a55748954d6270c574724f0de41452f0394ea2"/>
+  </files>
+  <packages>
+    <package name="symfony/form" version="8.1.7"/>
+    <package name="symfony/framework-bundle" version="8.1.7"/>
+    <package name="symfony/http-foundation" version="8.1.7"/>
+    <package name="symfony/options-resolver" version="8.1.0"/>
+    <package name="symfony/routing" version="8.1.6"/>
+    <package name="symfony/security-core" version="8.1.6"/>
+    <package name="symfony/security-http" version="8.1.7"/>
+  </packages>
+  <decisions>
+    <decision target="App\Entity\Customer::creditLimit" value="invalid" condition="!(this.creditLimit &gt;= 0 or this.tier == &quot;platinum&quot;)" file="src/Entity/Customer.php" line="26" confidence="high"/>
+    <decision target="App\Entity\Customer::creditLimit" value="valid" condition="this.creditLimit &gt;= 0 or this.tier == &quot;platinum&quot;" file="src/Entity/Customer.php" line="26" confidence="high"/>
+    <decision target="App\Entity\Customer::site" value="$this-&gt;sites-&gt;visibleTo($options['user'])" condition="depends on $this-&gt;sites, $options['user']" file="src/Form/CustomerType.php" line="31" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="'gold'" file="src/Entity/Customer.php" line="23" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="'platinum'" file="src/Entity/Customer.php" line="23" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="'standard'" file="src/Entity/Customer.php" line="23" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="'platinum'" condition="tierOf() : $customer-&gt;creditLimit &gt; 100000" file="src/Service/CustomerTiering.php" line="23" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="'gold'" condition="tierOf() : !($customer-&gt;creditLimit &gt; 100000) &amp;&amp; $customer-&gt;creditLimit &gt; 10000" file="src/Service/CustomerTiering.php" line="27" confidence="high"/>
+    <decision target="App\Entity\Customer::tier" value="$this-&gt;defaultTier($customer)" condition="tierOf() : !($customer-&gt;creditLimit &gt; 100000) &amp;&amp; !($customer-&gt;creditLimit &gt; 10000)" file="src/Service/CustomerTiering.php" line="30" confidence="high"/>
+    <decision target="App\Entity\Customer::vatNumber" value="NotBlank" condition="this.country == &quot;CH&quot;" file="src/Entity/Customer.php" line="29" confidence="high"/>
+    <decision target="App\Form\CustomerType::site.disabled" value="false" condition="!(!$options['can_change_site'])" file="src/Form/CustomerType.php" line="32" confidence="high"/>
+    <decision target="App\Form\CustomerType::site.disabled" value="true" condition="!$options['can_change_site']" file="src/Form/CustomerType.php" line="32" confidence="high"/>
+  </decisions>
+  <mechanisms>
+    <mechanism kind="listener" name="App\EventListener\LocaleListener" event="kernel.request" priority="20">
+      <declared-in path="src/EventListener/LocaleListener.php" role="listener"/>
+    </mechanism>
+    <mechanism kind="listener" name="App\EventListener\TotalsListener" event="prePersist">
+      <declared-in path="src/EventListener/TotalsListener.php" role="listener"/>
+    </mechanism>
+    <mechanism kind="voter" name="App\Security\CustomerVoter" event="CUSTOMER_EDIT">
+      <declared-in path="src/Security/CustomerVoter.php" role="other"/>
+      <decisions>
+        <decision target="access" value="denied" condition="!$user instanceof \Symfony\Component\Security\Core\User\UserInterface" file="src/Security/CustomerVoter.php" line="33" confidence="high"/>
+        <decision target="access" value="granted" condition="!(!$user instanceof \Symfony\Component\Security\Core\User\UserInterface) &amp;&amp; \in_array('ROLE_MANAGER', $user-&gt;getRoles(), true)" file="src/Security/CustomerVoter.php" line="37" confidence="high"/>
+        <decision target="access" value="denied" condition="!(!$user instanceof \Symfony\Component\Security\Core\User\UserInterface) &amp;&amp; !(\in_array('ROLE_MANAGER', $user-&gt;getRoles(), true)) &amp;&amp; manages() : !($customer-&gt;accountManager === $user-&gt;getUserIdentifier())" file="src/Security/CustomerVoter.php" line="45" confidence="high"/>
+        <decision target="access" value="granted" condition="!(!$user instanceof \Symfony\Component\Security\Core\User\UserInterface) &amp;&amp; !(\in_array('ROLE_MANAGER', $user-&gt;getRoles(), true)) &amp;&amp; manages() : $customer-&gt;accountManager === $user-&gt;getUserIdentifier()" file="src/Security/CustomerVoter.php" line="45" confidence="high"/>
+      </decisions>
+    </mechanism>
+  </mechanisms>
+  <confidence>high</confidence>
+  <producer>native:symfony</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="4290ff5b8d18b578b04ff987aa30c0016ae35dba" reason="rédaction initiale"/>
+  </history>
+</workflow>

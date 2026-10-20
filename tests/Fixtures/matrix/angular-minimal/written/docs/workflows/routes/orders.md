@@ -30,7 +30,9 @@ sequenceDiagram
   L-->>U: un lien par commande vers /orders/:id
 ```
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -39,9 +41,7 @@ flowchart LR
   n1 -->|"link"| n2
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 

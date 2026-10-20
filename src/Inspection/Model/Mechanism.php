@@ -6,14 +6,16 @@ namespace Jul6Art\DevTools\Inspection\Model;
 
 /**
  * Something that runs inside a workflow without being one: a listener, a subscriber, a middleware, a
- * Doctrine filter (ADR-0043).
+ * Doctrine filter (ADR-0043), a voter (ADR-0044).
  *
  * A listener used to be a workflow of its own, with a page nobody opened. What a reader wants to know
  * is what it can do **during this workflow** — hence the event, the priority, and the fields it writes.
+ * A voter answers the attributes it votes on, which stand where a listener names its event, and decides
+ * access.
  */
 final readonly class Mechanism
 {
-    public const array KINDS = ['listener', 'subscriber', 'middleware', 'doctrine-filter'];
+    public const array KINDS = ['listener', 'subscriber', 'middleware', 'doctrine-filter', 'voter'];
 
     public string $kind;
 

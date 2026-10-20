@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type: async · last updated: 2026-09-16 · commit: 1777426
+`async.order-created` · type: async · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -15,10 +15,6 @@
 | Preconditions | — |
 
 ## Journey
-
-—
-
-## Navigation / states
 
 —
 
@@ -46,4 +42,4 @@
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | initial |
+| 2026-09-16 | 643805e | initial |

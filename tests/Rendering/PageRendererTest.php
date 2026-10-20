@@ -72,28 +72,43 @@ final class PageRendererTest extends TestCase
     }
 
     /**
-     * A listener is not a workflow: what a reader wants is what it can do inside this one (ADR-0043).
+     * A listener is not a workflow: what a reader wants is what it can do inside this one (ADR-0043) — and a
+     * voter decides access (ADR-0044).
      */
-    public function testTheMechanismsOfTheWorkflowAreListedWithWhatTheyWrite(): void
+    public function testTheMechanismsOfTheWorkflowAreListedWithWhatTheyDecide(): void
     {
         $workflow = new Workflow(
             id: new WorkflowId('route.order.new'),
             type: WorkflowType::routes(),
             title: 'Order creation',
             main: new EntryPoint('route', 'app_order_new', new FileRef('src/Controller/OrderController.php', FileRole::Controller)),
-            mechanisms: [new Mechanism(
-                'listener',
-                'App\\EventListener\\LocaleListener',
-                'kernel.request',
-                new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener),
-                16,
-                [new DecisionPoint('App\\Entity\\User::locale', "'fr'", null, new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener), 22)],
-            )],
+            mechanisms: [
+                new Mechanism(
+                    'listener',
+                    'App\\EventListener\\LocaleListener',
+                    'kernel.request',
+                    new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener),
+                    16,
+                    [new DecisionPoint('App\\Entity\\User::locale', "'fr'", null, new FileRef('src/EventListener/LocaleListener.php', FileRole::Listener), 22)],
+                ),
+                new Mechanism(
+                    'voter',
+                    'App\\Security\\OrderVoter',
+                    'ORDER_EDIT',
+                    new FileRef('src/Security/OrderVoter.php'),
+                    decisions: [
+                        new DecisionPoint('access', 'granted', '$user->isManager()', new FileRef('src/Security/OrderVoter.php'), 30),
+                        new DecisionPoint('access', 'denied', '!($user->isManager())', new FileRef('src/Security/OrderVoter.php'), 30),
+                    ],
+                ),
+            ],
         );
 
         $mechanisms = (string) new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingContext::of([$workflow])))->section(PageSection::CrossCutting);
 
+        self::assertStringContainsString('| Mechanism | Event | Priority | Decides |', $mechanisms);
         self::assertStringContainsString('| `App\\EventListener\\LocaleListener` | `kernel.request` | 16 | `App\\Entity\\User::locale` |', $mechanisms);
+        self::assertStringContainsString('| `App\\Security\\OrderVoter` | `ORDER_EDIT` | — | `access` |', $mechanisms);
     }
 
     /**
@@ -154,7 +169,7 @@ final class PageRendererTest extends TestCase
         $edited = str_replace('n3["app_order_show"]', 'n3["app_order_elsewhere"]', $page);
         $edited = str_replace("## Summary\n\n—", "## Summary\n\nWritten by Claude.", $edited);
 
-        self::assertSame([PageSection::Navigation], new PageParser()->parse($edited)->devToolsSectionsDifferingFrom(new PageParser()->parse($page)));
+        self::assertSame([PageSection::Decisions], new PageParser()->parse($edited)->devToolsSectionsDifferingFrom(new PageParser()->parse($page)), 'The navigation is DevTools\' part of "Decisions" (ADR-0044).');
     }
 
     public function testAFactualRewriteKeepsWhatClaudeWrote(): void
@@ -173,7 +188,7 @@ final class PageRendererTest extends TestCase
         $rewritten = new PageParser()->parse($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $written));
 
         foreach ([PageSection::Summary, PageSection::Journey, PageSection::Decisions, PageSection::Data, PageSection::CrossCutting, PageSection::Attention] as $section) {
-            self::assertSame($written->sections[$section->value], $rewritten->sections[$section->value], $section->value);
+            self::assertSame($written->section($section), $rewritten->section($section), $section->value);
         }
 
         self::assertStringContainsString('| Preconditions | catalogue chargé |', $rewritten->sections['Trigger']);
@@ -199,7 +214,6 @@ final class PageRendererTest extends TestCase
             '## Summary' => '## Résumé',
             '## Trigger' => '## Déclencheur',
             '## Journey' => '## Parcours',
-            '## Navigation / states' => '## Navigation / états',
             '## Decisions' => '## Décisions',
             '## Data' => '## Données',
             '## Cross-cutting mechanisms' => '## Mécanismes transverses',
@@ -218,16 +232,56 @@ final class PageRendererTest extends TestCase
     }
 
     /**
-     * Without Claude, "Journey" and "Decisions" hold "—": a flowchart of the files reached restated the
-     * table this ADR removed, and a decision diagram is Claude's to draw (ADR-0043).
+     * Without Claude, "Journey" holds "—" and "Decisions" only what DevTools draws from the code: a flowchart
+     * of the files reached restated the table ADR-0043 removed, and a field diagram is Claude's to draw.
      */
     public function testWithoutAWrittenPageTheSectionsClaudeOwnsAreEmpty(): void
     {
         $parsed = new PageParser()->parse(new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context()));
 
         self::assertSame('—', $parsed->sections['Journey']);
-        self::assertSame('—', $parsed->sections['Decisions']);
-        self::assertStringContainsString('stateDiagram-v2', $parsed->sections['Navigation / states'], 'The state machine stays factual.');
+        self::assertStringContainsString('stateDiagram-v2', $parsed->sections['Decisions'], 'The state machine stays factual.');
+        self::assertSame('—', $parsed->section(PageSection::Decisions), 'Claude\'s part is empty.');
+    }
+
+    /**
+     * ADR-0044 § 5: the state machine IS a decision, on the field `marking` — the first diagram of
+     * "Decisions", then the navigation, then Claude's diagrams, below a line a reader does not see.
+     */
+    public function testTheStateMachineAndTheNavigationOpenTheDecisionsAndClaudesDiagramsFollow(): void
+    {
+        $renderer = new PageRenderer();
+        $claude = "**`App\\Entity\\Order::status`**\n\n```mermaid\nflowchart TD\n  d1{\"sans référence\"}\n```";
+        $written = new PageParser()->parse(str_replace("## Summary\n\n—", "## Summary\n\nCrée une commande.", $renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context())))
+            ->withSection(PageSection::Decisions, $claude);
+
+        $decisions = (string) new PageParser()->parse($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $written))->sections['Decisions'];
+
+        self::assertStringStartsWith("**`marking`** — state machine `order`\n\n```mermaid\nstateDiagram-v2", $decisions);
+        self::assertGreaterThan(strpos($decisions, 'stateDiagram-v2'), strpos($decisions, 'flowchart LR'), 'The navigation follows the state machine.');
+        self::assertStringEndsWith(PageSection::CLAUDE_BELOW."\n\n".$claude, $decisions);
+        self::assertSame($claude, new PageParser()->parse($renderer->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $written))->section(PageSection::Decisions), 'What Claude wrote is read back alone.');
+    }
+
+    /**
+     * ADR-0044: a page of the ten-section template — "Navigation / states" apart — is recognised, and the
+     * next rendering gives it nine, Claude's decisions kept below DevTools' diagrams.
+     */
+    public function testAPageOfTheTenSectionTemplateIsRecognisedAndRewrittenInNine(): void
+    {
+        $nine = new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context());
+        $claude = "**`App\\Entity\\Order::status`**\n\n```mermaid\nflowchart TD\n  d1{\"sans référence\"}\n```";
+        $ten = (string) preg_replace('/## Decisions\n.*?(?=\n## Data)/s', "## Navigation / states\n\n```mermaid\nstateDiagram-v2\n  [*] --> draft\n```\n\n## Decisions\n\n".$claude."\n", $nine);
+        $ten = str_replace("## Summary\n\n—", "## Summary\n\nCrée une commande.", $ten);
+        $old = new PageParser()->parse($ten);
+
+        self::assertContains('The section "Navigation / states" is not part of the template.', $old->conformityProblems());
+
+        $rewritten = new PageParser()->parse(new PageRenderer()->render(RenderingFixtures::workflows()['routes'], RenderingFixtures::history(), RenderingFixtures::context(), $old));
+
+        self::assertSame([], $rewritten->conformityProblems());
+        self::assertSame($claude, $rewritten->section(PageSection::Decisions));
+        self::assertStringContainsString('stateDiagram-v2', $rewritten->sections['Decisions']);
     }
 
     /**
@@ -336,7 +390,7 @@ final class PageRendererTest extends TestCase
         $workflow = new Workflow(new WorkflowId('command.app.purge'), WorkflowType::commands(), 'app:purge', new EntryPoint('command', 'app:purge', new FileRef('src/Command/PurgeCommand.php')));
         $parsed = new PageParser()->parse(new PageRenderer()->render($workflow, RenderingFixtures::history(), RenderingContext::of([$workflow])));
 
-        self::assertSame('—', $parsed->sections['Navigation / states']);
+        self::assertSame('—', $parsed->sections['Decisions'], 'Nothing to draw, no line between nobody\'s diagrams.');
         self::assertSame('—', $parsed->sections['Cross-cutting mechanisms']);
     }
 }

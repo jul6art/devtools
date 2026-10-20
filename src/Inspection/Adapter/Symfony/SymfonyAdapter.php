@@ -197,6 +197,16 @@ final readonly class SymfonyAdapter implements AdapterInterface
             }
         }
 
+        // ADR-0044: a voter decides access inside the workflows that ask for one of its attributes.
+        foreach ($scanner->voters() as $class => $attributes) {
+            $file = $scanner->fileOf($class);
+
+            if ($file instanceof FileRef && [] !== $attributes) {
+                $voter = new Mechanism('voter', $class, implode(', ', $attributes), $file, decisions: $decisions->votes($root->absolute($file), $file));
+                $attachments[] = new MechanismAttachment($voter, grants: $attributes);
+            }
+        }
+
         return $attachments;
     }
 

@@ -623,8 +623,8 @@ final readonly class InspectionPipeline
                 // The last revision is still DevTools' own until Claude writes it: the writing completes it,
                 // however many inspections ran in between (a brief must not change from one run to the next).
                 amend: GenerationMode::NoAi === $document->generated->mode,
-                promptVersion: 'page/3',
-                promptPath: Resources::path('prompts/page/v3.md'),
+                promptVersion: 'page/4',
+                promptPath: Resources::path('prompts/page/v4.md'),
                 language: $options->language ?? $config->language($options->fallbackLanguage),
                 modelPath: $modelPath,
                 pagePath: $directory->pageRelativePath($workflow->type, $workflow->id, $workflow->group?->directory),

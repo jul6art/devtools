@@ -20,10 +20,6 @@ flowchart LR
   M["001_create_orders.sql"] --> T[("orders")]
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

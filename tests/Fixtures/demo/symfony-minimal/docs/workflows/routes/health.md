@@ -25,10 +25,6 @@ sequenceDiagram
   C-->>S: 200 {"status": "ok"}
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

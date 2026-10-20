@@ -27,10 +27,6 @@ sequenceDiagram
   R-->>H: Order ou null
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 **`App\Entity\Order::status`**

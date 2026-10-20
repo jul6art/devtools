@@ -29,7 +29,9 @@ sequenceDiagram
   T-->>U: liste, liens app_order_new et app_order_show
 ```
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -40,9 +42,7 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 

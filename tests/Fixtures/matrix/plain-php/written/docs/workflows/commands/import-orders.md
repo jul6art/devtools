@@ -29,10 +29,6 @@ sequenceDiagram
   end
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

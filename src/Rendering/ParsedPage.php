@@ -97,9 +97,31 @@ final readonly class ParsedPage
         return $problems;
     }
 
+    /**
+     * The content of a section — for "Decisions", only what Claude wrote below DevTools' diagrams
+     * (ADR-0044). A page of the ten-section template has no such line: its "Decisions" is Claude's whole.
+     */
     public function section(PageSection $section): ?string
     {
-        return $this->sectionNamed($section->value);
+        $content = $this->sectionNamed($section->value);
+
+        if (PageSection::Decisions !== $section || null === $content || !str_contains($content, PageSection::CLAUDE_BELOW)) {
+            return $content;
+        }
+
+        $claude = trim(substr($content, strpos($content, PageSection::CLAUDE_BELOW) + \strlen(PageSection::CLAUDE_BELOW)));
+
+        return '' === $claude ? MarkdownWriter::EMPTY : $claude;
+    }
+
+    /**
+     * What DevTools drew at the top of "Decisions": the state machine and the navigation (ADR-0044).
+     */
+    private function drawnDecisions(): string
+    {
+        $content = $this->sectionNamed(PageSection::Decisions->value) ?? '';
+
+        return str_contains($content, PageSection::CLAUDE_BELOW) ? trim(substr($content, 0, (int) strpos($content, PageSection::CLAUDE_BELOW))) : '';
     }
 
     public function withSection(PageSection $section, string $content): self
@@ -127,6 +149,11 @@ final readonly class ParsedPage
 
         foreach (PageSection::cases() as $section) {
             if (!$section->writtenByClaude() && self::normalised($this, $section) !== self::normalised($other, $section)) {
+                $differing[] = $section;
+            }
+
+            // Claude's section, opened by DevTools' diagrams: a hand edit there is a hand edit of facts.
+            if (PageSection::Decisions === $section && $this->drawnDecisions() !== $other->drawnDecisions()) {
                 $differing[] = $section;
             }
         }

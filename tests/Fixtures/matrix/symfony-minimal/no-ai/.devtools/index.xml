@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
-  <source vcs="git" commit="18b210d51cded26295e31fdf58ab25a8ce140c31" branch="main" dirty="true"/>
+  <source vcs="git" commit="4290ff5b8d18b578b04ff987aa30c0016ae35dba" branch="main" dirty="true"/>
   <workflow id="async.order-created" type="async" title="OrderCreated" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="async/order-created.md"/>
   <workflow id="command.app.import-catalog" type="commands" title="app:import-catalog" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="commands/app.import-catalog.md"/>
   <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="data/migrations.md"/>
+  <workflow id="route.customer.edit" type="routes" title="GET|POST /customers/{id}/edit" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/customer.edit.md"/>
   <workflow id="route.health" type="routes" title="GET /health" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/health.md"/>
   <workflow id="route.order.index" type="routes" title="GET /orders" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/order.index.md"/>
   <workflow id="route.order.new" type="routes" title="GET|POST /orders/new" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/order.new.md"/>

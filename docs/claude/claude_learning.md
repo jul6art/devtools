@@ -667,3 +667,27 @@
 - **Le plancher passe de 512 M à 1 G.** Mesure sur superp (2 073 fichiers, `check`) : 404 Mo de pic PHP avec
   la version en cours, 79 % de 512 M — trop peu de marge pour un projet qui grandit et une analyse qui en
   apprend davantage. La v3.1.2 y passait encore à 512 M.
+
+### 2026-10-20 (bis) — ADR-0044 : des décisions lues plus loin, et un gabarit à neuf sections
+
+- ⚠️ **Une extraction plus riche change la documentation du dépôt lui-même.** Le saut d'appel et les
+  nouveaux champs ont fait entrer `DecisionExtractor::class` et `::dataClass` dans les huit champs dessinés
+  de trois pages, et en ont fait sortir deux autres : les brouillons de rattrapage doivent ajouter **et**
+  retirer des graphiques, champ par champ, sinon `apply` les refuse. **Règle :** après un lot qui touche
+  l'extraction, comparer pour chaque brief les cibles du modèle à celles déjà dessinées.
+- ⚠️ **Un instantané régénéré trop tôt fige un état intermédiaire.** La première régénération de la
+  matrice a enregistré la page client avec son brief en attente ; il a fallu la refaire après avoir écrit
+  le brouillon. **Règle :** régénérer les instantanés quand l'arbre est complet, puis relire le diff.
+- **« Même application, autre configuration » se tient dans les deux sens.** Une route ajoutée à
+  `symfony-minimal` doit l'être à `symfony-legacy-yaml` (en YAML), sinon le test de la console réelle
+  diverge. Les brouillons, eux, se copient : la page ne dépend pas de la configuration ici.
+- **Réenregistrer une sortie de console, c'est remplacer celle qui a changé, et elle seule.** Les autres
+  diffèrent par un chemin absolu normalisé ou par l'ordre de sortie, sans rapport avec le changement.
+- **Les noms résolus s'impriment complets** (`\Symfony\…\UserInterface`) dans les conditions : une
+  attente de test s'écrit avec eux.
+- **Rector 2.7 dans les bundles `^7.4 || ^8.0`** : `RemoveEraseCredentialsRector` (jeu Symfony 8)
+  retire `eraseCredentials()` des utilisateurs de test, ce qui rend la classe abstraite sur 7.4 ;
+  `RemoveEmptyClassMethodRector` ne saute que les classes non finales et les méthodes `@deprecated`.
+  audit-bundle et core-bundle l'écartent désormais dans leur `rector.php`, comme admin-bundle.
+- **Une suppression sur variable est refusée par le garde-fou de la session** : écrire `"${VAR:?}"`, qui
+  arrête le shell si la variable est vide, au lieu de `$VAR`.

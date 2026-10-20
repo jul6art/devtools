@@ -1,5 +1,5 @@
 # OrderCreated
-`async.order-created` · type: async · last updated: 2026-09-16 · commit: 1777426
+`async.order-created` · type: async · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -25,10 +25,6 @@ sequenceDiagram
   H->>R: get(orderId)
   R-->>H: Order ou null
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -56,4 +52,4 @@ aujourd'hui jamais déclenché.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | rédaction initiale |
+| 2026-09-16 | 643805e | rédaction initiale |

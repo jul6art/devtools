@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Inspection\Adapter\Symfony;
 
+use Jul6Art\DevTools\Inspection\Graph\AttributeArgument;
 use Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor;
 use Jul6Art\DevTools\Inspection\Graph\RoleGuesser;
 use Jul6Art\DevTools\Inspection\Graph\SourceFiles;
@@ -11,16 +12,20 @@ use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Stack\StackProfile;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
@@ -73,6 +78,12 @@ final class StaticSymfonyScanner
     ];
 
     private const string IS_GRANTED = 'Symfony\Component\Security\Http\Attribute\IsGranted';
+
+    /**
+     * What a class extends or implements to be a voter (ADR-0044). A voter extending a voter of the project
+     * is not followed: its attributes would be read in a class that does not declare them.
+     */
+    private const array VOTER = ['Symfony\Component\Security\Core\Authorization\Voter\Voter', 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface'];
 
     private const array SCHEDULED = ['Symfony\Component\Scheduler\Attribute\AsCronTask', 'Symfony\Component\Scheduler\Attribute\AsPeriodicTask'];
 
@@ -275,7 +286,21 @@ final class StaticSymfonyScanner
 
         foreach ([$node->attrGroups, $node->getMethod($method)->attrGroups ?? []] as $groups) {
             foreach ($this->attributes($groups, [self::IS_GRANTED]) as $attribute) {
-                $role = self::stringArgument($attribute, 0, 'attribute');
+                $role = $this->stringValue(self::argument($attribute, 0, 'attribute'), $class);
+
+                if (null !== $role) {
+                    $roles[] = $role;
+                }
+            }
+        }
+
+        // ADR-0044: `$this->denyAccessUnlessGranted(CustomerVoter::EDIT, $customer)` is as much the route's
+        // security as an attribute — and the voter of that attribute runs inside it.
+        foreach (new NodeFinder()->findInstanceOf($node->getMethod($method)->stmts ?? [], MethodCall::class) as $call) {
+            $argument = $call->args[0] ?? null;
+
+            if ($call->var instanceof Variable && 'this' === $call->var->name && $call->name instanceof Identifier && 'denyAccessUnlessGranted' === $call->name->toString() && $argument instanceof Arg) {
+                $role = $this->stringValue($argument->value, $class);
 
                 if (null !== $role) {
                     $roles[] = $role;
@@ -284,6 +309,83 @@ final class StaticSymfonyScanner
         }
 
         return $roles;
+    }
+
+    /**
+     * The voters of the project, and the attributes each one votes on — the strings and constants its
+     * `supports()` compares the attribute with (ADR-0044).
+     *
+     * @return array<string, list<string>> class => attributes, sorted by class
+     */
+    public function voters(): array
+    {
+        $voters = [];
+
+        foreach ($this->classes() as $name => ['class' => $class]) {
+            if (!$class instanceof Class_ || !self::isVoter($class)) {
+                continue;
+            }
+
+            $attributes = [];
+
+            foreach (['supports', 'supportsAttribute'] as $method) {
+                $values = new NodeFinder()->find($class->getMethod($method)->stmts ?? [], static fn (Node $node): bool => $node instanceof String_ || $node instanceof ClassConstFetch);
+
+                foreach ($values as $value) {
+                    $attribute = $value instanceof Expr ? $this->stringValue($value, $name) : null;
+
+                    if (null !== $attribute && '' !== $attribute) {
+                        $attributes[] = $attribute;
+                    }
+                }
+            }
+
+            if ([] === $attributes) {
+                $this->warnings[] = \sprintf('%s: a voter whose supports() names no attribute DevTools can read — it is attached to no workflow.', $name);
+            }
+
+            $voters[$name] = array_values(array_unique($attributes));
+        }
+
+        ksort($voters, \SORT_STRING);
+
+        return $voters;
+    }
+
+    private static function isVoter(Class_ $class): bool
+    {
+        return array_any([$class->extends, ...$class->implements], static fn (?Name $parent): bool => $parent instanceof Name && \in_array($parent->toString(), self::VOTER, true));
+    }
+
+    /**
+     * A string literal, or a constant of the project that holds one — `CustomerVoter::EDIT`, `self::EDIT`.
+     * Anything else is not known without running the code.
+     */
+    private function stringValue(?Expr $value, string $class): ?string
+    {
+        if ($value instanceof String_) {
+            return $value->value;
+        }
+
+        if (!$value instanceof ClassConstFetch || !$value->class instanceof Name || !$value->name instanceof Identifier || 'class' === $value->name->toString()) {
+            return null;
+        }
+
+        $owner = \in_array(strtolower($value->class->toString()), ['self', 'static'], true) ? $class : $value->class->toString();
+
+        foreach ($this->classes()[$owner]['class']->stmts ?? [] as $statement) {
+            if (!$statement instanceof ClassConst) {
+                continue;
+            }
+
+            foreach ($statement->consts as $constant) {
+                if ($constant->name->toString() === $value->name->toString()) {
+                    return $constant->value instanceof String_ ? $constant->value->value : null;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -413,23 +515,7 @@ final class StaticSymfonyScanner
      */
     private static function argument(Attribute $attribute, int $position, string $name): ?Expr
     {
-        $index = 0;
-
-        foreach ($attribute->args as $argument) {
-            if (null !== $argument->name) {
-                if ($name === $argument->name->toString()) {
-                    return $argument->value;
-                }
-
-                continue;
-            }
-
-            if ($index++ === $position) {
-                return $argument->value;
-            }
-        }
-
-        return null;
+        return AttributeArgument::of($attribute, $position, $name);
     }
 
     private static function integerArgument(Attribute $attribute, int $position, string $name): ?int

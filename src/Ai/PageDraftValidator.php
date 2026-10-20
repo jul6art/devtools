@@ -170,6 +170,22 @@ final class PageDraftValidator
     {
         $section = $draft->sections[PageSection::Decisions->value] ?? null;
 
+        // ADR-0044: the state machine and the navigation open "Decisions", drawn by DevTools from the code. A
+        // draft redrawing them would put a second, unchecked version of a fact on the page.
+        $drawn = [];
+
+        if (null !== $section && str_contains($section['content'], 'stateDiagram')) {
+            $drawn[] = \sprintf('"%s" must not draw the state machine: DevTools draws it from the code, above your diagrams (line %d).', PageSection::Decisions->value, $section['line']);
+        }
+
+        if (null !== $section && str_contains($section['content'], PageSection::CLAUDE_BELOW)) {
+            $drawn[] = \sprintf('"%s" must not carry the line that separates DevTools\' diagrams from yours: DevTools writes it (line %d).', PageSection::Decisions->value, $section['line']);
+        }
+
+        if ([] !== $drawn) {
+            return $drawn;
+        }
+
         if (null === $section || '' === $section['content'] || MarkdownWriter::EMPTY === $section['content']) {
             return [] === $workflow->decisions
                 ? []

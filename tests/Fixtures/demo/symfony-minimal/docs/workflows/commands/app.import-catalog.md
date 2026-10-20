@@ -25,10 +25,6 @@ sequenceDiagram
   C-->>O: code de sortie 0
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

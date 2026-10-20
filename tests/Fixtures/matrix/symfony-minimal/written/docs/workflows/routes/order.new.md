@@ -1,5 +1,5 @@
 # GET|POST /orders/new
-`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 18b210d
+`route.order.new` · type: routes · last updated: 2026-09-16 · commit: 4290ff5
 
 ## Summary
 
@@ -31,14 +31,9 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Navigation / states
+## Decisions
 
-```mermaid
-flowchart LR
-  n1["app_order_new"]
-  n2["app_order_show"]
-  n1 -->|"redirect"| n2
-```
+**`marking`** — state machine `order`
 
 ```mermaid
 stateDiagram-v2
@@ -50,7 +45,16 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Decisions
+**Navigation**
+
+```mermaid
+flowchart LR
+  n1["app_order_new"]
+  n2["app_order_show"]
+  n1 -->|"redirect"| n2
+```
+
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 **`App\Entity\Order::status`**
 
@@ -93,4 +97,4 @@ Le prix vaut toujours 0 : `Product` crée son prix à zéro et rien ne le rensei
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 18b210d | rédaction initiale |
+| 2026-09-16 | 4290ff5 | rédaction initiale |

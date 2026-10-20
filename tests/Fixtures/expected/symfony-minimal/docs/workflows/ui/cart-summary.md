@@ -18,10 +18,6 @@
 
 —
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —
@@ -32,7 +28,7 @@
 
 ## Cross-cutting mechanisms
 
-| Mechanism | Event | Priority | Writes |
+| Mechanism | Event | Priority | Decides |
 |---|---|---|---|
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 

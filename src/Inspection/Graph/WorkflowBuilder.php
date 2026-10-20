@@ -101,7 +101,7 @@ final readonly class WorkflowBuilder
 
             $attached = array_values(array_map(
                 static fn (MechanismAttachment $attachment): Mechanism => $attachment->mechanism,
-                array_filter($mechanisms, static fn (MechanismAttachment $attachment): bool => $attachment->applies($main->type, array_values($files), $main->states)),
+                array_filter($mechanisms, static fn (MechanismAttachment $attachment): bool => $attachment->applies($main->type, array_values($files), $main->states, array_values(array_filter(explode(', ', $main->entryPoint->attributes['security'] ?? ''))))),
             ));
 
             $workflows[] = new Workflow(

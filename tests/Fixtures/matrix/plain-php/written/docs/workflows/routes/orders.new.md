@@ -30,7 +30,9 @@ sequenceDiagram
   P-->>U: Location: /index.php
 ```
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -41,9 +43,7 @@ flowchart LR
   n1 -->|"redirect"| n3
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 

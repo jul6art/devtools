@@ -2,7 +2,7 @@
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.order.new" type="routes" schema-version="1">
   <title>GET|POST /orders/new</title>
   <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
-  <source vcs="git" commit="17774264b403f17965e39ec16e79f2b023431f42" branch="main" dirty="true"/>
+  <source vcs="git" commit="643805e972926155696b401c1ae7290ca2b30643" branch="main" dirty="true"/>
   <entrypoints>
     <entrypoint kind="route" name="app_order_new" role="main">
       <declared-in path="src/Controller/OrderController.php" role="controller"/>
@@ -14,7 +14,7 @@
   <files>
     <file path="config/packages/framework.yaml" role="config" sha256="b2648cb7b058e23b63f80ee556de48287d9f4a8297bdcddaddf1dcf608476377"/>
     <file path="config/packages/security.yaml" role="config" sha256="a2f8fb4c97712ef95d7e55876125fdfb2d08f46af1f0de79d86702d7e80ab7ef"/>
-    <file path="config/routes.yaml" role="config" sha256="877e010ec7cda9c3bb1936514124beaac76c6fe353563303ee79133c52e5810a"/>
+    <file path="config/routes.yaml" role="config" sha256="dcf40037f10feba5c71408e43f6c8e2c555472f2458f920607da7a48729f953f"/>
     <file path="src/Controller/OrderController.php" role="controller" sha256="b6fcbeeb1a8cef7a27cd55ade0723206bca441e6284a4078f44b986f55534a2f"/>
     <file path="src/Entity/Order.php" role="entity" sha256="a731872e1c48bf879742d5cbd18b95940ea3bb4e252e502ec6850af9396664fc"/>
     <file path="src/Entity/Product.php" role="entity" sha256="328ab809b0f216bd4d9ae7fac57844aae521e822bf7a1fe09ebe35ff04e4b5c7"/>
@@ -54,6 +54,6 @@
   <producer>native:symfony</producer>
   <status>fresh</status>
   <history>
-    <revision at="2026-09-16T12:00:00+00:00" commit="17774264b403f17965e39ec16e79f2b023431f42" reason="initial"/>
+    <revision at="2026-09-16T12:00:00+00:00" commit="643805e972926155696b401c1ae7290ca2b30643" reason="initial"/>
   </history>
 </workflow>

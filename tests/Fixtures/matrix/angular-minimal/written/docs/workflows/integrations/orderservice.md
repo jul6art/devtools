@@ -28,10 +28,6 @@ sequenceDiagram
   S-->>C: Observable<Order[]> / Observable<Order>
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

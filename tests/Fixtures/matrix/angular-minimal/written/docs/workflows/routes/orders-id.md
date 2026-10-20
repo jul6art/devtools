@@ -30,10 +30,6 @@ sequenceDiagram
   D-->>U: nom du client
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

@@ -18,16 +18,9 @@
 
 —
 
-## Navigation / states
+## Decisions
 
-```mermaid
-flowchart LR
-  n1["app_order_new"]
-  n2["app_order_index"]
-  n3["app_order_show"]
-  n1 -->|"link"| n2
-  n1 -->|"redirect"| n3
-```
+**`marking`** — state machine `order`
 
 ```mermaid
 stateDiagram-v2
@@ -39,9 +32,18 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Decisions
+**Navigation**
 
-—
+```mermaid
+flowchart LR
+  n1["app_order_new"]
+  n2["app_order_index"]
+  n3["app_order_show"]
+  n1 -->|"link"| n2
+  n1 -->|"redirect"| n3
+```
+
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 
@@ -49,7 +51,7 @@ stateDiagram-v2
 
 ## Cross-cutting mechanisms
 
-| Mechanism | Event | Priority | Writes |
+| Mechanism | Event | Priority | Decides |
 |---|---|---|---|
 | `App\EventListener\LocaleListener` | `kernel.request` | 16 | — |
 

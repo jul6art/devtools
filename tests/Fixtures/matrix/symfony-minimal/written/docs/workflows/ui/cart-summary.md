@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type: ui · last updated: 2026-09-16 · commit: 18b210d
+`ui.cart-summary` · type: ui · last updated: 2026-09-16 · commit: 4290ff5
 
 ## Summary
 
@@ -30,10 +30,6 @@ sequenceDiagram
   C-->>U: rendu de components/CartSummary.html.twig
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —
@@ -60,4 +56,4 @@ que `refresh` n'a pas été appelé.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 18b210d | rédaction initiale |
+| 2026-09-16 | 4290ff5 | rédaction initiale |

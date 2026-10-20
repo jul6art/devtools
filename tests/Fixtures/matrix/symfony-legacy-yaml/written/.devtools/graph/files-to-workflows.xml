@@ -6,6 +6,7 @@
     <workflow ref="route.order.validate" relation="file"/>
   </file>
   <file path="config/packages/security.yaml">
+    <workflow ref="route.customer.edit" relation="file"/>
     <workflow ref="route.health" relation="file"/>
     <workflow ref="route.order.index" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
@@ -13,6 +14,7 @@
     <workflow ref="route.order.validate" relation="file"/>
   </file>
   <file path="config/routes.yaml">
+    <workflow ref="route.customer.edit" relation="file"/>
     <workflow ref="route.health" relation="file"/>
     <workflow ref="route.order.index" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
@@ -25,6 +27,9 @@
   <file path="src/Command/ImportCatalogCommand.php">
     <workflow ref="command.app.import-catalog" relation="file"/>
   </file>
+  <file path="src/Controller/CustomerController.php">
+    <workflow ref="route.customer.edit" relation="file"/>
+  </file>
   <file path="src/Controller/HealthController.php">
     <workflow ref="route.health" relation="file"/>
   </file>
@@ -33,6 +38,9 @@
     <workflow ref="route.order.new" relation="file"/>
     <workflow ref="route.order.show" relation="file"/>
     <workflow ref="route.order.validate" relation="file"/>
+  </file>
+  <file path="src/Entity/Customer.php">
+    <workflow ref="route.customer.edit" relation="file"/>
   </file>
   <file path="src/Entity/Order.php">
     <workflow ref="async.order-created" relation="file"/>
@@ -46,6 +54,12 @@
     <workflow ref="command.app.import-catalog" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
   </file>
+  <file path="src/Entity/Site.php">
+    <workflow ref="route.customer.edit" relation="file"/>
+  </file>
+  <file path="src/Form/CustomerType.php">
+    <workflow ref="route.customer.edit" relation="file"/>
+  </file>
   <file path="src/Form/OrderType.php">
     <workflow ref="route.order.new" relation="file"/>
   </file>
@@ -54,6 +68,9 @@
   </file>
   <file path="src/MessageHandler/OrderCreatedHandler.php">
     <workflow ref="async.order-created" relation="file"/>
+  </file>
+  <file path="src/Repository/CustomerRepository.php">
+    <workflow ref="route.customer.edit" relation="file"/>
   </file>
   <file path="src/Repository/OrderRepository.php">
     <workflow ref="async.order-created" relation="file"/>
@@ -66,6 +83,15 @@
   <file path="src/Repository/ProductRepository.php">
     <workflow ref="command.app.import-catalog" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
+  </file>
+  <file path="src/Repository/SiteRepository.php">
+    <workflow ref="route.customer.edit" relation="file"/>
+  </file>
+  <file path="src/Security/CustomerVoter.php">
+    <workflow ref="route.customer.edit" relation="file"/>
+  </file>
+  <file path="src/Service/CustomerTiering.php">
+    <workflow ref="route.customer.edit" relation="file"/>
   </file>
   <file path="src/Service/OrderPricing.php">
     <workflow ref="route.order.new" relation="file"/>
@@ -83,12 +109,16 @@
     <workflow ref="ui.cart-summary" relation="file"/>
   </file>
   <file path="templates/base.html.twig">
+    <workflow ref="route.customer.edit" relation="file"/>
     <workflow ref="route.order.index" relation="file"/>
     <workflow ref="route.order.new" relation="file"/>
     <workflow ref="route.order.show" relation="file"/>
   </file>
   <file path="templates/components/CartSummary.html.twig">
     <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="templates/customer/edit.html.twig">
+    <workflow ref="route.customer.edit" relation="file"/>
   </file>
   <file path="templates/order/_form.html.twig">
     <workflow ref="route.order.new" relation="file"/>

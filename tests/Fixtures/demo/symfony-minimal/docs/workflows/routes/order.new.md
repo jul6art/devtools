@@ -31,14 +31,9 @@ sequenceDiagram
   C-->>U: redirect app_order_show
 ```
 
-## Navigation / states
+## Decisions
 
-```mermaid
-flowchart LR
-  n1["app_order_new"]
-  n2["app_order_show"]
-  n1 -->|"redirect"| n2
-```
+**`marking`** — state machine `order`
 
 ```mermaid
 stateDiagram-v2
@@ -50,7 +45,16 @@ stateDiagram-v2
   s2 --> s3 : ship
 ```
 
-## Decisions
+**Navigation**
+
+```mermaid
+flowchart LR
+  n1["app_order_new"]
+  n2["app_order_show"]
+  n1 -->|"redirect"| n2
+```
+
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 **`App\Entity\Order::status`**
 

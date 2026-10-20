@@ -33,6 +33,20 @@ final class MechanismAttachmentTest extends TestCase
         self::assertFalse($attachment->applies(WorkflowType::async(), $this->files()));
     }
 
+    /**
+     * ADR-0044 § 2: a voter runs inside the workflows that ask for one of its attributes, whatever their
+     * type, and only those — the mutant this kills attaches it everywhere.
+     */
+    public function testAVoterRunsInsideTheWorkflowsAskingForOneOfItsAttributes(): void
+    {
+        $voter = new Mechanism('voter', 'App\\Security\\CustomerVoter', 'CUSTOMER_EDIT, CUSTOMER_VIEW', new FileRef('src/Security/CustomerVoter.php'));
+        $attachment = new MechanismAttachment($voter, grants: ['CUSTOMER_EDIT', 'CUSTOMER_VIEW']);
+
+        self::assertTrue($attachment->applies(WorkflowType::routes(), [], null, ['ROLE_USER', 'CUSTOMER_VIEW']));
+        self::assertFalse($attachment->applies(WorkflowType::routes(), $this->files(), null, ['ROLE_USER']));
+        self::assertFalse($attachment->applies(WorkflowType::routes(), $this->files()), 'No security, no voter.');
+    }
+
     public function testAConsoleListenerRunsInsideEveryCommand(): void
     {
         $attachment = new MechanismAttachment($this->mechanism('console.command'), WorkflowType::commands()->name);

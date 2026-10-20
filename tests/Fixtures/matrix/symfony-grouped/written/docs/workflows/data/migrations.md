@@ -1,5 +1,5 @@
 # Migrations
-`data.migrations` · type: data · last updated: 2026-09-16 · commit: 18b210d
+`data.migrations` · type: data · last updated: 2026-09-16 · commit: 4290ff5
 
 ## Summary
 
@@ -19,10 +19,6 @@ Migrations de la base : une seule version, `Version20260901000000`, dont la mét
 flowchart TD
   A[doctrine:migrations:migrate] --> B[Version20260901000000::up]
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -49,4 +45,4 @@ se trouve dans `migrations/`.
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 18b210d | rédaction initiale |
+| 2026-09-16 | 4290ff5 | rédaction initiale |

@@ -24,10 +24,6 @@ sequenceDiagram
   S->>B: DELETE FROM orders WHERE customer = ""
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

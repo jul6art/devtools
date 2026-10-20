@@ -27,10 +27,6 @@ sequenceDiagram
   R-->>C: 201 JSON
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

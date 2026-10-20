@@ -23,6 +23,11 @@ app_order_validate:
     controller: App\Controller\OrderController::validate
     methods: [POST]
 
+app_customer_edit:
+    path: /customers/{id}/edit
+    controller: App\Controller\CustomerController::edit
+    methods: [GET, POST]
+
 app_order_show:
     path: /orders/{id}
     controller: App\Controller\OrderController::show

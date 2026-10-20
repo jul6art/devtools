@@ -23,10 +23,6 @@ sequenceDiagram
   A-->>M: 200 {"status": "ok"}
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

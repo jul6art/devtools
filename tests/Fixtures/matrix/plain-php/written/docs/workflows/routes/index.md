@@ -32,7 +32,9 @@ sequenceDiagram
   P-->>U: liste + accès à /orders/new.php
 ```
 
-## Navigation / states
+## Decisions
+
+**Navigation**
 
 ```mermaid
 flowchart LR
@@ -43,9 +45,7 @@ flowchart LR
   n1 -->|"link"| n3
 ```
 
-## Decisions
-
-—
+<!-- Above: drawn by DevTools from the code. Below: written by Claude. -->
 
 ## Data
 

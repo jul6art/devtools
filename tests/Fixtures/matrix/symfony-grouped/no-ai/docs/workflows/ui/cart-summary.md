@@ -1,5 +1,5 @@
 # CartSummary
-`ui.cart-summary` · type: ui · last updated: 2026-09-16 · commit: 18b210d
+`ui.cart-summary` · type: ui · last updated: 2026-09-16 · commit: 4290ff5
 
 ## Summary
 
@@ -18,10 +18,6 @@
 
 —
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —
@@ -32,7 +28,7 @@
 
 ## Cross-cutting mechanisms
 
-| Mechanism | Event | Priority | Writes |
+| Mechanism | Event | Priority | Decides |
 |---|---|---|---|
 | `App\EventListener\TotalsListener` | `prePersist` | — | — |
 
@@ -48,4 +44,4 @@
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 18b210d | initial |
+| 2026-09-16 | 4290ff5 | initial |

@@ -26,10 +26,6 @@ sequenceDiagram
   C-->>U: order/show.html.twig
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —

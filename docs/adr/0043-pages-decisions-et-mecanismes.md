@@ -1,6 +1,6 @@
 # ADR-0043 — Pages : les faits au XML, les listeners en mécanismes, les décisions en graphiques
 
-- **Statut** : Accepted — 2026-09-18
+- **Statut** : Superseded by [ADR-0044](0044-introspection-approfondie.md) — 2026-10-20 (accepté le 2026-09-18)
 - **Décideurs** : jul6art
 - **Specs** : § 4.2, § 4.5, § 4.7, § 12 question 4
 - **Remplace** : ADR-0008, passée `Superseded by ADR-0043`

@@ -1,5 +1,5 @@
 # app:import-catalog
-`command.app.import-catalog` · type: commands · last updated: 2026-09-16 · commit: 1777426
+`command.app.import-catalog` · type: commands · last updated: 2026-09-16 · commit: 643805e
 
 ## Summary
 
@@ -24,10 +24,6 @@ sequenceDiagram
   C->>R: add(new Product('Widget XL'))
   C-->>O: code de sortie 0
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -54,4 +50,4 @@ Le dépôt est en mémoire et vit le temps de la commande : l'import n'a aucun e
 
 | Date | Commit | Change |
 |---|---|---|
-| 2026-09-16 | 1777426 | rédaction initiale |
+| 2026-09-16 | 643805e | rédaction initiale |

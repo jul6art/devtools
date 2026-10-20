@@ -24,10 +24,6 @@ sequenceDiagram
   I-->>C: 200 []
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 —
