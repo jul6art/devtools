@@ -1,0 +1,213 @@
+[
+    {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {
+                "logging": {},
+                "completions": {},
+                "tools": {}
+            },
+            "serverInfo": {
+                "name": "devtools",
+                "version": "VERSION",
+                "description": "The workflows of this project, as DevTools documents them"
+            },
+            "instructions": "DevTools documents the workflows of this project — routes, commands, messages, components — and maps each source file to the workflows it takes part in. Before modifying a file, call `impact` with it: the workflows it reaches are the behaviour to keep, and their pages say what that behaviour is. Call `get_workflow` to read one page instead of opening the documentation directory, `list_workflows` to find an identifier, `get_knowledge` for the conventions of the stack. Nothing here writes: the documentation is as fresh as the last `devtools workflows:inspect`."
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+            "tools": [
+                {
+                    "name": "list_workflows",
+                    "title": "List the workflows",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "routes",
+                                    "commands",
+                                    "async",
+                                    "ui",
+                                    "integrations",
+                                    "data"
+                                ],
+                                "description": "Only the workflows of this type"
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "fresh",
+                                    "stale",
+                                    "orphaned",
+                                    "manual"
+                                ],
+                                "description": "Only the workflows of this freshness"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "description": "Lists the documented workflows of the project: identifier, type, title, freshness, confidence and page. Call it to find the identifier get_workflow needs, or to see which pages are stale.",
+                    "annotations": {
+                        "title": "List the workflows",
+                        "readOnlyHint": true,
+                        "destructiveHint": false,
+                        "idempotentHint": true,
+                        "openWorldHint": false
+                    }
+                },
+                {
+                    "name": "get_workflow",
+                    "title": "Read a workflow",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "The identifier of the workflow, e.g. route.order.create"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "id"
+                        ]
+                    },
+                    "description": "Returns the page of one workflow — what it does, what it decides, what to watch — then its files, tests, dependencies, mechanisms and history. Call it before changing a behaviour, instead of opening the documentation directory.",
+                    "annotations": {
+                        "title": "Read a workflow",
+                        "readOnlyHint": true,
+                        "destructiveHint": false,
+                        "idempotentHint": true,
+                        "openWorldHint": false
+                    }
+                },
+                {
+                    "name": "impact",
+                    "title": "Impact of a change",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "files": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Files of the project, relative to it or absolute"
+                            },
+                            "changed": {
+                                "type": "boolean",
+                                "description": "The files modified, staged or untracked in the working tree, instead of files"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "description": "Lists the workflows a change reaches — directly, through a test, or through a dependency — and the files no workflow covers. Call it before modifying a file, and before a commit with \"changed\": true.",
+                    "annotations": {
+                        "title": "Impact of a change",
+                        "readOnlyHint": true,
+                        "destructiveHint": false,
+                        "idempotentHint": true,
+                        "openWorldHint": false
+                    }
+                },
+                {
+                    "name": "get_knowledge",
+                    "title": "Knowledge of the stack",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "stack": {
+                                "type": "string",
+                                "description": "A stack root (\".\", \"front\") or a knowledge key (symfony-7); every stack when omitted"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "description": "Returns the knowledge sheet of the project's stacks: where the framework puts its routes, rules and side effects, and the conventions the pages follow. Call it once, before reading code of a framework you are unsure of.",
+                    "annotations": {
+                        "title": "Knowledge of the stack",
+                        "readOnlyHint": true,
+                        "destructiveHint": false,
+                        "idempotentHint": true,
+                        "openWorldHint": false
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "{\"count\":6,\"workflows\":[{\"id\":\"route.customer.edit\",\"type\":\"routes\",\"title\":\"GET|POST /customers/{id}/edit\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/customer.edit.md\"},{\"id\":\"route.health\",\"type\":\"routes\",\"title\":\"GET /health\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/health.md\"},{\"id\":\"route.order.index\",\"type\":\"routes\",\"title\":\"GET /orders\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/order.index.md\"},{\"id\":\"route.order.new\",\"type\":\"routes\",\"title\":\"GET|POST /orders/new\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/order.new.md\"},{\"id\":\"route.order.show\",\"type\":\"routes\",\"title\":\"GET /orders/{id}\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/order.show.md\"},{\"id\":\"route.order.validate\",\"type\":\"routes\",\"title\":\"POST /orders/{id}/validate\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/order.validate.md\"}]}"
+                }
+            ],
+            "isError": false
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "# GET /health\n`route.health` · type: routes · last updated: 2026-09-16 · commit: —\n\n## Summary\n\n—\n\n## Trigger\n\n| Element | Value |\n|---|---|\n| Entry point | `GET /health` (`app_health`) |\n| Satellite | `GET /status` (`app_status`) |\n| Security | — |\n| Preconditions | — |\n\n## Journey\n\n—\n\n## Decisions\n\n—\n\n## Data\n\n—\n\n## Cross-cutting mechanisms\n\n| Mechanism | Event | Priority | Decides |\n|---|---|---|---|\n| `App\\EventListener\\LocaleListener` | `kernel.request` | 20 | — |\n\n## Points of attention\n\n—\n\n## Related workflows\n\n—\n\n## History\n\n| Date | Commit | Change |\n|---|---|---|\n| 2026-09-16 | — | initial |\n"
+                },
+                {
+                    "type": "text",
+                    "text": "{\"id\":\"route.health\",\"type\":\"routes\",\"title\":\"GET /health\",\"status\":\"fresh\",\"confidence\":\"high\",\"page\":\"docs/workflows/routes/health.md\",\"tracking\":\".devtools/workflows/routes/health.xml\",\"files\":[{\"path\":\"config/packages/security.yaml\",\"role\":\"config\"},{\"path\":\"config/routes.yaml\",\"role\":\"config\"},{\"path\":\"config/routes/ux_live_component.yaml\",\"role\":\"config\"},{\"path\":\"config/services.yaml\",\"role\":\"config\"},{\"path\":\"src/Controller/HealthController.php\",\"role\":\"controller\"}],\"tests\":[],\"dependsOn\":[],\"mechanisms\":[{\"kind\":\"listener\",\"name\":\"App\\\\EventListener\\\\LocaleListener\",\"event\":\"kernel.request\"}],\"history\":[{\"date\":\"2026-09-16\",\"commit\":null,\"change\":\"initial\"}]}"
+                }
+            ],
+            "isError": false
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "{\"warnings\":[],\"workflows\":[{\"id\":\"async.order-created\",\"type\":\"async\",\"title\":\"OrderCreated\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/async/order-created.md\",\"status\":\"fresh\"},{\"id\":\"route.order.index\",\"type\":\"routes\",\"title\":\"GET /orders\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/routes/order.index.md\",\"status\":\"fresh\"},{\"id\":\"route.order.new\",\"type\":\"routes\",\"title\":\"GET|POST /orders/new\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/routes/order.new.md\",\"status\":\"fresh\"},{\"id\":\"route.order.show\",\"type\":\"routes\",\"title\":\"GET /orders/{id}\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/routes/order.show.md\",\"status\":\"fresh\"},{\"id\":\"route.order.validate\",\"type\":\"routes\",\"title\":\"POST /orders/{id}/validate\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/routes/order.validate.md\",\"status\":\"fresh\"},{\"id\":\"ui.cart-summary\",\"type\":\"ui\",\"title\":\"CartSummary\",\"relation\":\"direct\",\"files\":[\"src/Repository/OrderRepository.php\"],\"page\":\"docs/workflows/ui/cart-summary.md\",\"status\":\"fresh\"}],\"uncovered\":[]}"
+                }
+            ],
+            "isError": false
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "No workflow \"route.order.nope\" in this project: list_workflows gives the identifiers."
+                }
+            ],
+            "isError": true
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "The path \"../outside.php\" resolves outside the project root \"PROJECT\"; DevTools never reads or writes there."
+                }
+            ],
+            "isError": true
+        }
+    }
+]

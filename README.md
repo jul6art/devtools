@@ -40,6 +40,7 @@ Requirements
 
 - PHP ^8.5
 - Symfony ^7.4 || ^8.0 — the Console component in standalone mode, the framework only for the bridge
+- `mcp/sdk` ^0.9, optional — only for the MCP server, `mcp:serve`
 
 Installation
 ------------
@@ -125,6 +126,7 @@ Usage
 | | `devtools stack:detect` | writes what the project is built with; `init` and `inspect` do it too | `stack.xml` |
 | | `devtools claude:install` | installs the Claude Code skill that writes the pages | `.claude/skills/` |
 | | `devtools claude:install --hooks` | Claude Code is told what a file reaches before it edits it | `.claude/settings.json` |
+| | `devtools claude:install --mcp` | Claude Code reads one page, the impact or the knowledge when it needs them | `.mcp.json` |
 | | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
@@ -690,7 +692,7 @@ vendor/bin/devtools claude:uninstall --hooks    # takes back exactly what it add
 | Event | When | What Claude is told |
 | --- | --- | --- |
 | `PreToolUse` | before `Edit`, `Write`, `MultiEdit` | the workflows the file reaches, their pages, a few of their tests — or, for a file no workflow references, one line saying so |
-| `SessionStart` | at the start of a session | how many workflows are documented and where, those to check |
+| `SessionStart` | at the start of a session | how many workflows are documented and where, those to check, and the MCP server when it is installed |
 
 `PreToolUse` and `SessionStart` add to Claude's context and **never block anything**: a tool that writes no file, a file
 outside the project or a file that reaches nothing gets no answer at all, and whatever goes wrong — no
@@ -703,6 +705,39 @@ object stays an object, and `claude:uninstall --hooks` gives the file back as it
 DevTools' entries were all it held. The command it writes is
 `"${CLAUDE_PROJECT_DIR}/vendor/bin/devtools" claude:hook <Event>` when the project installs DevTools, and
 `devtools claude:hook <Event>` for a global installation.
+
+MCP server
+----------
+
+The hooks tell Claude what a file reaches; the MCP server lets it ask — one page instead of a directory to
+read. It runs on stdio, launched by Claude Code inside the project, and needs the MCP SDK, which DevTools
+only suggests:
+
+```shell
+composer require --dev mcp/sdk:^0.9
+vendor/bin/devtools claude:install --mcp        # merged into .mcp.json — commit it
+vendor/bin/devtools claude:uninstall --mcp      # takes back exactly what it added
+```
+
+| Tool | Input | Answers |
+| --- | --- | --- |
+| `list_workflows` | `type?`, `status?` | identifier, type, title, freshness, confidence and page of each workflow |
+| `get_workflow` | `id` | its page, then its files, tests, dependencies, mechanisms and history |
+| `impact` | `files` or `changed: true` | what `workflows:impact --format=json` answers |
+| `get_knowledge` | `stack?` — a root or a key | the knowledge sheet of the stack, read where the inspection would find it |
+
+Every tool **reads**: none writes, none inspects, none reads the code — a call reads the index, one page
+and its tracking file, or the impact map. A project never inspected gets the command to run; an unknown
+identifier, a path outside the project or an unreadable file is an error Claude reads, never a crash of the
+server.
+
+The entry it writes is `{"type": "stdio", "command": "${CLAUDE_PROJECT_DIR:-.}/vendor/bin/devtools",
+"args": ["mcp:serve"]}` when the project installs DevTools, with `"command": "devtools"` for a global
+installation. The servers the team declared stay untouched, and so does a server named `devtools` DevTools
+did not write, unless `--force`. Claude Code asks each teammate to approve a server of `.mcp.json` once.
+
+⚠️ **Without the SDK, `mcp:serve` does not exist**: asked for anyway, it answers with the line that
+installs it. The SDK is not 1.0 yet — DevTools follows one minor version at a time.
 
 Writing with Claude Code
 ------------------------
@@ -876,8 +911,8 @@ src/
 ├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
-│                            claude:uninstall, claude:hook, knowledge:list, knowledge:promote,
-│                            knowledge:amend
+│                            claude:uninstall, claude:hook, mcp:serve, knowledge:list,
+│                            knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
@@ -893,6 +928,7 @@ src/
 ├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
 ├── Impact/                  the workflows a change reaches, read from the graph
 ├── Claude/                  the hooks Claude Code runs, and the configuration files DevTools merges into
+├── Mcp/                     the MCP server — the only directory that knows the MCP SDK
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else

@@ -31,6 +31,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.68",
         "infection/infection": "^0.35.4",
+        "mcp/sdk": "^0.9",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
@@ -46,6 +47,7 @@
         "symfony/yaml": "^7.4 || ^8.0"
     },
     "suggest": {
+        "mcp/sdk": "^0.9 — to serve the documentation to Claude Code over MCP: devtools mcp:serve",
         "symfony/framework-bundle": "To register the commands in bin/console through Jul6Art\\DevTools\\Bridge\\Symfony\\DevToolsBundle"
     },
     "autoload": {
@@ -64,7 +66,8 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true,
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "php-http/discovery": false
         },
         "sort-packages": true
     },

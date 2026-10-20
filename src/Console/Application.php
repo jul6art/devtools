@@ -13,6 +13,7 @@ use Jul6Art\DevTools\Command\InitCommand;
 use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
+use Jul6Art\DevTools\Command\McpServeCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\WorkflowsAcceptCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
@@ -22,8 +23,11 @@ use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
 use Jul6Art\DevTools\Command\WorkflowsRejectCommand;
 use Jul6Art\DevTools\Command\WorkflowsReviewCommand;
+use Jul6Art\DevTools\Mcp\McpServer;
 use Jul6Art\DevTools\Version;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 /**
  * The standalone entry point: `vendor/bin/devtools`, usable on any project whatever its language.
@@ -31,14 +35,24 @@ use Symfony\Component\Console\Application as BaseApplication;
  * Every command lives in the core and is registered here. The Symfony bridge registers the same
  * commands in `bin/console` under the `devtools:` prefix, and adds nothing but kernel introspection:
  * a command that only works through the bridge is a command the standalone mode silently lacks.
+ *
+ * One command depends on a package DevTools only suggests: `mcp:serve`, registered when the MCP SDK is
+ * installed, and otherwise answered with the line that installs it (ADR-0018).
  */
 final class Application extends BaseApplication
 {
     public const string NAME = 'DevTools';
 
-    public function __construct()
+    private readonly bool $mcp;
+
+    /**
+     * @param bool|null $mcp whether the MCP SDK is installed — null: look for it
+     */
+    public function __construct(?bool $mcp = null)
     {
         parent::__construct(self::NAME, Version::current());
+
+        $this->mcp = $mcp ?? McpServer::available();
 
         $this->addCommands([
             new InitCommand(),
@@ -60,5 +74,23 @@ final class Application extends BaseApplication
             new KnowledgePromoteCommand(),
             new KnowledgeAmendCommand(),
         ]);
+
+        if ($this->mcp) {
+            $this->addCommands([new McpServeCommand()]);
+        }
+    }
+
+    #[\Override]
+    public function find(string $name): Command
+    {
+        try {
+            return parent::find($name);
+        } catch (CommandNotFoundException $unknown) {
+            if ($this->mcp || McpServeCommand::NAME !== $name) {
+                throw $unknown;
+            }
+
+            throw new CommandNotFoundException(\sprintf("%s\n\nThe MCP server needs the MCP SDK, which DevTools only suggests: composer require --dev %s", $unknown->getMessage(), McpServer::PACKAGE), $unknown->getAlternatives(), previous: $unknown);
+        }
     }
 }

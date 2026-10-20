@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Takes back what `claude:install` added to the Claude Code configuration of a project, and nothing else
- * (ADR-0019).
+ * (ADR-0019, ADR-0018).
  */
 #[AsCommand(name: 'claude:uninstall', description: 'Remove what claude:install added to the Claude Code configuration')]
 final class ClaudeUninstallCommand extends Command
@@ -33,7 +33,8 @@ final class ClaudeUninstallCommand extends Command
     {
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'The project (default: the current directory)')
-            ->addOption('hooks', null, InputOption::VALUE_NONE, 'The DevTools hooks of .claude/settings.json');
+            ->addOption('hooks', null, InputOption::VALUE_NONE, 'The DevTools hooks of .claude/settings.json')
+            ->addOption('mcp', null, InputOption::VALUE_NONE, 'The DevTools MCP server of .mcp.json');
     }
 
     #[\Override]
@@ -49,21 +50,30 @@ final class ClaudeUninstallCommand extends Command
             return Command::INVALID;
         }
 
-        if (true !== $input->getOption('hooks')) {
-            $io->error('Say what to remove: --hooks.');
+        $hooks = true === $input->getOption('hooks');
+        $mcp = true === $input->getOption('mcp');
+
+        if (!$hooks && !$mcp) {
+            $io->error('Say what to remove: --hooks, --mcp.');
 
             return Command::INVALID;
         }
 
+        $root = new ProjectRoot($path);
+
         try {
-            $changed = $this->settings->uninstallHooks(new ProjectRoot($path)->absolute('.claude/settings.json'));
+            if ($hooks) {
+                $io->success($this->settings->uninstallHooks($root->absolute('.claude/settings.json')) ? 'Removed the DevTools hooks from .claude/settings.json.' : 'No DevTools hook in .claude/settings.json.');
+            }
+
+            if ($mcp) {
+                $io->success($this->settings->uninstallMcpServer($root->absolute('.mcp.json')) ? 'Removed the DevTools MCP server from .mcp.json.' : 'No DevTools MCP server in .mcp.json.');
+            }
         } catch (\InvalidArgumentException $refusal) {
             $io->error($refusal->getMessage());
 
             return Command::FAILURE;
         }
-
-        $io->success($changed ? 'Removed the DevTools hooks from .claude/settings.json.' : 'No DevTools hook in .claude/settings.json.');
 
         return Command::SUCCESS;
     }
