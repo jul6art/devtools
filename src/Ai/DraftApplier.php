@@ -17,6 +17,7 @@ use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Serialization\ModelXmlSerializer;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdAssigner;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdCollision;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdDeriver;
@@ -24,6 +25,7 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\GroupPageRenderer;
+use Jul6Art\DevTools\Rendering\MenuRenderer;
 use Jul6Art\DevTools\Rendering\PageParser;
 use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
@@ -33,6 +35,7 @@ use Jul6Art\DevTools\Stack\Knowledge\DepositOutcome;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
 use Jul6Art\DevTools\Stack\Knowledge\XmlKnowledgeBriefStore;
+use Jul6Art\DevTools\Stack\XmlStackStore;
 use Jul6Art\DevTools\Tracking\AtomicFileWriter;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\Generation;
@@ -111,7 +114,11 @@ final readonly class DraftApplier
         }
 
         if ([] !== $result->accepted) {
-            $this->refreshIndex($directory, $types, array_values($documents));
+            $index = $this->refreshIndex($directory, $types, array_values($documents));
+
+            if ($index instanceof Index) {
+                $this->refreshMenu($directory, $index, $config);
+            }
         }
 
         return $result;
@@ -420,16 +427,44 @@ final readonly class DraftApplier
 
     /**
      * @param list<TrackingDocument> $documents
+     *
+     * @return Index|null the index written, or null when there is none to refresh
      */
-    private function refreshIndex(DevToolsDirectory $directory, WorkflowTypeRegistry $types, array $documents): void
+    private function refreshIndex(DevToolsDirectory $directory, WorkflowTypeRegistry $types, array $documents): ?Index
     {
         $store = new XmlIndexStore($types, $this->writer);
 
         if (!is_file($directory->indexFile())) {
-            return;
+            return null;
         }
 
         $previous = $store->read($directory->indexFile());
-        $store->write($directory->indexFile(), Index::fromTracking($previous->scannedAt, $previous->vcs, $documents, $directory->docs));
+        $index = Index::fromTracking($previous->scannedAt, $previous->vcs, $documents, $directory->docs);
+        $store->write($directory->indexFile(), $index);
+
+        return $index;
+    }
+
+    /**
+     * `workflows.md` lists the workflows whose brief is waiting for Claude, and `apply` is what makes those
+     * briefs disappear (ADR-0049): the menu is rebuilt from what is on disk — the stack, the index just
+     * written, the briefs that remain — never from a new analysis. "Not covered" is computed by the
+     * inspection and persisted nowhere: it is read back from the menu itself, which applying a page cannot
+     * change, since a draft says nothing about which files a workflow has.
+     *
+     * Before the first inspection there is no menu, and nothing to correct; without the stack, the menu
+     * cannot be rendered, and the pages already written are not worth a failure over it.
+     */
+    private function refreshMenu(DevToolsDirectory $directory, Index $index, Config $config): void
+    {
+        if (!is_file($directory->menuFile()) || !is_file($directory->stackFile())) {
+            return;
+        }
+
+        $uncovered = MenuRenderer::uncoveredIn((string) file_get_contents($directory->menuFile()));
+        $pending = array_map(static fn (string $brief): WorkflowId => new WorkflowId(substr(basename($brief), \strlen('page.'), -\strlen('.brief.xml'))), glob($directory->path('pending/page.*.brief.xml')) ?: []);
+        $stacks = new XmlStackStore()->read($directory->stackFile());
+
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs));
     }
 }

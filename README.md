@@ -127,7 +127,7 @@ Usage
 | | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
-| | `devtools workflows:apply` | checks each draft and rebuilds its page | pages, tracking |
+| | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -623,8 +623,9 @@ runs the loop:
 2. Claude reads the files the model lists and writes `.devtools/pending/page.<id>.draft.md`: summary,
    preconditions, a sequence diagram, data, cross-cutting mechanisms, points of attention, and one line for
    the history;
-3. `workflows:apply` checks each draft, rebuilds the page — facts from the code, prose from the draft — and
-   records the model and the prompt version in the tracking file;
+3. `workflows:apply` checks each draft, rebuilds the page — facts from the code, prose from the draft —
+   records the model and the prompt version in the tracking file, and rewrites `workflows.md` so that the
+   workflow is no longer listed as *waiting for Claude* — from what is on disk, without inspecting again;
 4. the skill inspects again until no brief is left.
 
 A draft is **refused**, with the rule and the line, when it adds or drops a section, when its journey is not

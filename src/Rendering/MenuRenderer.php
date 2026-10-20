@@ -112,6 +112,26 @@ final class MenuRenderer
         return implode("\n", $lines)."\n";
     }
 
+    /**
+     * The files of the "Not covered" section of a menu already written, for the one caller that rebuilds
+     * the menu without the inspection that computes them (ADR-0049). Rendering them again gives the section
+     * back byte for byte: the paths were sorted when written, and sorting them again changes nothing.
+     *
+     * The heading is read in English and in the French the menu carried before it spoke English.
+     *
+     * @return list<FileRef>
+     */
+    public static function uncoveredIn(string $menu): array
+    {
+        if (1 !== preg_match('/^## (?:Not covered|Non couvert)\n(.*?)(?=^## |\z)/ms', $menu, $section)) {
+            return [];
+        }
+
+        preg_match_all('/^- (`+)(.+?)\1 — /m', $section[1], $lines);
+
+        return array_map(static fn (string $path): FileRef => new FileRef($path), $lines[2]);
+    }
+
     private static function stack(StackProfile $stack): string
     {
         $name = null === $stack->framework ? ucfirst($stack->language) : ucfirst($stack->framework).(null === $stack->version ? '' : ' '.$stack->version);
