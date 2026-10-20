@@ -101,10 +101,10 @@ Chaque cas du § 7.2 « Fraîcheur » dans un dépôt git temporaire créé par 
 - [x] Workflow `manual` périmé → non réécrit, alerte, XML mis à jour
 - [x] `--force=<id>`, `--since`, `--dry-run` : un test chacun
 - [x] Compteurs : au plus 4 processus git et un hash par fichier distinct (instrumentés)
-- [ ] Couverture 100 % de `Inspection/Freshness/` et `Tracking/` ; Infection lancé sur ces deux
+- [x] Couverture 100 % de `Inspection/Freshness/` et `Tracking/` ; Infection lancé sur ces deux
       dossiers, mutants survivants justifiés un par un ou tués *(Infection configuré, job CI « Mutation »
       avec pcov prêt ; aucun pilote de couverture sur le poste de développement — pcov à installer, ou CI
-      réactivée. Mutations manuelles en attendant : 12 mutants, tous tués. **Premier passage en CI le 2026-10-01** : `Freshness/` 88,79 %, `Tracking/` 79,17 %, MSI 72 %, 146 mutants non détectés — repris par l'ADR-0049)*
+      réactivée. Mutations manuelles en attendant : 12 mutants, tous tués. **Premier passage en CI le 2026-10-01** : `Freshness/` 88,79 %, `Tracking/` 79,17 %, MSI 72 %, 146 mutants non détectés — repris par l'ADR-0049. **Tenu le 2026-10-20** (pcov en local, ADR-0049) : 100 % et 100 %, 654 mutants tués sur 677, les 23 restants équivalents et justifiés un par un dans l'ADR-0049)*
 - [x] Fichier de performance : projet généré de 300 routes, re-scan sans changement < 10 s
 
 ## Conséquences

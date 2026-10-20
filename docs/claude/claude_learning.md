@@ -614,3 +614,37 @@
   et l'ancien verdict quand elle échoue.
 - Vérifié par mutation (la condition des dépendances, celle de `checkJs`) ; jeu `lowest` vert dans une
   copie hors du dépôt (Symfony 7.4.0, 520 tests).
+
+### 2026-10-20 — ADR-0049 : le sommaire suit `apply`, et les planchers de l'ADR-0015 sont tenus
+
+- ⚠️ **Une couverture basse peut être une attribution manquante.** `src/` était à 82,6 % alors que la
+  suite en exécutait 95,1 % : PHPUnit 13 ne compte une ligne que pour les classes que le test nomme en
+  `#[CoversClass]`, et `ChangeRenderer`, l'applicateur, le pipeline ou `DomBuilder` tournaient dans des
+  tests qui ne les nommaient pas. **Règle :** avant d'écrire des tests pour tenir un plancher, mesurer une
+  fois avec `--disable-coverage-targeting` — l'écart entre les deux mesures est de l'attribution. Une
+  classe se nomme dans le test qui **vérifie sa sortie**, pas dans tout test qui la traverse ; et la mesure
+  du plancher ne change pas (la rendre non ciblée serait abaisser le plancher).
+- ⚠️ **Un dépassement de temps n'est pas un mutant tué.** Avec les 17 fils du poste, Infection annonçait
+  98 % : 68 mutants de `Freshness/` dépassaient 10 s parce que leurs tests lancent git sur une machine
+  saturée, et Infection les compte comme détectés. Avec 4 fils, 47 survivaient. **Règle :** le MSI se
+  mesure avec le nombre de fils d'un exécuteur de CI (`composer infection` en lance 4) ; une liste de
+  dépassements se relit avant de croire le score.
+- **Un test de bout en bout tue mal les mutants.** `FreshnessTest` (git + pipeline) prouve l'assemblage ;
+  sous mutation, il est trop lent pour trancher. Les règles de décision ont maintenant leur test
+  unitaire (`FreshnessResolverTest`, `GitClientTest`), qui tranche en millisecondes.
+- **Un test « rien n'est réécrit » doit partir d'un état que la réécriture effacerait.** Réécrire le
+  sommaire à l'identique ne se voyait pas, et le mutant « réécrire même sans brouillon accepté »
+  survivait : le test retouche maintenant le sommaire à la main avant de comparer.
+- **Une clé de tri à séparateur se teste par la collision qu'il empêche.** `IndexGroup::key()` et le tri
+  des satellites joignent leurs parties par `\0` ; sans un cas où deux concaténations se confondent (un
+  type `route` à côté de `routes`, des noms préfixes l'un de l'autre), retirer le séparateur ne cassait
+  rien.
+- **Le poste a désormais pcov** (PHP 8.5 de Homebrew) : `mkdir -p /opt/homebrew/lib/php/pecl/20250925`,
+  puis `CPPFLAGS=-I$(brew --prefix pcre2)/include pecl install pcov`. `composer coverage` et
+  `composer infection` tournent en local — ce que les entrées du 2026-09-17 et du 2026-10-01 disaient
+  impossible.
+- ⚠️ **Un lot qui touche `src/` finit par la doc de ce dépôt.** L'ADR-0050 avait laissé la page de
+  `stack:detect` affirmer qu'un `package.json` sans framework n'est jamais une stack, et rien ne l'a dit
+  avant ce lot. **Règle :** avant de déclarer un lot fini, `bin/devtools workflows:check` sur ce dépôt ;
+  s'il signale, inspecter, réémettre telles quelles les pages qu'aucun fait ne contredit, corriger les
+  autres (ici 2 sur 14).

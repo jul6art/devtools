@@ -27,12 +27,12 @@
 | [0007](0007-adaptateur-symfony.md) | Adaptateur Symfony : la console du projet comme source de vérité | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
 | [0008](0008-rendu-norme-des-pages-et-du-menu.md) | Rendu normé des pages, du menu et du graphe | MVP 2 — Tranche factuelle | Superseded by 0043 | 2026-09-16 |
 | [0009](0009-commande-workflows-inspect.md) | Commande `workflows:inspect` et pipeline | MVP 2 — Tranche factuelle | Accepted | 2026-09-16 |
-| [0010](0010-fraicheur.md) | Fraîcheur : ne réécrire que ce qui a changé | MVP 3 — Fraîcheur | Accepted | 2026-09-16 (Infection : CI) |
+| [0010](0010-fraicheur.md) | Fraîcheur : ne réécrire que ce qui a changé | MVP 3 — Fraîcheur | Accepted | 2026-09-16 (Infection : 2026-10-20) |
 | [0011](0011-redaction-des-pages-par-claude-code.md) | Rédaction des pages par Claude Code | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0012](0012-connaissances-de-stack.md) | Connaissances de stack (`knowledge`) | MVP 4 — Rédaction et langages | Superseded by 0041 | 2026-09-17 |
 | [0013](0013-voie-claude-pour-les-stacks-sans-adaptateur.md) | Voie Claude pour les stacks sans adaptateur natif | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
-| [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | en cours (CI, MSI, commit du dogfooding) |
+| [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | en cours (CI : passage mensuel) |
 | [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Proposed | — |
 | [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Accepted | 2026-09-18 |
 | [0018](0018-serveur-mcp.md) | Serveur MCP `devtools` | 1 — Impact, MCP, gate | Proposed | — |
@@ -66,7 +66,7 @@
 | [0046](0046-diff-type-des-workflows.md) | Diff typé des workflows : ce qui a changé, pas seulement que ça a changé | MVP+ — Retours d'usage | Accepted | — |
 | [0047](0047-accepter-ou-refuser-un-changement.md) | Accepter un changement, ou le refuser : la revue | MVP+ — Retours d'usage | Accepted | — |
 | [0048](0048-regle-phpstan-de-derive.md) | La dérive se voit là où on écrit le code : une règle PHPStan | MVP+ — Retours d'usage | Accepted | — |
-| [0049](0049-sommaire-apres-apply.md) | Le sommaire ment jusqu'à la prochaine inspection — et les planchers de couverture de l'ADR-0015 | MVP+ — Retours d'usage | Proposed | — |
+| [0049](0049-sommaire-apres-apply.md) | Le sommaire ment jusqu'à la prochaine inspection — et les planchers de couverture de l'ADR-0015 | MVP+ — Retours d'usage | Accepted | 2026-10-20 (CI : passage mensuel) |
 | [0050](0050-application-node-sans-framework.md) | Une application Node sans framework est une stack | MVP+ — Retours d'usage | Accepted | 2026-10-17 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
