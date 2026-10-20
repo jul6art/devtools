@@ -32,22 +32,27 @@
         "friendsofphp/php-cs-fixer": "^3.68",
         "infection/infection": "^0.35.4",
         "mcp/sdk": "^0.9",
+        "php-webdriver/webdriver": "^1.16",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^13.0",
         "rector/rector": "^2.0",
+        "symfony/browser-kit": "^7.4 || ^8.0",
         "symfony/config": "^7.4 || ^8.0",
         "symfony/dependency-injection": "^7.4 || ^8.0",
+        "symfony/dom-crawler": "^7.4 || ^8.0",
         "symfony/framework-bundle": "^7.4 || ^8.0",
         "symfony/http-kernel": "^7.4 || ^8.0",
+        "symfony/panther": "^2.4",
         "symfony/phpunit-bridge": "^7.4 || ^8.0",
         "symfony/var-dumper": "^7.4 || ^8.0",
         "symfony/yaml": "^7.4 || ^8.0"
     },
     "suggest": {
         "mcp/sdk": "^0.9 — to serve the documentation to Claude Code over MCP: devtools mcp:serve",
+        "symfony/panther": "^2.4 — to replay the scenarios in Chrome: devtools scenarios:run, and ScenarioTestCase",
         "symfony/framework-bundle": "To register the commands in bin/console through Jul6Art\\DevTools\\Bridge\\Symfony\\DevToolsBundle"
     },
     "autoload": {

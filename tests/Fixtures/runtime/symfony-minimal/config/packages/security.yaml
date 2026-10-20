@@ -1,0 +1,21 @@
+# What symfony-minimal lacks to be served (ADR-0021), laid over a copy of it by the tests that replay its
+# scenarios in a browser. The analysis fixture stays as it is: its files are hashed in every snapshot.
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
+    role_hierarchy:
+        ROLE_OPERATOR: ROLE_USER
+        ROLE_MANAGER: ROLE_OPERATOR
+    providers:
+        users:
+            memory:
+                users:
+                    operator: { password: 'operator', roles: ['ROLE_OPERATOR'] }
+                    user: { password: 'user', roles: ['ROLE_USER'] }
+    firewalls:
+        main:
+            lazy: true
+            provider: users
+            http_basic: ~
+    access_control:
+        - { path: ^/orders, roles: ROLE_USER }

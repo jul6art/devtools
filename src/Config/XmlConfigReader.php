@@ -58,6 +58,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $php = $this->dom->optional($root, 'php');
         $routes = $this->dom->optional($root, 'routes');
         $knowledge = $this->dom->optional($root, 'knowledge');
+        $scenarios = $this->dom->optional($root, 'scenarios');
 
         return new Config(
             excludes: array_map(static fn (\DOMElement $exclude): string => trim($exclude->textContent), $this->dom->children($this->dom->optional($root, 'paths'), 'exclude')),
@@ -77,6 +78,31 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,
             knowledgeLibrary: $knowledge?->hasAttribute('library') ? trim($knowledge->getAttribute('library')) : $defaults->knowledgeLibrary,
             shareKnowledge: $knowledge?->hasAttribute('share') ? 'false' !== $knowledge->getAttribute('share') && '0' !== $knowledge->getAttribute('share') : $defaults->shareKnowledge,
+            scenarios: $scenarios instanceof \DOMElement ? $this->scenarios($scenarios) : $defaults->scenarios,
+        );
+    }
+
+    private function scenarios(\DOMElement $scenarios): ScenarioSettings
+    {
+        $optional = static fn (\DOMElement $element, string $name): ?string => $element->hasAttribute($name) ? $element->getAttribute($name) : null;
+
+        return new ScenarioSettings(
+            $optional($scenarios, 'base-url'),
+            (int) ($optional($scenarios, 'timeout') ?? ScenarioSettings::DEFAULT_TIMEOUT),
+            array_map(
+                static fn (\DOMElement $login): LoginSettings => new LoginSettings(
+                    $login->getAttribute('role'),
+                    $login->getAttribute('type'),
+                    $login->getAttribute('username-env'),
+                    $login->getAttribute('password-env'),
+                    $optional($login, 'url'),
+                    $optional($login, 'username-field') ?? '_username',
+                    $optional($login, 'password-field') ?? '_password',
+                    $optional($login, 'submit'),
+                ),
+                $this->dom->children($scenarios, 'login'),
+            ),
+            array_map(static fn (\DOMElement $fixture): FixtureSettings => new FixtureSettings($fixture->getAttribute('name'), $fixture->getAttribute('command')), $this->dom->children($scenarios, 'fixture')),
         );
     }
 }

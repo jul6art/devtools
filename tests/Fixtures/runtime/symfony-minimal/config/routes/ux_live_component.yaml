@@ -1,0 +1,4 @@
+# The prefix of the recipe: without it, /{_live_component}/{_live_action} answers every URL of the application.
+live_component:
+    resource: '@LiveComponentBundle/config/routes.php'
+    prefix: '/_components'

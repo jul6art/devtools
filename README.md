@@ -41,6 +41,7 @@ Requirements
 - PHP ^8.5
 - Symfony ^7.4 || ^8.0 — the Console component in standalone mode, the framework only for the bridge
 - `mcp/sdk` ^0.9, optional — only for the MCP server, `mcp:serve`
+- `symfony/panther` ^2.4 and Chrome, optional — only to replay the scenarios, `scenarios:run`
 
 Installation
 ------------
@@ -133,6 +134,7 @@ Usage
 | | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
 | **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages | nothing |
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
+| | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -791,6 +793,65 @@ a scenario holds neither a password nor data.
 
 Routes and components only: a command or a message has no browser to replay.
 
+### Replaying the scenarios
+
+A scenario is worth something only replayed exactly, without whoever wrote the code. DevTools replays them in
+Chrome through [Panther](https://github.com/symfony/panther), which it only suggests:
+
+```shell
+composer require --dev symfony/panther:^2.4
+vendor/bin/bdi detect drivers                 # once: ChromeDriver matching your Chrome, in drivers/
+```
+
+**Against a running application** — any stack, Docker or not:
+
+```shell
+vendor/bin/devtools scenarios:run --base-url=https://app.localhost              # every scenario
+vendor/bin/devtools scenarios:run route.order.new --base-url=https://app.localhost
+        [--timeout=10] [--viewport=1280x800] [--headed]
+```
+
+**As PHPUnit tests**, in a Symfony project — Panther serves `public/` itself:
+
+```php
+use Jul6Art\DevTools\Bridge\Symfony\Test\ScenarioTestCase;
+
+final class ScenariosTest extends ScenarioTestCase
+{
+}
+```
+
+One test per scenario, named after it. Both modes run the same runner: one browser for the run, cleaned
+between scenarios; every step waits for what it looks for — never a fixed pause — up to the timeout. The
+first step that fails stops its scenario.
+
+A scenario names a role and fixtures; the project resolves them. In the URL mode, `.devtools/config.xml`
+says how — and never holds a credential, only the environment variables that do:
+
+```xml
+<scenarios base-url="https://app.localhost" timeout="10">
+    <login role="ROLE_USER" type="form" url="/login" username-env="APP_USER" password-env="APP_USER_PASSWORD"/>
+    <login role="ROLE_ADMIN" type="http-basic" username-env="APP_ADMIN" password-env="APP_ADMIN_PASSWORD"/>
+    <fixture name="catalog-loaded" command="bin/console app:fixtures:load catalog"/>
+</scenarios>
+```
+
+In PHPUnit, the services of the application that implement `LoginProviderInterface` and
+`FixtureProviderInterface` win over the file. The application runs in the web server Panther starts, another
+process: a fixture that resets what a scenario needs isolates it, a transaction of the test does not.
+
+Each run writes `.devtools/runs/<timestamp>/result.xml` (`run.xsd`): a verdict per scenario and per step —
+`passed`, `failed` when the application did not do what the step says, `error` when the run could not tell
+(a login, a fixture, the browser), `skipped` after a failure — with its duration and its message. Every
+`<screenshot>` step, and every step that did not pass, keeps the screen as a PNG and the DOM as HTML beside
+it, with the URL the browser was at. The command exits 1 when a scenario did not pass. Credentials never
+appear in what a run writes: they are masked in messages, URLs and DOMs alike.
+
+⚠️ **ChromeDriver must match Chrome**, to the major version. `bdi detect drivers` downloads the right one into
+`drivers/`, which `scenarios:run` uses first — keep it out of git. A CI image updates Chrome on its own
+schedule: install the driver in the job, not once and for all. Without Panther, `scenarios:run` does not exist
+and says how to install it; generating scenarios needs no browser.
+
 Writing with Claude Code
 ------------------------
 
@@ -964,7 +1025,7 @@ src/
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
-│                            knowledge:list, knowledge:promote, knowledge:amend
+│                            scenarios:run, knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
@@ -981,10 +1042,11 @@ src/
 ├── Impact/                  the workflows a change reaches, read from the graph
 ├── Claude/                  the hooks Claude Code runs, and the configuration files DevTools merges into
 ├── Mcp/                     the MCP server — the only directory that knows the MCP SDK
-├── Scenario/                scenarios: their format, skeletons, briefs, drafts, what to review
+├── Scenario/                scenarios: their format, skeletons, briefs, drafts, what to review — and the
+│                            runner that replays them in Chrome, one class per action
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
-└── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else
+└── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
 resources/schemas/           the XSD of every format DevTools reads or writes
 resources/templates/         the files init writes
 resources/prompts/           the versioned prompts Claude follows

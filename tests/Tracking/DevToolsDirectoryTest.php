@@ -85,6 +85,20 @@ final class DevToolsDirectoryTest extends TestCase
     /**
      * The menu links to `.devtools/` from wherever the documentation lives: one `../` per level of it.
      */
+    /**
+     * ADR-0020 and ADR-0021: a scenario under its workflow's directory, their index beside them, and one
+     * directory per run, named after the second it started.
+     */
+    public function testTheScenariosAndTheirRunsLiveInDotDevtools(): void
+    {
+        $directory = new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()));
+
+        self::assertSame($this->temporaryDirectory().'/.devtools/scenarios/route.order.new/happy-path.xml', $directory->scenarioFile(new WorkflowId('route.order.new'), 'happy-path'));
+        self::assertSame($this->temporaryDirectory().'/.devtools/scenarios/index.xml', $directory->scenarioIndexFile());
+        self::assertSame($this->temporaryDirectory().'/.devtools/runs/2026-10-20-090507', $directory->runDirectory(new \DateTimeImmutable('2026-10-20T09:05:07+02:00')));
+        self::assertContains('runs', DevToolsDirectory::IGNORED, 'Screenshots of a machine, never committed.');
+    }
+
     public function testALinkToTheMachineryClimbsOutOfTheDocumentationDirectory(): void
     {
         self::assertSame('../.devtools/stack.xml', DevToolsDirectory::machineryLink('docs', 'stack.xml'));

@@ -53,6 +53,7 @@ final readonly class Config
      * @param string|null                 $pagesLanguage    the language Claude writes the pages in; null when the project does not say, and the default then applies
      * @param string|null                 $knowledgeLibrary where the shared knowledge library lives; null to let {@see \Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::locate()} decide (ADR-0041)
      * @param bool                        $shareKnowledge   whether a knowledge file Claude writes is deposited in that library
+     * @param ScenarioSettings            $scenarios        how scenarios:run reaches the application (ADR-0021)
      */
     public function __construct(
         array $excludes = [],
@@ -69,6 +70,7 @@ final readonly class Config
         public ?string $phpWebRoot = null,
         public ?string $knowledgeLibrary = null,
         public bool $shareKnowledge = true,
+        public ScenarioSettings $scenarios = new ScenarioSettings(),
     ) {
         if ($graphDepth < 0) {
             throw new InvalidConfig('The graph depth cannot be negative.');

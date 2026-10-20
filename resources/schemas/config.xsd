@@ -97,6 +97,40 @@
                         <xs:attribute name="share" type="xs:boolean"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- How scenarios:run reaches the application (ADR-0021). No credential here: environment variables. -->
+                <xs:element name="scenarios" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="login" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="role" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="type" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="form"/>
+                                                <xs:enumeration value="http-basic"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="username-env" type="t:environmentVariable" use="required"/>
+                                    <xs:attribute name="password-env" type="t:environmentVariable" use="required"/>
+                                    <xs:attribute name="url" type="t:nonEmpty"/>
+                                    <xs:attribute name="username-field" type="t:nonEmpty"/>
+                                    <xs:attribute name="password-field" type="t:nonEmpty"/>
+                                    <xs:attribute name="submit" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="fixture" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="command" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="base-url" type="t:nonEmpty"/>
+                        <xs:attribute name="timeout" type="xs:positiveInteger"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="language" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="pages" use="required">
@@ -124,6 +158,12 @@
     <xs:simpleType name="path">
         <xs:restriction base="xs:string">
             <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="environmentVariable">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z_][A-Za-z0-9_]*"/>
         </xs:restriction>
     </xs:simpleType>
 

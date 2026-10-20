@@ -42,6 +42,14 @@
          By default public/, web/ and www/: <php web-root="htdocs"/> -->
     <php/>
 
+    <!-- How scenarios:run reaches the application: where it is served, and how each role a scenario names
+         logs in — the credentials are read from the environment variables named here, never from this file.
+         <scenarios base-url="https://app.localhost" timeout="10">
+             <login role="ROLE_USER" type="form" url="/login" username-env="APP_USER" password-env="APP_USER_PASSWORD"/>
+             <login role="ROLE_ADMIN" type="http-basic" username-env="APP_ADMIN" password-env="APP_ADMIN_PASSWORD"/>
+             <fixture name="catalog-loaded" command="bin/console app:fixtures:load catalog"/>
+         </scenarios> -->
+
     <!-- Language of the pages Claude writes, as two lowercase letters. English when nothing says
          otherwise; the locale option of workflows:inspect wins over this file.
          <language pages="fr"/> -->

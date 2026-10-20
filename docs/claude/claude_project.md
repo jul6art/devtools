@@ -181,6 +181,11 @@ Les dossiers `Stack/`, `Inspection/{Model,Adapter,Graph,Freshness}/`, `Rendering
 `Ai/`, `Mcp/` et `resources/{knowledge,prompts,schemas,templates}/` (specs §6) **se créent avec le
 module qui les remplit** — pas de dossier vide ni de `.gitkeep`.
 
+Paquets seulement suggérés, et où ils ont le droit d'être nommés (tests d'architecture) : le SDK MCP dans
+`src/Mcp/` (ADR-0018) ; Panther et php-webdriver dans `src/Scenario/{Action,Runner}/`, la commande
+`scenarios:run` et `src/Bridge/Symfony/Test/` (ADR-0021). Leur disponibilité se lit sans charger leurs
+classes (`InstalledVersions`) : charger le client de Panther tire BrowserKit à chaque commande.
+
 ⚠️ Les futurs **projets-fixtures** (`tests/Fixtures/projects/`) sont de vrais mini-projets dans leur
 propre langage : exclus de PHP-CS-Fixer (déjà fait), à exclure de PHPStan et Rector dès le premier.
 
@@ -201,6 +206,18 @@ bin/devtools list
 Tout tourne sur l'hôte. `composer.lock` n'est pas commité : la CI résout toujours la dernière version
 des outils de qualité, et une dérive Rector/PHP-CS-Fixer peut casser la CI sans commit (c'est arrivé
 sur `admin-bundle` et `core-bundle` le 2026-09-14).
+
+### Tests navigateur (groupe `browser`, ADR-0021 à 0023)
+
+- **ChromeDriver** de la version majeure de Chrome, dans `drivers/` (ignoré par git) : Chrome for Testing,
+  ou `vendor/bin/bdi detect drivers`. En CI, celui du runner (`CHROMEWEBDRIVER`). Sans lui, ces tests sont
+  ignorés en le disant (`tests/Support/Browser.php`).
+- **Site de fixture** `tests/Fixtures/browser/` servi par `php -S` avec son `router.php` : une page par
+  besoin d'action ; jQuery 3.7.1 et Select2 4.0.13 y sont embarqués (`vendor/`, sous licence MIT).
+- **symfony-minimal servi** : son `vendor/` n'est installé qu'en local (`composer install` dans la
+  fixture) ; les tests qui le servent posent sur une **copie** les deux fichiers de
+  `tests/Fixtures/runtime/symfony-minimal/` (préfixe des composants live, hacheur et hiérarchie de rôles).
+  La fixture d'analyse ne se modifie pas pour cela : ses fichiers sont hachés dans tous les instantanés.
 
 ---
 

@@ -29,7 +29,7 @@ final readonly class DevToolsDirectory
     /**
      * Work areas never committed, added to the project's `.gitignore` by `init`.
      */
-    public const array IGNORED = ['pending', 'reports'];
+    public const array IGNORED = ['pending', 'reports', 'runs'];
 
     public const string DEFAULT_DOCS = 'docs/workflows';
 
@@ -137,6 +137,14 @@ final readonly class DevToolsDirectory
     public function scenarioIndexFile(): string
     {
         return $this->path('scenarios/index.xml');
+    }
+
+    /**
+     * `.devtools/runs/2026-10-20-153000/`: one execution of the scenarios (ADR-0021), never committed.
+     */
+    public function runDirectory(\DateTimeImmutable $startedAt): string
+    {
+        return $this->path('runs/'.$startedAt->format('Y-m-d-His'));
     }
 
     public function trackingFile(WorkflowType $type, WorkflowId $id): string
