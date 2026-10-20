@@ -648,3 +648,10 @@
   avant ce lot. **Règle :** avant de déclarer un lot fini, `bin/devtools workflows:check` sur ce dépôt ;
   s'il signale, inspecter, réémettre telles quelles les pages qu'aucun fait ne contredit, corriger les
   autres (ici 2 sur 14).
+- ⚠️ **Rector 2.7 et PHPStan 2.3 se contredisent sur un test de nullité.** La CI, qui résout la
+  dernière version des outils, a rougi sur « Coding standards » : `TernaryToNullsafeCoalesceRector`
+  réécrit `null === $x ? [] : $x->y` en `$x?->y ?? []`, que PHPStan 2.3 refuse aussitôt
+  (`nullsafe.neverNull` : le `?->` est inutile à gauche de `??`). **Règle :** écrire `$x->y ?? []`, que
+  les deux acceptent ; et s'attendre à la même dérive dans les autres dépôts `jul6art/*` au prochain
+  passage mensuel. Le passage du 2026-10-20 (hors cycle) a ensuite été vert sur ses six jobs, décomptes
+  lus : l'ADR-0015 est livrée.

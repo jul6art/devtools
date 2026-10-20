@@ -1,6 +1,6 @@
 # ADR-0049 — Le sommaire ment jusqu'à la prochaine inspection
 
-- **Statut** : Accepted — 2026-10-20
+- **Statut** : Accepted — 2026-10-20 · Livré le 2026-10-20 (CI verte sur `216830f`)
 - **Décideurs** : jul6art
 - **Specs** : § 4.7 (menu)
 - **Dépend de** : ADR-0011 (rédaction par Claude), ADR-0008 puis 0043 (rendu du menu) ; ADR-0015 pour
@@ -176,11 +176,13 @@ vide par `Initializer`, et sa réécriture **le remplace** par le seul bloc de D
 - [x] Infection : chaque mutant survivant de `Freshness/` et `Tracking/` tué ou justifié un par un
       (critère de l'ADR-0010), puis `minCoveredMsi` fixé dans `infection.json5` à la valeur atteinte
       *(23 équivalents justifiés ci-dessus ; `minCoveredMsi: 96` pour 96,6 %)*
-- [ ] Les jobs « Coverage floors » et « Mutation » verts en CI ; cochées, les deux cases ouvertes de
+- [x] Les jobs « Coverage floors » et « Mutation » verts en CI ; cochées, les deux cases ouvertes de
       l'ADR-0015 (seuils et MSI en CI, CI verte) et celle de l'ADR-0010 (couverture 100 % et mutants) ;
-      la ligne de l'ADR-0015 dans `docs/adr/README.md` passée à livrée *(attend le commit, la poussée et
-      un passage de la CI, coupée hors du passage mensuel ; la case de l'ADR-0010, qui ne demande pas la
-      CI, est cochée)*
+      la ligne de l'ADR-0015 dans `docs/adr/README.md` passée à livrée *(passage hors cycle du
+      2026-10-20, [run 39444357281](https://github.com/jul6art/devtools/actions/runs/39444357281) sur `216830f` : six jobs verts, décomptes lus — 614 tests en
+      `highest` et en `lowest`, planchers atteints sur 599 tests, 654 mutants tués sur 677. Le premier
+      run, sur `ced16c6`, avait rougi sur « Coding standards » seul : Rector 2.7 et PHPStan 2.3, résolus
+      par la CI, se contredisaient sur une ligne étrangère au lot — corrigé par `216830f`)*
 
 **Sommaire :**
 
