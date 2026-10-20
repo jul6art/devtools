@@ -741,6 +741,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/Labels.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -756,6 +757,7 @@
   </file>
   <file path="src/Rendering/MenuRenderer.php">
     <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -942,6 +944,7 @@
   <file path="src/Stack/StackDocument.php">
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -961,6 +964,7 @@
   <file path="src/Stack/XmlStackStore.php">
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -1222,6 +1226,19 @@
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
   </file>
+  <file path="tests/Ai/MenuAfterApplyTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
   <file path="tests/Ai/PageRedactionTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.git.install-hooks" relation="test"/>
@@ -1249,9 +1266,12 @@
     <workflow ref="command.workflows.inspect" relation="test"/>
   </file>
   <file path="tests/Command/WorkflowsDiffCommandTest.php">
+    <workflow ref="command.workflows.accept" relation="test"/>
     <workflow ref="command.workflows.check" relation="test"/>
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.reject" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Command/WorkflowsInspectCommandTest.php">
     <workflow ref="command.workflows.check" relation="test"/>
@@ -1319,10 +1339,33 @@
   <file path="tests/Inspection/Diff/WorkflowDifferTest.php">
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
+  <file path="tests/Inspection/Freshness/FreshnessResolverTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
   <file path="tests/Inspection/Freshness/FreshnessTest.php">
     <workflow ref="command.workflows.check" relation="test"/>
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Freshness/GitClientTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/DecisionExtractorTest.php">
     <workflow ref="command.workflows.review" relation="test"/>
@@ -1331,6 +1374,17 @@
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/MechanismAttachmentTest.php">
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Graph/SourceFilesTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/WorkflowBuilderTest.php">
@@ -1446,6 +1500,16 @@
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.knowledge.promote" relation="test"/>
   </file>
+  <file path="tests/Tracking/DevToolsDirectoryTest.php">
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
   <file path="tests/Tracking/InitializerTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.git.install-hooks" relation="test"/>
@@ -1455,5 +1519,8 @@
     <workflow ref="command.knowledge.promote" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
+  </file>
+  <file path="tests/Tracking/XmlTrackingStoreTest.php">
+    <workflow ref="command.workflows.review" relation="test"/>
   </file>
 </files-to-workflows>

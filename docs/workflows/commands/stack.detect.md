@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type: commands · last updated: 2026-09-20 · commit: 9e40da9
+`command.stack.detect` · type: commands · last updated: 2026-10-20 · commit: 2885138
 
 ## Summary
 
@@ -72,7 +72,7 @@ Aucun.
 
 ## Points of attention
 
-Un `package.json` sans framework à côté d'un projet Symfony est de l'outillage, pas une stack : sinon la voie Claude se lancerait sur les assets. Le nom du projet est verrouillable dans `stack.xml`, et une détection suivante ne l'écrase plus.
+Un `package.json` à côté d'un projet Symfony n'est une stack que s'il porte un framework, ou s'il décrit une application : un point d'entrée (`bin`, `main` ou un script `start`) **et** des dépendances d'exécution (ADR-0050). Celui de Webpack Encore n'a ni l'un ni l'autre et reste de l'outillage — sinon la voie Claude se lancerait sur les assets. Une application Node sans framework reçoit le framework `node`, sa version vient d'`engines.node`, sinon de `.nvmrc` ou de `.node-version`, et les dossiers de ses points d'entrée rejoignent ses sources. ⚠️ Un projet Node sans framework à la racine, jusqu'ici sans framework et de clé `javascript`, passe à `node` à sa prochaine détection, sauf élément verrouillé. Un `tsconfig.json` avec `checkJs` garde la langue `javascript`. Le nom du projet est verrouillable dans `stack.xml`, et une détection suivante ne l'écrase plus.
 
 ## Related workflows
 
@@ -85,3 +85,4 @@ Un `package.json` sans framework à côté d'un projet Symfony est de l'outillag
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
+| 2026-10-20 | 2885138 | une application Node sans framework devient une stack : un point d'entrée et des dépendances d'exécution suffisent (ADR-0050) (added test tests/Ai/MenuAfterApplyTest.php (+4)) |

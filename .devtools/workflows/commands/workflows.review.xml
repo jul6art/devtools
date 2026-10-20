@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.review" type="commands" schema-version="1">
   <title>workflows:review</title>
-  <generated at="2026-09-21T21:19:53+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5" prompt="page/3"/>
-  <source vcs="git" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" branch="master" dirty="true"/>
+  <generated at="2026-10-20T14:34:04+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/3"/>
+  <source vcs="git" commit="2885138774af0c08de65091f6b75dafda1802f83" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:review" role="main">
       <declared-in path="src/Command/WorkflowsReviewCommand.php" role="other"/>
@@ -61,7 +61,7 @@
     <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="df2e219c4ee1a8a37632d88992b2b1e08bb56fb5b2f63d9e37d36128c96a6749"/>
     <file path="src/Rendering/GroupPageSection.php" role="other" sha256="61e8a37c69cf52d70686aac050c7fe5d8f520f46fbd91d88fb8a0c2bf35922a7"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
-    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="2711a3da47d908940d7007db11753ebcf8c905dec34694e456cc23eee653171d"/>
+    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="e8c2f3d273b08613e091773dd95423eba6ccb12848bd4a8d2acc83266cc03d2f"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
     <file path="src/Rendering/PageRenderer.php" role="other" sha256="59ea67146f8938e9b7841ceb069ec60591ae5b692693b87ca1e30e3be93e245e"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="72731f989521539bc02804047e1d228690396935dddda8e4f29ab2c39043c371"/>
@@ -98,13 +98,16 @@
     <file path="src/Xml/InvalidXml.php" role="other" sha256="5e6a85caa327cf77f737c259704f9bb5bfe87474b53fcad0286b483cc53cc966"/>
   </files>
   <tests>
+    <file path="tests/Command/WorkflowsDiffCommandTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Symfony/SymfonyAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Diff/ChangeGroupTest.php" role="test"/>
     <file path="tests/Inspection/Diff/WorkflowDifferTest.php" role="test"/>
+    <file path="tests/Inspection/Freshness/FreshnessResolverTest.php" role="test"/>
     <file path="tests/Inspection/Graph/DecisionExtractorTest.php" role="test"/>
     <file path="tests/Inspection/Graph/DependencyResolverTest.php" role="test"/>
     <file path="tests/Inspection/Graph/MechanismAttachmentTest.php" role="test"/>
+    <file path="tests/Inspection/Graph/SourceFilesTest.php" role="test"/>
     <file path="tests/Inspection/Graph/WorkflowBuilderTest.php" role="test"/>
     <file path="tests/Inspection/Model/EntryPointAndValueObjectsTest.php" role="test"/>
     <file path="tests/Inspection/Model/FileRefTest.php" role="test"/>
@@ -118,6 +121,7 @@
     <file path="tests/Rendering/MenuRendererTest.php" role="test"/>
     <file path="tests/Rendering/PageRendererTest.php" role="test"/>
     <file path="tests/Review/ChangeReviewTest.php" role="test"/>
+    <file path="tests/Tracking/XmlTrackingStoreTest.php" role="test"/>
   </tests>
   <packages>
     <package name="symfony/console" version="8.1.7"/>
@@ -150,5 +154,6 @@
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : le pipeline d'inspection a bougé sur l'élagage et sur les écouteurs Doctrine, deux points que cette commande ne touche pas. La prose a été relue contre le code et tient. (files changed: src/Inspection/InspectionPipeline.php)"/>
     <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsReviewCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php)"/>
     <revision at="2026-09-21T21:19:02+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php)"/>
+    <revision at="2026-10-20T14:32:43+00:00" commit="2885138774af0c08de65091f6b75dafda1802f83" reason="Aucun changement de fond : le rendu du menu a gagné la relecture de sa section « Not covered », que seul workflows:apply appelle ; des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Command/WorkflowsDiffCommandTest.php (+3))"/>
   </history>
 </workflow>

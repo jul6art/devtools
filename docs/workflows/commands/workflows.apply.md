@@ -1,9 +1,9 @@
 # workflows:apply
-`command.workflows.apply` · type: commands · last updated: 2026-09-21 · commit: e5a6438
+`command.workflows.apply` · type: commands · last updated: 2026-10-20 · commit: 2885138
 
 ## Summary
 
-Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, puis les pages. Une fiche de connaissance acceptée est déposée dans la bibliothèque partagée.
+Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, puis les pages. Une fiche de connaissance acceptée est déposée dans la bibliothèque partagée. Dès qu'une page est acceptée, l'index et le sommaire workflows.md sont réécrits depuis ce qui est sur disque, sans nouvelle inspection : un workflow rédigé quitte aussitôt la liste « To check » (ADR-0049).
 
 ## Trigger
 
@@ -22,6 +22,7 @@ sequenceDiagram
   participant A as DraftApplier
   participant V as PageDraftValidator
   participant L as Bibliothèque
+  participant M as MenuRenderer
   participant D as docs/ + .devtools/
   U->>C: devtools workflows:apply .
   C->>A: apply(racine, partage)
@@ -29,6 +30,10 @@ sequenceDiagram
   A->>V: validate(brouillon, modèle, révision)
   V-->>A: règles cassées, ou rien
   A->>D: page reconstruite, suivi mis à jour
+  A->>D: index réécrit
+  A->>M: render(stack, index, briefs restants, « Not covered » relu)
+  M-->>A: sommaire
+  A->>D: sommaire réécrit
   A-->>C: acceptés, refusés, déposés
   C-->>U: bilan
 ```
@@ -97,7 +102,7 @@ flowchart TD
 
 ## Data
 
-Lit les briefs, les modèles et les brouillons de `.devtools/pending/` ; écrit les pages, les fichiers de suivi, l'index, et dépose les fiches de connaissance.
+Lit les briefs, les modèles et les brouillons de `.devtools/pending/`, le fichier de stack et le sommaire existant ; écrit les pages, les fichiers de suivi, l'index et le sommaire, et dépose les fiches de connaissance.
 
 ## Cross-cutting mechanisms
 
@@ -105,7 +110,7 @@ Aucun listener. Un brouillon est une donnée non fiable : chaque chemin qu'il ci
 
 ## Points of attention
 
-Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé. Une page rédigée survit aux réécritures factuelles ultérieures : seuls les faits sont régénérés.
+Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé. Une page rédigée survit aux réécritures factuelles ultérieures : seuls les faits sont régénérés. Un apply qui n'accepte rien ne touche ni l'index ni le sommaire, et sans sommaire — avant la première inspection — il n'en crée pas. ⚠️ La section « Not covered » du sommaire est recopiée telle quelle, pas recalculée : la couverture n'est persistée nulle part, et appliquer une page ne change pas les fichiers d'un workflow. Le jour où apply toucherait aux fichiers d'un workflow, il faudrait persister la couverture. Le sommaire a désormais deux auteurs, l'inspection et apply : un test vérifie qu'une inspection lancée juste après un apply rend le même.
 
 ## Related workflows
 
@@ -120,3 +125,4 @@ Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/DraftApplier.php, src/Ai/PageDraft.php, src/Ai/PageDraftValidator.php, src/Console/SummaryRenderer.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
 | 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Rendering/PageRenderer.php) |
+| 2026-10-20 | 2885138 | apply réécrit le sommaire depuis le disque : un workflow rédigé quitte « To check » sans attendre la prochaine inspection (ADR-0049) (added test tests/Ai/MenuAfterApplyTest.php (+4)) |

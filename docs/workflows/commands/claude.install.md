@@ -1,5 +1,5 @@
 # claude:install
-`command.claude.install` · type: commands · last updated: 2026-09-20 · commit: 9e40da9
+`command.claude.install` · type: commands · last updated: 2026-10-20 · commit: 2885138
 
 ## Summary
 
@@ -67,3 +67,4 @@ Un skill modifié à la main n'est jamais écrasé sans `--force` : c'est le fic
 | 2026-09-18 | b8049a4 | rédaction initiale |
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
+| 2026-10-20 | 2885138 | Aucun changement de fond : seuls des tests se sont ajoutés au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+4)) |
