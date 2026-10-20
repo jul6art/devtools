@@ -11,6 +11,7 @@ use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
+use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -47,6 +48,7 @@ class DevToolsExtension extends Extension
         KnowledgeListCommand::class => 'knowledge:list',
         KnowledgePromoteCommand::class => 'knowledge:promote',
         KnowledgeAmendCommand::class => 'knowledge:amend',
+        WorkflowsImpactCommand::class => 'workflows:impact',
     ];
 
     #[\Override]

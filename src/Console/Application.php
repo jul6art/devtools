@@ -16,6 +16,7 @@ use Jul6Art\DevTools\Command\WorkflowsAcceptCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
 use Jul6Art\DevTools\Command\WorkflowsCheckCommand;
 use Jul6Art\DevTools\Command\WorkflowsDiffCommand;
+use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
 use Jul6Art\DevTools\Command\WorkflowsRejectCommand;
 use Jul6Art\DevTools\Command\WorkflowsReviewCommand;
@@ -44,6 +45,7 @@ final class Application extends BaseApplication
             new WorkflowsApplyCommand(),
             new WorkflowsDiffCommand(),
             new WorkflowsCheckCommand(),
+            new WorkflowsImpactCommand(),
             new WorkflowsReviewCommand(),
             new WorkflowsAcceptCommand(),
             new WorkflowsRejectCommand(),

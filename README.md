@@ -128,6 +128,7 @@ Usage
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
 | | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
+| **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages | nothing |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -627,6 +628,54 @@ misspelled shows there.
 ⚠️ There is therefore **no `events` workflow type**, against the seven of the specs. A project that wants
 such pages declares a custom type in `config.xml`.
 
+Impact of a change
+------------------
+
+"What does this change touch?" — answered from the map the last inspection wrote, never from the code:
+two XML files, no parsing, a few milliseconds even on a project of three hundred routes. It is what a
+Claude Code hook asks before every edit, and what the gate uses to choose the scenarios to replay.
+
+```shell
+vendor/bin/devtools workflows:impact src/Service/OrderPricing.php     # files, relative or absolute
+vendor/bin/devtools workflows:impact --commit=HEAD                    # the files of a commit
+vendor/bin/devtools workflows:impact --range=main..feature            # a pull request
+vendor/bin/devtools workflows:impact --changed                        # the working tree, untracked files included
+        [--format=text|json|xml] [--depth=0|1] [--path=<project>]
+```
+
+Each workflow comes with **how** the change reaches it — `direct` (it traverses the file), `test` (the file
+tests it), `dependency` (the file declares a listener or a voter running inside it, or belongs to a
+workflow it depends on) — the files that do, its page and its freshness. `--depth=0` leaves the
+dependencies out. A file no workflow references is listed as **not covered**, never ignored: a new file is
+the usual case, and the next inspection says where it belongs. A path outside the project is refused.
+`--commit`, `--range` and `--changed` cost one git process each.
+
+⚠️ **The map is as fresh as the last inspection.** When a file asked about changed after it — or vanished
+from a map that still names it — the answer starts with a warning: run `workflows:inspect` for an exact
+one.
+
+The `json` format is for tools:
+
+```json
+{
+    "warnings": [],
+    "workflows": [
+        {
+            "id": "route.order.new",
+            "type": "routes",
+            "title": "GET|POST /orders/new",
+            "relation": "direct",
+            "files": ["src/Service/OrderPricing.php"],
+            "page": "docs/workflows/routes/order.new.md",
+            "status": "fresh"
+        }
+    ],
+    "uncovered": ["src/Brand/New.php"]
+}
+```
+
+The `xml` format follows `impact.xsd`, copied into `.devtools/schemas/` like every schema.
+
 Writing with Claude Code
 ------------------------
 
@@ -797,8 +846,8 @@ bin/devtools                 standalone entry point
 src/
 ├── Console/                 the console application every command is registered in
 ├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
-│                            workflows:review, workflows:accept, workflows:reject, workflows:apply,
-│                            git:install-hooks, git:uninstall-hooks, claude:install,
+│                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
+│                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
@@ -813,6 +862,7 @@ src/
 │   ├── Diff/                what changed in a workflow, fact by fact, grouped across workflows
 │   └── InspectionPipeline   the whole run of workflows:inspect
 ├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
+├── Impact/                  the workflows a change reaches, read from the graph
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper, and nothing else

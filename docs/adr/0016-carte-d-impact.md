@@ -1,6 +1,6 @@
 # ADR-0016 — Carte d'impact : `workflows:impact`
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-20 (proposée le 2026-09-16 ; phase 1 lancée par jul6art) · Livré le 2026-10-20
 - **Décideurs** : jul6art
 - **Specs** : § 4.8 (carte d'impact), § 5 (socle des modules ultérieurs), § 9 (phase 1)
 
@@ -44,6 +44,31 @@ il est décrit par un exemple dans le README, et figé par un snapshot de test.
 Si `index.xml` est plus ancien que le dernier commit touchant un fichier source, la sortie commence
 par un avertissement : l'impact est calculé sur une carte **potentiellement périmée**.
 
+### Précisions à l'acceptation (2026-10-20)
+
+Le MVP a changé depuis la rédaction : les listeners sont devenus des mécanismes (ADR-0043), les voters
+aussi (ADR-0044), et ni les uns ni les autres ne sont des workflows.
+
+- **La relation `dependency` est précalculée dans `graph/files-to-workflows.xml`** (troisième valeur de
+  `relation`, après `file` et `test`) : le fichier qui déclare un mécanisme est lié à chaque workflow qui
+  le porte, et les fichiers d'un workflow à chaque workflow qui en dépend (`dependsOn`). L'impact ne lit
+  ainsi que deux XML, quel que soit `--depth` : `--depth=0` écarte simplement ces liens.
+- **La carte est dite périmée quand un fichier interrogé a été modifié après la dernière inspection** —
+  date du dernier rapport d'inspection, à défaut celle de `index.xml`. Comparer au dernier commit
+  coûterait un processus git de plus, et un fichier modifié sans commit est précisément le cas d'une
+  session Claude Code.
+- **Le projet se désigne par `--path`** : les arguments de la commande sont les fichiers.
+- La sortie `xml` suit `impact.xsd`, validée à l'écriture comme tout XML de DevTools.
+- **Infection** (`Freshness/` et `Tracking/`, que ce lot touche) : le découpage de `GitClient` déplace des
+  survivants que l'ADR-0049 justifie — `continue` → `break` passe à la ligne 161, les deux mutants du préfixe à
+  la ligne 175 (survivants, ou hors délai selon la charge de la machine) ; celui du `return []` anticipé
+  disparaît avec le code qu'il mutait — et en ajoute trois, équivalents : `GitClient:140` (`UnwrapArrayValues` :
+  le `sort()` qui suit réindexe), `GitClient:141` (sans `sort()` : git écrit les chemins de `diff-tree` et de
+  `diff --name-only` dans l'ordre de l'index, déjà trié, et chaque appelant retrie), `FilesToWorkflows:72`
+  (`UnwrapArrayMap` : le constructeur trie chaque liste par `usort`, qui réindexe). `FilesToWorkflows:54` est
+  tué par un test : un fichier à la fois parcouru et listé en test reste un fichier du workflow. Bilan au
+  2026-10-20 : 699 mutants tués, 25 survivants tous justifiés, MSI couvert 96,5 % (plancher 96).
+
 ## Budget d'exécution
 
 Lecture de deux fichiers XML ; **aucun parsing de code, aucun hash**. `--commit`, `--range`,
@@ -57,16 +82,19 @@ automatique quand la carte est périmée.
 
 ## Critères d'acceptation
 
-- [ ] Sur `symfony-minimal` inspecté : un service partagé → ses deux routes (direct) ; un listener
+- [x] Sur `symfony-minimal` inspecté : un service partagé → ses deux routes (direct) ; un listener
       `kernel.request` → toutes les routes (dependency) ; un test → le workflow qu'il couvre (test)
-- [ ] Fichier inconnu → section « non couvert », code de sortie 0
-- [ ] `--commit`, `--range`, `--changed` dans un dépôt git temporaire : un test chacun, un seul
+      *(`ImpactTest` : `OrderRepository` atteint ses quatre routes, le gestionnaire d'`OrderCreated` et
+      le composant du panier ; `LocaleListener` toutes les routes en `dependency`, aucune à `--depth=0`)*
+- [x] Fichier inconnu → section « non couvert », code de sortie 0
+- [x] `--commit`, `--range`, `--changed` dans un dépôt git temporaire : un test chacun, un seul
       processus git (compteur)
-- [ ] Chemin hors racine refusé
-- [ ] Sorties `text`, `json`, `xml` figées en snapshot
-- [ ] Carte périmée → avertissement en tête
-- [ ] < 200 ms mesurés sur le projet généré de 300 routes (ADR-0015)
-- [ ] README : section « Impact d'un changement »
+- [x] Chemin hors racine refusé *(code 2, avant toute lecture)*
+- [x] Sorties `text`, `json`, `xml` figées en snapshot *(`tests/Fixtures/snapshots/impact.*`)*
+- [x] Carte périmée → avertissement en tête *(fichier modifié après l'inspection, ou disparu)*
+- [x] < 200 ms mesurés sur le projet généré de 300 routes (ADR-0015) *(5 ms pour un service que les
+      300 routes traversent)*
+- [x] README : section « Impact d'un changement » *(« Impact of a change »)*
 
 ## Conséquences
 

@@ -57,6 +57,14 @@
   <file path="src/Entity/Site.php">
     <workflow ref="route.customer.edit" relation="file"/>
   </file>
+  <file path="src/EventListener/LocaleListener.php">
+    <workflow ref="route.customer.edit" relation="dependency"/>
+    <workflow ref="route.health" relation="dependency"/>
+    <workflow ref="route.order.index" relation="dependency"/>
+    <workflow ref="route.order.new" relation="dependency"/>
+    <workflow ref="route.order.show" relation="dependency"/>
+    <workflow ref="route.order.validate" relation="dependency"/>
+  </file>
   <file path="src/Form/CustomerType.php">
     <workflow ref="route.customer.edit" relation="file"/>
   </file>

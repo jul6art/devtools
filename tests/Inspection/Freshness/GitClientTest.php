@@ -173,6 +173,80 @@ final class GitClientTest extends TestCase
         self::assertSame(['src/Purchase.php', 'src/Order.php', 'src/Zeta.php'], $git->workingTree($root, $git->state($root) ?? self::fail('No state.')));
     }
 
+    /**
+     * ADR-0016: the files of one commit — the root commit included — relative to the project, in one
+     * process; a reference git does not know is no answer, not an empty one.
+     */
+    public function testTheFilesOfACommitAreReadInOneProcessRelativeToTheProject(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('app');
+        $root = new ProjectRoot($repository->path.'/app');
+        $initial = $repository->head();
+        file_put_contents($repository->path.'/app/src/Order.php', "<?php // changed\n");
+        file_put_contents($repository->path.'/app/src/Line.php', "<?php\n");
+        file_put_contents($repository->path.'/beside.txt', "not the project's\n");
+        $repository->commitAll('change');
+        $git = new GitClient();
+
+        self::assertSame(['src/Line.php', 'src/Order.php'], $git->filesOfCommit($root, 'HEAD'));
+        self::assertSame(1, $git->processes());
+        self::assertSame(['src/Order.php', 'src/Other.php'], $git->filesOfCommit($root, $initial), 'The root commit has no parent to compare with, and still has files.');
+        self::assertNull($git->filesOfCommit($root, 'f00df00df00df00df00df00df00df00df00df00d'));
+    }
+
+    public function testTheFilesOfARangeAreReadInOneProcessRelativeToTheProject(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('app');
+        $root = new ProjectRoot($repository->path.'/app');
+        $from = $repository->head();
+        file_put_contents($repository->path.'/app/src/Order.php', "<?php // changed\n");
+        $repository->commitAll('one');
+        file_put_contents($repository->path.'/app/src/Line.php', "<?php\n");
+        file_put_contents($repository->path.'/beside.txt', "not the project's\n");
+        $to = $repository->commitAll('two');
+        $git = new GitClient();
+
+        self::assertSame(['src/Line.php', 'src/Order.php'], $git->filesOfRange($root, $from.'..'.$to));
+        self::assertSame(1, $git->processes());
+        self::assertNull($git->filesOfRange($root, 'f00df00df00df00df00df00df00df00df00df00d..HEAD'));
+    }
+
+    /**
+     * The working tree in one process: the project's place in the repository is found on the disk, from
+     * the `.git` above it, instead of asking git a second question.
+     */
+    public function testTheWorkingTreeChangesAreReadInOneProcessFromAProjectInASubdirectory(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('app');
+        $root = new ProjectRoot($repository->path.'/app');
+        file_put_contents($repository->path.'/app/src/Order.php', "<?php // changed\n");
+        file_put_contents($repository->path.'/app/src/New.php', "<?php\n");
+        $repository->git('mv', 'app/src/Other.php', 'app/src/Renamed.php');
+        file_put_contents($repository->path.'/beside.txt', "not the project's\n");
+        $git = new GitClient();
+
+        self::assertSame(['src/New.php', 'src/Order.php', 'src/Other.php', 'src/Renamed.php'], self::sorted($git->workingTreeChanges($root) ?? self::fail('No answer.')));
+        self::assertSame(1, $git->processes());
+    }
+
+    public function testAProjectAtTheRootOfItsRepositoryHasNoPrefix(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('.');
+        file_put_contents($repository->path.'/src/Order.php', "<?php // changed\n");
+
+        self::assertSame(['src/Order.php'], new GitClient()->workingTreeChanges(new ProjectRoot($repository->path)));
+    }
+
+    public function testOutsideARepositoryTheWorkingTreeHasNoAnswer(): void
+    {
+        $directory = $this->temporaryDirectory().'/plain';
+        mkdir($directory);
+        $git = new GitClient();
+
+        self::assertNull($git->workingTreeChanges(new ProjectRoot($directory)));
+        self::assertSame(0, $git->processes(), 'No repository above: git is not even asked.');
+    }
+
     public function testTheDiffShowsWhatChangedSinceACommitAndNothingWithoutPaths(): void
     {
         $repository = $this->repositoryWithAProjectIn('.');

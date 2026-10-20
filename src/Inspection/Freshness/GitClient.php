@@ -63,10 +63,94 @@ final class GitClient
         $exclusions = array_map(static fn (string $directory): string => ':(exclude)'.trim($directory, '/'), $excluded);
         [$ok, $output] = $this->git($root, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--', '.', ...$exclusions]);
 
-        if (!$ok) {
-            return [];
+        return $ok ? self::statusPaths($output, $state->prefix) : [];
+    }
+
+    /**
+     * The files of one commit — the root commit included — relative to the project, in one process
+     * (ADR-0016). Null when git does not know the reference.
+     *
+     * @return list<string>|null
+     */
+    public function filesOfCommit(ProjectRoot $root, string $reference): ?array
+    {
+        [$ok, $output] = $this->git($root, ['diff-tree', '--root', '--no-commit-id', '--name-only', '-r', '-z', '--relative', $reference]);
+
+        return $ok ? self::nameList($output) : null;
+    }
+
+    /**
+     * The files changed by a range of commits (`a..b`), relative to the project, in one process (ADR-0016).
+     *
+     * @return list<string>|null
+     */
+    public function filesOfRange(ProjectRoot $root, string $range): ?array
+    {
+        [$ok, $output] = $this->git($root, ['diff', '--name-only', '-z', '--relative', $range]);
+
+        return $ok ? self::nameList($output) : null;
+    }
+
+    /**
+     * Files modified, staged or untracked, relative to the project, in ONE process (ADR-0016): the project's
+     * place in its repository is read from the disk — the `.git` above it — instead of asking git. Null
+     * outside a repository.
+     *
+     * @return list<string>|null
+     */
+    public function workingTreeChanges(ProjectRoot $root): ?array
+    {
+        $prefix = self::prefixOf($root->path);
+
+        if (null === $prefix) {
+            return null;
         }
 
+        [$ok, $output] = $this->git($root, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--', '.']);
+
+        return $ok ? self::statusPaths($output, $prefix) : null;
+    }
+
+    /**
+     * The directory of the project inside its repository, `app/` or `''` — from the nearest `.git`, a
+     * directory or the file of a worktree.
+     */
+    private static function prefixOf(string $path): ?string
+    {
+        $directory = $path;
+
+        while (!file_exists($directory.'/.git')) {
+            $parent = \dirname($directory);
+
+            if ($parent === $directory) {
+                return null;
+            }
+
+            $directory = $parent;
+        }
+
+        return $directory === $path ? '' : substr($path, \strlen($directory) + 1).'/';
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function nameList(string $output): array
+    {
+        $paths = array_values(array_filter(explode("\0", $output)));
+        sort($paths, \SORT_STRING);
+
+        return $paths;
+    }
+
+    /**
+     * The paths of `git status --porcelain=v1 -z`, relative to the project: a rename or a copy names its
+     * original path too.
+     *
+     * @return list<string>
+     */
+    private static function statusPaths(string $output, string $prefix): array
+    {
         $paths = [];
         $entries = explode("\0", $output);
 
@@ -88,8 +172,8 @@ final class GitClient
         $relative = [];
 
         foreach ($paths as $path) {
-            if ('' !== $path && ('' === $state->prefix || str_starts_with($path, $state->prefix))) {
-                $relative[] = substr($path, \strlen($state->prefix));
+            if ('' !== $path && ('' === $prefix || str_starts_with($path, $prefix))) {
+                $relative[] = substr($path, \strlen($prefix));
             }
         }
 

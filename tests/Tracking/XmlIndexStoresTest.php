@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Tests\Tracking;
 
+use Jul6Art\DevTools\Inspection\Model\FileRef;
+use Jul6Art\DevTools\Inspection\Model\FileRole;
+use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -16,6 +19,7 @@ use Jul6Art\DevTools\Tracking\FilesToWorkflows;
 use Jul6Art\DevTools\Tracking\Index;
 use Jul6Art\DevTools\Tracking\IndexEntry;
 use Jul6Art\DevTools\Tracking\IndexGroup;
+use Jul6Art\DevTools\Tracking\TrackedFile;
 use Jul6Art\DevTools\Tracking\TrackingDocument;
 use Jul6Art\DevTools\Tracking\VcsState;
 use Jul6Art\DevTools\Tracking\VcsXml;
@@ -197,6 +201,46 @@ final class XmlIndexStoresTest extends TestCase
             $graph->linksOf('tests/Controller/OrderControllerTest.php'),
         );
         self::assertSame([], $graph->linksOf('src/Unknown.php'));
+    }
+
+    /**
+     * ADR-0016: what runs inside a workflow without being one of its files — a mechanism, a workflow it
+     * depends on — is linked too, as a dependency, so that impact reads one map at any depth.
+     */
+    public function testFilesToWorkflowsLinksMechanismsAndDependenciesAsDependencies(): void
+    {
+        $show = new TrackingDocument(
+            new WorkflowId('route.order.show'),
+            WorkflowType::routes(),
+            'Order',
+            TrackingFixtures::orderNew()->generated,
+            VcsState::none(),
+            TrackingFixtures::orderNew()->main,
+            files: [new TrackedFile(new FileRef('src/Controller/ShowController.php'), TrackingFixtures::HASH_A), new TrackedFile(new FileRef('src/Controller/OrderController.php'), TrackingFixtures::HASH_A)],
+            history: TrackingFixtures::orderNew()->history,
+        );
+        $new = TrackingFixtures::orderNew();
+        $withMechanism = new TrackingDocument($new->id, $new->type, $new->title, $new->generated, $new->vcs, $new->main, $new->satellites, $new->files, $new->tests, $new->packages, $new->dependsOn, history: $new->history, mechanisms: [
+            new Mechanism('listener', 'App\\EventListener\\LocaleListener', 'kernel.request', new FileRef('src/EventListener/LocaleListener.php')),
+            new Mechanism('listener', 'App\\EventListener\\LocaleListener', 'kernel.response', new FileRef('src/EventListener/LocaleListener.php')),
+        ]);
+
+        $graph = FilesToWorkflows::fromTracking([$withMechanism, $show]);
+
+        self::assertEquals([new FileLink($new->id, FileRelation::Dependency)], $graph->linksOf('src/EventListener/LocaleListener.php'), 'Once, however many events the listener answers.');
+        self::assertEquals([new FileLink($new->id, FileRelation::Dependency), new FileLink($show->id, FileRelation::File)], $graph->linksOf('src/Controller/ShowController.php'), 'route.order.new depends on route.order.show.');
+        self::assertEquals(
+            [new FileLink($new->id, FileRelation::File), new FileLink($show->id, FileRelation::File)],
+            $graph->linksOf('src/Controller/OrderController.php'),
+            'A file a workflow traverses is a file of it, not also a dependency.',
+        );
+
+        // A file both traversed and listed as a test keeps the stronger link: it is a file of the workflow.
+        $tested = new TrackingDocument($new->id, $new->type, $new->title, $new->generated, $new->vcs, $new->main, files: $new->files, tests: [new FileRef('src/Controller/OrderController.php', FileRole::Test)], history: $new->history);
+        self::assertEquals([new FileLink($new->id, FileRelation::File)], FilesToWorkflows::fromTracking([$tested])->linksOf('src/Controller/OrderController.php'));
+
+        $store = new XmlFilesToWorkflowsStore();
+        self::assertEquals($graph, $store->unserialize($store->serialize($graph), 'files-to-workflows.xml'));
     }
 
     public function testFilesToWorkflowsSurvivesARoundTripToTheByte(): void

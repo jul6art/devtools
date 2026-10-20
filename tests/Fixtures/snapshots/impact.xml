@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<impact xmlns="https://github.com/jul6art/devtools/schema/impact/1" schema-version="1">
+  <workflow id="async.order-created" type="async" title="OrderCreated" relation="direct" page="docs/workflows/async/order-created.md" status="fresh">
+    <file path="src/Service/OrderPricing.php"/>
+  </workflow>
+  <workflow id="route.order.new" type="routes" title="GET|POST /orders/new" relation="direct" page="docs/workflows/routes/order.new.md" status="fresh">
+    <file path="src/Service/OrderPricing.php"/>
+  </workflow>
+  <uncovered path="src/Brand/New.php"/>
+</impact>

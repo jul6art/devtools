@@ -33,7 +33,7 @@
 | [0013](0013-voie-claude-pour-les-stacks-sans-adaptateur.md) | Voie Claude pour les stacks sans adaptateur natif | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0014](0014-adaptateur-php-generique.md) | Adaptateur PHP générique (sans framework) | MVP 4 — Rédaction et langages | Accepted | 2026-09-17 |
 | [0015](0015-livraison-du-mvp.md) | Livraison du MVP : bout en bout, mesures, dogfooding | MVP — Livraison | Accepted | 2026-10-20 |
-| [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Proposed | — |
+| [0016](0016-carte-d-impact.md) | Carte d'impact : `workflows:impact` | 1 — Impact, MCP, gate | Accepted | 2026-10-20 |
 | [0017](0017-controle-de-fraicheur-et-hooks-git.md) | Contrôle de fraîcheur en CI et hooks git | 1 — Impact, MCP, gate | Accepted | 2026-09-18 |
 | [0018](0018-serveur-mcp.md) | Serveur MCP `devtools` | 1 — Impact, MCP, gate | Proposed | — |
 | [0019](0019-hooks-claude-code.md) | Hooks Claude Code : l'impact avant la modification | 1 — Impact, MCP, gate | Proposed | — |

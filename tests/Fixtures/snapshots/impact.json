@@ -1,0 +1,30 @@
+{
+    "warnings": [],
+    "workflows": [
+        {
+            "id": "async.order-created",
+            "type": "async",
+            "title": "OrderCreated",
+            "relation": "direct",
+            "files": [
+                "src/Service/OrderPricing.php"
+            ],
+            "page": "docs/workflows/async/order-created.md",
+            "status": "fresh"
+        },
+        {
+            "id": "route.order.new",
+            "type": "routes",
+            "title": "GET|POST /orders/new",
+            "relation": "direct",
+            "files": [
+                "src/Service/OrderPricing.php"
+            ],
+            "page": "docs/workflows/routes/order.new.md",
+            "status": "fresh"
+        }
+    ],
+    "uncovered": [
+        "src/Brand/New.php"
+    ]
+}

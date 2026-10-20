@@ -1,0 +1,11 @@
+ DevTools — acme/symfony-minimal   workflow impact
+
+ 2 workflows reached
+ --------------------- ---------- ------------------------------ --------------------------------------- -------- 
+  Workflow              Relation   Through                        Page                                    Status  
+ --------------------- ---------- ------------------------------ --------------------------------------- -------- 
+  async.order-created   direct     src/Service/OrderPricing.php   docs/workflows/async/order-created.md   fresh   
+  route.order.new       direct     src/Service/OrderPricing.php   docs/workflows/routes/order.new.md      fresh   
+ --------------------- ---------- ------------------------------ --------------------------------------- -------- 
+
+ Not covered src/Brand/New.php — no workflow references it yet; workflows:inspect will tell where it belongs.
