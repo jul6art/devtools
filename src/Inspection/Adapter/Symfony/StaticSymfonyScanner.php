@@ -308,7 +308,7 @@ final class StaticSymfonyScanner
         $names = [];
 
         foreach ([$node?->getMethod($method), $node?->getMethod('__construct')] as $candidate) {
-            foreach (null === $candidate ? [] : $candidate->params as $parameter) {
+            foreach ($candidate->params ?? [] as $parameter) {
                 if ($parameter->type instanceof Name && str_starts_with($parameter->type->toString(), 'Symfony\Component\Workflow\\') && $parameter->var instanceof Variable && \is_string($parameter->var->name)) {
                     $names[] = $parameter->var->name;
                 }
