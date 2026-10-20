@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Tests\Command;
 
 use Jul6Art\DevTools\Clock\FrozenClock;
 use Jul6Art\DevTools\Command\WorkflowsDiffCommand;
+use Jul6Art\DevTools\Console\ChangeRenderer;
 use Jul6Art\DevTools\Inspection\AdapterResolver;
 use Jul6Art\DevTools\Inspection\Freshness\GitClient;
 use Jul6Art\DevTools\Inspection\InspectionOptions;
@@ -22,6 +23,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * ADR-0046: `workflows:diff` says what changed, groups it by fact, and writes nothing.
  */
 #[CoversClass(WorkflowsDiffCommand::class)]
+#[CoversClass(ChangeRenderer::class)]
 final class WorkflowsDiffCommandTest extends TestCase
 {
     use AssertsSnapshots;

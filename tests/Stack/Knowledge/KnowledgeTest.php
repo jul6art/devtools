@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(KnowledgeCanvas::class)]
 #[CoversClass(KnowledgeBrief::class)]
 #[CoversClass(XmlKnowledgeBriefStore::class)]
+#[CoversClass(DraftApplier::class)]
+#[CoversClass(InspectionPipeline::class)]
 final class KnowledgeTest extends TestCase
 {
     use CopiesFixtureProjects;

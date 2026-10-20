@@ -7,6 +7,8 @@ namespace Jul6Art\DevTools\Tests\Stack\Knowledge;
 use Jul6Art\DevTools\Ai\ApplyResult;
 use Jul6Art\DevTools\Ai\DraftApplier;
 use Jul6Art\DevTools\Clock\FrozenClock;
+use Jul6Art\DevTools\Command\KnowledgeListCommand;
+use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Console\Application;
 use Jul6Art\DevTools\Inspection\InspectionOptions;
@@ -31,6 +33,9 @@ use Symfony\Component\Console\Tester\CommandTester;
 #[CoversClass(KnowledgeProvider::class)]
 #[CoversClass(LibraryEntry::class)]
 #[CoversClass(DepositOutcome::class)]
+#[CoversClass(DraftApplier::class)]
+#[CoversClass(KnowledgeListCommand::class)]
+#[CoversClass(KnowledgePromoteCommand::class)]
 final class KnowledgeLibraryTest extends TestCase
 {
     use CopiesFixtureProjects;

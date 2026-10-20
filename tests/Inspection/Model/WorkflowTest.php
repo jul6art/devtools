@@ -15,6 +15,7 @@ use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -154,5 +155,21 @@ final class WorkflowTest extends TestCase
         $this->expectExceptionMessage('route.order.new');
 
         new InspectionResult('symfony-7', [ModelFixtures::orderNewWorkflow(), ModelFixtures::orderNewWorkflow()]);
+    }
+
+    /**
+     * ADR-0045: `apply` reads the model from its serialized file, where the group does not travel, and the
+     * group from the tracking. Putting it back must change the group and nothing else.
+     */
+    public function testPuttingAWorkflowInAGroupChangesTheGroupAndNothingElse(): void
+    {
+        $workflow = ModelFixtures::orderNewWorkflow();
+        $group = new WorkflowGroup('order', 'Orders', $workflow->main->declaredIn);
+
+        $grouped = $workflow->inGroup($group);
+
+        self::assertSame($group, $grouped->group);
+        self::assertNull($workflow->group, 'The original is left as it was.');
+        self::assertEquals($workflow, $grouped->inGroup(null), 'Taken back out, it is the same workflow.');
     }
 }

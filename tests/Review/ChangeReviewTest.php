@@ -32,6 +32,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 #[CoversClass(WorkflowsAcceptCommand::class)]
 #[CoversClass(WorkflowsRejectCommand::class)]
 #[CoversClass(WorkflowsReviewCommand::class)]
+#[CoversClass(InspectionPipeline::class)]
 final class ChangeReviewTest extends TestCase
 {
     use CopiesFixtureProjects;

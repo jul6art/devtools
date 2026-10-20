@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Tests\Inspection\Model\Serialization;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
+use Jul6Art\DevTools\Inspection\Model\Serialization\EntryPointXml;
 use Jul6Art\DevTools\Inspection\Model\Serialization\ModelXmlSerializer;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Tests\Inspection\Model\ModelFixtures;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ModelXmlSerializer::class)]
 #[CoversClass(SafeXmlLoader::class)]
 #[CoversClass(InvalidXml::class)]
+#[CoversClass(EntryPointXml::class)]
 final class ModelXmlSerializerTest extends TestCase
 {
     use AssertsSnapshots;

@@ -34,6 +34,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 #[CoversClass(Reason::class)]
 #[CoversClass(GitClient::class)]
 #[CoversClass(FileHasher::class)]
+#[CoversClass(InspectionPipeline::class)]
 final class FreshnessTest extends TestCase
 {
     use CopiesFixtureProjects;
@@ -113,12 +114,33 @@ final class FreshnessTest extends TestCase
 
         $orphaned = $this->inspect(adapter: new FakeAdapter(['app_order_show']));
         self::assertSame(DecisionKind::Orphan, $orphaned->decision('route.order.show')?->kind);
+        self::assertSame(TrackingStatus::Orphaned, $orphaned->decision('route.order.show')->status());
         self::assertFileExists($this->project.'/docs/workflows/routes/order.show.md');
 
         $this->inspect(prune: true, adapter: new FakeAdapter(['app_order_show']));
         self::assertFileDoesNotExist($this->project.'/docs/workflows/routes/order.show.md');
         self::assertFileDoesNotExist($this->project.'/.devtools/workflows/routes/order.show.xml');
         self::assertStringNotContainsString('route.order.show', (string) file_get_contents($this->project.'/.devtools/index.xml'));
+    }
+
+    /**
+     * A route removed then restored (a revert, a branch switched back): its page was kept and flagged, and
+     * it must come back to life — rewritten, its history saying why — instead of staying orphaned forever.
+     */
+    public function testAnOrphanWhoseEntryPointComesBackIsRewrittenAndNoLongerOrphaned(): void
+    {
+        $repository = GitRepository::initialise($this->project);
+        $this->inspect();
+        $repository->commitAll('documentation');
+        $this->inspect(adapter: new FakeAdapter(['app_order_show']));
+        self::assertSame(TrackingStatus::Orphaned, $this->tracking('route.order.show')->status);
+
+        $report = $this->inspect();
+
+        self::assertSame(DecisionKind::Rewrite, $report->decision('route.order.show')?->kind);
+        self::assertEquals([Reason::entryPointBack()], $report->decision('route.order.show')->reasons);
+        self::assertSame(TrackingStatus::Fresh, $this->tracking('route.order.show')->status);
+        self::assertSame(['route.order.show'], $this->rewritten($report), 'Nothing else moved.');
     }
 
     public function testPruneOnlyDeletesThePagesOfTheTypeBeingWritten(): void

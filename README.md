@@ -809,7 +809,7 @@ Quality assurance
 ```shell
 composer qa            # cs-check + rector-check + phpstan (level max) + phpunit
 composer coverage      # needs pcov or Xdebug: > 90 % of src/, 100 % of Freshness/ and Tracking/
-composer infection     # mutation testing of Freshness/ and Tracking/, needs a coverage driver too
+composer infection     # mutation testing of Freshness/ and Tracking/: 96 % MSI at least, measured on 4 threads
 ```
 
 The suite includes the end-to-end group: every fixture project goes through the binary in a temporary git

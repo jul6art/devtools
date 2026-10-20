@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Ai\ApplyResult;
 use Jul6Art\DevTools\Ai\DraftApplier;
 use Jul6Art\DevTools\Clock\FrozenClock;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\ClaudeDrivenAdapter;
+use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\DiscoveryBrief;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\XmlDiscoveryBriefStore;
 use Jul6Art\DevTools\Inspection\Adapter\Symfony\ConsoleFailed;
@@ -33,6 +34,9 @@ use Symfony\Component\Filesystem\Filesystem;
 #[CoversClass(ClaudeDrivenAdapter::class)]
 #[CoversClass(DiscoveryBrief::class)]
 #[CoversClass(XmlDiscoveryBriefStore::class)]
+#[CoversClass(DraftApplier::class)]
+#[CoversClass(InspectionPipeline::class)]
+#[CoversClass(Discovery::class)]
 final class ClaudeDrivenTest extends TestCase
 {
     use CopiesFixtureProjects;

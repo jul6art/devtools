@@ -38,6 +38,49 @@ final class InitializerTest extends TestCase
         self::assertStringContainsString("/.devtools/pending/\n/.devtools/reports/\n", (string) file_get_contents($this->temporaryDirectory().'/.gitignore'));
     }
 
+    /**
+     * `init` prints this list: what it names is what the project now holds, project-relative.
+     */
+    public function testAFirstRunNamesEverythingItCreated(): void
+    {
+        $created = new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory())));
+        $schemas = array_map(static fn (string $schema): string => '.devtools/schemas/'.basename($schema), glob(\dirname(__DIR__, 2).'/resources/schemas/*.xsd') ?: []);
+
+        self::assertNotSame([], $schemas);
+        self::assertSame(
+            ['.devtools/', '.devtools/workflows/', '.devtools/knowledge/', '.devtools/graph/', '.devtools/schemas/', '.devtools/pending/', '.devtools/reports/', '.devtools/config.xml', ...$schemas, '.gitignore'],
+            $created,
+        );
+    }
+
+    public function testAProjectWithoutGitignoreGetsOneHoldingOnlyTheWorkAreas(): void
+    {
+        new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory())));
+
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n");
+    }
+
+    /**
+     * A last line without its newline must not be glued to the block: `/vendor/# DevTools…` would stop
+     * ignoring vendor/.
+     */
+    public function testAGitignoreWithoutAFinalNewlineKeepsItsLastLineIntact(): void
+    {
+        file_put_contents($this->temporaryDirectory().'/.gitignore', '/vendor/');
+
+        new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory())));
+
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "/vendor/\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n");
+    }
+
+    public function testALineWithSpacesAroundItIsTheSameEntry(): void
+    {
+        file_put_contents($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n");
+
+        self::assertNotContains('.gitignore', new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()))));
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n");
+    }
+
     public function testRunningItAgainModifiesNothing(): void
     {
         $directory = new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()));
@@ -60,6 +103,7 @@ final class InitializerTest extends TestCase
         self::assertStringStartsWith("/vendor/\n.devtools/pending\n", $gitignore);
         self::assertSame(1, substr_count($gitignore, 'pending'));
         self::assertSame(1, substr_count($gitignore, '/.devtools/reports/'));
+        self::assertSame("/vendor/\n.devtools/pending\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/reports/\n", $gitignore, 'One blank line before the block, not two.');
     }
 
     public function testItNeverOverwritesAConfigTheProjectEdited(): void

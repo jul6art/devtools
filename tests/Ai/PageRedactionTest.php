@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Tests\Ai;
 
 use Jul6Art\DevTools\Ai\ApplyResult;
 use Jul6Art\DevTools\Ai\DraftApplier;
+use Jul6Art\DevTools\Ai\GroupBrief;
 use Jul6Art\DevTools\Ai\PageBrief;
 use Jul6Art\DevTools\Ai\PageDraft;
 use Jul6Art\DevTools\Ai\PageDraftValidator;
@@ -33,6 +34,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(PageDraft::class)]
 #[CoversClass(PageDraftValidator::class)]
 #[CoversClass(XmlPageBriefStore::class)]
+#[CoversClass(XmlGroupBriefStore::class)]
+#[CoversClass(GroupBrief::class)]
 final class PageRedactionTest extends TestCase
 {
     use CopiesFixtureProjects;
