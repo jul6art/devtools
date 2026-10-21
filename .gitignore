@@ -36,3 +36,4 @@
 # DevTools work areas — https://github.com/jul6art/devtools
 /.devtools/runs/
 /.devtools/gate/
+/.devtools/stats/

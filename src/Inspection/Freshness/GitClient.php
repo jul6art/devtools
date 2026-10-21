@@ -112,6 +112,20 @@ final class GitClient
     }
 
     /**
+     * The files of the project git knows of — tracked, or new and not ignored — relative to it, in one process
+     * (ADR-0026). Null outside a repository. A path in conflict, listed once per stage of the merge, is listed
+     * once.
+     *
+     * @return list<string>|null
+     */
+    public function files(ProjectRoot $root): ?array
+    {
+        [$ok, $output] = $this->git($root, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']);
+
+        return $ok ? array_values(array_unique(self::nameList($output))) : null;
+    }
+
+    /**
      * The directory of the project inside its repository, `app/` or `''` — from the nearest `.git`, a
      * directory or the file of a worktree.
      */

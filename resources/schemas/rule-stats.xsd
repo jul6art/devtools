@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What each rule did: .devtools/stats/rules.xml (ADR-0026, ADR-0027). Never committed — a count that moves on every
+    edit would be a diff on every edit. Given to Claude ("applied"), it is counted by the hook; stopping a change
+    ("blocked"), by the gate.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/rule-stats/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/rule-stats/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="rule-stats">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="applied" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="blocked" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="last-applied" type="xs:dateTime"/>
+                        <xs:attribute name="last-blocked" type="xs:dateTime"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+        <xs:unique name="ruleId">
+            <xs:selector xpath="t:rule"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

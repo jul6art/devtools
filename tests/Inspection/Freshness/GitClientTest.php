@@ -11,6 +11,7 @@ use Jul6Art\DevTools\Tests\Support\GitRepository;
 use Jul6Art\DevTools\Tests\Support\UsesTemporaryDirectory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
 /**
  * Each question freshness asks git, answered by a real repository of the test's own (ADR-0010) — and the
@@ -103,6 +104,30 @@ final class GitClientTest extends TestCase
 
         self::assertSame(['src/Line.php', 'src/Order.php'], new GitClient()->changedSince($root, $since));
         self::assertSame([], new GitClient()->changedSince($root, 'f00df00df00df00df00df00df00df00df00df00d'));
+    }
+
+    /**
+     * The files git knows of: tracked or new, never ignored — and a path in conflict, which git lists once per
+     * stage of the merge, once. Outside a repository, git cannot say.
+     */
+    public function testTheFilesOfTheProjectAreListedOnceEvenInConflict(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('.');
+        $root = new ProjectRoot($repository->path);
+        $repository->git('checkout', '--quiet', '-b', 'other');
+        file_put_contents($repository->path.'/src/Order.php', "<?php // theirs\n");
+        $repository->commitAll('theirs');
+        $repository->git('checkout', '--quiet', 'main');
+        file_put_contents($repository->path.'/src/Order.php', "<?php // ours\n");
+        $repository->commitAll('ours');
+        new Process(['git', 'merge', '--quiet', 'other'], $repository->path, ['GIT_CONFIG_GLOBAL' => '/dev/null', 'GIT_CONFIG_NOSYSTEM' => '1'])->run();
+        file_put_contents($repository->path.'/.gitignore', "*.log\n");
+        file_put_contents($repository->path.'/debug.log', 'ignored');
+        file_put_contents($repository->path.'/src/New.php', '<?php');
+
+        self::assertSame(3, substr_count($repository->git('ls-files'), 'src/Order.php'), 'In conflict: once per stage.');
+        self::assertSame(['.gitignore', 'src/New.php', 'src/Order.php', 'src/Other.php'], new GitClient()->files($root));
+        self::assertNull(new GitClient()->files(new ProjectRoot($this->temporaryDirectory())));
     }
 
     /**

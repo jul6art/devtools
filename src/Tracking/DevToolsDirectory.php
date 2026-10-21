@@ -29,7 +29,7 @@ final readonly class DevToolsDirectory
     /**
      * Work areas never committed, added to the project's `.gitignore` by `init`.
      */
-    public const array IGNORED = ['pending', 'reports', 'runs', 'gate'];
+    public const array IGNORED = ['pending', 'reports', 'runs', 'gate', 'stats'];
 
     public const string DEFAULT_DOCS = 'docs/workflows';
 
@@ -145,6 +145,22 @@ final readonly class DevToolsDirectory
     public function feedbackDirectory(): string
     {
         return $this->path('feedback');
+    }
+
+    /**
+     * `.devtools/rules/`: the rules of the project and their index (ADR-0026), versioned.
+     */
+    public function rulesDirectory(): string
+    {
+        return $this->path('rules');
+    }
+
+    /**
+     * `.devtools/stats/rules.xml`: what each rule did (ADR-0026) — a count that moves on every edit, never committed.
+     */
+    public function ruleStatsFile(): string
+    {
+        return $this->path('stats/rules.xml');
     }
 
     /**

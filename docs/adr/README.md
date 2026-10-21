@@ -43,7 +43,7 @@
 | [0023](0023-gate.md) | Gate : Claude ne peut pas déclarer la tâche finie tant qu'elle échoue | 1 — Impact, MCP, gate | Accepted | 2026-10-20 |
 | [0024](0024-sous-agent-verifier.md) | Sous-agent `verifier` | 1 — Impact, MCP, gate | Accepted | — |
 | [0025](0025-retours-types.md) | Retours typés et détection de récurrence | 2 — Retours et règles | Accepted | 2026-10-20 |
-| [0026](0026-regles-et-injection-contextuelle.md) | Promotion en règles et injection contextuelle | 2 — Retours et règles | Proposed | — |
+| [0026](0026-regles-et-injection-contextuelle.md) | Promotion en règles et injection contextuelle | 2 — Retours et règles | Accepted | 2026-10-20 |
 | [0027](0027-assertions-mecaniques.md) | Assertions mécaniques | 2 — Retours et règles | Proposed | — |
 | [0028](0028-interface-de-revue-humaine.md) | Interface de revue humaine | 2 — Retours et règles | Proposed | — |
 | [0029](0029-retrospective-et-metriques.md) | Rétrospective et métriques | 2 — Retours et règles | Proposed | — |

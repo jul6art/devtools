@@ -41,6 +41,10 @@ through files, and DevTools validates everything you write before it reaches `.d
    the prompt each names (`resources/prompts/scenario/v1.md`), write the XML draft at its `<draft path>` —
    never a scenario whose origin is `human` — and apply with the pages.
 
+   **Rule briefs** (`rule.*.brief.xml`) exist only when someone ran `rules:promote`: follow the prompt each
+   names (`resources/prompts/rule/v1.md`), write one rule at its `<draft path>` — `status="proposed"`, a human
+   activates it — and apply with the pages.
+
 4. Apply the drafts:
 
    ```shell

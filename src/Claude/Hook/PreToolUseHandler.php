@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Claude\Hook;
 
+use Jul6Art\DevTools\Clock\Clock;
+use Jul6Art\DevTools\Clock\SystemClock;
+use Jul6Art\DevTools\Impact\Impact;
 use Jul6Art\DevTools\Impact\ImpactedWorkflow;
 use Jul6Art\DevTools\Impact\ImpactRelation;
 use Jul6Art\DevTools\Impact\ImpactResolver;
 use Jul6Art\DevTools\Project\PathOutsideProject;
+use Jul6Art\DevTools\Rule\RuleIndexEntry;
+use Jul6Art\DevTools\Rule\RuleRepository;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\FileRelation;
 use Jul6Art\DevTools\Tracking\XmlFilesToWorkflowsStore;
+use Jul6Art\DevTools\Xml\InvalidXml;
 
 /**
  * Before Claude modifies a file, what the change will reach (ADR-0019): the workflows, their pages, their
- * tests — added to its context, never in its way.
+ * tests — and the active rules that apply to it (ADR-0026) — added to its context, never in its way.
  *
- * Silent on a tool that writes no file, on a file outside the project, and when nothing is reached; one
- * line on a file no workflow references.
+ * Silent on a tool that writes no file, on a file outside the project, and when nothing is reached and no rule
+ * applies; one line on a file no workflow references.
  */
 final readonly class PreToolUseHandler implements HookHandlerInterface
 {
@@ -36,7 +42,7 @@ final readonly class PreToolUseHandler implements HookHandlerInterface
      */
     private const int TESTS = 3;
 
-    public function __construct(private ImpactResolver $resolver = new ImpactResolver())
+    public function __construct(private ImpactResolver $resolver = new ImpactResolver(), private Clock $clock = new SystemClock())
     {
     }
 
@@ -58,13 +64,22 @@ final readonly class PreToolUseHandler implements HookHandlerInterface
         }
 
         $impact = $this->resolver->resolve($directory, [$file]);
+        $lines = [...$this->impact($directory, $file, $impact), ...$this->rules($directory, $file, $impact)];
 
+        return [] === $lines ? null : self::answer(implode("\n", $lines));
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function impact(DevToolsDirectory $directory, string $file, Impact $impact): array
+    {
         if ([] !== $impact->uncovered) {
-            return self::answer(\sprintf('DevTools: no documented workflow references %s yet — the next workflows:inspect will tell where it belongs.', $file));
+            return [\sprintf('DevTools: no documented workflow references %s yet — the next workflows:inspect will tell where it belongs.', $file)];
         }
 
         if ([] === $impact->workflows) {
-            return null;
+            return [];
         }
 
         $tests = self::tests($directory, $impact->workflows);
@@ -89,7 +104,36 @@ final readonly class PreToolUseHandler implements HookHandlerInterface
             $lines[] = '⚠ '.$impact->warning();
         }
 
-        return self::answer(implode("\n", $lines));
+        return $lines;
+    }
+
+    /**
+     * The active rules that apply to the file or to the kind of a workflow it is part of (ADR-0026): their
+     * identifier and their instruction, nothing else — and each counted as given.
+     *
+     * @return list<string>
+     */
+    private function rules(DevToolsDirectory $directory, string $file, Impact $impact): array
+    {
+        $repository = new RuleRepository($directory);
+
+        try {
+            $rules = $repository->index()->applicableTo($file, array_values(array_unique(array_map(static fn (ImpactedWorkflow $workflow): string => $workflow->type->name, $impact->workflows))));
+        } catch (InvalidXml $invalid) {
+            return ['⚠ DevTools cannot read the rules: '.$invalid->getMessage()];
+        }
+
+        if ([] === $rules) {
+            return [];
+        }
+
+        $ids = array_map(static fn (RuleIndexEntry $rule): string => $rule->id, $rules);
+        $repository->saveStats($repository->stats()->applied($ids, $this->clock->now()));
+
+        return [
+            \sprintf('DevTools: the rules of this project for %s — follow them:', $file),
+            ...array_map(static fn (RuleIndexEntry $rule): string => \sprintf('- %s: %s', $rule->id, $rule->instruction), $rules),
+        ];
     }
 
     /**

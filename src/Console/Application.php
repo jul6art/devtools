@@ -19,6 +19,9 @@ use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\McpServeCommand;
+use Jul6Art\DevTools\Command\RulesActivateCommand;
+use Jul6Art\DevTools\Command\RulesListCommand;
+use Jul6Art\DevTools\Command\RulesPromoteCommand;
 use Jul6Art\DevTools\Command\ScenariosGenerateCommand;
 use Jul6Art\DevTools\Command\ScenariosRunCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
@@ -94,6 +97,9 @@ final class Application extends BaseApplication
             new FeedbackAddCommand(),
             new FeedbackListCommand(),
             new FeedbackResolveCommand(),
+            new RulesPromoteCommand(),
+            new RulesActivateCommand(),
+            new RulesListCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

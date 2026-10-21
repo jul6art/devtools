@@ -31,6 +31,7 @@ use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
 use Jul6Art\DevTools\Rendering\ParsedPage;
 use Jul6Art\DevTools\Rendering\RenderingContext;
+use Jul6Art\DevTools\Rule\RuleDraftApplier;
 use Jul6Art\DevTools\Scenario\ScenarioDraftApplier;
 use Jul6Art\DevTools\Scenario\ScenarioReview;
 use Jul6Art\DevTools\Scenario\XmlScenarioIndexStore;
@@ -102,6 +103,11 @@ final readonly class DraftApplier
         $scenarios = new ScenarioDraftApplier($this->writer)->apply($directory, $types);
         $result->accepted = [...$result->accepted, ...$scenarios['accepted']];
         $result->refused = [...$result->refused, ...$scenarios['refused']];
+
+        // And the rules (ADR-0026): feedback and the files of the project, never a page.
+        $rules = new RuleDraftApplier($this->writer)->apply($directory, $config);
+        $result->accepted = [...$result->accepted, ...$rules['accepted']];
+        $result->refused = [...$result->refused, ...$rules['refused']];
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
 
         if ([] === $drafts) {

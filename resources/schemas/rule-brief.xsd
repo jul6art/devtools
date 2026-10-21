@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to turn feedback into a rule: .devtools/pending/rule.<feedback-id>.brief.xml (ADR-0026).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/rule-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/rule-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="rule-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="vocabulary" type="t:pathElement"/>
+                <!-- What it is promoted from: each feedback, its file, and what it says. -->
+                <xs:element name="feedback" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="category" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="occurrences" type="xs:positiveInteger" use="required"/>
+                        <xs:attribute name="summary" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="workflow" type="t:nonEmpty"/>
+                        <xs:attribute name="selector" type="t:nonEmpty"/>
+                        <xs:attribute name="file" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The files the feedback is about, those of its workflows included: where the globs start from. -->
+                <xs:element name="file" type="t:pathElement" minOccurs="0" maxOccurs="unbounded"/>
+                <!-- What applies-to may name. -->
+                <xs:element name="workflow-type" type="t:nameElement" maxOccurs="unbounded"/>
+                <xs:element name="category" type="t:nameElement" maxOccurs="unbounded"/>
+                <!-- The rules the project has, not to write twice. -->
+                <xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft" type="t:pathElement"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <!-- The date the rule is created on. -->
+            <xs:attribute name="date" type="xs:date" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="nameElement">
+        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

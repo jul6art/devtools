@@ -142,6 +142,8 @@ Usage
 | | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
 | **After a review** | `devtools feedback:add` | records a remark: its workflow, element or file, its category, one line — or counts it again | `.devtools/feedback/` |
 | | `devtools feedback:list` / `feedback:resolve <id>` | what is open, by category or workflow; closed as fixed or set aside | `.devtools/feedback/` |
+| **Seen twice** | `devtools rules:promote <feedback>` | asks Claude for the rule the feedback should become; `workflows:apply` checks its draft | a brief, then `.devtools/rules/` |
+| | `devtools rules:activate <rule>` / `rules:list` | you agree with a proposed rule: Claude is given it before editing a file it applies to | `.devtools/rules/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -701,12 +703,12 @@ vendor/bin/devtools claude:uninstall --hooks    # takes back exactly what it add
 
 | Event | When | What Claude is told |
 | --- | --- | --- |
-| `PreToolUse` | before `Edit`, `Write`, `MultiEdit` | the workflows the file reaches, their pages, a few of their tests — or, for a file no workflow references, one line saying so |
+| `PreToolUse` | before `Edit`, `Write`, `MultiEdit` | the workflows the file reaches, their pages, a few of their tests — or, for a file no workflow references, one line saying so — and the active [rules](#rules) that apply to it |
 | `SessionStart` | at the start of a session | how many workflows are documented and where, those to check, and the MCP server when it is installed |
 | `Stop` | when Claude is about to end a task | the gate: while it fails, the task is not finished — see [The gate](#the-gate) |
 
 `PreToolUse` and `SessionStart` add to Claude's context and **never block anything**: a tool that writes no file, a file
-outside the project or a file that reaches nothing gets no answer at all, and whatever goes wrong — no
+outside the project or a file that reaches nothing and no rule applies to gets no answer at all, and whatever goes wrong — no
 index, a broken map, an input DevTools does not understand — exits 0 with nothing injected and the cause on
 the standard error. Measured on a project of three hundred routes, the `PreToolUse` answer takes about
 75 ms end to end, PHP started.
@@ -991,13 +993,57 @@ to this one: the same selector, the same file, the same workflow — or two work
 a component they share. Found, it asks whether this is the same remark: yes adds an **occurrence** to it, no
 records a new one. `--auto` answers yes, `--new` answers no; without anyone to ask and without either, the
 command stops and says which feedback it found. A feedback `fixed` and seen again is open again; one set aside
-as `wont-fix` is not looked for. **Seen twice**, a feedback is worth a rule: the command says so, and the rule
+as `wont-fix` is not looked for. **Seen twice**, a feedback is worth a rule: the command says so, and [the rule](#rules)
 is the next step.
 
 Each feedback is a file, `.devtools/feedback/<year>/<id>.xml`, its identifier made of the day and of what it is
 about — `fb-2026-10-20-order-product` — and `index.xml` lists them all: it is what `list` and the search for a
 recurrence read, never the files one by one. Both are versioned with the project — a feedback is shared like the
 code it is about.
+
+Rules
+-----
+
+A remark said twice is worth more than a third time: a **rule** says it once, and is given to Claude right
+before it edits a file the rule applies to — not in a `CLAUDE.md` read at every session, where it would weigh
+on everything and apply to nothing in particular.
+
+```shell
+vendor/bin/devtools rules:promote fb-2026-10-18-order-product [fb-…]   # a brief for Claude
+vendor/bin/devtools workflows:apply                                    # its draft, checked: a proposed rule
+vendor/bin/devtools rules:list [--status=proposed|active|archived]
+vendor/bin/devtools rules:activate rule-product-fields-use-select2      # you agree: Claude is given it
+```
+
+`rules:promote` writes a brief: the feedback, the files it is about and those of its workflows, what a rule may
+name. Claude answers with a draft — the `devtools-inspect` skill follows every brief — and `workflows:apply`
+checks it before writing `.devtools/rules/<id>.xml`:
+
+```xml
+<rule xmlns="https://github.com/jul6art/devtools/schema/rule/1" schema-version="1"
+      id="rule-product-fields-use-select2" status="proposed" created="2026-10-20">
+  <origin feedback="fb-2026-10-18-order-product fb-2026-10-20-invoice-product"/>
+  <applies-to>
+    <files glob="templates/**/_form.html.twig"/>
+    <workflow-type>routes</workflow-type>
+    <category>ui-component</category>
+  </applies-to>
+  <instruction>An entity choice field with more than 20 options uses Select2Type, never a native select.</instruction>
+</rule>
+```
+
+- **Where it applies**: globs of files, kinds of workflow, or both — of one kind any of them, of both kinds one
+  of each. Never everywhere: a rule for every file belongs to the project's `CLAUDE.md`. Each glob must match a
+  file of the project; `*` stays in a directory, `**` crosses them, `{a,b}` is one or the other.
+- **What it says**: one to three sentences. A rule that needs a paragraph is two rules.
+- **Proposed** by Claude, **active** once a human runs `rules:activate` — checked again then, the project may have
+  moved — and only then given. The feedback it comes from is `promoted` to it, and no longer proposed for a rule.
+
+Before an edit, the `PreToolUse` hook adds the active rules that apply to the file — its path, or the kind of a
+workflow it is part of — to what it says of the impact: the identifier and the instruction, nothing else, **five
+at most**, the most specific first (the longest glob written out, then the rule that asks for both a file and a
+kind of workflow). Each time a rule is given counts, in `.devtools/stats/rules.xml`: a count that moves on every
+edit is never committed, and `init` adds `stats/` to the `.gitignore`. `rules:list` shows it.
 
 Writing with Claude Code
 ------------------------
@@ -1173,9 +1219,11 @@ src/
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
-│                            feedback:add, feedback:list, feedback:resolve, knowledge:list,
-│                            knowledge:promote, knowledge:amend
-├── Project/                 the project root, last guard against a path leaving it; the inspection lock
+│                            feedback:add, feedback:list, feedback:resolve, rules:promote,
+│                            rules:activate, rules:list, knowledge:list, knowledge:promote,
+│                            knowledge:amend
+├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
+│                            the files of a project
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
 ├── Review/                  accepting a changed fact, or refusing it and undoing the code
@@ -1196,6 +1244,7 @@ src/
 ├── Verification/            the folder a verifier judges a change on, and its verdict, checked
 ├── Gate/                    the gate: its steps, its last passage
 ├── Feedback/                feedback as data: its categories, its files and index, the search for a recurrence
+├── Rule/                    rules: their format, globs, the brief and draft of a promotion, what each did
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
