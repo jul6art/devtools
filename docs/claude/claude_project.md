@@ -253,6 +253,27 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
   rejoint `IGNORED`. La gate ne juge jamais `gate/`, `runs/`, `pending/`, `reports/`, `stats/` ni
   `journal/` — le journal, écrit par le hook `Stop`, ouvrirait sinon la tâche suivante.
 
+- **Phases 3 et 4 (ADR-0030 à 0040)** : paquets `Inspection/Adapter/{Laravel,Angular,Express,JavaScript}/`,
+  `Inspection/Node/` (le pont Node : un processus, le TypeScript du projet), `Rendering/Site/`, `Release/`,
+  `Ai/Api/`, `Tracking/Rename/`, `Glossary/`, `Link/`, `Ask/`. Les classes qui ouvrent une connexion sont
+  **nommées par décision** et seules autorisées : `Ai/Api/AnthropicClient.php` (ADR-0035) et
+  `Release/GitHubReleases.php` (ADR-0034) — la liste `CONNECTING` du test d'ADR-0002.
+- ⚠️ **L'API Claude est coupée par défaut** (`<ai enabled="true"/>` absent : `ai:run` et `ask` refusent),
+  à la demande expresse de l'utilisateur (« peur des tokens »). La clé ne se lit que dans
+  `ANTHROPIC_API_KEY`. **Aucun test, aucune vérification ne lance une vraie session** : fausse API servie
+  (`tests/Fixtures/anthropic/router.php`) ou client doublé (`tests/Ask/AnsweringClient.php`).
+- **Fixtures JavaScript** (`angular-minimal`, `ionic-tabs`, `express-api`, `express-api-ts`,
+  `monorepo-link/mobile`) : seuls `package.json` et `package-lock.json` sont versionnés ; `node_modules/` est
+  installé au premier test par `tests/Support/NodeDependencies.php` (`npm ci`, réseau une fois) et ignoré
+  (`/tests/Fixtures/projects/*/node_modules/` et `*/*/node_modules/`).
+- **Ce que les phases 3 et 4 écrivent dans `.devtools/`** : `glossary.xml` et `graph/links.xml` sont
+  versionnés ; `search.idx` ne l'est pas (un cache, reconstruit par toute question) : il rejoint
+  `IGNORED_FILES`, la gate ne le juge pas, et toute comparaison d'arborescence l'écarte.
+- `tests/EndToEnd/DistributionTest` (phar, image Docker) ne tourne que si `DEVTOOLS_BOX` désigne un
+  `box.phar` : sinon ignoré, en le disant.
+- ⚠️ **Packagist n'a que la v3.3.0**, antérieure aux hooks, au serveur MCP et au vérificateur. Le générateur
+  de squelettes (ADR-0040) exige `^3.4` : **publier DevTools 3.4.0 avant de pousser le générateur**.
+
 ---
 
 ## Definition of done

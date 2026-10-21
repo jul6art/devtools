@@ -763,3 +763,32 @@
   commande par le `cd` de la racine du dépôt.
 - **Dans une page, `<mot>` disparaît** — balise inconnue pour GitHub, pour Mermaid aussi : écrire `AAAA`, ou
   des mots.
+
+### 2026-10-21 — Phases 3 et 4 : adaptateurs natifs, distribution, API Claude, glossaire, projets liés, questions
+
+- ⚠️ **Un commentaire XML ne peut pas contenir `--`** : `--link` écrit dans le gabarit `config.xml` puis dans
+  deux XSD a cassé la lecture de la configuration de tous les projets (« Double hyphen within comment »).
+  **Règle :** une option de la ligne de commande se nomme en mots dans un commentaire XML (« l'option link de
+  workflows:inspect »).
+- ⚠️ **PHP-CS-Fixer dégrade `/** @var … */` en `/* @var … */`** (`phpdoc_to_comment`) quand l'annotation ne
+  précède pas une déclaration : PHPStan a perdu le type du retour de l'API sans que rien ne casse au style.
+  **Règle :** ne pas forcer un type par annotation (consignes de PHPStan) ; le réduire dans le code
+  (`array_filter(…, \is_string(...), \ARRAY_FILTER_USE_KEY)`), et relancer PHPStan après `composer cs`.
+- ⚠️ **zsh ne découpe pas `set -- $chaine`** : quatre générations du squelette sont parties avec un nom de
+  dossier contenant leurs options, et sans mode. **Règle :** une boucle sur des listes d'arguments se fait dans
+  `bash -c`, ou avec des tableaux explicites — jamais en comptant sur le découpage d'une variable sous zsh.
+- **Packagist n'a que ce qui a été publié** : la v3.3.0 précède les hooks, le serveur MCP et le vérificateur
+  (ADR-0018, 0019, 0024). Une intégration en aval qui exige une fonction se vérifie contre la version qui la
+  porte — dépôt `path` dans un `COMPOSER_HOME` temporaire, jamais en touchant à la configuration de la
+  machine — et attend sa publication.
+- **`symfony new --docker` ne met pas PHP en conteneur** : seulement les services (base, mailer), dont la CLI
+  Symfony passe les variables aux commandes. La console d'un projet du générateur est `symfony console`, en
+  `--docker` aussi ; l'ADR-0040 supposait un conteneur `php`.
+- **Un cache écrit par une commande doit sortir de toute comparaison d'arborescence** : `search.idx`, écrit par
+  l'inspection, a fait échouer trois tests qui comparaient un projet avant et après (ChangeReview, lien de
+  projets). Il rejoint `IGNORED_FILES`, `Gate::OWN` et les filtres des tests à sa création.
+- **Un outil MCP déclaré en lecture seule n'écrit même pas un cache** : `search_workflows` reconstruit un index
+  périmé en mémoire (`save: false`).
+- **Des pages réécrites en masse se génèrent depuis la prose existante** : les sections de Claude relues, les
+  blocs de décision repris par cible, retirés ou ajoutés selon le modèle — le validateur exige exactement les
+  cibles du modèle, et un script qui compare les deux listes avant d'écrire évite 35 refus.
