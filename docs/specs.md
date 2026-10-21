@@ -506,6 +506,13 @@ Cible : couverture > 90 % sur le cœur, 100 % sur `Freshness/` et `Tracking/`. L
 ### Phase 3 — Généralisation
 - Adaptateurs Laravel, Angular, Node natifs ; publication open source ; site de documentation.
 
+### Phase 4 — Compléments
+- Rédaction par l'API Claude en CI, coupée par défaut ; `workflows:rename` ; glossaire métier ;
+  multi-projets front/API ; `devtools ask` ; intégration au générateur de squelettes.
+
+> État au 2026-10-21 : les phases 0 à 4 sont livrées et publiées en 3.4.0. Ce qui a été décidé, et
+> pourquoi, est dans `docs/adr/` (ADR-0001 à 0049) ; une évolution nouvelle commence par une ADR.
+
 ---
 
 ## 10. Positionnement
@@ -525,13 +532,18 @@ Les outils existants documentent le code (PHPDoc, Compodoc, Swagger) ou testent 
 
 ---
 
-## 12. Questions ouvertes
+## 12. Questions ouvertes — tranchées
 
 1. Rédaction via API Claude (clé dans la CI) ou uniquement via Claude Code (skill `/devtools:inspect`) ? Les deux sont prévus ; laquelle par défaut ?
+   → **Claude Code par défaut.** La rédaction par l'API (`ai:run`, ADR-0035) existe pour la CI, mais reste coupée tant que le projet ne pose pas `<ai enabled="true"/>` : elle dépense des jetons.
 2. Profondeur par défaut du graphe de dépendances (2 niveaux ? jusqu'aux entités ?) ?
+   → **Trois sauts**, jusqu'aux entités : contrôleur → service → dépôt → entité (`<graph depth="3"/>`, ADR-0006) ; les fichiers structurels qu'un adaptateur déclare sont toujours inclus.
 3. Le `knowledge` généré doit-il remonter automatiquement dans le cœur (PR ouverte par l'outil) ?
+   → **Non.** Une fiche rédigée remonte d'elle-même dans une bibliothèque partagée entre projets (ADR-0041) ; `knowledge:promote` la copie dans ce que le paquet livre, et c'est un humain qui ouvre la PR.
 4. Gabarit de page : une seule version pour toutes les stacks, ou variantes par type de workflow ?
+   → **Un seul gabarit** de neuf sections, pour toutes les stacks et tous les types (ADR-0044), plus une page de groupe quand les routes sont regroupées par contrôleur (ADR-0045).
 5. Distribution standalone : phar, `composer global`, ou image Docker ?
+   → **Les trois** : Composer, dans le projet ou en global ; un phar dont `self-update` vérifie la somme et la provenance ; une image Docker construite depuis ce phar (ADR-0034).
 
 ---
 
