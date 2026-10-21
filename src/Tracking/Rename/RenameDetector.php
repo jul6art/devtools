@@ -32,31 +32,30 @@ final class RenameDetector
             $current[$workflow->id->value] = $workflow;
         }
 
-        $gone = array_diff_key($previous, $current);
-        $new = array_diff_key($current, $previous);
         $renames = [];
         $taken = [];
 
-        foreach ($gone as $old => $document) {
+        foreach (array_diff_key($previous, $current) as $document) {
             $before = array_map(static fn (TrackedFile $file): string => $file->file->path, $document->files);
             $best = null;
 
-            foreach ($new as $id => $workflow) {
-                if (isset($taken[$id]) || $workflow->type->name !== $document->type->name) {
+            foreach (array_diff_key($current, $previous) as $workflow) {
+                if (($taken[$workflow->id->value] ?? false) || $workflow->type->name !== $document->type->name) {
                     continue;
                 }
 
                 $after = array_map(static fn (FileRef $file): string => $file->path, $workflow->files);
-                $share = [] === $before || [] === $after ? 0.0 : \count(array_intersect($before, $after)) / max(\count($before), \count($after));
+                // Every workflow tracks its entry file: neither side is empty, and the 1 only guards a hand edit.
+                $share = \count(array_intersect($before, $after)) / max(\count($before), \count($after), 1);
 
                 if ($share >= self::THRESHOLD && (null === $best || $share > $best[1])) {
-                    $best = [$id, $share];
+                    $best = [$workflow->id->value, $share];
                 }
             }
 
             if (null !== $best) {
                 $taken[$best[0]] = true;
-                $renames[] = [(string) $old, (string) $best[0], $best[1]];
+                $renames[] = [$document->id->value, $best[0], $best[1]];
             }
         }
 

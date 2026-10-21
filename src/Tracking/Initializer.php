@@ -59,10 +59,17 @@ final readonly class Initializer
         $present = array_map(static fn (string $line): string => trim(trim($line), '/'), explode("\n", $current));
 
         // A directory is written with its trailing slash, a file without.
-        $missing = array_values(array_filter(
-            [...array_map(static fn (string $area): string => DevToolsDirectory::NAME.'/'.$area.'/', DevToolsDirectory::IGNORED), ...array_map(static fn (string $file): string => DevToolsDirectory::NAME.'/'.$file, DevToolsDirectory::IGNORED_FILES)],
-            static fn (string $entry): bool => !\in_array(rtrim($entry, '/'), $present, true),
-        ));
+        $entries = [];
+
+        foreach (DevToolsDirectory::IGNORED as $area) {
+            $entries[] = DevToolsDirectory::NAME.'/'.$area.'/';
+        }
+
+        foreach (DevToolsDirectory::IGNORED_FILES as $file) {
+            $entries[] = DevToolsDirectory::NAME.'/'.$file;
+        }
+
+        $missing = array_filter($entries, static fn (string $entry): bool => !\in_array(rtrim($entry, '/'), $present, true));
 
         if ([] === $missing) {
             return false;

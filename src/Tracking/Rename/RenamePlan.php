@@ -25,6 +25,11 @@ final class RenamePlan
     public array $moves = [];
 
     /**
+     * @var list<string> absolute paths of the directories removed whole once their files have moved
+     */
+    public array $removals = [];
+
+    /**
      * @var list<string>
      */
     public array $notes = [];
@@ -50,22 +55,21 @@ final class RenamePlan
         }
     }
 
+    /**
+     * A directory of the workflow's own — a scenario's, a baseline's — whose every file was moved.
+     */
+    public function removeDirectory(string $directory): void
+    {
+        $this->removals[] = $directory;
+    }
+
     public function apply(AtomicFileWriter $writer, Filesystem $filesystem): void
     {
         foreach ($this->writes as $path => $content) {
             $writer->write($path, $content);
         }
 
-        foreach (array_keys($this->moves) as $from) {
-            $filesystem->remove($from);
-        }
-
-        // A directory a move emptied — a scenario's, a baseline's — goes with it.
-        foreach (array_unique(array_map(\dirname(...), array_keys($this->moves))) as $directory) {
-            if (is_dir($directory) && [] === array_diff(scandir($directory) ?: [], ['.', '..'])) {
-                $filesystem->remove($directory);
-            }
-        }
+        $filesystem->remove([...array_keys($this->moves), ...$this->removals]);
     }
 
     /**

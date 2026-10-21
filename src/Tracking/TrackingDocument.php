@@ -119,6 +119,14 @@ final readonly class TrackingDocument
         $this->history = $history;
     }
 
+    /**
+     * The same workflow, its history one revision longer: a rename (ADR-0036) says so without rewriting it.
+     */
+    public function revised(Revision $revision): self
+    {
+        return new self($this->id, $this->type, $this->title, $this->generated, $this->vcs, $this->main, $this->satellites, $this->files, $this->tests, $this->packages, $this->dependsOn, $this->confidence, $this->producer, $this->status, [...$this->history, $revision], $this->decisions, $this->mechanisms, $this->group);
+    }
+
     public function lastRevision(): Revision
     {
         return array_last($this->history);

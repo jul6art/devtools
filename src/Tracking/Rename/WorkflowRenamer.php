@@ -12,6 +12,7 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Tracking\AtomicFileWriter;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\IndexEntry;
+use Jul6Art\DevTools\Tracking\Revision;
 use Jul6Art\DevTools\Tracking\XmlIndexStore;
 use Jul6Art\DevTools\Tracking\XmlTrackingStore;
 use Symfony\Component\Filesystem\Filesystem;
@@ -72,31 +73,23 @@ final readonly class WorkflowRenamer
 
         // The tracking file: the identifier changed, the history kept, one revision more.
         $trackingStore = new XmlTrackingStore($types, $this->writer);
-        $commit = $this->git->state($directory->root)?->commit;
-        $revision = \sprintf('<revision at="%s"%s reason="renamed from %s"/>', $this->clock->now()->format(\DATE_ATOM), null === $commit ? '' : ' commit="'.$commit.'"', $old->value);
-        $tracking = (string) preg_replace('#(\s*)</history>#', '$1  '.$revision.'$1</history>', self::replace((string) file_get_contents($oldTracking), $old, $new), 1);
-        $plan->write($newTracking, $trackingStore->serialize($trackingStore->unserialize($tracking, $newTracking)));
+        $renamed = $trackingStore->unserialize(self::replace(self::read($oldTracking), $old, $new), $newTracking);
+        $plan->write($newTracking, $trackingStore->serialize($renamed->revised(new Revision($this->clock->now(), $this->git->state($directory->root)?->commit, 'renamed from '.$old->value))));
         $plan->move($oldTracking, $newTracking);
 
         // The index, serialized again so that the page follows the identifier.
-        $indexXml = self::replace((string) file_get_contents($directory->indexFile()), $old, $new);
+        $indexXml = self::replace(self::read($directory->indexFile()), $old, $new);
         $plan->write($directory->indexFile(), $indexStore->serialize($indexStore->unserialize($indexXml, $directory->indexFile())));
 
+        // Every other holder: a file under the workflow's own directory (a scenario) is written where it
+        // goes, and moved there with the rest of that directory below.
         foreach (self::HOLDERS as $holder) {
-            foreach (self::files($directory->path($holder)) as $file) {
-                if ($file === $oldTracking || $file === $directory->indexFile()) {
-                    continue;
-                }
-
-                $content = (string) file_get_contents($file);
+            foreach (array_diff(self::files($directory->path($holder)), [$oldTracking, $directory->indexFile()]) as $file) {
+                $content = self::read($file);
                 $replaced = self::replace($content, $old, $new);
 
                 if ($replaced !== $content) {
                     $plan->write(str_replace('/'.$old->value.'/', '/'.$new->value.'/', $file), $replaced);
-
-                    if (str_contains($file, '/'.$old->value.'/')) {
-                        $plan->move($file, str_replace('/'.$old->value.'/', '/'.$new->value.'/', $file));
-                    }
                 }
             }
         }
@@ -115,18 +108,16 @@ final readonly class WorkflowRenamer
 
                     $plan->move($file, $target);
                 }
+
+                $plan->removeDirectory($from);
             }
         }
 
         // The pages: the identifier in their text, and the links to the moved page.
-        foreach (self::files($docs) as $file) {
-            if (!str_ends_with($file, '.md')) {
-                continue;
-            }
-
-            $content = (string) file_get_contents($file);
+        foreach (array_filter(self::files($docs), static fn (string $file): bool => str_ends_with($file, '.md')) as $file) {
+            $content = self::read($file);
             $target = $file === $oldPage ? $newPage : $file;
-            $replaced = self::links(self::replace($content, $old, $new), \dirname($file), \dirname($target), $oldPage, $newPage);
+            $replaced = self::links(self::replace($content, $old, $new), \dirname($file), $oldPage, $newPage);
 
             if ($replaced !== $content || $target !== $file) {
                 $plan->write($target, $replaced);
@@ -138,7 +129,7 @@ final readonly class WorkflowRenamer
         }
 
         // Its comments name example identifiers: only what the configuration says counts.
-        if (is_file($directory->configFile()) && 1 === preg_match(self::pattern($old), (string) preg_replace('/<!--.*?-->/s', '', (string) file_get_contents($directory->configFile())))) {
+        if (is_file($directory->configFile()) && 1 === preg_match(self::pattern($old), (string) preg_replace('/<!--.*?-->/s', '', self::read($directory->configFile())))) {
             $plan->notes[] = \sprintf('.devtools/config.xml names %s: DevTools never rewrites it — update it yourself.', $old->value);
         }
 
@@ -163,29 +154,22 @@ final readonly class WorkflowRenamer
     }
 
     /**
-     * Markdown links resolved from the page's directory: one reaching the old page reaches the new one, from
-     * wherever the page now is.
+     * Markdown links resolved from the page's directory: one reaching the old page reaches the new one, its
+     * anchor kept. A rename keeps the type and the group, hence the directory: no other link moves.
      */
-    private static function links(string $markdown, string $from, string $to, string $oldPage, string $newPage): string
+    private static function links(string $markdown, string $directory, string $oldPage, string $newPage): string
     {
-        return (string) preg_replace_callback('/\]\(([^)\s#]+)(#[^)\s]*)?\)/', static function (array $match) use ($from, $to, $oldPage, $newPage): string {
-            if (1 === preg_match('#^[a-z]+:#', $match[1])) {
-                return $match[0];
-            }
-
-            $resolved = Path::canonicalize($from.'/'.$match[1]);
-            $target = $resolved === $oldPage ? $newPage : $resolved;
-
-            if ($target === $resolved && $from === $to) {
-                return $match[0];
-            }
-
-            return ']('.Path::makeRelative($target, $to).($match[2] ?? '').')';
-        }, $markdown);
+        return (string) preg_replace_callback(
+            '/\]\(([^)\s#]+)(#[^)\s]*)?\)/',
+            static fn (array $match): string => Path::canonicalize($directory.'/'.$match[1]) === $oldPage ? ']('.Path::makeRelative($newPage, $directory).($match[2] ?? '').')' : $match[0],
+            $markdown,
+        );
     }
 
     /**
-     * @return list<string> absolute paths, sorted
+     * The files under a directory — leaves only, so no directory — or the file itself.
+     *
+     * @return list<string> absolute paths
      */
     private static function files(string $path): array
     {
@@ -200,13 +184,16 @@ final readonly class WorkflowRenamer
         $files = [];
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $file) {
-            if ($file instanceof \SplFileInfo && $file->isFile()) {
+            if ($file instanceof \SplFileInfo) {
                 $files[] = $file->getPathname();
             }
         }
 
-        sort($files, \SORT_STRING);
-
         return $files;
+    }
+
+    private static function read(string $file): string
+    {
+        return (string) file_get_contents($file);
     }
 }

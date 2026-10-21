@@ -22,6 +22,8 @@
     },
     // The value reached on 2026-10-20 (ADR-0049): 654 of 677 mutants killed, 96.6 %. The 23 left are
     // equivalent mutants, justified one by one in ADR-0049 — a new survivor lowers the score and fails.
+    // 2026-10-21, with the rename of ADR-0036: 918 killed, 97 %; its four survivors are equivalent too,
+    // justified in ADR-0036.
     // Measured with 4 threads, as on a CI runner: on a loaded machine, slow tests time out, and a time out
     // counts as a kill without proving one.
     "minCoveredMsi": 96

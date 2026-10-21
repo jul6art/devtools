@@ -60,6 +60,20 @@ Fusion ou scission de workflows ; renommage d'un type de workflow.
 - **La page n'est pas réécrite** : son historique en Markdown attend la prochaine réécriture de ses faits,
   la révision est dans le XML de suivi.
 
+### Mutation (2026-10-21)
+
+Infection couvre `src/Tracking/Rename/` avec le reste de `Tracking` : 918 mutants tués, 97 %. Les tests
+qu'il a demandés ont trouvé un défaut — le dossier `baselines/<ancien>/` restait, vide, après le
+renommage —, et deux simplifications : un renommage garde le type et le groupe, donc le dossier de la page,
+si bien que seuls les liens vers l'ancienne page bougent ; les dossiers propres au workflow (`scenarios/`,
+`baselines/`) sont retirés en entier une fois leurs fichiers déplacés. Quatre mutants restent, équivalents :
+
+- `RenameDetector`, `max(…, 1)` changé en `max(…, 0)` ou `max(…, 2)` : le 1 ne protège que d'un fichier de
+  suivi édité à la main sans aucun fichier ; tout workflow suit au moins son fichier d'entrée, et deux
+  workflows qui partagent un fichier unique n'ont pas le même.
+- `WorkflowRenamer::read()` et `RenamePlan::copy()`, le transtypage de `file_get_contents()` retiré : les
+  chemins lus viennent d'un parcours du disque fait juste avant, et ne manquent pas.
+
 ## Conséquences
 
 - La règle « changer un identifiant est cassant » (ADR-0003) garde son sens pour la **dérivation** ;

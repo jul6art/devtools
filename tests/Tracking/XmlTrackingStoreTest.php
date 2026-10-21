@@ -84,6 +84,23 @@ final class XmlTrackingStoreTest extends TestCase
     }
 
     /**
+     * ADR-0036: a renamed workflow keeps everything it knew, its history one revision longer.
+     */
+    public function testARevisedDocumentKeepsAllAndAddsOneRevision(): void
+    {
+        $document = self::groupedWithMechanismsAndDecisions();
+        $revision = new Revision(new \DateTimeImmutable('2026-10-21T10:00:00+00:00'), 'abc1234', 'renamed from route.order.create');
+        $revised = $document->revised($revision);
+
+        self::assertSame([...$document->history, $revision], $revised->history);
+        self::assertSame($revision, $revised->lastRevision());
+
+        $everythingElse = static fn (TrackingDocument $tracked): array => array_diff_key(get_object_vars($tracked), ['history' => true]);
+        self::assertEquals($everythingElse($document), $everythingElse($revised));
+        self::assertNotNull($document->group, 'A document that carries every optional part, so that none is dropped unseen.');
+    }
+
+    /**
      * The schema cannot count attribute values: "exactly one main entry point" is checked on read.
      */
     public function testADocumentDeclaringTwoMainEntryPointsIsRefused(): void
