@@ -20,7 +20,8 @@ final class NodeScriptTest extends TestCase
     {
         NodeDependencies::install(__DIR__.'/../../Fixtures/projects/angular-minimal');
 
-        $run = new Process(['node', '--test', 'tests/Node/devtools-analyze.test.mjs'], \dirname(__DIR__, 3), timeout: 300);
+        // The reporter is named: without a terminal — in CI — Node writes TAP, and `ℹ fail 0` is the spec reporter's.
+        $run = new Process(['node', '--test', '--test-reporter=spec', 'tests/Node/devtools-analyze.test.mjs'], \dirname(__DIR__, 3), timeout: 300);
         $run->run();
 
         self::assertSame(0, $run->getExitCode(), $run->getOutput().$run->getErrorOutput());
