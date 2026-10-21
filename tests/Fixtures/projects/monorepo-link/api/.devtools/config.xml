@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
+    <!-- The mobile application, which calls this API. -->
+    <links>
+        <project name="mobile" path="../mobile" role="client"/>
+    </links>
+</devtools>

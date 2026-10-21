@@ -166,7 +166,8 @@ Usage
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
 | | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
-| **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages | nothing |
+| **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages — with `--linked`, the screens of the front calling them | nothing |
+| **A front and its API** | `devtools workflows:inspect ../api ../mobile --link` | both inspected, then each front call matched against an API route | `graph/links.xml`, pages, menus |
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
 | | `devtools baselines:accept <run>` | after looking at them: the screenshots of a run become the baselines | `.devtools/baselines/` |
@@ -768,6 +769,56 @@ The `json` format is for tools:
 ```
 
 The `xml` format follows `impact.xsd`, copied into `.devtools/schemas/` like every schema.
+
+Linked projects
+---------------
+
+A mobile application knows of its back-end only `/api/*`: changing a resource of the API without knowing
+which screens call it is the question this tool answers, across two repositories. Each project declares the
+other in its `.devtools/config.xml`, with a path relative to itself:
+
+```xml
+<!-- in the API -->
+<links>
+    <project name="mobile" path="../mobile" role="client"/>
+</links>
+
+<!-- in the mobile application -->
+<links>
+    <project name="api" path="../api" role="server"/>
+</links>
+```
+
+```shell
+vendor/bin/devtools workflows:inspect ../api ../mobile --link
+```
+
+Both are inspected as usual, then linked, in memory, from what both inspections wrote — no inspection more.
+Each call of an integration of the client (`GET ${environment.apiUrl}/items/${id}`, read by the Angular
+adapter) is matched against the routes of the server by method and path: the host goes, a parameter matches
+any segment, and the routes alike the most win — `/items/${id}` is `/items/{id}` rather than
+`/items/export`. When the start of a URL cannot be read, it is matched by its end, or replaced by the
+`base-url` a `<project>` declares.
+
+The calls land in `.devtools/graph/links.xml` in **each** project — the neighbour's name, its relative path,
+the workflows on both sides, never an absolute path — and in their pages, after their own related
+workflows:
+
+```markdown
+## Related workflows
+
+- mobile · [`integration.item-service`](../../../../mobile/docs/workflows/integrations/item-service.md) — calls GET https://items.example.com/api/items/:param
+```
+
+The link opens when the two repositories sit side by side on disk, as they do where `--link` ran. A call no
+route answers — a screen calling a route the API deleted — is an **orphan call**: it is listed under "To
+check" in both menus, and `workflows:check` fails on it in both projects. So does a linked workflow that is
+gone, on either side: run `--link` again. A neighbour that was never inspected keeps the links it had, with
+a warning; in CI, with one repository checked out, the neighbour is not checked against.
+
+`workflows:impact --linked` follows the links: a controller of the API changes, and the answer names the
+integrations of the mobile application that call its routes (`calls`), then the screens that go through
+those integrations (`uses`), read from the mobile application's own map.
 
 Claude Code hooks
 -----------------
@@ -1617,6 +1668,7 @@ src/
 ├── Assertion/               the mechanical checks of the rules: pattern, DOM, tool — and how they are run
 ├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
 ├── Glossary/                the project's terms: collected from the model, defined by Claude, given to the pages
+├── Link/                    a front and its API: their calls matched, links.xml, the pages and the impact across both
 ├── Rendering/               pages, workflows.md and the overview diagram; the exported site
 ├── Release/                 self-update: the latest release, its checksum and provenance verified
 ├── Ai/                      briefs for Claude, validation and application of its drafts; ai:run and its
@@ -1633,7 +1685,8 @@ resources/review/            the review page: its HTML, stylesheet, script, and 
 resources/claude/            the Claude Code skill claude:install copies
 tests/
 ├── Fixtures/projects/       real projects: Symfony 8.1, Symfony 7.4 with YAML, Laravel 13, PHP, Express 5 in JavaScript
-│                            and in TypeScript, Express 4 without TypeScript, Angular 22, Ionic tabs, monorepos
+│                            and in TypeScript, Express 4 without TypeScript, Angular 22, Ionic tabs, monorepos,
+│                            an API and its mobile application side by side
 ├── Node/                    the Node bridge's own tests, run by PHPUnit through `node --test`
 ├── Fixtures/drafts/         what Claude wrote for them, replayed by the tests
 ├── Fixtures/matrix/         the .devtools/ each of them must produce, without AI and written

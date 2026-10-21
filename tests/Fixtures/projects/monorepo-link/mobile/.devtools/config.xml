@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1">
+    <!-- The API this application calls. -->
+    <links>
+        <project name="api" path="../api" role="server"/>
+    </links>
+</devtools>

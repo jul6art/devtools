@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Config;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
+use Jul6Art\DevTools\Link\LinkedProject;
 
 /**
  * The options of DevTools for one project, with their defaults (`.devtools/config.xml`, ADR-0004).
@@ -63,6 +64,7 @@ final readonly class Config
      * @param bool                        $aiWebSearch        whether the knowledge tasks may search the web (the key must allow it)
      * @param ScenarioSettings            $scenarios          how scenarios:run reaches the application (ADR-0021)
      * @param list<string>                $feedbackCategories the categories of feedback the project adds to DevTools' own (ADR-0025)
+     * @param list<LinkedProject>         $links              the neighbours a front and its API link to (ADR-0038)
      */
     public function __construct(
         array $excludes = [],
@@ -92,6 +94,7 @@ final readonly class Config
         public bool $shareKnowledge = true,
         public ScenarioSettings $scenarios = new ScenarioSettings(),
         public array $feedbackCategories = [],
+        public array $links = [],
     ) {
         if ($graphDepth < 0) {
             throw new InvalidConfig('The graph depth cannot be negative.');

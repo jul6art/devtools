@@ -43,6 +43,14 @@
          ANTHROPIC_API_KEY, never from this file; the budget caps one run, input and output together.
          <ai enabled="true" model="claude-opus-5-5" max-tokens="16000" budget-tokens="200000" effort="medium" web-search="false"/> -->
 
+    <!-- The projects this one is linked to: a mobile front and its API. Inspected together with the link
+         option of workflows:inspect, the calls of the front's integrations are matched against the routes of
+         the API. The path is relative to this project; role is what the neighbour is to it; base-url is what
+         the client's URLs start with when the analysis cannot read it (an environment variable, for instance).
+         <links>
+             <project name="mobile" path="../mobile" role="client"/>
+         </links> -->
+
     <!-- One workflow per route (entry-point), or one per controller with its routes as triggers
          (controller), which suits a back-office with twenty routes per resource.
          <routes group="controller"/> -->

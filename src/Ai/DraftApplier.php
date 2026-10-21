@@ -20,15 +20,15 @@ use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Serialization\ModelXmlSerializer;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
-use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdAssigner;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdCollision;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdDeriver;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
+use Jul6Art\DevTools\Link\XmlLinksStore;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\GroupPageRenderer;
-use Jul6Art\DevTools\Rendering\MenuRenderer;
+use Jul6Art\DevTools\Rendering\MenuRefresher;
 use Jul6Art\DevTools\Rendering\PageParser;
 use Jul6Art\DevTools\Rendering\PageRenderer;
 use Jul6Art\DevTools\Rendering\PageSection;
@@ -36,8 +36,6 @@ use Jul6Art\DevTools\Rendering\ParsedPage;
 use Jul6Art\DevTools\Rendering\RenderingContext;
 use Jul6Art\DevTools\Rule\RuleDraftApplier;
 use Jul6Art\DevTools\Scenario\ScenarioDraftApplier;
-use Jul6Art\DevTools\Scenario\ScenarioReview;
-use Jul6Art\DevTools\Scenario\XmlScenarioIndexStore;
 use Jul6Art\DevTools\Stack\Knowledge\DepositOutcome;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeCanvas;
 use Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary;
@@ -128,7 +126,7 @@ final readonly class DraftApplier
         if ([] === $drafts) {
             // The menu lists the scenarios to review: one Claude rewrote leaves the list.
             if ([] !== $scenarios['accepted'] || [] !== $glossary['accepted']) {
-                $this->refreshMenu($directory, new XmlIndexStore($types)->read($directory->indexFile()), $config);
+                new MenuRefresher($this->writer)->refresh($directory, new XmlIndexStore($types)->read($directory->indexFile()), $config);
             }
 
             return $result;
@@ -161,7 +159,7 @@ final readonly class DraftApplier
             $index = $this->refreshIndex($directory, $types, array_values($documents));
 
             if ($index instanceof Index) {
-                $this->refreshMenu($directory, $index, $config);
+                new MenuRefresher($this->writer)->refresh($directory, $index, $config);
             }
         }
 
@@ -267,7 +265,7 @@ final readonly class DraftApplier
             $document->group,
         );
 
-        $page = new PageRenderer()->render($workflow, $history, RenderingContext::fromTracking(array_values($documents)), self::writtenSections($draft));
+        $page = new PageRenderer()->render($workflow, $history, RenderingContext::fromTracking(array_values($documents))->withLinks(new XmlLinksStore()->read($directory->path(XmlLinksStore::FILE)), $directory->docs), self::writtenSections($draft));
 
         // The path comes from the brief, never from the model: the serialized model carries no group
         // (ADR-0045), so recomputing it here wrote a grouped project's pages back at the flat path —
@@ -521,29 +519,5 @@ final readonly class DraftApplier
         $store->write($directory->indexFile(), $index);
 
         return $index;
-    }
-
-    /**
-     * `workflows.md` lists the workflows whose brief is waiting for Claude, and `apply` is what makes those
-     * briefs disappear (ADR-0049): the menu is rebuilt from what is on disk — the stack, the index just
-     * written, the briefs that remain — never from a new analysis. "Not covered" is computed by the
-     * inspection and persisted nowhere: it is read back from the menu itself, which applying a page cannot
-     * change, since a draft says nothing about which files a workflow has.
-     *
-     * Before the first inspection there is no menu, and nothing to correct; without the stack, the menu
-     * cannot be rendered, and the pages already written are not worth a failure over it.
-     */
-    private function refreshMenu(DevToolsDirectory $directory, Index $index, Config $config): void
-    {
-        if (!is_file($directory->menuFile()) || !is_file($directory->stackFile())) {
-            return;
-        }
-
-        $uncovered = MenuRenderer::uncoveredIn((string) file_get_contents($directory->menuFile()));
-        $pending = array_map(static fn (string $brief): WorkflowId => new WorkflowId(substr(basename($brief), \strlen('page.'), -\strlen('.brief.xml'))), glob($directory->path('pending/page.*.brief.xml')) ?: []);
-        $stacks = new XmlStackStore()->read($directory->stackFile());
-        $scenarios = ScenarioReview::attention(new XmlScenarioIndexStore()->read($directory->scenarioIndexFile()), $index);
-
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md'))));
     }
 }

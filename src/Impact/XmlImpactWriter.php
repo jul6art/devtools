@@ -53,6 +53,10 @@ final readonly class XmlImpactWriter
             $this->dom->element($root, 'uncovered', ['path' => $file]);
         }
 
+        foreach ($impact->linked ?? [] as $linked) {
+            $this->dom->element($root, 'linked', array_filter($linked->toArray(), \is_string(...)));
+        }
+
         $this->loader->validate($xml, Resources::path('schemas/impact.xsd'), 'impact');
 
         return $this->dom->toXml($xml);

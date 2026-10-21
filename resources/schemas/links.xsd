@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The calls between this project and the neighbours its config.xml declares (ADR-0038):
+    .devtools/graph/links.xml, written by the link option of workflows:inspect in every project linked.
+
+    A call without a server is an orphan: a client calling a route that does not exist. Every path is
+    relative — the neighbour's to this project, a page to the root of its own project — never absolute.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/links/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/links/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="links">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="project" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="call" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="endpoint" type="t:endpoint" use="required"/>
+                                    <xs:attribute name="client" type="t:workflowId" use="required"/>
+                                    <xs:attribute name="server" type="t:workflowId"/>
+                                    <xs:attribute name="client-page" type="t:relativePath"/>
+                                    <xs:attribute name="server-page" type="t:relativePath"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="t:slug" use="required"/>
+                        <xs:attribute name="path" type="t:relativePath" use="required"/>
+                        <xs:attribute name="role" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="client"/>
+                                    <xs:enumeration value="server"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                    <xs:unique name="uniqueCall">
+                        <xs:selector xpath="t:call"/>
+                        <xs:field xpath="@client"/>
+                        <xs:field xpath="@endpoint"/>
+                        <xs:field xpath="@server"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+        <xs:unique name="uniqueProject">
+            <xs:selector xpath="t:project"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <!-- "GET /api/items/:param": an HTTP method, a space, the URL as the client writes it. -->
+    <xs:simpleType name="endpoint">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]+ \S+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Neither "/..." nor "C:...". -->
+    <xs:simpleType name="relativePath">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="slug">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9\-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="workflowId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

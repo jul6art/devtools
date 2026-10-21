@@ -11,6 +11,7 @@ use Jul6Art\DevTools\Impact\ImpactUnavailable;
 use Jul6Art\DevTools\Impact\XmlImpactWriter;
 use Jul6Art\DevTools\Inspection\Freshness\GitClient;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
+use Jul6Art\DevTools\Link\LinkedImpactResolver;
 use Jul6Art\DevTools\Project\PathOutsideProject;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Stack\XmlStackStore;
@@ -47,7 +48,8 @@ final class WorkflowsImpactCommand extends Command
         $this
             ->addOption('path', null, InputOption::VALUE_REQUIRED, 'The project (default: the current directory)')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'text, json or xml', 'text')
-            ->addOption('depth', null, InputOption::VALUE_REQUIRED, '1 follows mechanisms and dependencies, 0 does not', '1');
+            ->addOption('depth', null, InputOption::VALUE_REQUIRED, '1 follows mechanisms and dependencies, 0 does not', '1')
+            ->addOption('linked', null, InputOption::VALUE_NONE, 'Add the workflows of the linked projects it reaches: the screens of a front calling a route of its API');
     }
 
     #[\Override]
@@ -85,6 +87,10 @@ final class WorkflowsImpactCommand extends Command
 
         try {
             $impact = new ImpactResolver(new WorkflowTypeRegistry(new XmlConfigReader()->read($directory->configFile())->customTypes))->resolve($directory, $files, '0' === $depth ? 0 : 1);
+
+            if (true === $input->getOption('linked')) {
+                $impact = $impact->withLinked(new LinkedImpactResolver()->resolve($directory, $impact));
+            }
         } catch (ImpactUnavailable|PathOutsideProject $refusal) {
             $io->error($refusal->getMessage());
 

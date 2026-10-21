@@ -44,6 +44,14 @@ final class InspectionReport
     public array $errors = [];
 
     /**
+     * What `.devtools/graph/links.xml` says that no longer holds: orphan calls, linked workflows gone
+     * (ADR-0038). Causes of `workflows:check`.
+     *
+     * @var list<string>
+     */
+    public array $linkProblems = [];
+
+    /**
      * @var array<string, FreshnessDecision> by identifier
      */
     public array $decisions = [];

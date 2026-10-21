@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Config;
 
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
+use Jul6Art\DevTools\Link\LinkedProject;
+use Jul6Art\DevTools\Link\LinkRole;
 use Jul6Art\DevTools\Resources;
 use Jul6Art\DevTools\Xml\DomBuilder;
 use Jul6Art\DevTools\Xml\InvalidXml;
@@ -95,6 +97,12 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             shareKnowledge: $knowledge?->hasAttribute('share') ? 'false' !== $knowledge->getAttribute('share') && '0' !== $knowledge->getAttribute('share') : $defaults->shareKnowledge,
             scenarios: $scenarios instanceof \DOMElement ? $this->scenarios($scenarios) : $defaults->scenarios,
             feedbackCategories: array_map(static fn (\DOMElement $category): string => $category->getAttribute('name'), $this->dom->children($this->dom->optional($root, 'feedback'), 'category')),
+            links: array_map(static fn (\DOMElement $project): LinkedProject => new LinkedProject(
+                $project->getAttribute('name'),
+                $project->getAttribute('path'),
+                LinkRole::from($project->getAttribute('role')),
+                $project->hasAttribute('base-url') ? $project->getAttribute('base-url') : null,
+            ), $this->dom->children($this->dom->optional($root, 'links'), 'project')),
         );
     }
 

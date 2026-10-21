@@ -57,7 +57,7 @@
 | [0035](0035-client-api-claude-et-redaction-en-ci.md) | Client API Claude et rédaction en CI | Compléments | Accepted | — |
 | [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Accepted | 2026-10-21 |
 | [0037](0037-glossaire-metier.md) | Glossaire métier | Compléments | Accepted | 2026-10-21 |
-| [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Proposed | — |
+| [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Accepted | 2026-10-21 |
 | [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Proposed | — |
 | [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Proposed | — |
 | [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |

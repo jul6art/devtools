@@ -9,6 +9,7 @@ use Jul6Art\DevTools\Inspection\Model\Mechanism;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
+use Jul6Art\DevTools\Link\RelatedLinks;
 use Jul6Art\DevTools\Tracking\Revision;
 
 /**
@@ -192,7 +193,10 @@ final class PageRenderer
 
         ksort($related, \SORT_STRING);
 
-        return [] === $related ? MarkdownWriter::EMPTY : implode("\n", array_map(fn (array $entry): string => '- '.$this->linkTo($workflow, $entry[0], $context).' — '.$entry[1], $related));
+        return RelatedLinks::section(
+            array_values(array_map(fn (array $entry): string => '- '.$this->linkTo($workflow, $entry[0], $context).' — '.$entry[1], $related)),
+            $context->linked($workflow->type, $workflow->group?->directory, $workflow->id),
+        );
     }
 
     /**

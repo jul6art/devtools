@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Console;
 
 use Jul6Art\DevTools\Impact\Impact;
 use Jul6Art\DevTools\Impact\ImpactedWorkflow;
+use Jul6Art\DevTools\Link\LinkedImpact;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -38,6 +39,21 @@ final readonly class ImpactRenderer
 
         foreach ($impact->uncovered as $file) {
             $io->writeln(\sprintf(' <comment>Not covered</comment> %s — no workflow references it yet; workflows:inspect will tell where it belongs.', $file));
+        }
+
+        if (null === $impact->linked) {
+            return;
+        }
+
+        $count = \count($impact->linked);
+        $io->newLine();
+        $io->writeln(\sprintf(' %d workflow%s of linked projects reached', $count, 1 === $count ? '' : 's'));
+
+        if ([] !== $impact->linked) {
+            $io->table(['Project', 'Workflow', 'Relation', 'Through', 'Page'], array_map(
+                static fn (LinkedImpact $linked): array => [$linked->project, $linked->id, $linked->relation, null === $linked->endpoint ? $linked->via : $linked->via."\n".$linked->endpoint, $linked->page ?? '—'],
+                $impact->linked,
+            ));
         }
     }
 }

@@ -8,12 +8,14 @@ use Jul6Art\DevTools\Inspection\Model\Workflow;
 use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
+use Jul6Art\DevTools\Link\Links;
+use Jul6Art\DevTools\Link\RelatedLinks;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\TrackingDocument;
 
 /**
  * The other workflows of the scan, so that a page can link to them: identifiers to their type, route names
- * to the workflow they belong to.
+ * to the workflow they belong to — and the workflows of the linked projects (ADR-0038).
  */
 final readonly class RenderingContext
 {
@@ -22,8 +24,32 @@ final readonly class RenderingContext
      * @param array<string, WorkflowId>   $entryPoints entry point name => identifier
      * @param array<string, string>       $groups      identifier => the directory of its group (ADR-0045)
      */
-    private function __construct(private array $types, private array $entryPoints, private array $groups = [])
+    private function __construct(
+        private array $types,
+        private array $entryPoints,
+        private array $groups = [],
+        private Links $links = new Links(),
+        private string $docs = DevToolsDirectory::DEFAULT_DOCS,
+    ) {
+    }
+
+    /**
+     * The same context, with the calls `.devtools/graph/links.xml` keeps; `$docs` places the pages in the
+     * project, so that a link to a neighbour's page climbs out of it.
+     */
+    public function withLinks(Links $links, string $docs): self
     {
+        return new self($this->types, $this->entryPoints, $this->groups, $links, $docs);
+    }
+
+    /**
+     * The lines of the linked projects in the "Related workflows" of a page of type `$type`.
+     *
+     * @return list<string>
+     */
+    public function linked(WorkflowType $type, ?string $group, WorkflowId $id): array
+    {
+        return RelatedLinks::lines($this->links, $id->value, $this->docs.'/'.$type->name.(null === $group ? '' : '/'.$group));
     }
 
     /**

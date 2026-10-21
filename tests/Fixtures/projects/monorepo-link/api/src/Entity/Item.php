@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+final class Item
+{
+    public ?int $id = null;
+
+    public string $label = '';
+}

@@ -21,6 +21,8 @@ final readonly class InspectionOptions
      * @param list<string> $restrictTo       identifiers whose pages may be written; every other workflow is left exactly as it is (ADR-0047)
      * @param bool         $switchAdapter    move a stack Claude documented to the native adapter that now reads it (ADR-0030)
      * @param bool         $applyRenames     carry the workflows that were probably renamed to their new identifier (ADR-0036)
+     * @param bool         $link             the links are computed again after this run (ADR-0038): what the current
+     *                                       ones say is not worth a warning
      */
     public function __construct(
         public string $path,
@@ -37,6 +39,7 @@ final readonly class InspectionOptions
         public array $restrictTo = [],
         public bool $switchAdapter = false,
         public bool $applyRenames = false,
+        public bool $link = false,
     ) {
         // The documentation directory is checked here rather than at the first write: a bad path must stop
         // the run before it has created anything.

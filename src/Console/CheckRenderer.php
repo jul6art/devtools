@@ -65,6 +65,10 @@ final readonly class CheckRenderer
             $lines[] = \sprintf('%s code changed, no fact', self::pad($id));
         }
 
+        foreach ($report->linkProblems as $problem) {
+            $lines[] = 'link   '.$problem;
+        }
+
         foreach ($groups as $group) {
             $change = $group->change;
             $lines[] = trim(\sprintf(
@@ -113,6 +117,10 @@ final readonly class CheckRenderer
 
         foreach ($silent as $id) {
             $lines[] = self::annotation(\sprintf('%s: its files changed without changing a documented fact; its prose may be stale.', $id), $report->entryFiles[$id] ?? null, null);
+        }
+
+        foreach ($report->linkProblems as $problem) {
+            $lines[] = self::annotation('Linked projects: '.$problem.'.', null, null);
         }
 
         foreach ($groups as $group) {

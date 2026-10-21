@@ -96,6 +96,32 @@
                         <xs:attribute name="web-search" type="xs:boolean"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- The neighbours a front and its API link to (ADR-0038), relative to this project. -->
+                <xs:element name="links" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="project" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="t:slug" use="required"/>
+                                    <xs:attribute name="path" type="t:path" use="required"/>
+                                    <xs:attribute name="role" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="client"/>
+                                                <xs:enumeration value="server"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="base-url" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="uniqueLinkedProject">
+                        <xs:selector xpath="t:project"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
                 <!-- How to run Node for the JavaScript and TypeScript adapters (ADR-0031). -->
                 <xs:element name="node" minOccurs="0">
                     <xs:complexType>

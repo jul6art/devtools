@@ -47,6 +47,8 @@ use Jul6Art\DevTools\Inspection\Model\WorkflowType;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Inspection\Progress\NullProgressReporter;
 use Jul6Art\DevTools\Inspection\Progress\ProgressReporter;
+use Jul6Art\DevTools\Link\LinkCheck;
+use Jul6Art\DevTools\Link\XmlLinksStore;
 use Jul6Art\DevTools\Project\ProjectLock;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\GraphRenderer;
@@ -205,7 +207,8 @@ final readonly class InspectionPipeline
         foreach (array_diff($options->force, array_map(static fn (Workflow $workflow): string => $workflow->id->value, $workflows)) as $unknown) {
             $report->warnings[] = \sprintf('--force=%s names no workflow of this project; nothing was forced for it.', $unknown);
         }
-        $context = RenderingContext::of($workflows);
+        $links = new XmlLinksStore()->read($directory->path(XmlLinksStore::FILE));
+        $context = RenderingContext::of($workflows)->withLinks($links, $directory->docs);
         $documents = [];
         $written = static fn (Workflow|TrackingDocument $workflow): bool => !$options->dryRun && (null === $options->only || $options->only === $workflow->type->name);
 
@@ -342,6 +345,14 @@ final readonly class InspectionPipeline
 
         $progress->finish();
 
+        // ADR-0038: what links.xml says that the code no longer holds — the links themselves are
+        // computed by --link only, which reads the neighbours, and after which these would be stale.
+        $report->linkProblems = $options->link ? [] : new LinkCheck()->problems($directory, $links, array_map(static fn (Workflow $workflow): string => $workflow->id->value, $workflows));
+
+        foreach ($report->linkProblems as $problem) {
+            $report->warnings[] = 'Linked projects: '.$problem.'.';
+        }
+
         if ($options->dryRun) {
             return;
         }
@@ -378,7 +389,7 @@ final readonly class InspectionPipeline
             $report->warnings[] = \sprintf('The scenario %s is %s.', $scenario, $reason);
         }
 
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md'))));
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md')), $links));
         $this->writer->write($directory->overviewFile(), new GraphRenderer()->render($workflows));
     }
 
