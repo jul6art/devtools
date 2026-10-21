@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <workflow id="async.orders-import" type="async" title="orders:import (daily)" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="async/orders-import.md"/>
+  <workflow id="async.send-order-confirmation" type="async" title="SendOrderConfirmation" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="async/send-order-confirmation.md"/>
+  <workflow id="command.orders.import" type="commands" title="orders:import" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="commands/orders.import.md"/>
+  <workflow id="data.migrations" type="data" title="Migrations" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="data/migrations.md"/>
+  <workflow id="data.seeders" type="data" title="Seeders" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="data/seeders.md"/>
+  <workflow id="route.get.about" type="routes" title="GET /about" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/get.about.md"/>
+  <workflow id="route.home" type="routes" title="GET /" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/home.md"/>
+  <workflow id="route.orders.index" type="routes" title="GET /orders" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/orders.index.md"/>
+  <workflow id="route.orders.show" type="routes" title="GET /orders/{order}" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/orders.show.md"/>
+  <workflow id="route.orders.store" type="routes" title="POST /orders" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="routes/orders.store.md"/>
+  <workflow id="ui.alert" type="ui" title="Alert" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="ui/alert.md"/>
+  <workflow id="ui.cart-summary" type="ui" title="CartSummary" status="fresh" confidence="high" mode="ai" updated="2026-09-16T12:00:00+00:00" page="ui/cart-summary.md"/>
+</index>

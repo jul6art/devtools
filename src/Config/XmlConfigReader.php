@@ -54,6 +54,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $graph = $this->dom->optional($root, 'graph');
         $identifiers = $this->dom->optional($root, 'identifiers');
         $symfony = $this->dom->optional($root, 'symfony');
+        $laravel = $this->dom->optional($root, 'laravel');
         $language = $this->dom->optional($root, 'language');
         $php = $this->dom->optional($root, 'php');
         $routes = $this->dom->optional($root, 'routes');
@@ -73,6 +74,9 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             symfonyConsole: $symfony?->hasAttribute('console') ? $symfony->getAttribute('console') : $defaults->symfonyConsole,
             symfonyEnv: $symfony?->hasAttribute('env') ? $symfony->getAttribute('env') : $defaults->symfonyEnv,
             symfonyTimeout: $symfony?->hasAttribute('timeout') ? (float) $symfony->getAttribute('timeout') : $defaults->symfonyTimeout,
+            laravelArtisan: $laravel?->hasAttribute('artisan') ? $laravel->getAttribute('artisan') : $defaults->laravelArtisan,
+            laravelEnv: $laravel?->hasAttribute('env') ? $laravel->getAttribute('env') : $defaults->laravelEnv,
+            laravelTimeout: $laravel?->hasAttribute('timeout') ? (float) $laravel->getAttribute('timeout') : $defaults->laravelTimeout,
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
             routeGrouping: $routes?->hasAttribute('group') ? $routes->getAttribute('group') : $defaults->routeGrouping,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,

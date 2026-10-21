@@ -74,6 +74,14 @@
                         <xs:attribute name="timeout" type="xs:decimal"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- How to run a Laravel project's Artisan (ADR-0030); env defaults to the project's APP_ENV. -->
+                <xs:element name="laravel" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="artisan" type="t:nonEmpty"/>
+                        <xs:attribute name="env" type="t:nonEmpty"/>
+                        <xs:attribute name="timeout" type="xs:decimal"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="routes" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="group">

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="ui.cart-summary" type="ui" schema-version="1">
+  <title>CartSummary</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="component" name="App\Livewire\CartSummary" role="main">
+      <declared-in path="app/Livewire/CartSummary.php" role="component"/>
+      <attribute name="live" value="true"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="app/Livewire/CartSummary.php" role="component" sha256="543d3222278b218e58c0b0fc26f9441c017e011d77e8bb32a491af7f51bcdd31"/>
+    <file path="resources/views/livewire/cart-summary.blade.php" role="template" sha256="3d21ec70ca13ceb8c1822716dc2934e400406bd8302433a7fa3672d7c8b8b8e1"/>
+  </files>
+  <packages>
+    <package name="livewire/livewire" version="4.4.7"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="initial"/>
+  </history>
+</workflow>

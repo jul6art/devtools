@@ -15,8 +15,7 @@ final class ComposerDetector implements StackDetectorInterface
 
     private const array FRAMEWORKS = [
         'symfony/framework-bundle' => ['symfony', 'symfony', ['config', 'migrations', 'src', 'templates']],
-        // No native adapter in the MVP: Laravel goes through the Claude path until ADR-0030.
-        'laravel/framework' => ['laravel', 'claude', ['app', 'config', 'database', 'resources/views', 'routes']],
+        'laravel/framework' => ['laravel', 'laravel', ['app', 'config', 'database', 'resources/views', 'routes']],
     ];
 
     #[\Override]

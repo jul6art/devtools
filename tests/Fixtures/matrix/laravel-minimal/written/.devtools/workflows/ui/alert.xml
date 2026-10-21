@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="ui.alert" type="ui" schema-version="1">
+  <title>Alert</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/4"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="component" name="App\View\Components\Alert" role="main">
+      <declared-in path="app/View/Components/Alert.php" role="component"/>
+      <attribute name="live" value="false"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="app/View/Components/Alert.php" role="component" sha256="481c81d669cc1630ff92eeda72a86863ef41b0dfba712815fab1362fa9d0bea2"/>
+    <file path="resources/views/components/alert.blade.php" role="template" sha256="083e4c6aea3403e21306c3efc17174a84eaf88537211fbdc5ffdc67473f021b1"/>
+  </files>
+  <packages>
+    <package name="laravel/framework" version="13.38.0"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="rédaction initiale"/>
+  </history>
+</workflow>

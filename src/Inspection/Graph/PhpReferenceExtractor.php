@@ -9,9 +9,12 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
@@ -44,6 +47,14 @@ final class PhpReferenceExtractor
     private const array ROUTING_METHODS = ['redirectToRoute', 'generateUrl'];
 
     private const string TEMPLATE_ATTRIBUTE = 'Symfony\\Bridge\\Twig\\Attribute\\Template';
+
+    /**
+     * Laravel's helpers and facade (ADR-0030): `view('orders.index')`, `View::make('orders.index')` render a
+     * Blade view; `route('orders.show')`, `to_route(…)`, `redirect()->route(…)` lead to a route.
+     */
+    private const string VIEW_FACADE = 'Illuminate\\Support\\Facades\\View';
+
+    private const array ROUTING_FUNCTIONS = ['route', 'to_route'];
 
     private readonly Parser $parser;
 
@@ -85,9 +96,9 @@ final class PhpReferenceExtractor
 
         return new PhpReferences(
             self::sorted($classes),
-            self::sorted($this->templates($finder, $scope)),
+            self::sorted([...$this->templates($finder, $scope), ...$this->views($finder, $scope)]),
             null,
-            self::sorted($this->literalArguments($finder, $scope, self::ROUTING_METHODS)),
+            self::sorted([...$this->literalArguments($finder, $scope, self::ROUTING_METHODS), ...$this->laravelRoutes($finder, $scope)]),
             self::sorted($this->includes($finder, $scope, \dirname($absolutePath))),
         );
     }
@@ -193,6 +204,59 @@ final class PhpReferenceExtractor
         }
 
         return array_values(array_filter($templates, \is_string(...)));
+    }
+
+    /**
+     * The Blade views a Laravel file renders, as paths under its views directory.
+     *
+     * @param list<Node> $scope
+     *
+     * @return list<string>
+     */
+    private function views(NodeFinder $finder, array $scope): array
+    {
+        $views = [];
+
+        foreach ($finder->findInstanceOf($scope, FuncCall::class) as $call) {
+            if ($call->name instanceof Name && 'view' === $call->name->toLowerString()) {
+                $views[] = self::firstStringArgument($call->args);
+            }
+        }
+
+        foreach ($finder->findInstanceOf($scope, StaticCall::class) as $call) {
+            if ($call->class instanceof Name && self::VIEW_FACADE === $call->class->toString() && $call->name instanceof Identifier && 'make' === $call->name->toString()) {
+                $views[] = self::firstStringArgument($call->args);
+            }
+        }
+
+        return array_values(array_filter(array_map(
+            static fn (?string $view): ?string => null === $view ? null : BladeReferenceExtractor::viewPath($view),
+            $views,
+        ), \is_string(...)));
+    }
+
+    /**
+     * @param list<Node> $scope
+     *
+     * @return list<string>
+     */
+    private function laravelRoutes(NodeFinder $finder, array $scope): array
+    {
+        $routes = [];
+
+        foreach ($finder->findInstanceOf($scope, FuncCall::class) as $call) {
+            if ($call->name instanceof Name && \in_array($call->name->toLowerString(), self::ROUTING_FUNCTIONS, true)) {
+                $routes[] = self::firstStringArgument($call->args);
+            }
+        }
+
+        foreach ($finder->findInstanceOf($scope, MethodCall::class) as $call) {
+            if ($call->name instanceof Identifier && 'route' === $call->name->toString() && $call->var instanceof FuncCall && $call->var->name instanceof Name && 'redirect' === $call->var->name->toLowerString()) {
+                $routes[] = self::firstStringArgument($call->args);
+            }
+        }
+
+        return array_values(array_filter($routes, \is_string(...)));
     }
 
     /**

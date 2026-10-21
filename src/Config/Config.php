@@ -53,6 +53,8 @@ final readonly class Config
      * @param string|null                 $pagesLanguage      the language Claude writes the pages in; null when the project does not say, and the default then applies
      * @param string|null                 $knowledgeLibrary   where the shared knowledge library lives; null to let {@see \Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::locate()} decide (ADR-0041)
      * @param bool                        $shareKnowledge     whether a knowledge file Claude writes is deposited in that library
+     * @param string                      $laravelArtisan     how to run the project's Artisan (ADR-0030)
+     * @param string|null                 $laravelEnv         the environment Artisan boots in; null for the project's own (APP_ENV)
      * @param ScenarioSettings            $scenarios          how scenarios:run reaches the application (ADR-0021)
      * @param list<string>                $feedbackCategories the categories of feedback the project adds to DevTools' own (ADR-0025)
      */
@@ -66,6 +68,9 @@ final readonly class Config
         public string $symfonyConsole = 'bin/console',
         public string $symfonyEnv = 'dev',
         public float $symfonyTimeout = 60.0,
+        public string $laravelArtisan = 'php artisan',
+        public ?string $laravelEnv = null,
+        public float $laravelTimeout = 60.0,
         public ?string $pagesLanguage = null,
         public string $routeGrouping = self::ROUTES_BY_ENTRY_POINT,
         public ?string $phpWebRoot = null,
@@ -78,7 +83,7 @@ final readonly class Config
             throw new InvalidConfig('The graph depth cannot be negative.');
         }
 
-        if ($symfonyTimeout <= 0) {
+        if ($symfonyTimeout <= 0 || $laravelTimeout <= 0) {
             throw new InvalidConfig('The console timeout must be a positive number of seconds.');
         }
 

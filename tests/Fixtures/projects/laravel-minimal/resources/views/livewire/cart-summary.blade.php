@@ -1,0 +1,1 @@
+<div>{{ $items }} items</div>

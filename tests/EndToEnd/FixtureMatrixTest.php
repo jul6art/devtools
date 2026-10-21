@@ -176,6 +176,18 @@ final class FixtureMatrixTest extends TestCase
         yield 'symfony-minimal grouped by controller' => ['symfony-minimal', 'symfony-minimal', ...$symfony, 0, 'symfony-grouped', true];
 
         yield 'symfony-legacy-yaml' => ['symfony-legacy-yaml', 'symfony-legacy-yaml', ...$legacy];
+        // ADR-0030: Laravel read natively, through its real Artisan.
+        yield 'laravel-minimal' => ['laravel-minimal', 'laravel-minimal', ['app/Models/Order.php' => "\n// reviewed\n", 'app/Livewire/CartSummary.php' => null, 'app/Support/Money.php' => "<?php\n\nnamespace App\\Support;\n\nfinal class Money\n{\n}\n"], [
+            'async.send-order-confirmation' => 'rewrite: files changed: app/Models/Order.php',
+            'command.orders.import' => 'rewrite: files changed: app/Models/Order.php',
+            'data.seeders' => 'rewrite: files changed: app/Models/Order.php',
+            // The Livewire component is gone, and with it the view the route's page rendered through it.
+            'route.home' => 'rewrite: files removed: app/Livewire/CartSummary.php, resources/views/livewire/cart-summary.blade.php',
+            'route.orders.index' => 'rewrite: files changed: app/Models/Order.php',
+            'route.orders.show' => 'rewrite: files changed: app/Models/Order.php',
+            'route.orders.store' => 'rewrite: files changed: app/Models/Order.php',
+            'ui.cart-summary' => 'orphan: entry point gone',
+        ]];
         yield 'plain-php' => ['plain-php', 'plain-php', ['lib/db.php' => "\n// connection reviewed\n", 'migrations/001_create_orders.sql' => null, 'public/about.php' => "<?php\n\necho 'Acme';\n"], [
             'command.cleanup' => 'rewrite: files changed: lib/db.php',
             'command.import-orders' => 'rewrite: files changed: lib/db.php',

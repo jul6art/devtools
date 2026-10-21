@@ -40,7 +40,7 @@ final class StackDetectorTest extends TestCase
      */
     public static function fixtureProjects(): iterable
     {
-        foreach (['symfony-minimal', 'plain-php', 'node-express', 'angular-minimal', 'monorepo', 'node-app-monorepo'] as $project) {
+        foreach (['symfony-minimal', 'laravel-minimal', 'plain-php', 'node-express', 'angular-minimal', 'monorepo', 'node-app-monorepo'] as $project) {
             yield $project => [$project];
         }
     }
@@ -55,6 +55,17 @@ final class StackDetectorTest extends TestCase
         self::assertSame('symfony-8', $stack->knowledgeKey);
         self::assertSame(['config', 'migrations', 'src', 'templates'], $stack->sourceDirs);
         self::assertSame(['tests'], $stack->testDirs);
+    }
+
+    /**
+     * ADR-0030: Laravel has its native adapter, and its version comes from the lock.
+     */
+    public function testALaravelProjectIsReadByItsNativeAdapter(): void
+    {
+        $stack = $this->onlyStack('laravel-minimal');
+
+        self::assertSame(['laravel', '13.38', 'laravel', 'laravel-13'], [$stack->framework, $stack->version, $stack->adapter, $stack->knowledgeKey]);
+        self::assertSame(['app', 'config', 'database', 'database/seeders', 'resources/views', 'routes'], $stack->sourceDirs);
     }
 
     public function testWithoutALockTheVersionComesFromTheConstraint(): void

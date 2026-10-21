@@ -33,6 +33,10 @@ use PHPUnit\Framework\TestCase;
 final class KnowledgeTest extends TestCase
 {
     use CopiesFixtureProjects;
+    /**
+     * The sheets DevTools ships, one per major version of each stack it reads natively.
+     */
+    private const array SHIPPED = ['laravel-12.md', 'laravel-13.md', 'symfony-7.md', 'symfony-8.md'];
 
     #[DataProvider('embeddedKnowledge')]
     public function testEveryEmbeddedKnowledgeFollowsTheCanvas(string $file): void
@@ -52,10 +56,12 @@ final class KnowledgeTest extends TestCase
         }
     }
 
-    public function testThereIsEmbeddedKnowledgeForSymfonySevenAndEight(): void
+    public function testThereIsEmbeddedKnowledgeForEveryNativeStack(): void
     {
-        self::assertFileExists(Resources::path('knowledge/symfony-7.md'));
-        self::assertFileExists(Resources::path('knowledge/symfony-8.md'));
+        foreach (self::SHIPPED as $sheet) {
+            self::assertFileExists(Resources::path('knowledge/'.$sheet));
+            self::assertSame([], new KnowledgeCanvas()->problems((string) file_get_contents(Resources::path('knowledge/'.$sheet))), $sheet.' follows the canvas.');
+        }
     }
 
     /**
@@ -69,7 +75,7 @@ final class KnowledgeTest extends TestCase
         $files = array_map(basename(...), glob(Resources::path('knowledge/*')) ?: []);
         sort($files, \SORT_STRING);
 
-        self::assertSame(['_canvas.md', 'symfony-7.md', 'symfony-8.md'], $files);
+        self::assertSame(['_canvas.md', ...self::SHIPPED], $files);
         self::assertFalse(KnowledgeLibrary::locate()->isEmbedded(), 'The suite writes to a temporary library, never to the knowledge the package ships.');
     }
 
@@ -85,7 +91,7 @@ final class KnowledgeTest extends TestCase
         self::assertSame('.devtools/knowledge/symfony-8.md', $provider->provide($directory, 'symfony-8'));
         self::assertStringContainsString('Adapted by the team', (string) file_get_contents($directory->path('knowledge/symfony-8.md')), 'Never overwritten.');
 
-        self::assertNull($provider->provide($directory, 'laravel-12'));
+        self::assertNull($provider->provide($directory, 'django-5'));
     }
 
     /**

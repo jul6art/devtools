@@ -19,6 +19,7 @@ final readonly class InspectionOptions
      * @param string|null  $fallbackLanguage the language to use when neither the option nor the project says (the Symfony bundle's configuration)
      * @param string|null  $docs             the directory the pages and the menu are written in, relative to the project; null for docs/workflows
      * @param list<string> $restrictTo       identifiers whose pages may be written; every other workflow is left exactly as it is (ADR-0047)
+     * @param bool         $switchAdapter    move a stack Claude documented to the native adapter that now reads it (ADR-0030)
      */
     public function __construct(
         public string $path,
@@ -33,6 +34,7 @@ final readonly class InspectionOptions
         public ?string $fallbackLanguage = null,
         public ?string $docs = null,
         public array $restrictTo = [],
+        public bool $switchAdapter = false,
     ) {
         // The documentation directory is checked here rather than at the first write: a bad path must stop
         // the run before it has created anything.

@@ -33,6 +33,9 @@
          <symfony console="docker compose exec -T php bin/console" env="dev" timeout="120"/> -->
     <symfony console="bin/console" env="dev" timeout="60"/>
 
+    <!-- The same for a Laravel project's Artisan; Sail: <laravel artisan="vendor/bin/sail artisan"/>
+         <laravel artisan="php artisan" timeout="60"/> -->
+
     <!-- One workflow per route (entry-point), or one per controller with its routes as triggers
          (controller), which suits a back-office with twenty routes per resource.
          <routes group="controller"/> -->

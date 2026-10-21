@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="async.orders-import" type="async" schema-version="1">
+  <title>orders:import (daily)</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="scheduled" name="orders:import" role="main">
+      <declared-in path="routes/console.php" role="other"/>
+      <attribute name="schedule" value="daily"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="routes/console.php" role="other" sha256="5834ec3de60f9b6865f86420991dc107c8982d298d8b72dfd0f5315fd921ee1f"/>
+  </files>
+  <packages>
+    <package name="laravel/framework" version="13.38.0"/>
+  </packages>
+  <depends-on>
+    <workflow ref="command.orders.import"/>
+  </depends-on>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="initial"/>
+  </history>
+</workflow>

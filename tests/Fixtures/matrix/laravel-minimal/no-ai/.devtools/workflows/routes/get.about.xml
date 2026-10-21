@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.get.about" type="routes" schema-version="1">
+  <title>GET /about</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="get.about" role="main">
+      <declared-in path="app/Http/Controllers/AboutController.php" role="controller"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/about"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="app/Http/Controllers/AboutController.php" role="controller" sha256="fdafeb4307030411442d4e61554402ae1739849ff5f8b057c293a848df7bd306"/>
+    <file path="app/Http/Controllers/Controller.php" role="controller" sha256="e8ae1d379d50027fd478b2f00f4b0f211fcc2290606bb941f17251a651276e1b"/>
+    <file path="app/Providers/AppServiceProvider.php" role="config" sha256="a8b06a9dcc82dfee48b58366e535fc0a40bdf2aebef2f17ceae410121925adbf"/>
+    <file path="bootstrap/app.php" role="config" sha256="16fecf256a8e0707b62e04c8c7ebf7a8d89b6b4786336ed2ba3c4a61d6ee6b1a"/>
+    <file path="bootstrap/providers.php" role="config" sha256="2ef405f988a6ef3f5222bfbdd89352a6ad7b2e9e21aa25e236ac5dff58358953"/>
+    <file path="resources/views/about.blade.php" role="template" sha256="7b4b237466a2716faf804f495ad88b0fa926b156dd3bf464da16e307ec70162d"/>
+    <file path="resources/views/layouts/app.blade.php" role="template" sha256="db22091a4341590ef4ad9ae4c07d9ba5d5c954cb066610dca0cadb79a080d284"/>
+    <file path="routes/web.php" role="config" sha256="686f2ee3a0c8f214abf892efce942f1f5dac8b66fa053b87a7f3f6b7312ae24c"/>
+  </files>
+  <packages>
+    <package name="laravel/framework" version="13.38.0"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="initial"/>
+  </history>
+</workflow>

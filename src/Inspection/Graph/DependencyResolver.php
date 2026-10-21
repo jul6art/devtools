@@ -32,6 +32,7 @@ final readonly class DependencyResolver
         private TwigReferenceExtractor $twig,
         private int $maxDepth,
         private array $templateDirectories,
+        private BladeReferenceExtractor $blade = new BladeReferenceExtractor(),
     ) {
     }
 
@@ -105,6 +106,16 @@ final readonly class DependencyResolver
 
         if (FileRole::Template === $file->role && str_ends_with($file->path, '.twig')) {
             return array_values(array_filter(array_map($this->template(...), $this->twig->extract($absolute)->templates)));
+        }
+
+        // ⚠️ Before the PHP branch: a Blade view ends in `.php`, and is no PHP a parser can read.
+        if (str_ends_with($file->path, '.blade.php')) {
+            $blade = $this->blade->extract($absolute);
+
+            return [
+                ...array_values(array_filter(array_map($this->template(...), $blade->views))),
+                ...array_values(array_filter(array_map($this->locator->locate(...), $blade->classes))),
+            ];
         }
 
         if (!PhpReferenceExtractor::isPhpFile($absolute)) {

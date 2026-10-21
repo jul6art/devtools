@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.home" type="routes" schema-version="1">
+  <title>GET /</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="home" role="main">
+      <declared-in path="app/Http/Controllers/HomeController.php" role="controller"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="app/Http/Controllers/Controller.php" role="controller" sha256="e8ae1d379d50027fd478b2f00f4b0f211fcc2290606bb941f17251a651276e1b"/>
+    <file path="app/Http/Controllers/HomeController.php" role="controller" sha256="2659025e9de0b298ae554f4c110eda4279d8c25907287a45165b4b45f72af31c"/>
+    <file path="app/Livewire/CartSummary.php" role="component" sha256="543d3222278b218e58c0b0fc26f9441c017e011d77e8bb32a491af7f51bcdd31"/>
+    <file path="app/Providers/AppServiceProvider.php" role="config" sha256="a8b06a9dcc82dfee48b58366e535fc0a40bdf2aebef2f17ceae410121925adbf"/>
+    <file path="app/View/Components/Alert.php" role="component" sha256="481c81d669cc1630ff92eeda72a86863ef41b0dfba712815fab1362fa9d0bea2"/>
+    <file path="bootstrap/app.php" role="config" sha256="16fecf256a8e0707b62e04c8c7ebf7a8d89b6b4786336ed2ba3c4a61d6ee6b1a"/>
+    <file path="bootstrap/providers.php" role="config" sha256="2ef405f988a6ef3f5222bfbdd89352a6ad7b2e9e21aa25e236ac5dff58358953"/>
+    <file path="resources/views/components/alert.blade.php" role="template" sha256="083e4c6aea3403e21306c3efc17174a84eaf88537211fbdc5ffdc67473f021b1"/>
+    <file path="resources/views/home.blade.php" role="template" sha256="9454ad3839983c6a32620e97494cb0cc82c732a244d7abfd788ad39f2b27dee2"/>
+    <file path="resources/views/layouts/app.blade.php" role="template" sha256="db22091a4341590ef4ad9ae4c07d9ba5d5c954cb066610dca0cadb79a080d284"/>
+    <file path="resources/views/livewire/cart-summary.blade.php" role="template" sha256="3d21ec70ca13ceb8c1822716dc2934e400406bd8302433a7fa3672d7c8b8b8e1"/>
+    <file path="routes/web.php" role="config" sha256="686f2ee3a0c8f214abf892efce942f1f5dac8b66fa053b87a7f3f6b7312ae24c"/>
+  </files>
+  <packages>
+    <package name="laravel/framework" version="13.38.0"/>
+    <package name="livewire/livewire" version="4.4.7"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="initial"/>
+  </history>
+</workflow>

@@ -1,0 +1,24 @@
+flowchart LR
+  subgraph routes["Routes"]
+    w6["route.get.about"]
+    w7["route.home"]
+    w8["route.orders.index"]
+    w9["route.orders.show"]
+    w10["route.orders.store"]
+  end
+  subgraph commands["Commands"]
+    w3["command.orders.import"]
+  end
+  subgraph async["Async"]
+    w1["async.orders-import"]
+    w2["async.send-order-confirmation"]
+  end
+  subgraph ui["UI"]
+    w11["ui.alert"]
+    w12["ui.cart-summary"]
+  end
+  subgraph data["Data"]
+    w4["data.migrations"]
+    w5["data.seeders"]
+  end
+  w1 --> w3

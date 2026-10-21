@@ -236,7 +236,7 @@ reported as framework `node`, and the directories of its entry points join its s
 `package.json` of a build tool (Webpack Encore beside a Symfony application) has neither, and stays
 tooling. A `tsconfig.json` with `checkJs` keeps the language `javascript`. A framework version comes
 from the lock file when there is one, from the constraint otherwise. The adapter says who finds the workflows:
-`symfony` and `generic-php` are native; everything else goes to Claude.
+`symfony`, `laravel` and `generic-php` are native; everything else goes to Claude.
 
 ⚠️ **A wrong detection is corrected in `stack.xml`, not with an option.** Mark the element
 `locked="true"` and every later detection keeps it — the correction is committed and shared:
@@ -286,6 +286,7 @@ page to open first. Commit all of it; the report stays out of git.
 | `--no-ai` | write no brief for Claude: factual pages only |
 | `--locale=fr` | the language Claude writes the pages in, as two lowercase letters |
 | `--docs=docs/workflows` | the directory the pages and the menu are written in |
+| `--switch-adapter` | move a stack documented through Claude to the native adapter this version has for it — see *Switching to a native adapter* |
 
 Exit code `0` when everything was documented, `1` with warnings — a console that did not answer, a stack
 without an adapter, a file that could not be parsed — and `2` when nothing could be (invalid
@@ -513,6 +514,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<groups><group main="app_order_index"><satellite>app_order_export</satellite></group></groups>` | — | documents an entry point as part of another workflow |
 | `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
+| `<laravel artisan="vendor/bin/sail artisan" env="local" timeout="60"/>` | `php artisan`, the project's `APP_ENV` | how to run a Laravel project's Artisan |
 | `<routes group="controller"/>` | `entry-point` | one page per route at the root of `routes/`, or the same pages laid out under a directory per controller, with an index |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language Claude writes the prose of the pages in; `--locale` wins over it |
@@ -1252,6 +1254,38 @@ not installed, a kernel that does not boot, a deprecation printed before the JSO
 reading attributes, marks every workflow `medium` confidence, and says why at the top of the report.
 Routes declared in YAML and services wired in configuration are invisible to that fallback.
 
+Laravel
+-------
+
+A Laravel project (`laravel/framework` 11 or later in `composer.json`) is read natively: **Artisan is the
+source of truth**, the code completes it and stands in for it — three Artisan processes per scan, whatever
+the size of the project.
+
+| Type | Source | Identifier |
+| --- | --- | --- |
+| routes | `php artisan route:list --json`: name, URI, methods, action, middleware — a package's routes left out | `orders.show` → `route.orders.show`; a route without a name → `route.<method>.<uri>`: `GET /about` → `route.get.about` |
+| commands | `php artisan list --format=json`, kept to the commands the project declares: `app/Console/Commands`, the closures of `routes/console.php` | `orders:import` → `command.orders.import` |
+| async | jobs — a `ShouldQueue` class with a `handle()` — and the schedule of `routes/console.php` or a console kernel, which depends on the command it runs | `async.send-order-confirmation`, `async.orders-import` |
+| ui | Livewire components and Blade class components, with their view | `ui.cart-summary` |
+| data | `database/migrations`, `database/seeders` | `data.migrations`, `data.seeders` |
+
+A route's **security** is its middleware, by the alias the project writes — `auth`, `can:view,order`,
+`verified`, `signed` — whether Artisan resolved them to classes or the route file names them; the policy a
+`can:` asks for (`can:view,order` → `app/Policies/OrderPolicy.php`) is a file of the route. The **views** a
+controller renders with `view()` or `View::make()` are followed through `@extends`, `@include`, `<x-…>` and
+`<livewire:…>`, and the links of `route('…')` in them, and the routes a method redirects to, draw its
+**navigation** — not those of its layout, which every page shares. A **listener** Laravel discovers is no
+workflow (ADR-0043): it is a mechanism of the workflows that dispatch its event, read with `event:list`.
+
+```xml
+<laravel artisan="vendor/bin/sail artisan"/>    <!-- or docker compose exec -T app php artisan -->
+```
+
+⚠️ **Artisan boots the application**: a service provider that queries the database at boot makes it fail.
+DevTools then reads the route files — groups, prefixes and middleware followed — and the classes of the
+project, marks every workflow `medium` confidence, and says why at the top of the report. A route a package
+or a macro registers is invisible to that fallback.
+
 PHP without a framework
 -----------------------
 
@@ -1274,7 +1308,7 @@ of the web directory. The binary of a console application is not a workflow of i
 Projects without a native adapter
 ---------------------------------
 
-Express, Angular, Laravel, Django… any stack DevTools has no adapter for is mapped **by Claude Code, from
+Express, Angular, Django… any stack DevTools has no adapter for is mapped **by Claude Code, from
 files** — never through an API. The first `workflows:inspect` writes a *knowledge* brief (what the stack
 is, how a request flows through it); once `workflows:apply` has accepted it, the next run writes a
 *discovery* brief: read the sources, list the entry points and the files each one traverses, in the same
@@ -1288,6 +1322,21 @@ nobody covers asks for a discovery **limited to that file**; a change to a cover
 
 A monorepo gets one `.devtools/`: each stack is detected apart (a Symfony `api/` through its console, an
 Angular `front/` through Claude), and identifiers stay unique across both.
+
+### Switching to a native adapter
+
+A stack Claude documented, that a later version of DevTools reads natively — Laravel since ADR-0030 — is
+**not switched silently**: its identifiers may differ, and a page whose identifier goes is orphaned. Every
+inspection keeps it on the Claude path and lists what the switch would do:
+
+```
+laravel (.) is documented through Claude, and this version reads it natively (adapter laravel):
+10 identifiers stay, 2 go (route.orders-list, …), 3 come (route.get.about, …). Inspect with --switch-adapter to switch.
+```
+
+`workflows:inspect --switch-adapter` switches: `stack.xml` names the native adapter, the discovery is
+deleted, and the pages of the identifiers that went are orphaned — `--prune` deletes them, an alias in
+`config.xml` keeps one under its old name.
 
 Workflow identifiers
 --------------------
@@ -1335,8 +1384,8 @@ src/
 ├── Stack/                   stack detection from manifests, .devtools/stack.xml, knowledge of a stack
 ├── Inspection/
 │   ├── Model/               the intermediate model every adapter produces, and its XML form
-│   ├── Adapter/             entry points of a stack: Symfony, PHP without a framework, the Claude path
-│   ├── Graph/               files a PHP entry point traverses, grouping, tests, coverage
+│   ├── Adapter/             entry points of a stack: Symfony, Laravel, PHP without a framework, the Claude path
+│   ├── Graph/               files a PHP entry point traverses — Twig and Blade views included — grouping, tests, coverage
 │   ├── Freshness/           what changed since the documentation was written: git, then hashes
 │   ├── Diff/                what changed in a workflow, fact by fact, grouped across workflows
 │   └── InspectionPipeline   the whole run of workflows:inspect
@@ -1363,7 +1412,7 @@ resources/feedback/          the closed list of feedback categories
 resources/review/            the review page: its HTML, stylesheet, script, and the router of its server
 resources/claude/            the Claude Code skill claude:install copies
 tests/
-├── Fixtures/projects/       six real projects: Symfony 8.1, Symfony 7.4 with YAML, PHP, Express, Angular, a monorepo
+├── Fixtures/projects/       real projects: Symfony 8.1, Symfony 7.4 with YAML, Laravel 13, PHP, Express, Angular, monorepos
 ├── Fixtures/drafts/         what Claude wrote for them, replayed by the tests
 ├── Fixtures/matrix/         the .devtools/ each of them must produce, without AI and written
 ├── EndToEnd/                the binary in a separate process: the matrix, both installations, the bundle

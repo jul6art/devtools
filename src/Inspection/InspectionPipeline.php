@@ -153,7 +153,12 @@ final readonly class InspectionPipeline
         }
 
         $stackStore = new XmlStackStore($this->writer);
-        $stacks = new StackDetector()->detect($directory->root, $config, is_file($directory->stackFile()) ? $stackStore->read($directory->stackFile()) : null);
+        $previousStacks = is_file($directory->stackFile()) ? $stackStore->read($directory->stackFile()) : null;
+        $stacks = new StackDetector()->detect($directory->root, $config, $previousStacks);
+
+        // ADR-0030: a stack Claude documented that a native adapter now reads switches only when asked to.
+        [$stacks, $switches] = new AdapterSwitch($this->adapters)->apply($directory, $stacks, $previousStacks, $config, $options->switchAdapter, $options->dryRun);
+        $report->warnings = [...$report->warnings, ...$switches];
         $report->projectName = $stacks->projectName;
 
         if (!$options->dryRun) {

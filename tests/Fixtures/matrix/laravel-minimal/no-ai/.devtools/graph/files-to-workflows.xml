@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="app/Console/Commands/ImportOrders.php">
+    <workflow ref="async.orders-import" relation="dependency"/>
+    <workflow ref="command.orders.import" relation="file"/>
+  </file>
+  <file path="app/Events/OrderPlaced.php">
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Http/Controllers/AboutController.php">
+    <workflow ref="route.get.about" relation="file"/>
+  </file>
+  <file path="app/Http/Controllers/Controller.php">
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Http/Controllers/HomeController.php">
+    <workflow ref="route.home" relation="file"/>
+  </file>
+  <file path="app/Http/Controllers/OrderController.php">
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Jobs/SendOrderConfirmation.php">
+    <workflow ref="async.send-order-confirmation" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Listeners/NotifyWarehouse.php">
+    <workflow ref="route.orders.store" relation="dependency"/>
+  </file>
+  <file path="app/Livewire/CartSummary.php">
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="app/Models/Order.php">
+    <workflow ref="async.orders-import" relation="dependency"/>
+    <workflow ref="async.send-order-confirmation" relation="file"/>
+    <workflow ref="command.orders.import" relation="file"/>
+    <workflow ref="data.seeders" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Policies/OrderPolicy.php">
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/Providers/AppServiceProvider.php">
+    <workflow ref="async.orders-import" relation="dependency"/>
+    <workflow ref="command.orders.import" relation="file"/>
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="app/View/Components/Alert.php">
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="ui.alert" relation="file"/>
+  </file>
+  <file path="bootstrap/app.php">
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="bootstrap/providers.php">
+    <workflow ref="async.orders-import" relation="dependency"/>
+    <workflow ref="command.orders.import" relation="file"/>
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="database/migrations/2026_01_01_000000_create_orders_table.php">
+    <workflow ref="data.migrations" relation="file"/>
+  </file>
+  <file path="database/seeders/DatabaseSeeder.php">
+    <workflow ref="data.seeders" relation="file"/>
+  </file>
+  <file path="resources/views/about.blade.php">
+    <workflow ref="route.get.about" relation="file"/>
+  </file>
+  <file path="resources/views/components/alert.blade.php">
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="ui.alert" relation="file"/>
+  </file>
+  <file path="resources/views/home.blade.php">
+    <workflow ref="route.home" relation="file"/>
+  </file>
+  <file path="resources/views/layouts/app.blade.php">
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+  </file>
+  <file path="resources/views/livewire/cart-summary.blade.php">
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="ui.cart-summary" relation="file"/>
+  </file>
+  <file path="resources/views/orders/_row.blade.php">
+    <workflow ref="route.orders.index" relation="file"/>
+  </file>
+  <file path="resources/views/orders/index.blade.php">
+    <workflow ref="route.orders.index" relation="file"/>
+  </file>
+  <file path="resources/views/orders/show.blade.php">
+    <workflow ref="route.orders.show" relation="file"/>
+  </file>
+  <file path="routes/console.php">
+    <workflow ref="async.orders-import" relation="file"/>
+  </file>
+  <file path="routes/web.php">
+    <workflow ref="route.get.about" relation="file"/>
+    <workflow ref="route.home" relation="file"/>
+    <workflow ref="route.orders.index" relation="file"/>
+    <workflow ref="route.orders.show" relation="file"/>
+    <workflow ref="route.orders.store" relation="file"/>
+  </file>
+  <file path="tests/Feature/OrderControllerTest.php">
+    <workflow ref="route.orders.index" relation="test"/>
+    <workflow ref="route.orders.store" relation="test"/>
+  </file>
+</files-to-workflows>

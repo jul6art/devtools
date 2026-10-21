@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="data.seeders" type="data" schema-version="1">
+  <title>Seeders</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/4"/>
+  <source vcs="git" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="seeder" name="seeders" role="main">
+      <declared-in path="database/seeders/DatabaseSeeder.php" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="app/Models/Order.php" role="entity" sha256="364d603c664869c8ad2433fa22631144c8e1ece22a6cfef88fac7b6f5fa6b515"/>
+    <file path="database/seeders/DatabaseSeeder.php" role="other" sha256="4ef010f28b4e67bf7f9e737b6d92e2f1d157dab849f3e7c8511c2a3e8f2050d8"/>
+  </files>
+  <packages>
+    <package name="laravel/framework" version="13.38.0"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:laravel</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="a8254ce3d870763a273d537d24dfadb818e8cf94" reason="rédaction initiale"/>
+  </history>
+</workflow>
