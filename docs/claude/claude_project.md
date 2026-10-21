@@ -248,6 +248,10 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
   `ClaudeInstallTest::testNoClassOfTheCoreOpensANetworkConnection`) : un serveur que DevTools lance se
   juge prêt à sa propre annonce — la ligne « Development Server … started » de `php -S` —, jamais en
   sondant son port. Un test, lui, peut sonder.
+- **Ce que la phase 2 écrit dans `.devtools/`** : `feedback/`, `rules/`, `assertions/` et `journal/` sont
+  versionnés (des données du projet) ; `stats/` ne l'est pas (un compteur qui bouge à chaque édition) et
+  rejoint `IGNORED`. La gate ne juge jamais `gate/`, `runs/`, `pending/`, `reports/`, `stats/` ni
+  `journal/` — le journal, écrit par le hook `Stop`, ouvrirait sinon la tâche suivante.
 
 ---
 

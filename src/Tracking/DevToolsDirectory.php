@@ -164,6 +164,14 @@ final readonly class DevToolsDirectory
     }
 
     /**
+     * `.devtools/journal/`: the tasks delivered, one file a month (ADR-0029), versioned.
+     */
+    public function journalDirectory(): string
+    {
+        return $this->path('journal');
+    }
+
+    /**
      * `.devtools/stats/rules.xml`: what each rule did (ADR-0026) — a count that moves on every edit, never committed.
      */
     public function ruleStatsFile(): string

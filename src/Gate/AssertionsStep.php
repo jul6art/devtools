@@ -75,6 +75,7 @@ final readonly class AssertionsStep implements GateStepInterface
         $run = $context->directory->runDirectory($context->at).'/result.xml';
         $checker = new AssertionChecker($context->directory->root, $this->tools ?? new ToolRunner(), is_file($run) ? $run : null);
         $warnings = [];
+        $blocked = [];
         $stats = $rules->stats();
 
         foreach ($checker->check($concerned, new WorkingTree($context->directory->root, $context->config->excludes()), $context->changed) as $result) {
@@ -83,6 +84,7 @@ final readonly class AssertionsStep implements GateStepInterface
             if ($result->failed()) {
                 $failures = [...$failures, ...self::describe($assertion, $result->violations)];
                 $stats = $stats->blocked($assertion->rule, $context->at);
+                $blocked[] = $assertion->rule;
             } elseif (null !== $result->unverifiable) {
                 $warnings[] = \sprintf('%s (%s) cannot tell: %s', $assertion->rule, $assertion->id, $result->unverifiable);
             }
@@ -90,7 +92,7 @@ final readonly class AssertionsStep implements GateStepInterface
 
         $rules->saveStats($stats);
 
-        return new GateStep($this->name(), $failures, $warnings, $notes);
+        return new GateStep($this->name(), $failures, $warnings, $notes, blocked: array_values(array_unique($blocked)));
     }
 
     /**

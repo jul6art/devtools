@@ -735,3 +735,31 @@
 - **Le classifieur du mode automatique refuse la création d'une surface publique** (commit et étiquette de
   publication d'un dépôt public) même relayée par une autre session : la publication attend l'accord direct
   de jul6art. Les dépôts privés, eux, ont été commités puis poussés sur sa demande.
+
+### 2026-10-21 — Phase 2 : retours, règles, assertions, revue, rétrospective
+
+- ⚠️ **Sonder un port, c'est ouvrir une connexion** : `ReviewServer::listening()` faisait un `fsockopen` vers
+  `127.0.0.1`, et le test de garde de l'ADR-0002 l'a refusé à la suite complète. **Règle :** un serveur que
+  DevTools lance se juge prêt à sa propre annonce (`php -S` écrit « Development Server … started » sur la
+  sortie d'erreur, ou « Failed to listen … Address already in use » et s'arrête) ; seul un test sonde.
+- ⚠️ **Ce que DevTools écrit pendant la gate ne doit pas devenir le changement suivant.** Le journal écrit
+  par le hook `Stop` changeait l'empreinte de l'arbre de travail : la gate se relançait, et chaque tâche
+  livrée en aurait ouvert une autre. `GateTest` (« Run once ») l'a vu. **Règle :** toute zone que le hook ou la
+  gate écrit rejoint `Gate::OWN`.
+- **Un cache de sortie d'outil par ligne de commande sert la sortie d'avant le défaut** à la vérification
+  suivante : le test de l'assertion PHPStan passait faux. Une seule exécution par commande se garantit en
+  regroupant les assertions dans un même appel du vérificateur, pas par un cache.
+- **`display: grid` l'emporte sur l'attribut `hidden`** : le formulaire de la page de revue s'affichait avant
+  tout choix, et aucun test DOM ne l'avait vu — une capture d'écran regardée, si. **Règle :**
+  `[hidden] { display: none !important; }` dans toute feuille de DevTools, et une page se regarde.
+- ⚠️ **Une substitution perl délimitée par `/` mange le `/` de `*/`** : la fin du docbloc de `StopHandler` a
+  disparu et la classe ne se chargeait plus. **Règle :** un autre délimiteur dès que le remplacement contient
+  `/`, et `php -l` après toute édition scriptée d'un fichier PHP.
+- **Deux `xs:pattern` dans une même restriction se combinent en « ou »**, jamais en « et » : une contrainte
+  de plus se vérifie en PHP (le segment `..` d'un glob).
+- **La couverture se compte par `#[CoversClass]`** : une méthode ajoutée à `GitClient` ou à `DevToolsDirectory`
+  et exercée par les tests d'un autre module laisse ces dossiers sous 100 % ; elle se teste dans leurs classes.
+- **Un `cd` dans un appel du shell change le répertoire des appels suivants** de la session : commencer chaque
+  commande par le `cd` de la racine du dépôt.
+- **Dans une page, `<mot>` disparaît** — balise inconnue pour GitHub, pour Mermaid aussi : écrire `AAAA`, ou
+  des mots.

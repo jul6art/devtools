@@ -9,6 +9,7 @@ use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Impact\ImpactResolver;
 use Jul6Art\DevTools\Impact\ImpactUnavailable;
+use Jul6Art\DevTools\Inspection\Freshness\GitClient;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\PathOutsideProject;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
@@ -27,9 +28,10 @@ final readonly class Gate
     public const int LIMIT = 3;
 
     /**
-     * DevTools' own work areas: never a change to judge.
+     * DevTools' own work areas, and the journal the Stop hook writes when the gate passes (ADR-0029): never a change
+     * to judge — or a delivered task would start the next one.
      */
-    private const string OWN = '#^\.devtools/(gate|runs|pending|reports|stats)/#';
+    private const string OWN = '#^\.devtools/(gate|runs|pending|reports|stats|journal)/#';
 
     /**
      * @var list<GateStepInterface>
@@ -39,7 +41,7 @@ final readonly class Gate
     /**
      * @param list<GateStepInterface>|null $steps null: freshness, scenarios, verification, assertions
      */
-    public function __construct(?array $steps = null, private Clock $clock = new SystemClock(), private XmlGateStore $store = new XmlGateStore())
+    public function __construct(?array $steps = null, private Clock $clock = new SystemClock(), private XmlGateStore $store = new XmlGateStore(), private GitClient $git = new GitClient())
     {
         $this->steps = $steps ?? [new FreshnessStep(), new ScenariosStep(), new VerificationStep(), new AssertionsStep()];
     }
@@ -98,7 +100,9 @@ final readonly class Gate
             $previous instanceof GateResult && !$previous->passed() && $previous->failure() === $result->failure() => $previous->consecutive + 1,
             default => 1,
         };
-        $result = new GateResult($result->at, $result->changed, $result->steps, $result->changes, $consecutive);
+        // A passage after a green one starts a task; the next green one delivers it (ADR-0029).
+        $task = $previous instanceof GateResult && !$previous->passed() && $previous->task instanceof GateTask ? $previous->task : new GateTask($context->at, $this->git->state($root)?->commit);
+        $result = new GateResult($result->at, $result->changed, $result->steps, $result->changes, $consecutive, $task->after($steps, $result->passed()));
         $this->store->write($file, $result);
 
         return $result;

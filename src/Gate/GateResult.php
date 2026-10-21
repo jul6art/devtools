@@ -15,8 +15,9 @@ final readonly class GateResult
      * @param list<GateStep> $steps       in the order they ran
      * @param string         $changes     a fingerprint of the files of the change, as they are
      * @param int            $consecutive how many passages in a row failed exactly like this one; 0 when it passed
+     * @param GateTask|null  $task        the task this passage belongs to (ADR-0029)
      */
-    public function __construct(public \DateTimeImmutable $at, public array $changed, public array $steps, public string $changes, public int $consecutive = 0)
+    public function __construct(public \DateTimeImmutable $at, public array $changed, public array $steps, public string $changes, public int $consecutive = 0, public ?GateTask $task = null)
     {
     }
 

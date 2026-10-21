@@ -13,8 +13,9 @@ final readonly class GateStep
      * @param list<string> $failures what fails
      * @param list<string> $warnings what does not fail, unless --strict
      * @param list<string> $notes    what the step did, for the record
+     * @param list<string> $blocked  the rules whose assertion failed (ADR-0027), for the journal (ADR-0029)
      */
-    public function __construct(public string $name, public array $failures = [], public array $warnings = [], public array $notes = [], public int $milliseconds = 0)
+    public function __construct(public string $name, public array $failures = [], public array $warnings = [], public array $notes = [], public int $milliseconds = 0, public array $blocked = [])
     {
     }
 
@@ -29,7 +30,7 @@ final readonly class GateStep
 
     public function timed(int $milliseconds): self
     {
-        return new self($this->name, $this->failures, $this->warnings, $this->notes, $milliseconds);
+        return new self($this->name, $this->failures, $this->warnings, $this->notes, $milliseconds, $this->blocked);
     }
 
     /**
@@ -37,6 +38,6 @@ final readonly class GateStep
      */
     public function strict(): self
     {
-        return new self($this->name, [...$this->failures, ...$this->warnings], [], $this->notes, $this->milliseconds);
+        return new self($this->name, [...$this->failures, ...$this->warnings], [], $this->notes, $this->milliseconds, $this->blocked);
     }
 }

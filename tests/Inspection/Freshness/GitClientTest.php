@@ -107,8 +107,8 @@ final class GitClientTest extends TestCase
     }
 
     /**
-     * A commit read as the project saw it (ADR-0027) — its files and their content relative to the
-     * project, in a subdirectory of the repository too.
+     * A commit read as the project saw it (ADR-0027, ADR-0029) — its files and their content relative to the
+     * project, in a subdirectory of the repository too — and the commits between two.
      */
     public function testACommitIsReadAsTheProjectSawIt(): void
     {
@@ -116,12 +116,18 @@ final class GitClientTest extends TestCase
         $root = new ProjectRoot($repository->path.'/app');
         $first = $repository->head();
         file_put_contents($repository->path.'/app/src/Order.php', "<?php // changed\n");
+        $second = $repository->commitAll('second');
+        $third = $repository->commitAll('third');
         $git = new GitClient();
 
         self::assertSame(['src/Order.php', 'src/Other.php'], $git->filesAt($root, $first));
         self::assertNull($git->filesAt($root, 'f00df00df00df00df00df00df00df00df00df00d'));
         self::assertSame("<?php\nfinal class Order {}\n", $git->show($root, $first, 'src/Order.php'), 'As it was, whatever the disk says.');
         self::assertNull($git->show($root, $first, 'src/Gone.php'));
+        self::assertSame([$third, $second], $git->commitsBetween($root, $first, $third));
+        self::assertSame([$second], $git->commitsBetween($root, $first, $second), 'Up to the second, not to HEAD.');
+        self::assertSame([], $git->commitsBetween($root, $third, $third));
+        self::assertNull($git->commitsBetween($root, 'f00df00df00df00df00df00df00df00df00df00d', $third));
     }
 
     /**

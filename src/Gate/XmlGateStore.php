@@ -55,6 +55,18 @@ final readonly class XmlGateStore
             }
         }
 
+        if ($result->task instanceof GateTask) {
+            $task = $this->dom->element($root, 'task', array_filter(['started' => self::date($result->task->startedAt), 'base' => $result->task->base, 'failed' => (string) $result->task->failed], \is_string(...)));
+
+            foreach ($result->task->steps as $step) {
+                $this->dom->element($task, 'failed', ['step' => $step]);
+            }
+
+            foreach ($result->task->blocked as $rule) {
+                $this->dom->element($task, 'blocked', ['rule' => $rule]);
+            }
+        }
+
         $this->writer->write($path, $this->dom->toXml($xml));
     }
 
@@ -86,6 +98,13 @@ final readonly class XmlGateStore
             ), $this->dom->children($root, 'step')),
             $root->getAttribute('changes'),
             (int) $root->getAttribute('consecutive'),
+            ($task = $this->dom->optional($root, 'task')) instanceof \DOMElement ? new GateTask(
+                self::parseDate($task->getAttribute('started'), $path),
+                $task->hasAttribute('base') ? $task->getAttribute('base') : null,
+                (int) $task->getAttribute('failed'),
+                array_map(static fn (\DOMElement $failed): string => $failed->getAttribute('step'), $this->dom->children($task, 'failed')),
+                array_map(static fn (\DOMElement $blocked): string => $blocked->getAttribute('rule'), $this->dom->children($task, 'blocked')),
+            ) : null,
         );
     }
 

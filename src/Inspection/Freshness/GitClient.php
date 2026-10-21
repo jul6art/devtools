@@ -149,6 +149,19 @@ final class GitClient
     }
 
     /**
+     * The commits reachable from one and not from the other (`git rev-list from..to`), in one process (ADR-0029).
+     * Null when git does not know one of them.
+     *
+     * @return list<string>|null
+     */
+    public function commitsBetween(ProjectRoot $root, string $from, string $to): ?array
+    {
+        [$ok, $output] = $this->git($root, ['rev-list', $from.'..'.$to]);
+
+        return $ok ? preg_split('/\n/', $output, -1, \PREG_SPLIT_NO_EMPTY) ?: [] : null;
+    }
+
+    /**
      * The directory of the project inside its repository, `app/` or `''` — from the nearest `.git`, a
      * directory or the file of a worktree.
      */

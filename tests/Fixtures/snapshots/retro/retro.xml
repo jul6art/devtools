@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<retro xmlns="https://github.com/jul6art/devtools/schema/retro/1" schema-version="1" since="2026-07-01T00:00:00+02:00" until="2026-10-21T12:00:00+02:00" unattributed="1" inactive-days="30">
+  <month month="2026-07" tasks="2" human="4" per-task="2.00"/>
+  <month month="2026-08" tasks="2" human="3" per-task="1.50"/>
+  <month month="2026-09" tasks="2" human="3" per-task="1.50"/>
+  <month month="2026-10" tasks="2" human="1" per-task="0.50"/>
+  <trend month="2026-10" per-task="0.50" before="1.67" change="-70"/>
+  <category name="layout" recent="1" before="0.67" trend="up"/>
+  <category name="ui-component" recent="0" before="1.00" trend="down"/>
+  <category name="filter" recent="0" before="0.67" trend="down"/>
+  <category name="validation" recent="0" before="0.67" trend="down"/>
+  <category name="data-display" recent="0" before="0.33" trend="down"/>
+  <category name="translation" recent="0" before="0.33" trend="down"/>
+  <blocking rule="rule-select2" tasks="2" blocked="2"/>
+  <inactive rule="rule-labels-in-french" last="2026-08-20" days="62"/>
+  <inactive rule="rule-never-given" last="2026-09-01" days="50"/>
+  <unpromoted feedback="fb-2026-08-26-index-filter" occurrences="2" summary="Le filtre par statut ne filtre rien."/>
+  <unpromoted feedback="fb-2026-09-29-new-layout" occurrences="2" summary="Le bouton passe sous le formulaire."/>
+  <unpromoted feedback="fb-2026-10-05-new-select" occurrences="2" summary="Un select natif reste dans le formulaire."/>
+  <passes tasks="8" attempts="12">
+    <task id="2026-07-20-170000" attempts="3">
+      <failed step="scenarios"/>
+      <failed step="assertions"/>
+    </task>
+    <task id="2026-08-25-170000" attempts="2">
+      <failed step="verification"/>
+    </task>
+    <task id="2026-09-28-170000" attempts="2">
+      <failed step="assertions"/>
+    </task>
+  </passes>
+  <source category="data-display" verifier="0" human="1"/>
+  <source category="filter" verifier="0" human="2"/>
+  <source category="layout" verifier="0" human="3"/>
+  <source category="translation" verifier="0" human="1"/>
+  <source category="ui-component" verifier="2" human="3"/>
+  <source category="validation" verifier="1" human="2"/>
+</retro>

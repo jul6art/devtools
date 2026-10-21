@@ -1,6 +1,6 @@
 # ADR-0029 — Rétrospective et métriques
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; phase 2 lancée par jul6art le 2026-10-20) · Livré le 2026-10-21
 - **Décideurs** : jul6art
 - **Specs** : § 2 (« historique conçu pour que les retours diminuent »), § 3.1 (module Retro), § 5.5, § 8 (retours humains par tâche livrée : −50 % à 3 mois)
 
@@ -40,6 +40,34 @@ Rapport `.devtools/reports/retro-<date>.md` (§ 5.5) :
 
 `devtools rules:archive <id>` applique une proposition ; rien n'est archivé automatiquement.
 
+### Précisions à l'acceptation (2026-10-21)
+
+- **Une tâche se suit dans la gate** : `last.xml` porte désormais un élément `task` (additif à `gate.xsd`) — début,
+  commit de base, passages en échec, étapes en échec, règles qui ont bloqué (`GateStep::$blocked`, rempli par
+  l'étape `assertions`). Un passage qui suit un passage vert ouvre une tâche ; le suivant vert la clôt.
+- **Livraison** : le hook `Stop` inscrit la tâche au journal quand il voit la gate verte — qu'il l'ait lancée ou
+  qu'un `devtools gate` l'ait fait sur le même état —, **une fois** (identifiant : l'instant du passage vert,
+  `AAAA-MM-JJ-HHMMSS`). `attempts` compte le passage vert ; `head` est le commit au moment de la livraison ;
+  `workflow` les workflows que le changement atteint. ⚠️ Le journal rejoint les zones que la gate ne juge jamais
+  (avec `gate/`, `runs/`, `pending/`, `reports/`, `stats/`) : sinon la tâche livrée ouvrirait la suivante.
+  Limite connue : une tâche dont tout est commité avant la fin ne laisse aucun changement à juger, donc aucune
+  livraison.
+- **Attribution** : par **occurrence** de retour (date, commit, source) — non par retour —, à la dernière tâche
+  livrée avant elle dont `base..head` contient son commit (`git rev-list`, une fois par plage ; commit abrégé
+  accepté), sinon à la dernière qui a atteint son workflow (celui de l'occurrence, ou du retour). Le budget lit donc
+  aussi les fichiers des retours, l'index ne portant pas les occurrences.
+- **Sections** : « retours humains » = occurrences de source `human` ; par mois, celles attribuées aux tâches du
+  mois, celles sans tâche comptées à part. Tendance : le dernier mois contre la moyenne des trois précédents qui
+  ont livré au moins une tâche — il faut quatre mois. Catégories : remarques humaines du dernier mois contre la
+  moyenne mensuelle des trois précédents. Règles qui bloquent : tâches de la période (journal) et total
+  (`stats/rules.xml`). Règle inactive : active, ni donnée ni bloquante depuis `--inactive-days` (30 par défaut),
+  comptés depuis sa création si elle ne l'a jamais été. Retours non promus : `open` et au moins deux occurrences,
+  toutes sources. Vérificateur et humains : occurrences de la période par catégorie et par source.
+- **`retro`** : `--since` par défaut le premier jour du mois, trois mois avant ; rapport Markdown ou XML
+  (`retro.xsd`) dans `.devtools/reports/retro-<date>.<md|xml>`, jamais versionné ; la console en donne la
+  tendance, le nombre de règles à archiver et de retours à promouvoir. **`rules:archive`** archive ; une règle
+  archivée n'est plus donnée ni vérifiée, et `rules:activate` la ramène.
+
 ## Budget d'exécution
 
 Lecture du journal et des index ; aucun scénario, aucun git au-delà d'un `log` pour attribuer les
@@ -51,12 +79,15 @@ Tableau de bord web ; métriques multi-projets ; export vers un outil externe.
 
 ## Critères d'acceptation
 
-- [ ] Journal : une entrée par gate verte en fin de tâche, avec le nombre d'échecs précédents
-- [ ] Attribution d'un retour à une tâche par plage de commits (dépôt temporaire)
-- [ ] `retro` sur un jeu de données de fixture sur quatre mois : chaque section chiffrée comme attendu
-      (snapshot)
-- [ ] Règle inactive proposée à l'archivage, pas archivée
-- [ ] README : section « Rétrospective »
+- [x] Journal : une entrée par gate verte en fin de tâche, avec le nombre d'échecs précédents *(deux échecs dont
+      un bloqué par une règle, puis le vert : une tâche de trois passages ; revue verte : rien de plus ; un vert de
+      `devtools gate` livré par le hook, une fois)*
+- [x] Attribution d'un retour à une tâche par plage de commits (dépôt temporaire) *(et le repli par workflow,
+      l'abrégé, l'avant-toute-tâche)*
+- [x] `retro` sur un jeu de données de fixture sur quatre mois : chaque section chiffrée comme attendu
+      (snapshot) *(Markdown et XML ; huit tâches, onze retours, cinq règles ; chiffres vérifiés à la main)*
+- [x] Règle inactive proposée à l'archivage, pas archivée *(puis archivée par `rules:archive`)*
+- [x] README : section « Rétrospective » *(« Retrospective »)*
 
 ## Conséquences
 

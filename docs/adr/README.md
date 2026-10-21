@@ -9,9 +9,11 @@
 > écarts qu'elle prend avec les specs.
 >
 > **Objectif n°1 : le MVP, qui livre toute la problématique P1** — introspection du code et
-> génération maintenue des workflows. Ses ADR (0000 à 0015) sont **acceptées**. Les suivantes sont
-> écrites pour que le MVP fige des formats qui les servent, mais restent `Proposed` : elles se
-> relisent, et au besoin se remplacent, à la lumière de ce que le MVP aura appris.
+> génération maintenue des workflows. Ses ADR (0000 à 0015) sont **acceptées**. Les phases 1
+> (0016–0024) et 2 (0025–0029) l'ont été à leur tour, en octobre 2026, et sont livrées à quelques
+> critères près — une session réelle de Claude Code pour 0018, 0019 et 0024, le regard d'un humain sur
+> la page de revue pour 0028. Les suivantes restent `Proposed` : elles se relisent, et au besoin se
+> remplacent, à la lumière de ce que les phases livrées auront appris.
 
 ## Vue d'ensemble
 
@@ -46,7 +48,7 @@
 | [0026](0026-regles-et-injection-contextuelle.md) | Promotion en règles et injection contextuelle | 2 — Retours et règles | Accepted | 2026-10-20 |
 | [0027](0027-assertions-mecaniques.md) | Assertions mécaniques | 2 — Retours et règles | Accepted | 2026-10-20 |
 | [0028](0028-interface-de-revue-humaine.md) | Interface de revue humaine | 2 — Retours et règles | Accepted | — |
-| [0029](0029-retrospective-et-metriques.md) | Rétrospective et métriques | 2 — Retours et règles | Proposed | — |
+| [0029](0029-retrospective-et-metriques.md) | Rétrospective et métriques | 2 — Retours et règles | Accepted | 2026-10-21 |
 | [0030](0030-adaptateur-natif-laravel.md) | Adaptateur natif Laravel | 3 — Généralisation | Proposed | — |
 | [0031](0031-pont-node-pour-javascript-et-typescript.md) | Pont Node pour l'analyse JavaScript et TypeScript | 3 — Généralisation | Proposed | — |
 | [0032](0032-adaptateur-natif-angular.md) | Adaptateur natif Angular | 3 — Généralisation | Proposed | — |

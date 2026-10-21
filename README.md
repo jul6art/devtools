@@ -30,9 +30,11 @@ DevTools is built in that order:
    mechanical assertion.
 
 > **Where it stands.** Step 1 is delivered and runs on real projects: three of them are documented
-> this way, the largest holding 259 workflows over 310 pages. Step 2 has its first half — what changed
-> in a workflow (`workflows:diff`), the gate that fails on it (`workflows:check`), the review that
-> accepts or refuses it (`workflows:review`), and the same drift shown by PHPStan. The design lives in
+> this way, the largest holding 259 workflows over 310 pages. Step 2 is built — the impact of a change,
+> the Claude Code hooks, the MCP server, scenarios replayed in Chrome against their baselines, the
+> verifier, and the gate the `Stop` hook runs — and waits to be watched in real Claude Code sessions.
+> Step 3 is built too: typed feedback and its review page, rules given where they apply, assertions in
+> the gate, and the retrospective that says whether feedback goes down. The design lives in
 > [`docs/specs.md`](docs/specs.md) and the decisions in [`docs/adr/`](docs/adr/README.md) (French).
 
 Requirements
@@ -146,6 +148,8 @@ Usage
 | **Seen twice** | `devtools rules:promote <feedback>` | asks Claude for the rule the feedback should become; `workflows:apply` checks its draft | a brief, then `.devtools/rules/` |
 | | `devtools rules:activate <rule>` / `rules:list` | you agree with a proposed rule: Claude is given it before editing a file it applies to | `.devtools/rules/` |
 | | `devtools assertions:propose <rule>` | asks Claude for the check that enforces the rule in the gate; `workflows:apply` runs it first | a brief, then `.devtools/assertions/` |
+| **Once a month** | `devtools retro` | whether feedback goes down: per task delivered, by category, by rule | `.devtools/reports/` |
+| | `devtools rules:archive <rule>` | a rule the retrospective found idle: no longer given, no longer checked | `.devtools/rules/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -707,7 +711,7 @@ vendor/bin/devtools claude:uninstall --hooks    # takes back exactly what it add
 | --- | --- | --- |
 | `PreToolUse` | before `Edit`, `Write`, `MultiEdit` | the workflows the file reaches, their pages, a few of their tests — or, for a file no workflow references, one line saying so — and the active [rules](#rules) that apply to it |
 | `SessionStart` | at the start of a session | how many workflows are documented and where, those to check, and the MCP server when it is installed |
-| `Stop` | when Claude is about to end a task | the gate: while it fails, the task is not finished — see [The gate](#the-gate) |
+| `Stop` | when Claude is about to end a task | the gate: while it fails, the task is not finished — see [The gate](#the-gate); once it passes, the task is written in the [journal](#retrospective) |
 
 `PreToolUse` and `SessionStart` add to Claude's context and **never block anything**: a tool that writes no file, a file
 outside the project or a file that reaches nothing and no rule applies to gets no answer at all, and whatever goes wrong — no
@@ -1115,6 +1119,37 @@ read it. A failure names the rule, the assertion, the file and the line, and cou
 (`rules:list`). A `dom` assertion reads the captures of this very passage only: without scenarios replayed, it
 cannot tell, which is a warning — never the captures of an older change.
 
+Retrospective
+-------------
+
+Storing feedback is not the point: it must **go down**. The retrospective says whether it does.
+
+```shell
+vendor/bin/devtools retro [--since=2026-07-01] [--format=md|xml] [--inactive-days=30]
+#  [OK] The retrospective: .devtools/reports/retro-2026-10-21.md
+#       2026-10: 0.50 human remarks per task, -70 % against the three months before.
+```
+
+It counts against **tasks delivered**: a task is a piece of work the `Stop` hook let end because the gate passed.
+The hook writes it in `.devtools/journal/<year-month>.xml`, versioned — when it started, at which commits, the
+workflows it reached, how many passages of the gate it took, the steps that failed and the rules that blocked on
+the way. A remark goes to the last task delivered before it whose commits hold the one it was made at, else to the
+last that reached its workflow.
+
+| Section | What it says |
+| --- | --- |
+| Human feedback per delivered task | by month, and the last one against the three before — the target is -50 % in three months |
+| Recurring categories | human remarks of the last month against the monthly mean of the three before: up, down |
+| Rules that blocked the gate | the tasks each rule stopped: one that blocks regularly serves |
+| Inactive rules | neither given to Claude nor blocking for 30 days — **proposed** for archiving |
+| Feedback seen twice, not promoted | still open: a rule waiting to be asked for |
+| Gate failures before success | the passages each task took to turn green |
+| The verifier and the humans | by category, what the verifier found, and what humans still had to say |
+
+Nothing is archived on its own: `devtools rules:archive <rule>` does it, and `rules:activate` brings a rule back.
+The report is written in `.devtools/reports/`, never committed; reading it runs no scenario and asks git only to
+place a remark in a task.
+
 Writing with Claude Code
 ------------------------
 
@@ -1290,8 +1325,8 @@ src/
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
-│                            rules:activate, rules:list, assertions:propose, review, knowledge:list,
-│                            knowledge:promote, knowledge:amend
+│                            rules:activate, rules:list, rules:archive, assertions:propose,
+│                            review, retro, knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
@@ -1316,6 +1351,7 @@ src/
 ├── Feedback/                feedback as data: its categories, its files and index, the search for a recurrence
 ├── Rule/                    rules: their format, globs, the brief and draft of a promotion, what each did
 ├── Assertion/               the mechanical checks of the rules: pattern, DOM, tool — and how they are run
+├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit

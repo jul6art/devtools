@@ -98,6 +98,7 @@ final class DevToolsDirectoryTest extends TestCase
         self::assertContains('runs', DevToolsDirectory::IGNORED, 'Screenshots of a machine, never committed.');
         self::assertSame($this->temporaryDirectory().'/.devtools/rules', $directory->rulesDirectory(), 'Versioned: the rules of the project (ADR-0026).');
         self::assertSame($this->temporaryDirectory().'/.devtools/assertions', $directory->assertionsDirectory(), 'Versioned: their checks (ADR-0027).');
+        self::assertSame($this->temporaryDirectory().'/.devtools/journal', $directory->journalDirectory(), 'Versioned: the tasks delivered (ADR-0029).');
         self::assertSame($this->temporaryDirectory().'/.devtools/stats/rules.xml', $directory->ruleStatsFile());
         self::assertContains('stats', DevToolsDirectory::IGNORED, 'A count that moves on every edit, never committed.');
     }

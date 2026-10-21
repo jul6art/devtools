@@ -39,6 +39,26 @@
                         <xs:attribute name="duration-ms" type="xs:nonNegativeInteger" use="required"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- The task this passage belongs to (ADR-0029): what failed since the last green passage. -->
+                <xs:element name="task" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="failed" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="step" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="blocked" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="rule" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="started" type="xs:dateTime" use="required"/>
+                        <xs:attribute name="base" type="t:nonEmpty"/>
+                        <xs:attribute name="failed" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
             <xs:attribute name="at" type="xs:dateTime" use="required"/>
