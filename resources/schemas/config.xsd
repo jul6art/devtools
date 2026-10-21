@@ -74,6 +74,28 @@
                         <xs:attribute name="timeout" type="xs:decimal"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- ai:run, the Claude API writing the drafts (ADR-0035): OFF unless enabled="true" — it spends tokens.
+                     The key is read from ANTHROPIC_API_KEY only, never from this file. -->
+                <xs:element name="ai" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="enabled" type="xs:boolean"/>
+                        <xs:attribute name="model" type="t:nonEmpty"/>
+                        <xs:attribute name="max-tokens" type="xs:positiveInteger"/>
+                        <xs:attribute name="budget-tokens" type="xs:positiveInteger"/>
+                        <xs:attribute name="effort">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="low"/>
+                                    <xs:enumeration value="medium"/>
+                                    <xs:enumeration value="high"/>
+                                    <xs:enumeration value="xhigh"/>
+                                    <xs:enumeration value="max"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="web-search" type="xs:boolean"/>
+                    </xs:complexType>
+                </xs:element>
                 <!-- How to run Node for the JavaScript and TypeScript adapters (ADR-0031). -->
                 <xs:element name="node" minOccurs="0">
                     <xs:complexType>

@@ -56,6 +56,8 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $symfony = $this->dom->optional($root, 'symfony');
         $laravel = $this->dom->optional($root, 'laravel');
         $node = $this->dom->optional($root, 'node');
+        $ai = $this->dom->optional($root, 'ai');
+        $flag = static fn (?\DOMElement $element, string $name, bool $default): bool => $element?->hasAttribute($name) ? \in_array($element->getAttribute($name), ['true', '1'], true) : $default;
         $language = $this->dom->optional($root, 'language');
         $php = $this->dom->optional($root, 'php');
         $routes = $this->dom->optional($root, 'routes');
@@ -80,6 +82,12 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             laravelTimeout: $laravel?->hasAttribute('timeout') ? (float) $laravel->getAttribute('timeout') : $defaults->laravelTimeout,
             nodeBinary: $node?->hasAttribute('binary') ? $node->getAttribute('binary') : $defaults->nodeBinary,
             nodeTimeout: $node?->hasAttribute('timeout') ? (float) $node->getAttribute('timeout') : $defaults->nodeTimeout,
+            aiEnabled: $flag($ai, 'enabled', $defaults->aiEnabled),
+            aiModel: $ai?->hasAttribute('model') ? $ai->getAttribute('model') : $defaults->aiModel,
+            aiMaxTokens: $ai?->hasAttribute('max-tokens') ? (int) $ai->getAttribute('max-tokens') : $defaults->aiMaxTokens,
+            aiBudgetTokens: $ai?->hasAttribute('budget-tokens') ? (int) $ai->getAttribute('budget-tokens') : $defaults->aiBudgetTokens,
+            aiEffort: $ai?->hasAttribute('effort') ? $ai->getAttribute('effort') : $defaults->aiEffort,
+            aiWebSearch: $flag($ai, 'web-search', $defaults->aiWebSearch),
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
             routeGrouping: $routes?->hasAttribute('group') ? $routes->getAttribute('group') : $defaults->routeGrouping,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,

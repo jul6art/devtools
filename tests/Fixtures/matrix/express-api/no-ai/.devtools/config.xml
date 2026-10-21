@@ -39,6 +39,10 @@
     <!-- How to run Node, which reads JavaScript and TypeScript with the project's own TypeScript:
          <node binary="node" timeout="120"/> -->
 
+    <!-- ai:run — the Claude API writes the drafts, in CI for instance. OFF: it spends tokens. The key comes from
+         ANTHROPIC_API_KEY, never from this file; the budget caps one run, input and output together.
+         <ai enabled="true" model="claude-opus-5-5" max-tokens="16000" budget-tokens="200000" effort="medium" web-search="false"/> -->
+
     <!-- One workflow per route (entry-point), or one per controller with its routes as triggers
          (controller), which suits a back-office with twenty routes per resource.
          <routes group="controller"/> -->

@@ -21,6 +21,7 @@ final class ClaudeInstallTest extends TestCase
      * The classes allowed to open a connection, each by the decision that named it.
      */
     private const array CONNECTING = [
+        'Ai/Api/AnthropicClient.php',
         'Release/GitHubReleases.php',
     ];
 
@@ -49,7 +50,7 @@ final class ClaudeInstallTest extends TestCase
     /**
      * ADR-0002: DevTools never talks to Claude, nor to anything else over the network — but for the
      * connections a later decision named, each in one class: the releases `self-update` downloads
-     * (ADR-0034). The name of Angular's `HttpClient`, which the Angular adapter looks for in the code it
+     * (ADR-0034), the Claude API `ai:run` writes through when a project turned it on (ADR-0035). The name of Angular's `HttpClient`, which the Angular adapter looks for in the code it
      * reads (ADR-0032), is no connection: what is searched is a client in use — Symfony's, Guzzle, cURL, a
      * socket, an HTTP stream context, a URL opened as a file.
      */

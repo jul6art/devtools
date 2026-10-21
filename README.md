@@ -193,6 +193,7 @@ Usage
 | | `devtools workflows:inspect --switch-adapter` | a stack Claude documented moves to the native adapter that now reads it | `stack.xml`, pages |
 | **To read it elsewhere** | `devtools export:site` | the documentation as a static site that works offline | `build/devtools-site/` |
 | **With the phar** | `devtools self-update` | the latest release, once its checksum and provenance are verified | the phar |
+| **In CI** (off by default) | `devtools ai:run` | the pending briefs written through the Claude API, then applied — it spends tokens | drafts, pages |
 
 The order matters twice, and only twice: `init` before anything else, and a brief before the draft
 that answers it. Everything else is idempotent — a command run twice on an unchanged project does
@@ -549,6 +550,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
 | `<laravel artisan="vendor/bin/sail artisan" env="local" timeout="60"/>` | `php artisan`, the project's `APP_ENV` | how to run a Laravel project's Artisan |
 | `<node binary="node" timeout="120"/>` | `node`, `120` | how to run Node, which reads JavaScript and TypeScript for the Angular and Express adapters |
+| `<ai enabled="true" model="claude-opus-5-5" budget-tokens="200000"/>` | **off**, Opus 5.5, 16000, 200000, `medium`, no web search | `ai:run` — see *Writing in CI* |
 | `<routes group="controller"/>` | `entry-point` | one page per route at the root of `routes/`, or the same pages laid out under a directory per controller, with an index |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language Claude writes the prose of the pages in; `--locale` wins over it |
@@ -1221,6 +1223,63 @@ absolute paths of the machine.
 
 `tests/Fixtures/demo/symfony-minimal/` is the output of a real session on the fixture application.
 
+
+Writing in CI
+-------------
+
+⚠️ **Off by default — it spends API tokens.** `ai:run` writes the pending briefs through the Claude API instead
+of a Claude Code session, for a repository nobody opens on the day it changes. A project turns it on in its
+`config.xml`, and pays for what it sends:
+
+```xml
+<ai enabled="true" model="claude-opus-5-5" max-tokens="16000" budget-tokens="200000" effort="medium" web-search="false"/>
+```
+
+```shell
+ANTHROPIC_API_KEY=… vendor/bin/devtools ai:run [--tasks=page,discovery,scenario,rule,assertion] [--max-tasks=20]
+```
+
+Each brief is sent with the files it names — nothing else — then its answer is written as the draft and
+`workflows:apply` judges it like any other: **no validation is skipped**. The prompt, the knowledge sheet and a
+fixed preamble form a prefix every page shares, cached, so the second page costs a fraction of the first.
+
+| Guard | What it does |
+| --- | --- |
+| `enabled="true"` | nothing is ever sent before a project says so |
+| `ANTHROPIC_API_KEY` | the only place the key is read; it goes in the request header, never in a file, a report, a brief or a message |
+| `--max-tasks` (20) and `budget-tokens` | the run stops cleanly at either, and the briefs left over are kept for the next |
+| secrets | right before a task leaves, every file of it is checked: an `.env*` file, an excluded directory, a key, a token, a private key or a `password = "…"` refuses the task — nothing of it is sent |
+| `web-search` | a knowledge sheet is researched on the web, with the server-side search tool when the key allows it; without it the task is skipped — never written from memory |
+
+The report — in the console and `.devtools/reports/ai-run-*.md` — lists what was written, accepted, refused
+and kept, the tokens in, out and through the cache, and what they probably cost. The default model is
+Claude Opus 5.5, with Anthropic's server-side fallback when a safety classifier declines; a draft Claude
+declines, or that does not fit in `max-tokens`, writes nothing.
+
+In GitHub Actions, after a merge — a pull request with the documentation, never a push:
+
+```yaml
+on:
+    push:
+        branches: [main]
+jobs:
+    documentation:
+        runs-on: ubuntu-latest
+        permissions: { contents: write, pull-requests: write }
+        steps:
+            - uses: actions/checkout@v4
+              with: { fetch-depth: 0 }
+            - uses: shivammathur/setup-php@v2
+              with: { php-version: '8.5' }
+            - run: composer install --no-interaction
+            - run: vendor/bin/devtools workflows:inspect
+            - run: vendor/bin/devtools ai:run --max-tasks=20
+              env: { ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}' }
+            - uses: peter-evans/create-pull-request@v7
+              with: { title: 'docs: workflows written by ai:run', branch: devtools/ai-run }
+```
+
+Freshness keeps a merge that changed nothing documented from sending anything: no brief, no request.
 Knowledge of the stack
 ----------------------
 
@@ -1474,7 +1533,7 @@ src/
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
 │                            rules:activate, rules:list, rules:archive, assertions:propose,
 │                            review, retro, knowledge:list, knowledge:promote, knowledge:amend,
-│                            export:site, self-update
+│                            export:site, self-update, ai:run
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
@@ -1504,7 +1563,8 @@ src/
 ├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
 ├── Rendering/               pages, workflows.md and the overview diagram; the exported site
 ├── Release/                 self-update: the latest release, its checksum and provenance verified
-├── Ai/                      briefs for Claude, validation and application of its drafts
+├── Ai/                      briefs for Claude, validation and application of its drafts; ai:run and its
+│                            client of the Claude API, off unless a project turns it on
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
 resources/schemas/           the XSD of every format DevTools reads or writes
 resources/templates/         the files init writes

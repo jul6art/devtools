@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Console;
 
+use Jul6Art\DevTools\Command\AiRunCommand;
 use Jul6Art\DevTools\Command\AssertionsProposeCommand;
 use Jul6Art\DevTools\Command\BaselinesAcceptCommand;
 use Jul6Art\DevTools\Command\ClaudeHookCommand;
@@ -120,6 +121,7 @@ final class Application extends BaseApplication
             new KnowledgeAmendCommand(),
             new ExportSiteCommand(),
             new SelfUpdateCommand(),
+            new AiRunCommand(),
         ]);
 
         if ($this->optional[McpServeCommand::NAME][0]) {

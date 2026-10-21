@@ -56,6 +56,11 @@ final readonly class Config
      * @param string                      $laravelArtisan     how to run the project's Artisan (ADR-0030)
      * @param string|null                 $laravelEnv         the environment Artisan boots in; null for the project's own (APP_ENV)
      * @param string                      $nodeBinary         how to run Node for the JavaScript and TypeScript adapters (ADR-0031)
+     * @param bool                        $aiEnabled          whether `ai:run` may call the Claude API — off unless the project turns it on: it spends tokens (ADR-0035)
+     * @param string                      $aiModel            the model `ai:run` writes with
+     * @param int                         $aiMaxTokens        the most a draft may be, in output tokens
+     * @param int                         $aiBudgetTokens     the most one `ai:run` spends, input and output together
+     * @param bool                        $aiWebSearch        whether the knowledge tasks may search the web (the key must allow it)
      * @param ScenarioSettings            $scenarios          how scenarios:run reaches the application (ADR-0021)
      * @param list<string>                $feedbackCategories the categories of feedback the project adds to DevTools' own (ADR-0025)
      */
@@ -74,6 +79,12 @@ final readonly class Config
         public float $laravelTimeout = 60.0,
         public string $nodeBinary = 'node',
         public float $nodeTimeout = 120.0,
+        public bool $aiEnabled = false,
+        public string $aiModel = 'claude-opus-5-5',
+        public int $aiMaxTokens = 16000,
+        public int $aiBudgetTokens = 200000,
+        public string $aiEffort = 'medium',
+        public bool $aiWebSearch = false,
         public ?string $pagesLanguage = null,
         public string $routeGrouping = self::ROUTES_BY_ENTRY_POINT,
         public ?string $phpWebRoot = null,
@@ -84,6 +95,14 @@ final readonly class Config
     ) {
         if ($graphDepth < 0) {
             throw new InvalidConfig('The graph depth cannot be negative.');
+        }
+
+        if ($aiMaxTokens <= 0 || $aiBudgetTokens <= 0) {
+            throw new InvalidConfig('The token limits of <ai> must be positive.');
+        }
+
+        if (!\in_array($aiEffort, ['low', 'medium', 'high', 'xhigh', 'max'], true)) {
+            throw new InvalidConfig(\sprintf('"%s" is not an effort: low, medium, high, xhigh or max.', $aiEffort));
         }
 
         if ($symfonyTimeout <= 0 || $laravelTimeout <= 0 || $nodeTimeout <= 0) {

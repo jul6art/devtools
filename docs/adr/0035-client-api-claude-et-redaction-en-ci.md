@@ -1,6 +1,6 @@
 # ADR-0035 — Client API Claude et rédaction en CI
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; compléments lancés par jul6art le 2026-10-21, « désactivé par défaut, peur des tokens »)
 - **Décideurs** : jul6art
 - **Specs** : § 3 (couche Claude : API ou Claude Code), § 11 (coût, non-déterminisme), § 12 question 1
 
@@ -59,14 +59,32 @@ Autres fournisseurs de modèles ; exécution parallèle des tâches ; API Batch.
 
 ## Critères d'acceptation
 
-- [ ] Client HTTP simulé : brief → requête conforme (snapshot sans clé) → brouillon → `apply`
-- [ ] Clé absente → message ; clé jamais présente dans une sortie (recherche dans tous les fichiers
+- [x] Client HTTP simulé : brief → requête conforme (snapshot sans clé) → brouillon → `apply` *(une
+      fausse API servie par `php -S` sur 127.0.0.1, `AiRunTest`)*
+- [x] Clé absente → message ; clé jamais présente dans une sortie (recherche dans tous les fichiers
       écrits par le test)
-- [ ] Brief contenant un secret de fixture → tâche refusée, aucune requête émise
-- [ ] `--max-tasks` et budget de tokens respectés, briefs restants conservés
-- [ ] Brouillon API invalide → refusé comme un brouillon Claude Code
-- [ ] Session réelle vérifiée une fois avec une clé, sur `symfony-minimal`
-- [ ] README : section « Rédaction en CI »
+- [x] Brief contenant un secret de fixture → tâche refusée, aucune requête émise
+- [x] `--max-tasks` et budget de tokens respectés, briefs restants conservés
+- [x] Brouillon API invalide → refusé comme un brouillon Claude Code
+- [ ] Session réelle vérifiée une fois avec une clé, sur `symfony-minimal` *(non faite : elle dépense des
+      tokens, ce que jul6art a demandé d'éviter par défaut — à jouer quand il le décide)*
+- [x] README : section « Rédaction en CI » *(« Writing in CI »)*
+
+## Écarts assumés à la livraison
+
+- **Désactivé par défaut** (demande de jul6art, 2026-10-21) : `ai:run` refuse tant que `config.xml` ne porte pas
+  `<ai enabled="true"/>`, et la commande n'est lancée par rien d'autre — ni `inspect`, ni un hook.
+- **Pas de `symfony/http-client`** : le client est du HTTP brut par les flux de PHP (TLS d'`ext-openssl`), dans
+  une seule classe, `Ai\Api\AnthropicClient` — que le test d'architecture de l'ADR-0002 nomme avec celle de
+  `self-update`. La commande existe donc toujours, éteinte.
+- **Modèle par défaut `claude-opus-5-5`**, et non `claude-fable-5-1`, plus capable mais deux fois et demie plus
+  cher : le coût est la crainte exprimée. `model` le change. Le repli côté serveur sur refus d'un classifieur
+  (`fallbacks: "default"`) est demandé pour les modèles qui l'acceptent.
+- **Pas de température** : les modèles courants refusent les paramètres d'échantillonnage (400) ; l'effort
+  (`medium` par défaut) et les validateurs tiennent le déterminisme.
+- **Ce qui part** : le brief, son prompt, la fiche de connaissance, et chaque fichier du projet qu'il nomme
+  (`path="…"`, un niveau de plus pour le modèle XML) — 200 Ko par fichier, 600 Ko par tâche au plus, sinon la
+  tâche est laissée à Claude Code.
 
 ## Conséquences
 
