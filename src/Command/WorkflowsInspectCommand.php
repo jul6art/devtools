@@ -45,7 +45,8 @@ final class WorkflowsInspectCommand extends Command
             ->addOption('no-ai', null, InputOption::VALUE_NONE, 'Write no brief for Claude: factual pages only (CI)')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'The language Claude writes the pages in (two letters); wins over .devtools/config.xml. Default: en')
             ->addOption('docs', null, InputOption::VALUE_REQUIRED, 'The directory the pages and the menu are written in, relative to the project. Default: docs/workflows')
-            ->addOption('switch-adapter', null, InputOption::VALUE_NONE, 'Move a stack documented through Claude to the native adapter that now reads it; its identifiers may change');
+            ->addOption('switch-adapter', null, InputOption::VALUE_NONE, 'Move a stack documented through Claude to the native adapter that now reads it; its identifiers may change')
+            ->addOption('apply-renames', null, InputOption::VALUE_NONE, 'Carry the workflows that were probably renamed — gone and new, sharing 80 % of their files — to their new identifier');
     }
 
     #[\Override]
@@ -88,6 +89,7 @@ final class WorkflowsInspectCommand extends Command
                 fallbackLanguage: $this->defaultLanguage,
                 docs: \is_string($docs) ? $docs : $this->defaultDocs,
                 switchAdapter: true === $input->getOption('switch-adapter'),
+                applyRenames: true === $input->getOption('apply-renames'),
             );
         } catch (\InvalidArgumentException $invalid) {
             // An option DevTools refuses is a configuration error (exit 2), not a usage error of the console.

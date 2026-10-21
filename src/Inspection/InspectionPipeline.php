@@ -73,6 +73,8 @@ use Jul6Art\DevTools\Tracking\Generation;
 use Jul6Art\DevTools\Tracking\GenerationMode;
 use Jul6Art\DevTools\Tracking\Index;
 use Jul6Art\DevTools\Tracking\Initializer;
+use Jul6Art\DevTools\Tracking\Rename\RenameDetector;
+use Jul6Art\DevTools\Tracking\Rename\WorkflowRenamer;
 use Jul6Art\DevTools\Tracking\Revision;
 use Jul6Art\DevTools\Tracking\TrackedFile;
 use Jul6Art\DevTools\Tracking\TrackingDocument;
@@ -176,6 +178,21 @@ final readonly class InspectionPipeline
         $this->hasher->reset();
         $tracking = new XmlTrackingStore($types, $this->writer);
         $previous = $this->previousTracking($directory, $tracking);
+
+        // ADR-0036: a workflow gone and a new one sharing most of their files are probably one, renamed.
+        foreach (new RenameDetector()->detect($previous, $workflows) as [$old, $new, $share]) {
+            if ($options->applyRenames && !$options->dryRun) {
+                new WorkflowRenamer($this->clock, $this->writer, $this->git)->rename($directory, $types, new WorkflowId($old), new WorkflowId($new));
+                $report->warnings[] = \sprintf('%s renamed %s: its page, its history and every reference followed.', $old, $new);
+            } else {
+                $report->warnings[] = \sprintf('Probably a rename, %s → %s (%d %% of their files shared): devtools workflows:rename %1$s %2$s keeps its page and history — or inspect with --apply-renames.', $old, $new, (int) round($share * 100));
+            }
+        }
+
+        if ($options->applyRenames) {
+            $previous = $this->previousTracking($directory, $tracking);
+        }
+
         [$vcs, $candidates] = $this->changes($directory->root, $previous, $options, $directory->docs);
         $report->decisions = $decisions = new FreshnessResolver($this->hasher)->resolve($directory->root, $workflows, $previous, $candidates, $options->force, $options->forceAll);
 

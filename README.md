@@ -191,6 +191,7 @@ Usage
 | | `devtools knowledge:list` / `knowledge:promote` | the stack knowledge shared between projects | the library |
 | | `devtools knowledge:amend <key>` | asks Claude to complete a sheet the project showed to be incomplete | a brief |
 | | `devtools workflows:inspect --switch-adapter` | a stack Claude documented moves to the native adapter that now reads it | `stack.xml`, pages |
+| | `devtools workflows:rename <old> <new>` | after renaming a route: its page, history and references follow | pages, tracking |
 | **To read it elsewhere** | `devtools export:site` | the documentation as a static site that works offline | `build/devtools-site/` |
 | **With the phar** | `devtools self-update` | the latest release, once its checksum and provenance are verified | the phar |
 | **In CI** (off by default) | `devtools ai:run` | the pending briefs written through the Claude API, then applied — it spends tokens | drafts, pages |
@@ -1518,6 +1519,27 @@ that derive the same identifier stop the scan with both of them named: DevTools 
 suffix, because a suffix would depend on discovery order and change from one scan to the next. The
 collision is resolved by an `<alias>` in `.devtools/config.xml`.
 
+
+### Renaming a workflow
+
+Renaming a route renames its workflow, and an identifier that changes orphans its page: a new one would start
+with no history, no scenario, no feedback, and cost a writing. `workflows:rename` carries the workflow over:
+
+```shell
+vendor/bin/devtools workflows:rename route.order.new route.order.create [--dry-run]
+```
+
+The page and the tracking file move, the history is kept with one revision more (`renamed from
+route.order.new`), and every reference follows — the other workflows' dependencies, the links of the pages,
+the index, the file → workflows map, the scenarios and their baselines, the feedback, the rules, the
+assertions, the journal. No page is asked of Claude. A rename onto an existing workflow, from one that does
+not exist, or across types is refused, and writes nothing; `config.xml`, the human's, is never rewritten — a
+rename it mentions is said.
+
+`workflows:inspect` spots the probable ones itself: a workflow gone and a new one of the same type that
+share at least 80 % of their files are proposed as a rename, with the command to run. Never applied on that
+guess alone — two histories merged by a false positive cannot be split again — unless you ask:
+`workflows:inspect --apply-renames`.
 Structure
 ---------
 
@@ -1527,7 +1549,7 @@ src/
 ├── Console/                 the console application every command is registered in
 ├── Command/                 init, stack:detect, workflows:inspect, workflows:diff, workflows:check,
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
-│                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
+│                            workflows:rename, workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
@@ -1549,7 +1571,7 @@ src/
 │   ├── Freshness/           what changed since the documentation was written: git, then hashes
 │   ├── Diff/                what changed in a workflow, fact by fact, grouped across workflows
 │   └── InspectionPipeline   the whole run of workflows:inspect
-├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init
+├── Tracking/                .devtools/: tracking files, index, file → workflows graph, init; renaming a workflow
 ├── Impact/                  the workflows a change reaches, read from the graph
 ├── Claude/                  the hooks Claude Code runs, and the configuration files DevTools merges into
 ├── Mcp/                     the MCP server — the only directory that knows the MCP SDK

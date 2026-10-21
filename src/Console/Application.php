@@ -41,6 +41,7 @@ use Jul6Art\DevTools\Command\WorkflowsDiffCommand;
 use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
 use Jul6Art\DevTools\Command\WorkflowsRejectCommand;
+use Jul6Art\DevTools\Command\WorkflowsRenameCommand;
 use Jul6Art\DevTools\Command\WorkflowsReviewCommand;
 use Jul6Art\DevTools\Mcp\McpServer;
 use Jul6Art\DevTools\Scenario\Runner\PantherRunner;
@@ -96,6 +97,7 @@ final class Application extends BaseApplication
             new WorkflowsReviewCommand(),
             new WorkflowsAcceptCommand(),
             new WorkflowsRejectCommand(),
+            new WorkflowsRenameCommand(),
             new ScenariosGenerateCommand(),
             new BaselinesAcceptCommand(),
             new VerifyPrepareCommand(),

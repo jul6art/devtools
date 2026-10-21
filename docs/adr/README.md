@@ -55,7 +55,7 @@
 | [0033](0033-adaptateur-natif-node-express.md) | Adaptateur natif Node / Express | 3 — Généralisation | Accepted | 2026-10-21 |
 | [0034](0034-publication-open-source-et-distribution.md) | Publication open source, phar, Docker, site | 3 — Généralisation | Accepted | — |
 | [0035](0035-client-api-claude-et-redaction-en-ci.md) | Client API Claude et rédaction en CI | Compléments | Accepted | — |
-| [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Proposed | — |
+| [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Accepted | 2026-10-21 |
 | [0037](0037-glossaire-metier.md) | Glossaire métier | Compléments | Proposed | — |
 | [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Proposed | — |
 | [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Proposed | — |

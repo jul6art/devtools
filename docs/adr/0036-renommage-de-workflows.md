@@ -1,6 +1,6 @@
 # ADR-0036 — Renommage de workflows : `workflows:rename`
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; compléments lancés par jul6art le 2026-10-21) · Livré le 2026-10-21
 - **Décideurs** : jul6art
 - **Specs** : § 11 (stabilité des identifiants)
 
@@ -38,14 +38,27 @@ Fusion ou scission de workflows ; renommage d'un type de workflow.
 
 ## Critères d'acceptation
 
-- [ ] Renommage sur une fixture complète (page rédigée, scénarios, retour, règle) : toutes les
-      références suivent, aucune ne reste (recherche de l'ancien identifiant dans `.devtools/`)
-- [ ] Historique conservé, révision ajoutée ; aucune tâche IA créée
-- [ ] Refus : cible existante, source absente
-- [ ] Détection : route renommée dans le fixture → renommage probable proposé ; recouvrement < 80 % →
-      rien
-- [ ] `--dry-run` n'écrit rien
-- [ ] README : section « Renommer un workflow »
+- [x] Renommage sur une fixture complète (page rédigée, scénarios, retour, règle) : toutes les
+      références suivent, aucune ne reste (recherche de l'ancien identifiant dans `.devtools/`) *(la
+      documentation rédigée de `symfony-minimal`, un scénario, sa baseline et un retour ; les règles et le
+      journal suivent par le même remplacement)*
+- [x] Historique conservé, révision ajoutée ; aucune tâche IA créée
+- [x] Refus : cible existante, source absente *(et changement de type)*
+- [x] Détection : route renommée dans le fixture → renommage probable proposé ; recouvrement < 80 % →
+      rien *(une page PHP renommée, cinq fichiers sur six partagés ; `--apply-renames` l'applique)*
+- [x] `--dry-run` n'écrit rien
+- [x] README : section « Renommer un workflow »
+
+## Écarts assumés à la livraison
+
+- **Recouvrement = fichiers communs / le plus grand des deux ensembles**, même type obligatoire ; un workflow
+  disparu ne s'apparie qu'au meilleur candidat, et un candidat qu'à un seul disparu.
+- **Les fichiers relus sont ceux des dossiers qui portent des identifiants** (`index.xml`, `graph/`,
+  `workflows/`, `scenarios/`, `feedback/`, `rules/`, `assertions/`, `journal/`) et les pages ; seuls ceux qui
+  contiennent l'identifiant sont réécrits. Les espaces de travail (`pending/`, `runs/`, `gate/`, `reports/`,
+  `stats/`) se refont au prochain passage.
+- **La page n'est pas réécrite** : son historique en Markdown attend la prochaine réécriture de ses faits,
+  la révision est dans le XML de suivi.
 
 ## Conséquences
 
