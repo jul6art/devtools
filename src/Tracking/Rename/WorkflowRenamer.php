@@ -20,8 +20,8 @@ use Symfony\Component\Filesystem\Path;
 /**
  * `workflows:rename` (ADR-0036): a workflow's page, tracking file and history carried to a new identifier, and
  * every reference to it with them — the other tracking files, the links of the pages, the index, the map, the
- * scenarios and their baselines, the feedback, the rules, the assertions, the journal. No page is rewritten
- * by Claude: the history goes on, with a revision saying so.
+ * scenarios and their baselines, the feedback, the rules, the assertions, the journal, the glossary. No page is
+ * rewritten by Claude: the history goes on, with a revision saying so.
  *
  * Everything is computed, then checked against its schema, then written: a refused rename writes nothing.
  * `config.xml` is the human's and is never rewritten — a rename it mentions is said.
@@ -32,7 +32,7 @@ final readonly class WorkflowRenamer
      * The parts of `.devtools/` that hold identifiers; work areas (pending, runs, gate, reports, stats) are
      * rewritten by the next run that needs them.
      */
-    private const array HOLDERS = ['index.xml', 'graph', 'workflows', 'scenarios', 'feedback', 'rules', 'assertions', 'journal'];
+    private const array HOLDERS = ['index.xml', 'graph', 'workflows', 'scenarios', 'feedback', 'rules', 'assertions', 'journal', 'glossary.xml'];
 
     public function __construct(
         private Clock $clock = new SystemClock(),

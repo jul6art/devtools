@@ -688,6 +688,39 @@ misspelled shows there.
 ⚠️ There is therefore **no `events` workflow type**, against the seven of the specs. A project that wants
 such pages declares a custom type in `config.xml`.
 
+Glossary
+--------
+
+Two pages of the same project call the same thing an *order*, a *purchase* and a *command*; a newcomer does
+not know that an `Item` is what the screens call an *object*. Each inspection collects the project's terms
+from the model, deterministically — the short names of the entities and messages the workflows traverse, the
+components of the interface, and every word three workflow identifiers or more share (`orders` in
+`route.orders.index`, `route.orders.show`, `route.orders.store`, which joins the `Order` entity) — into
+`.devtools/glossary.xml`, versioned:
+
+```xml
+<term name="Order" status="defined" occurrences="6">
+  <definition>Commande passée pour un client sur un produit, tarifée puis validée par un opérateur.</definition>
+  <label>Commande</label>
+  <synonym>purchase</synonym>
+  <workflow>route.order.index</workflow>
+  …
+  <file>src/Entity/Order.php</file>
+</term>
+```
+
+A new term is a `candidate`: one brief, `.devtools/pending/glossary.brief.xml`, asks Claude to define all of
+them in one or two sentences, with the synonyms the code and the pages use and the label the screens show.
+`workflows:apply` refuses the draft whole when a definition runs longer, names a term the glossary does not
+have, or redefines one set aside. Once defined, a term is listed in `docs/workflows/glossary.md`, linked
+from the menu, and handed to the brief of every page whose workflow meets it — with the instruction to use
+that word. A page draft that writes a declared synonym instead is accepted, with a warning.
+
+A term that is no business word — a component named `Layout`, say — is set aside by hand: `status="ignored"`
+in `glossary.xml`. It is never proposed again; a definition is never asked for twice either, and a renamed
+workflow carries its terms along. Nothing is written without a candidate: a project whose vocabulary is
+defined costs no brief.
+
 Impact of a change
 ------------------
 
@@ -1532,9 +1565,9 @@ vendor/bin/devtools workflows:rename route.order.new route.order.create [--dry-r
 The page and the tracking file move, the history is kept with one revision more (`renamed from
 route.order.new`), and every reference follows — the other workflows' dependencies, the links of the pages,
 the index, the file → workflows map, the scenarios and their baselines, the feedback, the rules, the
-assertions, the journal. No page is asked of Claude. A rename onto an existing workflow, from one that does
-not exist, or across types is refused, and writes nothing; `config.xml`, the human's, is never rewritten — a
-rename it mentions is said.
+assertions, the journal, the glossary. No page is asked of Claude. A rename onto an existing workflow, from
+one that does not exist, or across types is refused, and writes nothing; `config.xml`, the human's, is never
+rewritten — a rename it mentions is said.
 
 `workflows:inspect` spots the probable ones itself: a workflow gone and a new one of the same type that
 share at least 80 % of their files are proposed as a rename, with the command to run. Never applied on that
@@ -1583,6 +1616,7 @@ src/
 ├── Rule/                    rules: their format, globs, the brief and draft of a promotion, what each did
 ├── Assertion/               the mechanical checks of the rules: pattern, DOM, tool — and how they are run
 ├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
+├── Glossary/                the project's terms: collected from the model, defined by Claude, given to the pages
 ├── Rendering/               pages, workflows.md and the overview diagram; the exported site
 ├── Release/                 self-update: the latest release, its checksum and provenance verified
 ├── Ai/                      briefs for Claude, validation and application of its drafts; ai:run and its

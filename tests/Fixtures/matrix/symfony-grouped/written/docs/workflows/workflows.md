@@ -2,7 +2,7 @@
 
 Stack: Symfony 8.1 · 10 workflows · last scan: 2026-09-16 (commit 4290ff5)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-8](../../.devtools/knowledge/symfony-8.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-8](../../.devtools/knowledge/symfony-8.md) · [Glossary](glossary.md)
 
 ## Routes (6)
 

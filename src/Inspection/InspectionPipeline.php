@@ -15,6 +15,12 @@ use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Console\MemoryLimit;
+use Jul6Art\DevTools\Glossary\Glossary;
+use Jul6Art\DevTools\Glossary\GlossaryBriefWriter;
+use Jul6Art\DevTools\Glossary\GlossaryCollector;
+use Jul6Art\DevTools\Glossary\GlossaryRenderer;
+use Jul6Art\DevTools\Glossary\TermStatus;
+use Jul6Art\DevTools\Glossary\XmlGlossaryStore;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\DiscoveryBrief;
@@ -346,7 +352,8 @@ final readonly class InspectionPipeline
         if (!$options->noAi) {
             $this->writeDiscoveryBriefs($directory, $config, $discoveries, $knowledge, $report);
         }
-        $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options, $report);
+        $glossary = $this->glossary($directory, $config, $workflows, $knowledge, $options, $report);
+        $pending = $options->noAi ? [] : $this->writeBriefs($directory, $config, $knowledge, $stackOf, $workflows, $decisions, $documents, $types, $options, $report, $glossary);
 
         $progress->stage('Index, menu and graph');
         $indexStore = new XmlIndexStore($types, $this->writer);
@@ -371,7 +378,7 @@ final readonly class InspectionPipeline
             $report->warnings[] = \sprintf('The scenario %s is %s.', $scenario, $reason);
         }
 
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios));
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md'))));
         $this->writer->write($directory->overviewFile(), new GraphRenderer()->render($workflows));
     }
 
@@ -600,6 +607,48 @@ final readonly class InspectionPipeline
     }
 
     /**
+     * The project's glossary (ADR-0037): the terms the model names merged into what the project decided — a
+     * definition, a term set aside — then `glossary.md` from its defined terms, and a brief for Claude when
+     * some are still to define.
+     *
+     * @param list<Workflow>             $workflows
+     * @param array<string, string|null> $knowledge
+     */
+    private function glossary(DevToolsDirectory $directory, Config $config, array $workflows, array $knowledge, InspectionOptions $options, InspectionReport $report): Glossary
+    {
+        $store = new XmlGlossaryStore($this->writer);
+        $glossary = $store->read($directory->path('glossary.xml'))->merge(new GlossaryCollector()->collect($workflows));
+        $store->write($directory->path('glossary.xml'), $glossary);
+        $page = $directory->root->absolute($directory->docs.'/glossary.md');
+
+        if ([] !== $glossary->withStatus(TermStatus::Defined)) {
+            $this->writer->write($page, new GlossaryRenderer()->render($glossary, $report->projectName));
+        } elseif (is_file($page)) {
+            new Filesystem()->remove($page);
+        }
+
+        $brief = $directory->path(GlossaryBriefWriter::BRIEF);
+        $candidates = $glossary->withStatus(TermStatus::Candidate);
+
+        if ($options->noAi || [] === $candidates) {
+            new Filesystem()->remove($brief);
+
+            return $glossary;
+        }
+
+        $pages = [];
+
+        foreach ($workflows as $workflow) {
+            $pages[$workflow->id->value] = ['title' => $workflow->title, 'page' => $directory->pageRelativePath($workflow->type, $workflow->id, $workflow->group?->directory)];
+        }
+
+        new GlossaryBriefWriter($this->writer)->write($brief, DevToolsDirectory::NAME.'/'.GlossaryBriefWriter::DRAFT, $candidates, $pages, array_values(array_filter($knowledge, \is_string(...))), $options->language ?? $config->language($options->fallbackLanguage));
+        self::countBrief($report, $brief);
+
+        return $glossary;
+    }
+
+    /**
      * A brief for every page Claude has to (re)write: created or rewritten by this run, or never written.
      * Briefs are recomputed on each run; drafts are left for `workflows:apply` to judge.
      *
@@ -611,7 +660,7 @@ final readonly class InspectionPipeline
      *
      * @return list<WorkflowId> the workflows waiting for a writing
      */
-    private function writeBriefs(DevToolsDirectory $directory, Config $config, array $knowledge, array $stackOf, array $workflows, array $decisions, array $documents, WorkflowTypeRegistry $types, InspectionOptions $options, InspectionReport $report): array
+    private function writeBriefs(DevToolsDirectory $directory, Config $config, array $knowledge, array $stackOf, array $workflows, array $decisions, array $documents, WorkflowTypeRegistry $types, InspectionOptions $options, InspectionReport $report, Glossary $glossary = new Glossary()): array
     {
         new Filesystem()->remove([...glob($directory->path('pending/page.*.brief.xml')) ?: [], ...glob($directory->path('pending/page.*.model.xml')) ?: [], ...glob($directory->path('pending/group.*.brief.xml')) ?: []]);
 
@@ -664,6 +713,7 @@ final readonly class InspectionPipeline
                 changes: self::changedFiles($decisions[$workflow->id->value] ?? null),
                 draftPath: DevToolsDirectory::NAME.'/pending/'.PageBrief::fileName($workflow->id, 'draft.md'),
                 facts: array_map(self::describe(...), $report->changes[$workflow->id->value] ?? []),
+                terms: $glossary->of($workflow->id->value),
             ));
             self::countBrief($report, $briefPath, $directory->root->absolute($modelPath));
             $pending[] = $workflow->id;

@@ -2,7 +2,7 @@
 
 Stack: Laravel 13.38 · 12 workflows · last scan: 2026-09-16 (commit a8254ce)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge laravel-13](../../.devtools/knowledge/laravel-13.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge laravel-13](../../.devtools/knowledge/laravel-13.md) · [Glossary](glossary.md)
 
 ## Routes (5)
 

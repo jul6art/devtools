@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary-draft xmlns="https://github.com/jul6art/devtools/schema/glossary-draft/1" schema-version="1">
+  <term name="OrderStatusBadge">
+    <definition>Badge qui affiche le statut d'une commande, partagé par la liste et le détail.</definition>
+  </term>
+</glossary-draft>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="orders" status="defined" occurrences="4">
+    <definition>Les commandes du service, tenues en mémoire et exposées sous /orders.</definition>
+    <workflow>route.delete.admin.orders.id</workflow>
+    <workflow>route.get.orders</workflow>
+    <workflow>route.get.orders.id</workflow>
+    <workflow>route.post.orders</workflow>
+  </term>
+</glossary>

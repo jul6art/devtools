@@ -2,7 +2,7 @@
 
 Stack: Express 5.3 · 9 workflows · last scan: 2026-09-16 (commit b3f961c)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge express-5](../../.devtools/knowledge/express-5.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge express-5](../../.devtools/knowledge/express-5.md) · [Glossary](glossary.md)
 
 ## Routes (5)
 

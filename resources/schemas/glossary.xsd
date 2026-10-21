@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The project's glossary (ADR-0037): .devtools/glossary.xml. The terms come from the model at each inspection;
+    their definitions from Claude, applied by workflows:apply; their status from a human — "ignored" is never
+    proposed again.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/glossary/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/glossary/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="glossary">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="term" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="definition" type="t:nonEmpty" minOccurs="0"/>
+                            <xs:element name="label" type="t:nonEmpty" minOccurs="0"/>
+                            <xs:element name="synonym" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="workflow" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="file" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="candidate"/>
+                                    <xs:enumeration value="defined"/>
+                                    <xs:enumeration value="ignored"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="occurrences" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required" fixed="1"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

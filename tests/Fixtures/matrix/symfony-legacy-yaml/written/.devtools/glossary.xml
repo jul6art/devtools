@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="CartSummary" status="defined" occurrences="1">
+    <definition>Composant live qui résume le panier de l'utilisateur dans l'en-tête des pages.</definition>
+    <workflow>ui.cart-summary</workflow>
+    <file>src/Twig/Components/CartSummary.php</file>
+  </term>
+  <term name="Customer" status="defined" occurrences="1">
+    <definition>Client à qui une commande est rattachée, identifié par son nom et son site.</definition>
+    <label>Client</label>
+    <workflow>route.customer.edit</workflow>
+    <file>src/Entity/Customer.php</file>
+  </term>
+  <term name="Order" status="defined" occurrences="6">
+    <definition>Commande passée pour un client sur un produit, tarifée puis validée par un opérateur.</definition>
+    <label>Commande</label>
+    <synonym>purchase</synonym>
+    <workflow>async.order-created</workflow>
+    <workflow>route.order.index</workflow>
+    <workflow>route.order.new</workflow>
+    <workflow>route.order.show</workflow>
+    <workflow>route.order.validate</workflow>
+    <workflow>ui.cart-summary</workflow>
+    <file>src/Entity/Order.php</file>
+  </term>
+  <term name="OrderCreated" status="defined" occurrences="1">
+    <definition>Message publié quand une commande est créée ; ses gestionnaires notifient et préparent la suite.</definition>
+    <workflow>async.order-created</workflow>
+    <file>src/Message/OrderCreated.php</file>
+  </term>
+  <term name="Product" status="defined" occurrences="2">
+    <definition>Article du catalogue qu'une commande vise, avec son prix.</definition>
+    <workflow>command.app.import-catalog</workflow>
+    <workflow>route.order.new</workflow>
+    <file>src/Entity/Product.php</file>
+  </term>
+  <term name="Site" status="defined" occurrences="1">
+    <definition>Établissement d'un client, auquel ses commandes sont livrées.</definition>
+    <workflow>route.customer.edit</workflow>
+    <file>src/Entity/Site.php</file>
+  </term>
+</glossary>

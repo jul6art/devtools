@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="Alert" status="candidate" occurrences="1">
+    <workflow>ui.alert</workflow>
+    <file>app/View/Components/Alert.php</file>
+  </term>
+  <term name="CartSummary" status="candidate" occurrences="1">
+    <workflow>ui.cart-summary</workflow>
+    <file>app/Livewire/CartSummary.php</file>
+  </term>
+  <term name="Order" status="candidate" occurrences="6">
+    <workflow>async.send-order-confirmation</workflow>
+    <workflow>command.orders.import</workflow>
+    <workflow>data.seeders</workflow>
+    <workflow>route.orders.index</workflow>
+    <workflow>route.orders.show</workflow>
+    <workflow>route.orders.store</workflow>
+    <file>app/Models/Order.php</file>
+  </term>
+  <term name="OrderPlaced" status="candidate" occurrences="1">
+    <workflow>route.orders.store</workflow>
+    <file>app/Events/OrderPlaced.php</file>
+  </term>
+</glossary>

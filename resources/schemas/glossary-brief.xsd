@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude is given to define the project's terms (ADR-0037): .devtools/pending/glossary.brief.xml. Each
+    candidate term comes with the workflows it names and where it is declared; the draft answers in
+    glossary-draft.xsd.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/glossary-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/glossary-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="glossary-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="language" type="t:nonEmpty"/>
+                <xs:element name="knowledge" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="term" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="workflow" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="page" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="file" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required" fixed="1"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

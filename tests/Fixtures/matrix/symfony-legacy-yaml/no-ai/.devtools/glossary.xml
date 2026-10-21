@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="CartSummary" status="candidate" occurrences="1">
+    <workflow>ui.cart-summary</workflow>
+    <file>src/Twig/Components/CartSummary.php</file>
+  </term>
+  <term name="Customer" status="candidate" occurrences="1">
+    <workflow>route.customer.edit</workflow>
+    <file>src/Entity/Customer.php</file>
+  </term>
+  <term name="Order" status="candidate" occurrences="6">
+    <workflow>async.order-created</workflow>
+    <workflow>route.order.index</workflow>
+    <workflow>route.order.new</workflow>
+    <workflow>route.order.show</workflow>
+    <workflow>route.order.validate</workflow>
+    <workflow>ui.cart-summary</workflow>
+    <file>src/Entity/Order.php</file>
+  </term>
+  <term name="OrderCreated" status="candidate" occurrences="1">
+    <workflow>async.order-created</workflow>
+    <file>src/Message/OrderCreated.php</file>
+  </term>
+  <term name="Product" status="candidate" occurrences="2">
+    <workflow>command.app.import-catalog</workflow>
+    <workflow>route.order.new</workflow>
+    <file>src/Entity/Product.php</file>
+  </term>
+  <term name="Site" status="candidate" occurrences="1">
+    <workflow>route.customer.edit</workflow>
+    <file>src/Entity/Site.php</file>
+  </term>
+</glossary>

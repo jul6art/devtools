@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="OrderStatusBadge" status="defined" occurrences="1">
+    <definition>Badge qui affiche le statut d'une commande, partagé par la liste et le détail.</definition>
+    <workflow>ui.order-status-badge</workflow>
+    <file>src/app/shared/order-status-badge.component.ts</file>
+  </term>
+</glossary>

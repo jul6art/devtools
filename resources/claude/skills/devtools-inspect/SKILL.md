@@ -35,7 +35,13 @@ through files, and DevTools validates everything you write before it reaches `.d
 3. For **each** page brief (`page.*.brief.xml`), follow the prompt it names (`<prompt path>`, e.g.
    `vendor/jul6art/devtools/resources/prompts/page/v4.md`) **to the letter**:
    - read the model, the current page, the knowledge file, and the files the model lists;
+   - use the project's words: a `<term>` of the brief is the glossary's name for a thing — write it, not a
+     synonym;
    - write the draft at the brief's `<draft path>`.
+
+   **The glossary brief** (`glossary.brief.xml`) lists the terms the code names and nobody defined yet: follow
+   the prompt it names (`resources/prompts/glossary/v1.md`), define each in one or two sentences in the XML draft
+   at its `<draft path>`, and apply with the pages.
 
    **Scenario briefs** (`scenario.*.brief.xml`) exist only when someone ran `scenarios:generate`: follow
    the prompt each names (`resources/prompts/scenario/v1.md`), write the XML draft at its `<draft path>` —

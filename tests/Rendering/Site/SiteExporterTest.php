@@ -32,7 +32,7 @@ final class SiteExporterTest extends TestCase
         $tester = new CommandTester(new Application()->find('export:site'));
 
         self::assertSame(0, $tester->execute(['path' => $project]));
-        self::assertStringContainsString('17 pages written to', $tester->getDisplay());
+        self::assertStringContainsString('18 pages written to', $tester->getDisplay());
         self::assertStringContainsString('open index.html, no server needed', (string) preg_replace('/\s+/', ' ', $tester->getDisplay()));
 
         $site = $project.'/build/devtools-site';
@@ -43,6 +43,7 @@ final class SiteExporterTest extends TestCase
         self::assertStringContainsString('<a href="routes/orders.store.html">POST /orders</a>', $index);
         self::assertStringContainsString('<a href="_devtools/knowledge/laravel-13.html">', $index, 'The machinery a page links to is copied beside it.');
         self::assertFileExists($site.'/_devtools/stack.xml.html');
+        self::assertStringContainsString('<a href="glossary.html">Glossary</a>', $index, 'The glossary is a page of the site like the others.');
         self::assertStringContainsString('<pre class="mermaid">', (string) file_get_contents($site.'/_devtools/graph/workflows.mermaid.html'));
         self::assertStringContainsString('<a href="orders.show.html"><code>route.orders.show</code></a>', $page);
         self::assertStringContainsString('<script src="../assets/mermaid/mermaid.min.js"></script>', $page, 'Mermaid is in the site, never fetched from a CDN.');

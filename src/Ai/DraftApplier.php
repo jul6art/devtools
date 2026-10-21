@@ -9,6 +9,8 @@ use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Config\XmlConfigReader;
+use Jul6Art\DevTools\Glossary\GlossaryDraftApplier;
+use Jul6Art\DevTools\Glossary\XmlGlossaryStore;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\XmlDiscoveryBriefStore;
 use Jul6Art\DevTools\Inspection\Model\Confidence;
@@ -115,11 +117,17 @@ final readonly class DraftApplier
         $result->accepted = [...$result->accepted, ...$assertions['accepted']];
         $result->refused = [...$result->refused, ...$assertions['refused']];
         $result->warnings = [...$result->warnings, ...$assertions['warnings']];
+
+        // The glossary's definitions (ADR-0037), before the pages, which then read the terms they define.
+        $glossary = new GlossaryDraftApplier($this->writer)->apply($directory, is_file($directory->stackFile()) ? new XmlStackStore()->read($directory->stackFile())->projectName : basename($root->path));
+        $result->accepted = [...$result->accepted, ...$glossary['accepted']];
+        $result->refused = [...$result->refused, ...$glossary['refused']];
+        $terms = new XmlGlossaryStore()->read($directory->path('glossary.xml'));
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
 
         if ([] === $drafts) {
             // The menu lists the scenarios to review: one Claude rewrote leaves the list.
-            if ([] !== $scenarios['accepted']) {
+            if ([] !== $scenarios['accepted'] || [] !== $glossary['accepted']) {
                 $this->refreshMenu($directory, new XmlIndexStore($types)->read($directory->indexFile()), $config);
             }
 
@@ -136,6 +144,11 @@ final readonly class DraftApplier
 
         foreach ($drafts as $draftFile) {
             $id = substr(basename($draftFile), \strlen('page.'), -\strlen('.draft.md'));
+
+            // A synonym where the glossary has a term is said, never refused (ADR-0037).
+            foreach ($terms->synonymsIn((string) file_get_contents($draftFile)) as [$synonym, $term]) {
+                $result->warnings[] = \sprintf('%s writes "%s" where the glossary says "%s".', $id, $synonym, $term);
+            }
 
             try {
                 $documents[$id] = $this->applyOne($directory, $id, $draftFile, $documents, $types, $tracking, $result);
@@ -531,6 +544,6 @@ final readonly class DraftApplier
         $stacks = new XmlStackStore()->read($directory->stackFile());
         $scenarios = ScenarioReview::attention(new XmlScenarioIndexStore()->read($directory->scenarioIndexFile()), $index);
 
-        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios));
+        $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md'))));
     }
 }

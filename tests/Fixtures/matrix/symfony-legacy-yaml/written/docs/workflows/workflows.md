@@ -2,7 +2,7 @@
 
 Stack: Symfony 7.4 · 10 workflows · last scan: 2026-09-16 (commit 643805e)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-7](../../.devtools/knowledge/symfony-7.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge symfony-7](../../.devtools/knowledge/symfony-7.md) · [Glossary](glossary.md)
 
 ## Routes (6)
 

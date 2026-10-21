@@ -59,6 +59,10 @@ final readonly class XmlPageBriefStore
             $this->dom->element($root, 'fact', text: $fact);
         }
 
+        foreach ($brief->terms as $term => $definition) {
+            $this->dom->element($root, 'term', ['name' => $term], $definition);
+        }
+
         foreach ($brief->sections as $section) {
             $this->dom->element($root, 'section', text: $section);
         }
@@ -96,6 +100,7 @@ final readonly class XmlPageBriefStore
             array_map(static fn (\DOMElement $change): array => ['path' => $change->getAttribute('path'), 'change' => $change->getAttribute('kind')], $this->dom->children($root, 'change')),
             $this->dom->single($root, 'draft')->getAttribute('path'),
             array_map(static fn (\DOMElement $fact): string => $fact->textContent, $this->dom->children($root, 'fact')),
+            array_column(array_map(static fn (\DOMElement $term): array => [$term->getAttribute('name'), $term->textContent], $this->dom->children($root, 'term')), 1, 0),
         );
     }
 }

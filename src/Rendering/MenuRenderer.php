@@ -36,7 +36,7 @@ final class MenuRenderer
      * @param list<WorkflowType>    $customTypes
      * @param array<string, string> $scenarios        scenario => why it needs a look (ADR-0020)
      */
-    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = [], string $docs = DevToolsDirectory::DEFAULT_DOCS, array $scenarios = []): string
+    public function render(StackDocument $stacks, Index $index, array $uncovered, array $pendingRedaction = [], array $customTypes = [], string $docs = DevToolsDirectory::DEFAULT_DOCS, array $scenarios = [], bool $glossary = false): string
     {
         // The menu lives with the pages; everything it links to outside them lives in .devtools/.
         $machinery = static fn (string $path): string => DevToolsDirectory::machineryLink($docs, $path);
@@ -55,6 +55,7 @@ final class MenuRenderer
                 MarkdownWriter::link('Overview', $machinery('graph/workflows.mermaid')),
                 MarkdownWriter::link('Stack', $machinery('stack.xml')),
                 ...array_map(static fn (StackProfile $stack): string => MarkdownWriter::link('Knowledge '.$stack->knowledgeKey, $machinery('knowledge/'.$stack->knowledgeKey.'.md')), array_values(array_filter($stacks->stacks, static fn (StackProfile $stack): bool => null !== $stack->knowledgeKey))),
+                ...$glossary ? [MarkdownWriter::link('Glossary', 'glossary.md')] : [],
             ]),
         ];
 

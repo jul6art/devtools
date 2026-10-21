@@ -2,7 +2,7 @@
 
 Stack: Angular 22.2 · 7 workflows · last scan: 2026-09-16 (commit e40e7e1)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge angular-22](../../.devtools/knowledge/angular-22.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge angular-22](../../.devtools/knowledge/angular-22.md) · [Glossary](glossary.md)
 
 ## Routes (5)
 

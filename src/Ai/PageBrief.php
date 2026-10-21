@@ -20,6 +20,7 @@ final readonly class PageBrief
      * @param list<string>                              $sections the closed list of sections the draft holds, in order
      * @param list<array{path: string, change: string}> $changes  the files added, removed or changed since the last revision
      * @param list<string>                              $facts    what changed in the workflow itself (ADR-0046), as one line each
+     * @param array<string, string>                     $terms    the glossary's terms the workflow meets, with their definition (ADR-0037)
      */
     public function __construct(
         public WorkflowId $workflow,
@@ -37,6 +38,7 @@ final readonly class PageBrief
         public array $changes,
         public string $draftPath,
         public array $facts = [],
+        public array $terms = [],
     ) {
     }
 
