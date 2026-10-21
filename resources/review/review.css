@@ -1,0 +1,116 @@
+/* The review page of DevTools (ADR-0028): no framework, nothing from elsewhere. */
+:root {
+    --ink: #1f2933;
+    --muted: #616e7c;
+    --line: #d9e2ec;
+    --accent: #2563eb;
+    --failed: #b91c1c;
+    --passed: #15803d;
+    --pick: #e11d48;
+}
+
+* { box-sizing: border-box; }
+
+/* `hidden` hides, whatever display a rule gives. */
+[hidden] { display: none !important; }
+
+body {
+    margin: 0;
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: #f8fafc;
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+}
+
+h1 { margin: 0; font-size: 1.15rem; }
+h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
+h3 { font-size: 0.95rem; margin: 1.25rem 0 0.5rem; }
+
+#run { margin: 0; color: var(--muted); }
+
+main {
+    display: grid;
+    grid-template-columns: minmax(14rem, 20rem) 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem;
+}
+
+nav section { margin-bottom: 1rem; }
+nav h3 { margin: 0 0 0.25rem; font-size: 0.85rem; word-break: break-all; }
+nav ul { list-style: none; margin: 0; padding: 0; }
+nav button {
+    width: 100%;
+    text-align: left;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+}
+nav button:hover, nav button[aria-current="true"] { border-color: var(--line); background: #fff; }
+
+.verdict-passed { color: var(--passed); }
+.verdict-failed, .verdict-error, .visual-different { color: var(--failed); }
+
+#workspace { min-width: 0; }
+#hint { margin: 0; color: var(--muted); max-width: 40rem; }
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 0.75rem;
+}
+
+figure { margin: 0; }
+figcaption { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.25rem; }
+figure img { width: 100%; border: 1px solid var(--line); background: #fff; }
+
+#page {
+    width: 100%;
+    height: 32rem;
+    border: 1px solid var(--line);
+    background: #fff;
+}
+
+form {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 48rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+}
+
+form label { display: grid; gap: 0.2rem; font-size: 0.9rem; color: var(--muted); }
+form input, form select { font: inherit; padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); }
+form p { margin: 0; font-size: 0.8rem; color: var(--muted); }
+
+button[type="submit"], #accept, #outcome button {
+    justify-self: start;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+#outcome button { margin: 0.4rem 0.4rem 0 0; }
+#outcome .error { color: var(--failed); }
+
+@media (max-width: 52rem) {
+    main { grid-template-columns: 1fr; }
+}

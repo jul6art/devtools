@@ -20,6 +20,7 @@ use Jul6Art\DevTools\Command\KnowledgeAmendCommand;
 use Jul6Art\DevTools\Command\KnowledgeListCommand;
 use Jul6Art\DevTools\Command\KnowledgePromoteCommand;
 use Jul6Art\DevTools\Command\McpServeCommand;
+use Jul6Art\DevTools\Command\ReviewCommand;
 use Jul6Art\DevTools\Command\RulesActivateCommand;
 use Jul6Art\DevTools\Command\RulesListCommand;
 use Jul6Art\DevTools\Command\RulesPromoteCommand;
@@ -102,6 +103,7 @@ final class Application extends BaseApplication
             new RulesActivateCommand(),
             new RulesListCommand(),
             new AssertionsProposeCommand(),
+            new ReviewCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

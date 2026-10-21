@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Command;
 
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Scenario\Run\XmlRunReader;
+use Jul6Art\DevTools\Scenario\Visual\Baselines;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Xml\InvalidXml;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -15,7 +16,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Makes the captures of a run the baselines the next runs are compared with (ADR-0022) — once a human has
@@ -81,13 +81,10 @@ final class BaselinesAcceptCommand extends Command
             return [] === $asked ? Command::SUCCESS : Command::INVALID;
         }
 
-        $filesystem = new Filesystem();
-        $artifacts = \dirname($result);
+        $baselines = new Baselines($directory);
 
         foreach ($captures as $capture => [$screenshot, $dom]) {
-            $baseline = $directory->baselinesDirectory().'/'.$capture;
-            $filesystem->copy($artifacts.'/'.$screenshot, $baseline.'.png', true);
-            $filesystem->copy($artifacts.'/'.$dom, $baseline.'.dom.html', true);
+            $baselines->accept(\dirname($result), $capture, $screenshot, $dom);
             $io->writeln(\sprintf('<info>✓</info> %s', $capture));
         }
 

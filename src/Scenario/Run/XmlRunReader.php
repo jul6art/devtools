@@ -23,7 +23,10 @@ final readonly class XmlRunReader
     }
 
     /**
-     * @return array<string, array{verdict: string, captures: list<array{name: string, screenshot: string, dom: string, diff: ?string, domDiff: ?string, visual: ?string}>}> by scenario
+     * The scenarios of a run, by identifier: their verdict, the captures of their `screenshot` steps, and the step
+     * that stopped them with what it kept.
+     *
+     * @return array<string, array{verdict: string, captures: list<array{name: string, screenshot: string, dom: string, diff: ?string, domDiff: ?string, visual: ?string}>, failure: ?array{action: string, message: ?string, screenshot: ?string, dom: ?string}}>
      *
      * @throws InvalidXml when the file is not a result
      */
@@ -35,6 +38,7 @@ final readonly class XmlRunReader
 
         foreach ($dom->children($root, 'scenario') as $scenario) {
             $captures = [];
+            $failure = null;
 
             foreach ($dom->children($scenario, 'step') as $step) {
                 $screenshot = $dom->optional($step, 'screenshot')?->getAttribute('path');
@@ -45,9 +49,13 @@ final readonly class XmlRunReader
                 if ('screenshot' === $step->getAttribute('action') && null !== $screenshot && null !== $page) {
                     $captures[] = ['name' => substr($screenshot, 0, -\strlen('.png')), 'screenshot' => $screenshot, 'dom' => $page, 'diff' => $attribute('diff'), 'domDiff' => $attribute('dom-diff'), 'visual' => $attribute('verdict')];
                 }
+
+                if (null === $failure && \in_array($step->getAttribute('verdict'), ['failed', 'error'], true)) {
+                    $failure = ['action' => $step->getAttribute('action'), 'message' => $dom->optional($step, 'message')?->textContent, 'screenshot' => $screenshot, 'dom' => $page];
+                }
             }
 
-            $scenarios[$scenario->getAttribute('id')] = ['verdict' => $scenario->getAttribute('verdict'), 'captures' => $captures];
+            $scenarios[$scenario->getAttribute('id')] = ['verdict' => $scenario->getAttribute('verdict'), 'captures' => $captures, 'failure' => $failure];
         }
 
         return $scenarios;

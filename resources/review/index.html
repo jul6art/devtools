@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DevTools review</title>
+    <link rel="stylesheet" href="/assets/review.css">
+</head>
+<body>
+<header>
+    <h1>DevTools review</h1>
+    <p id="run">Loading the run…</p>
+    <label><input type="checkbox" id="impacted"> Only the workflows the current change reaches</label>
+</header>
+<main>
+    <nav id="scenarios" aria-label="Scenarios"></nav>
+    <div id="workspace">
+        <p id="hint">Pick a capture on the left: it shows next to its baseline and its difference, then point at an element of the page to say what is wrong with it.</p>
+        <section id="capture" hidden>
+            <h2 id="capture-title"></h2>
+            <div class="images">
+                <figure><figcaption>Capture</figcaption><img id="screenshot" alt="The capture"></figure>
+                <figure><figcaption>Baseline</figcaption><img id="baseline" alt="The baseline"><p id="no-baseline">No baseline yet.</p></figure>
+                <figure id="diff-figure"><figcaption>Difference</figcaption><img id="diff" alt="What differs"></figure>
+            </div>
+            <button type="button" id="accept">Accept this capture as the baseline</button>
+            <h3>The page — point at an element, click to pick it</h3>
+            <iframe id="page" title="The captured page, never run" sandbox="allow-same-origin"></iframe>
+        </section>
+        <form id="feedback" hidden>
+            <h2>Feedback</h2>
+            <label>Element <input id="selector" name="selector" autocomplete="off"></label>
+            <label>Workflow <input id="workflow" name="workflow" autocomplete="off"></label>
+            <label>Category <select id="category" name="category" required></select></label>
+            <label>In one line, what is wrong and what it should be
+                <input id="summary" name="summary" maxlength="200" required autocomplete="off">
+            </label>
+            <p><span id="count">0</span>/200</p>
+            <button type="submit">Record</button>
+            <div id="outcome" role="status"></div>
+        </form>
+    </div>
+</main>
+<script src="/assets/review.js"></script>
+</body>
+</html>

@@ -224,6 +224,11 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
   La fixture d'analyse ne se modifie pas pour cela : ses fichiers sont hachés dans tous les instantanés.
 - ⚠️ Un test ne supprime **que ce qu'il a créé, par son chemin exact** — jamais `dirname()` d'un chemin
   calculé : un test l'a fait le 2026-10-20 et a tenté de vider le répertoire temporaire du système.
+- **La page de revue** (ADR-0028) se teste trois fois : `ReviewAppTest` en processus (jeton, fichiers servis,
+  écritures limitées, arborescence comparée), `ReviewServerTest` sur le vrai `php -S` et son routeur,
+  `ReviewBrowserTest` dans Chrome (page capturée jamais exécutée, sélecteurs, du clic à la règle proposée).
+  Ce dernier n'a besoin que de ChromeDriver : il ne sert pas symfony-minimal, il sert une exécution
+  enregistrée (`RecordsARun`).
 
 ---
 
@@ -239,6 +244,10 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
 - Ordre d'écriture : **le test**, puis **le code**, puis **la section du README** qui dit comment
   s'en servir — pas qu'elle existe.
 - Commits en anglais, Conventional Commits. **Claude ne commite pas** sans demande explicite.
+- ⚠️ **Aucune connexion depuis `src/`, même vers `127.0.0.1`** (ADR-0002, gardé par
+  `ClaudeInstallTest::testNoClassOfTheCoreOpensANetworkConnection`) : un serveur que DevTools lance se
+  juge prêt à sa propre annonce — la ligne « Development Server … started » de `php -S` —, jamais en
+  sondant son port. Un test, lui, peut sonder.
 
 ---
 

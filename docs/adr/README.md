@@ -45,7 +45,7 @@
 | [0025](0025-retours-types.md) | Retours typés et détection de récurrence | 2 — Retours et règles | Accepted | 2026-10-20 |
 | [0026](0026-regles-et-injection-contextuelle.md) | Promotion en règles et injection contextuelle | 2 — Retours et règles | Accepted | 2026-10-20 |
 | [0027](0027-assertions-mecaniques.md) | Assertions mécaniques | 2 — Retours et règles | Accepted | 2026-10-20 |
-| [0028](0028-interface-de-revue-humaine.md) | Interface de revue humaine | 2 — Retours et règles | Proposed | — |
+| [0028](0028-interface-de-revue-humaine.md) | Interface de revue humaine | 2 — Retours et règles | Accepted | — |
 | [0029](0029-retrospective-et-metriques.md) | Rétrospective et métriques | 2 — Retours et règles | Proposed | — |
 | [0030](0030-adaptateur-natif-laravel.md) | Adaptateur natif Laravel | 3 — Généralisation | Proposed | — |
 | [0031](0031-pont-node-pour-javascript-et-typescript.md) | Pont Node pour l'analyse JavaScript et TypeScript | 3 — Généralisation | Proposed | — |

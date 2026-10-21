@@ -141,6 +141,7 @@ Usage
 | **Before calling a task finished** | `devtools gate` | freshness, scenarios, verification and assertions on what the change reaches — the `Stop` hook runs it | `.devtools/gate/` |
 | | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
 | **After a review** | `devtools feedback:add` | records a remark: its workflow, element or file, its category, one line — or counts it again | `.devtools/feedback/` |
+| | `devtools review` | a page: the captures of a run, an element clicked, a feedback in one line | `.devtools/feedback/`, `baselines/` |
 | | `devtools feedback:list` / `feedback:resolve <id>` | what is open, by category or workflow; closed as fixed or set aside | `.devtools/feedback/` |
 | **Seen twice** | `devtools rules:promote <feedback>` | asks Claude for the rule the feedback should become; `workflows:apply` checks its draft | a brief, then `.devtools/rules/` |
 | | `devtools rules:activate <rule>` / `rules:list` | you agree with a proposed rule: Claude is given it before editing a file it applies to | `.devtools/rules/` |
@@ -1002,6 +1003,32 @@ about — `fb-2026-10-20-order-product` — and `index.xml` lists them all: it i
 recurrence read, never the files one by one. Both are versioned with the project — a feedback is shared like the
 code it is about.
 
+### The review page
+
+Typing a selector is the moment prose wins. `devtools review` opens a page where the remark is made where it is
+seen:
+
+```shell
+vendor/bin/devtools review [--run=2026-10-20-153000] [--port=8765]
+#  [OK] The review page: http://127.0.0.1:8765/?token=3f9c…
+```
+
+- **The run** — the last one, or `--run` — scenario by scenario: each screenshot next to its baseline and its
+  difference, and where a scenario failed, the capture the run kept. A box keeps only the workflows the current
+  change of the working tree reaches.
+- **The page** captured with it, shown in a frame that runs nothing — sandboxed without scripts, under a policy
+  that forbids them. Point at an element: it is outlined. Click it: its selector is computed — its `id`, else its
+  `name`, else one of its `data-*` attributes, else the shortest path — and always checked to name it alone.
+- **The feedback**: the element and the workflow filled in, a category of the list, one line of 200 characters at
+  most — recorded as `feedback:add` records it. Already said, the page asks: an occurrence, or apart. Seen twice,
+  it proposes the rule.
+- **A capture accepted as the baseline**, once looked at — as `baselines:accept` does.
+
+PHP's built-in server serves it on `127.0.0.1` only, and every request carries the random token of the address it
+prints: another application of the machine cannot write feedback in your name. It writes in
+`.devtools/feedback/` and `.devtools/baselines/`, nothing else, replays nothing, and needs nothing from a CDN —
+one page, one stylesheet, one script, in `resources/review/`. Ctrl+C stops it.
+
 Rules
 -----
 
@@ -1263,13 +1290,13 @@ src/
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
-│                            rules:activate, rules:list, assertions:propose, knowledge:list,
+│                            rules:activate, rules:list, assertions:propose, review, knowledge:list,
 │                            knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
-├── Review/                  accepting a changed fact, or refusing it and undoing the code
+├── Review/                  accepting a changed fact, or refusing it and undoing the code; the review page
 ├── Stack/                   stack detection from manifests, .devtools/stack.xml, knowledge of a stack
 ├── Inspection/
 │   ├── Model/               the intermediate model every adapter produces, and its XML form
@@ -1297,6 +1324,7 @@ resources/templates/         the files init writes
 resources/prompts/           the versioned prompts Claude follows
 resources/knowledge/         the embedded knowledge of each stack, and its canvas
 resources/feedback/          the closed list of feedback categories
+resources/review/            the review page: its HTML, stylesheet, script, and the router of its server
 resources/claude/            the Claude Code skill claude:install copies
 tests/
 ├── Fixtures/projects/       six real projects: Symfony 8.1, Symfony 7.4 with YAML, PHP, Express, Angular, a monorepo
@@ -1317,7 +1345,7 @@ Quality assurance
 
 ```shell
 composer qa            # cs-check + rector-check + phpstan (level max) + phpunit
-composer coverage      # needs pcov or Xdebug: > 90 % of src/, 100 % of Freshness/ and Tracking/
+composer coverage      # needs pcov or Xdebug: > 90 % of src/, 100 % of Freshness/, Diff/, Review/ and Tracking/
 composer infection     # mutation testing of Freshness/ and Tracking/: 96 % MSI at least, measured on 4 threads
 ```
 
