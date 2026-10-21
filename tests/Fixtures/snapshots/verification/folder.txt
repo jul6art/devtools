@@ -1,0 +1,45 @@
+baselines/route.order.new/smoke/order-new.dom.html
+baselines/route.order.new/smoke/order-new.png
+manifest.xml
+pages/route.order.new.md
+run/route.order.new/smoke/order-new.diff.png
+run/route.order.new/smoke/order-new.dom.diff
+run/route.order.new/smoke/order-new.html
+run/route.order.new/smoke/order-new.png
+scenarios/route.order.new/smoke.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<verification-brief xmlns="https://github.com/jul6art/devtools/schema/verification-brief/1" schema-version="1" prepared-at="2026-10-20T13:00:00+00:00" run="2026-10-20-120000">
+  <changed path="templates/order/new.html.twig"/>
+  <workflow id="route.order.new" title="GET|POST /orders/new" relation="direct" page="pages/route.order.new.md">
+    <file path="config/packages/framework.yaml"/>
+    <file path="config/packages/security.yaml"/>
+    <file path="config/routes.yaml"/>
+    <file path="config/routes/ux_live_component.yaml"/>
+    <file path="config/services.yaml"/>
+    <file path="src/Controller/OrderController.php"/>
+    <file path="src/Entity/Order.php"/>
+    <file path="src/Entity/Product.php"/>
+    <file path="src/Form/OrderType.php"/>
+    <file path="src/Repository/OrderRepository.php"/>
+    <file path="src/Repository/ProductRepository.php"/>
+    <file path="src/Service/OrderPricing.php"/>
+    <file path="src/ValueObject/Money.php"/>
+    <file path="templates/base.html.twig"/>
+    <file path="templates/order/_form.html.twig"/>
+    <file path="templates/order/new.html.twig"/>
+    <scenario id="route.order.new/smoke" path="scenarios/route.order.new/smoke.xml" verdict="passed"/>
+    <capture name="route.order.new/smoke/order-new" screenshot="run/route.order.new/smoke/order-new.png" dom="run/route.order.new/smoke/order-new.html" baseline="baselines/route.order.new/smoke/order-new.png" diff="run/route.order.new/smoke/order-new.diff.png" dom-diff="run/route.order.new/smoke/order-new.dom.diff" visual="within-threshold"/>
+  </workflow>
+  <category>ui-component</category>
+  <category>filter</category>
+  <category>validation</category>
+  <category>navigation</category>
+  <category>permission</category>
+  <category>translation</category>
+  <category>layout</category>
+  <category>performance</category>
+  <category>data-display</category>
+  <category>error-handling</category>
+  <verdict path=".devtools/pending/verification.2026-10-20-130000/verdict.xml"/>
+</verification-brief>

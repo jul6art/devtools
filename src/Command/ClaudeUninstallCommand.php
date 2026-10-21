@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Command;
 
 use Jul6Art\DevTools\Claude\ClaudeSettings;
 use Jul6Art\DevTools\Project\ProjectRoot;
+use Jul6Art\DevTools\Resources;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Takes back what `claude:install` added to the Claude Code configuration of a project, and nothing else
- * (ADR-0019, ADR-0018).
+ * (ADR-0019, ADR-0018, ADR-0024).
  */
 #[AsCommand(name: 'claude:uninstall', description: 'Remove what claude:install added to the Claude Code configuration')]
 final class ClaudeUninstallCommand extends Command
@@ -34,7 +35,8 @@ final class ClaudeUninstallCommand extends Command
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'The project (default: the current directory)')
             ->addOption('hooks', null, InputOption::VALUE_NONE, 'The DevTools hooks of .claude/settings.json')
-            ->addOption('mcp', null, InputOption::VALUE_NONE, 'The DevTools MCP server of .mcp.json');
+            ->addOption('mcp', null, InputOption::VALUE_NONE, 'The DevTools MCP server of .mcp.json')
+            ->addOption('agents', null, InputOption::VALUE_NONE, 'The devtools-verifier subagent of .claude/agents/, unless the project modified it');
     }
 
     #[\Override]
@@ -52,9 +54,10 @@ final class ClaudeUninstallCommand extends Command
 
         $hooks = true === $input->getOption('hooks');
         $mcp = true === $input->getOption('mcp');
+        $agents = true === $input->getOption('agents');
 
-        if (!$hooks && !$mcp) {
-            $io->error('Say what to remove: --hooks, --mcp.');
+        if (!$hooks && !$mcp && !$agents) {
+            $io->error('Say what to remove: --hooks, --mcp, --agents.');
 
             return Command::INVALID;
         }
@@ -69,6 +72,10 @@ final class ClaudeUninstallCommand extends Command
             if ($mcp) {
                 $io->success($this->settings->uninstallMcpServer($root->absolute('.mcp.json')) ? 'Removed the DevTools MCP server from .mcp.json.' : 'No DevTools MCP server in .mcp.json.');
             }
+
+            if ($agents) {
+                $this->uninstallVerifier($io, $root);
+            }
         } catch (\InvalidArgumentException $refusal) {
             $io->error($refusal->getMessage());
 
@@ -76,5 +83,22 @@ final class ClaudeUninstallCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * The verifier DevTools installed goes; one the team adapted stays — it is their work now.
+     */
+    private function uninstallVerifier(SymfonyStyle $io, ProjectRoot $root): void
+    {
+        $target = $root->absolute('.'.ClaudeInstallCommand::VERIFIER);
+
+        if (!is_file($target)) {
+            $io->success('No DevTools verifier in .claude/agents/.');
+        } elseif (file_get_contents($target) !== file_get_contents(Resources::path(ClaudeInstallCommand::VERIFIER))) {
+            $io->warning('.claude/agents/devtools-verifier.md was modified in this project: it stays. Remove it yourself if you mean to.');
+        } else {
+            unlink($target);
+            $io->success('Removed .claude/agents/devtools-verifier.md.');
+        }
     }
 }

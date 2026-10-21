@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Command;
 
 use Jul6Art\DevTools\Project\ProjectRoot;
-use Jul6Art\DevTools\Resources;
-use Jul6Art\DevTools\Scenario\Run\XmlRunWriter;
+use Jul6Art\DevTools\Scenario\Run\XmlRunReader;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
-use Jul6Art\DevTools\Xml\DomBuilder;
 use Jul6Art\DevTools\Xml\InvalidXml;
-use Jul6Art\DevTools\Xml\SafeXmlLoader;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -108,24 +105,15 @@ final class BaselinesAcceptCommand extends Command
      */
     private static function captures(string $result, array $asked): array
     {
-        $root = DomBuilder::root(new SafeXmlLoader()->loadValidated((string) file_get_contents($result), $result, Resources::path('schemas/run.xsd'), 1));
-        $dom = new DomBuilder(XmlRunWriter::NAMESPACE);
         $captures = [];
 
-        foreach ($dom->children($root, 'scenario') as $scenario) {
-            $id = $scenario->getAttribute('id');
-
+        foreach (new XmlRunReader()->read($result) as $id => $scenario) {
             if ([] !== $asked && !\in_array($id, $asked, true) && !\in_array(explode('/', $id)[0], $asked, true)) {
                 continue;
             }
 
-            foreach ($dom->children($scenario, 'step') as $step) {
-                $screenshot = $dom->optional($step, 'screenshot')?->getAttribute('path');
-                $page = $dom->optional($step, 'dom')?->getAttribute('path');
-
-                if ('screenshot' === $step->getAttribute('action') && null !== $screenshot && null !== $page) {
-                    $captures[substr($screenshot, 0, -\strlen('.png'))] = [$screenshot, $page];
-                }
+            foreach ($scenario['captures'] as $capture) {
+                $captures[$capture['name']] = [$capture['screenshot'], $capture['dom']];
             }
         }
 

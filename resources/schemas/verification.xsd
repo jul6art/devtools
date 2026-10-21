@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The verdict of the verifier (ADR-0024), written in the verification folder as verdict.xml by the session that
+    called it — and, once verify:collect checked it, the outcome the gate reads (outcome.xml).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/verification/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/verification/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="verification">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="finding" type="t:finding" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="verdict" type="t:verdict" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- What verify:collect retained: the verdict that counts, why, and the findings it checked. -->
+    <xs:element name="outcome">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="reason" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="finding" type="t:finding" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="verdict" type="t:verdict" use="required"/>
+            <xs:attribute name="collected-at" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="finding">
+        <xs:simpleContent>
+            <xs:extension base="t:nonEmpty">
+                <xs:attribute name="workflow" type="t:nonEmpty" use="required"/>
+                <xs:attribute name="severity" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="blocking"/>
+                            <xs:enumeration value="minor"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <!-- The closed list of the feedback categories (ADR-0025), checked by DevTools. -->
+                <xs:attribute name="category" type="t:nonEmpty" use="required"/>
+                <xs:attribute name="selector" type="t:nonEmpty"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="verdict">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="approved"/>
+            <xs:enumeration value="rejected"/>
+            <xs:enumeration value="inconclusive"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

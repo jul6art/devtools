@@ -18,6 +18,8 @@ use Jul6Art\DevTools\Command\McpServeCommand;
 use Jul6Art\DevTools\Command\ScenariosGenerateCommand;
 use Jul6Art\DevTools\Command\ScenariosRunCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
+use Jul6Art\DevTools\Command\VerifyCollectCommand;
+use Jul6Art\DevTools\Command\VerifyPrepareCommand;
 use Jul6Art\DevTools\Command\WorkflowsAcceptCommand;
 use Jul6Art\DevTools\Command\WorkflowsApplyCommand;
 use Jul6Art\DevTools\Command\WorkflowsCheckCommand;
@@ -82,6 +84,8 @@ final class Application extends BaseApplication
             new WorkflowsRejectCommand(),
             new ScenariosGenerateCommand(),
             new BaselinesAcceptCommand(),
+            new VerifyPrepareCommand(),
+            new VerifyCollectCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

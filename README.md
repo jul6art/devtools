@@ -128,6 +128,7 @@ Usage
 | | `devtools stack:detect` | writes what the project is built with; `init` and `inspect` do it too | `stack.xml` |
 | | `devtools claude:install` | installs the Claude Code skill that writes the pages | `.claude/skills/` |
 | | `devtools claude:install --hooks` | Claude Code is told what a file reaches before it edits it | `.claude/settings.json` |
+| | `devtools claude:install --agents` | the verifier: a second agent that judges a change to the interface on evidence | `.claude/agents/` |
 | | `devtools claude:install --mcp` | Claude Code reads one page, the impact or the knowledge when it needs them | `.mcp.json` |
 | | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
 | **Documenting it** (once, then on demand) | `devtools workflows:inspect --locale=fr` | documents every workflow and asks Claude for the pages it cannot write | pages, tracking, briefs |
@@ -137,6 +138,7 @@ Usage
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
 | | `devtools baselines:accept <run>` | after looking at them: the screenshots of a run become the baselines | `.devtools/baselines/` |
+| **Before calling a task finished** | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -711,6 +713,28 @@ DevTools' entries were all it held. The command it writes is
 `"${CLAUDE_PROJECT_DIR}/vendor/bin/devtools" claude:hook <Event>` when the project installs DevTools, and
 `devtools claude:hook <Event>` for a global installation.
 
+The verifier
+------------
+
+Whoever wrote the code checks it with the author's bias. The verifier judges a change to the interface in a
+**fresh context**: a Claude Code subagent that can only read, given a folder that holds what it needs and
+nothing of the conversation that wrote the change.
+
+```shell
+vendor/bin/devtools claude:install --agents      # .claude/agents/devtools-verifier.md — commit it
+vendor/bin/devtools verify:prepare --changed     # .devtools/pending/verification.<timestamp>/
+vendor/bin/devtools verify:collect               # checks the verdict, records the one that counts
+```
+
+The folder holds the routes and components the change reaches: their page, their scenarios, the captures of
+the last run with their baselines and diffs — copies — and names the code they are made of. Not a commit
+message, not a line of the conversation. The agent reads it, and answers with a verdict — `approved`,
+`rejected`, `inconclusive` — and findings: a workflow, a severity, a category of the closed list, a CSS selector
+of the captured page, a sentence. It cannot write: the session that called it writes its answer to
+`verdict.xml` in the folder. `verify:collect` then checks it — a workflow it was shown, a category of the list,
+a selector the captured page has, a rejection that says what blocks — and anything it cannot check counts as
+`inconclusive`, never as approved.
+
 MCP server
 ----------
 
@@ -1068,8 +1092,8 @@ src/
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
-│                            scenarios:run, baselines:accept, knowledge:list, knowledge:promote,
-│                            knowledge:amend
+│                            scenarios:run, baselines:accept, verify:prepare, verify:collect,
+│                            knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
@@ -1088,6 +1112,7 @@ src/
 ├── Mcp/                     the MCP server — the only directory that knows the MCP SDK
 ├── Scenario/                scenarios: their format, skeletons, briefs, drafts, what to review — and the
 │                            runner that replays them in Chrome, one class per action
+├── Verification/            the folder a verifier judges a change on, and its verdict, checked
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
