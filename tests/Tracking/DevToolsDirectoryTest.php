@@ -95,6 +95,7 @@ final class DevToolsDirectoryTest extends TestCase
 
         self::assertSame($this->temporaryDirectory().'/.devtools/scenarios/route.order.new/happy-path.xml', $directory->scenarioFile(new WorkflowId('route.order.new'), 'happy-path'));
         self::assertSame($this->temporaryDirectory().'/.devtools/scenarios/index.xml', $directory->scenarioIndexFile());
+        self::assertSame($this->temporaryDirectory().'/.devtools/baselines', $directory->baselinesDirectory(), 'Versioned: a human accepted them (ADR-0022).');
         self::assertSame($this->temporaryDirectory().'/.devtools/runs/2026-10-20-090507', $directory->runDirectory(new \DateTimeImmutable('2026-10-20T09:05:07+02:00')));
         self::assertContains('runs', DevToolsDirectory::IGNORED, 'Screenshots of a machine, never committed.');
     }

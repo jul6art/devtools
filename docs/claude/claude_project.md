@@ -207,6 +207,10 @@ Tout tourne sur l'hôte. `composer.lock` n'est pas commité : la CI résout touj
 des outils de qualité, et une dérive Rector/PHP-CS-Fixer peut casser la CI sans commit (c'est arrivé
 sur `admin-bundle` et `core-bundle` le 2026-09-14).
 
+⚠️ **`composer cs`, jamais `php-cs-fixer fix <chemin>`** : un chemin passé en argument remplace le
+périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a réécrit des fixtures le
+2026-10-20.
+
 ### Tests navigateur (groupe `browser`, ADR-0021 à 0023)
 
 - **ChromeDriver** de la version majeure de Chrome, dans `drivers/` (ignoré par git) : Chrome for Testing,
@@ -218,6 +222,8 @@ sur `admin-bundle` et `core-bundle` le 2026-09-14).
   fixture) ; les tests qui le servent posent sur une **copie** les deux fichiers de
   `tests/Fixtures/runtime/symfony-minimal/` (préfixe des composants live, hacheur et hiérarchie de rôles).
   La fixture d'analyse ne se modifie pas pour cela : ses fichiers sont hachés dans tous les instantanés.
+- ⚠️ Un test ne supprime **que ce qu'il a créé, par son chemin exact** — jamais `dirname()` d'un chemin
+  calculé : un test l'a fait le 2026-10-20 et a tenté de vider le répertoire temporaire du système.
 
 ---
 

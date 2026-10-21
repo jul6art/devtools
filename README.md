@@ -127,7 +127,7 @@ Usage
 | **Setting a project up** (once) | `devtools init` | creates `.devtools/` and the `config.xml` you then edit | `.devtools/` |
 | | `devtools stack:detect` | writes what the project is built with; `init` and `inspect` do it too | `stack.xml` |
 | | `devtools claude:install` | installs the Claude Code skill that writes the pages | `.claude/skills/` |
-| | `devtools claude:install --hooks` | Claude Code is told what a file reaches before it edits it | `.claude/settings.json` |
+| | `devtools claude:install --hooks` | Claude Code is told what a file reaches before it edits it, and cannot end a task while the gate fails | `.claude/settings.json` |
 | | `devtools claude:install --agents` | the verifier: a second agent that judges a change to the interface on evidence | `.claude/agents/` |
 | | `devtools claude:install --mcp` | Claude Code reads one page, the impact or the knowledge when it needs them | `.mcp.json` |
 | | `devtools git:install-hooks` | the check on `pre-commit`, the facts refreshed on `post-merge` | `.git/hooks/` |
@@ -138,7 +138,8 @@ Usage
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
 | | `devtools baselines:accept <run>` | after looking at them: the screenshots of a run become the baselines | `.devtools/baselines/` |
-| **Before calling a task finished** | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
+| **Before calling a task finished** | `devtools gate` | freshness, scenarios, verification and assertions on what the change reaches — the `Stop` hook runs it | `.devtools/gate/` |
+| | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -700,6 +701,7 @@ vendor/bin/devtools claude:uninstall --hooks    # takes back exactly what it add
 | --- | --- | --- |
 | `PreToolUse` | before `Edit`, `Write`, `MultiEdit` | the workflows the file reaches, their pages, a few of their tests — or, for a file no workflow references, one line saying so |
 | `SessionStart` | at the start of a session | how many workflows are documented and where, those to check, and the MCP server when it is installed |
+| `Stop` | when Claude is about to end a task | the gate: while it fails, the task is not finished — see [The gate](#the-gate) |
 
 `PreToolUse` and `SessionStart` add to Claude's context and **never block anything**: a tool that writes no file, a file
 outside the project or a file that reaches nothing gets no answer at all, and whatever goes wrong — no
@@ -713,8 +715,38 @@ DevTools' entries were all it held. The command it writes is
 `"${CLAUDE_PROJECT_DIR}/vendor/bin/devtools" claude:hook <Event>` when the project installs DevTools, and
 `devtools claude:hook <Event>` for a global installation.
 
-The verifier
-------------
+The gate
+--------
+
+Claude says "done", a human opens the browser and finds the defect: the gate moves that moment before the
+human. **While it fails, Claude cannot call the task finished** — the `Stop` hook runs it, and blocks.
+
+```shell
+vendor/bin/devtools gate                              # the working tree, by default
+vendor/bin/devtools gate --commit=HEAD                # or --range=main..feature, or files
+        [--base-url=…] [--strict] [--format=text|json]
+```
+
+| Step | Judges, on what the change reaches | Fails when |
+| --- | --- | --- |
+| `freshness` | the facts, as `workflows:check` reads them | a fact changed, an entry point is new or gone |
+| `scenarios` | the scenarios of the routes and components reached — replayed, compared with their baselines | one fails, or differs from its baseline |
+| `verification` | a change to a template or a form, by the verifier | its verdict is not `approved` yet |
+| `assertions` | the checks phase 2 derives from rules | — none yet: green |
+
+Every step runs, whatever the first found, so that one passage says everything there is to fix, each line
+naming the workflow, the scenario, the step, the capture. A workflow reached without a scenario, scenarios that
+cannot be replayed here — no Panther, no base URL — or code changed without a fact moving: **warnings**, which
+`--strict` turns into failures; a project that starts must not be red everywhere. The last passage is kept in
+`.devtools/gate/last.xml`, never committed.
+
+**The `Stop` hook** (`claude:install --hooks`) runs the gate on the working tree when Claude is about to end a
+task. Failed: the task is not finished, and the gate's text is what Claude reads next. Passed on this very
+state of the change: it does not run again. ⚠️ The same failure three times in a row: Claude is asked to stop
+trying and to tell you what still fails; the fourth time, it may end — a gate that blocks forever fixes
+nothing.
+
+### The verifier
 
 Whoever wrote the code checks it with the author's bias. The verifier judges a change to the interface in a
 **fresh context**: a Claude Code subagent that can only read, given a folder that holds what it needs and
@@ -734,6 +766,10 @@ of the captured page, a sentence. It cannot write: the session that called it wr
 `verdict.xml` in the folder. `verify:collect` then checks it — a workflow it was shown, a category of the list,
 a selector the captured page has, a rejection that says what blocks — and anything it cannot check counts as
 `inconclusive`, never as approved.
+
+The gate asks for all this on its own for any change to a template or a form: its `verification` step prepares
+the folder, says what to do, and turns green once the verdict collected for that very state of the change is
+`approved`.
 
 MCP server
 ----------
@@ -1092,7 +1128,7 @@ src/
 │                            workflows:impact, workflows:review, workflows:accept, workflows:reject,
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
-│                            scenarios:run, baselines:accept, verify:prepare, verify:collect,
+│                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            knowledge:list, knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
@@ -1113,6 +1149,7 @@ src/
 ├── Scenario/                scenarios: their format, skeletons, briefs, drafts, what to review — and the
 │                            runner that replays them in Chrome, one class per action
 ├── Verification/            the folder a verifier judges a change on, and its verdict, checked
+├── Gate/                    the gate: its steps, its last passage
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit

@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Scenario;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Resources;
+use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\ReadsDocumentFiles;
 use Jul6Art\DevTools\Xml\DomBuilder;
 use Jul6Art\DevTools\Xml\InvalidXml;
@@ -91,6 +92,37 @@ final readonly class XmlScenarioStore
         $root = $this->root(self::contentOf($path), $path, 'scenarios');
 
         return array_map(fn (\DOMElement $scenario): Scenario => $this->scenario($scenario, $path), $this->dom->children($root, 'scenario'));
+    }
+
+    /**
+     * The scenarios of a project — or of the scenarios and workflows asked — and the files that could not be read.
+     *
+     * @param list<string> $asked scenario or workflow identifiers; all when empty
+     *
+     * @return array{list<Scenario>, array<string, string>} the scenarios, and file => why it could not be read
+     */
+    public function readProject(DevToolsDirectory $directory, array $asked = []): array
+    {
+        $scenarios = [];
+        $invalid = [];
+        $files = glob($directory->path('scenarios/*/*.xml')) ?: [];
+        sort($files, \SORT_STRING);
+
+        foreach ($files as $file) {
+            try {
+                $scenario = $this->read($file);
+            } catch (InvalidXml $error) {
+                $invalid[$directory->root->relative($file)] = $error->getMessage();
+
+                continue;
+            }
+
+            if ([] === $asked || \in_array($scenario->id, $asked, true) || \in_array($scenario->workflow->value, $asked, true)) {
+                $scenarios[] = $scenario;
+            }
+        }
+
+        return [$scenarios, $invalid];
     }
 
     private function root(string $xml, string $source, string $expected): \DOMElement

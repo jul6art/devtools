@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Verification;
 use Jul6Art\DevTools\Impact\ImpactedWorkflow;
 use Jul6Art\DevTools\Impact\ImpactResolver;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
+use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Resources;
 use Jul6Art\DevTools\Scenario\Run\XmlRunReader;
 use Jul6Art\DevTools\Scenario\ScenarioGenerator;
@@ -28,6 +29,39 @@ final readonly class VerificationPreparer
 
     public function __construct(private Filesystem $filesystem = new Filesystem())
     {
+    }
+
+    /**
+     * The change as it is now: its files and their content. A folder prepared for it is still the right one
+     * while this does not move (ADR-0023).
+     *
+     * @param list<string> $changed
+     */
+    public static function fingerprint(ProjectRoot $root, array $changed): string
+    {
+        $files = array_values(array_unique(array_map(static fn (string $file): string => $root->relative($root->absolute($file)), $changed)));
+        sort($files, \SORT_STRING);
+
+        return hash('sha256', implode("\n", array_map(static fn (string $file): string => $file.':'.(is_file($root->absolute($file)) ? (string) hash_file('sha256', $root->absolute($file)) : 'deleted'), $files)));
+    }
+
+    /**
+     * The latest folder prepared for this state of the change, if any.
+     */
+    public static function folderOf(DevToolsDirectory $directory, string $fingerprint): ?string
+    {
+        $folders = glob($directory->path('pending/verification.*'), \GLOB_ONLYDIR) ?: [];
+        rsort($folders, \SORT_STRING);
+
+        foreach ($folders as $folder) {
+            $manifest = is_file($folder.'/manifest.xml') ? (string) file_get_contents($folder.'/manifest.xml') : '';
+
+            if (str_contains($manifest, 'fingerprint="'.$fingerprint.'"')) {
+                return $folder;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -55,7 +89,7 @@ final readonly class VerificationPreparer
 
         $dom = new DomBuilder(self::NAMESPACE);
         $xml = $dom->document();
-        $root = $dom->element($xml, 'verification-brief', array_filter(['schema-version' => '1', 'prepared-at' => $at->format(\DATE_ATOM), 'run' => null === $result ? null : basename(\dirname($result))], \is_string(...)));
+        $root = $dom->element($xml, 'verification-brief', array_filter(['schema-version' => '1', 'prepared-at' => $at->format(\DATE_ATOM), 'fingerprint' => self::fingerprint($directory->root, $changed), 'run' => null === $result ? null : basename(\dirname($result))], \is_string(...)));
 
         foreach (array_values(array_unique(array_map(static fn (string $file): string => $directory->root->relative($directory->root->absolute($file)), $changed))) as $file) {
             $dom->element($root, 'changed', ['path' => $file]);

@@ -214,6 +214,7 @@ final class ClaudeHookTest extends TestCase
             $installed['hooks']['PreToolUse'],
         );
         self::assertSame([['hooks' => [['type' => 'command', 'command' => 'devtools claude:hook SessionStart', 'timeout' => 10]]]], $installed['hooks']['SessionStart']);
+        self::assertSame([['hooks' => [['type' => 'command', 'command' => 'devtools claude:hook Stop', 'timeout' => 600]]]], $installed['hooks']['Stop'], 'The gate (ADR-0023): it may replay scenarios.');
 
         $uninstall = new CommandTester(new Application()->find('claude:uninstall'));
         self::assertSame(0, $uninstall->execute(['path' => $this->project, '--hooks' => true]));

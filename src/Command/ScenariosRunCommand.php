@@ -7,24 +7,14 @@ namespace Jul6Art\DevTools\Command;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\XmlConfigReader;
-use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
-use Jul6Art\DevTools\Scenario\Run\RunResult;
 use Jul6Art\DevTools\Scenario\Run\ScenarioResult;
 use Jul6Art\DevTools\Scenario\Run\StepResult;
 use Jul6Art\DevTools\Scenario\Run\Verdict;
-use Jul6Art\DevTools\Scenario\Run\XmlRunWriter;
-use Jul6Art\DevTools\Scenario\Runner\ConfiguredFixtureProvider;
-use Jul6Art\DevTools\Scenario\Runner\ConfiguredLoginProvider;
-use Jul6Art\DevTools\Scenario\Runner\PantherRunner;
-use Jul6Art\DevTools\Scenario\Runner\RouteMap;
-use Jul6Art\DevTools\Scenario\Runner\Secrets;
-use Jul6Art\DevTools\Scenario\Scenario;
-use Jul6Art\DevTools\Scenario\Visual\VisualComparator;
+use Jul6Art\DevTools\Scenario\Runner\ScenarioSession;
 use Jul6Art\DevTools\Scenario\Visual\VisualVerdict;
 use Jul6Art\DevTools\Scenario\XmlScenarioStore;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
-use Jul6Art\DevTools\Xml\InvalidXml;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -40,16 +30,20 @@ use Symfony\Component\Panther\Client;
  *
  * Registered only when Panther is installed.
  */
-#[AsCommand(name: self::NAME, description: 'Replay the scenarios in Chrome against a running application, and write their verdicts')]
+#[AsCommand(name: 'scenarios:run', description: 'Replay the scenarios in Chrome against a running application, and write their verdicts')]
 final class ScenariosRunCommand extends Command
 {
     public const string NAME = 'scenarios:run';
 
-    public const string VIEWPORT = '1280x800';
+    public const string VIEWPORT = ScenarioSession::VIEWPORT;
 
+    /**
+     * @param \Closure(string, string, bool): Client|null $browser opens Chrome — null: the project's ChromeDriver
+     */
     public function __construct(
         private readonly Clock $clock = new SystemClock(),
         private readonly ?string $defaultPath = null,
+        private readonly ?\Closure $browser = null,
     ) {
         parent::__construct();
     }
@@ -111,7 +105,7 @@ final class ScenariosRunCommand extends Command
             return Command::INVALID;
         }
 
-        [$scenarios, $invalid] = self::scenarios($directory, $asked);
+        [$scenarios, $invalid] = new XmlScenarioStore()->readProject($directory, $asked);
 
         foreach ($invalid as $file => $error) {
             $io->error(\sprintf('%s: %s', $file, $error));
@@ -123,32 +117,12 @@ final class ScenariosRunCommand extends Command
             return [] === $asked && [] === $invalid ? Command::SUCCESS : Command::INVALID;
         }
 
-        $startedAt = $this->clock->now();
-        $artifacts = $directory->runDirectory($startedAt);
-        $secrets = new Secrets();
-        $visual = VisualComparator::forBaselines($directory->baselinesDirectory(), $settings->visual);
-        $runner = new PantherRunner(
-            self::browser($root, rtrim($baseUrl, '/'), $viewport, true === $input->getOption('headed')),
-            RouteMap::fromTracking($directory, new WorkflowTypeRegistry($config->customTypes)),
-            new ConfiguredLoginProvider($settings, $secrets, $timeout),
-            new ConfiguredFixtureProvider($settings, $root, $secrets),
-            $secrets,
-            $timeout,
-            $visual,
-        );
+        [$run, $artifacts, $warning] = new ScenarioSession($this->browser)->run($directory, $config, $scenarios, $baseUrl, $this->clock->now(), $timeout, $viewport, true === $input->getOption('headed'));
+        $results = $run->scenarios;
 
-        if (null !== $visual->warning()) {
-            $io->warning($visual->warning());
+        if (null !== $warning) {
+            $io->warning($warning);
         }
-
-        try {
-            $results = $runner->run($scenarios, $artifacts);
-        } finally {
-            $runner->quit();
-        }
-
-        $run = new RunResult($startedAt, $secrets->redact($baseUrl), $results);
-        new XmlRunWriter()->write($artifacts.'/result.xml', $run);
 
         foreach ($results as $result) {
             $io->writeln(self::line($result));
@@ -163,57 +137,6 @@ final class ScenariosRunCommand extends Command
         }
 
         return $run->passed() && [] === $invalid ? Command::SUCCESS : Command::FAILURE;
-    }
-
-    /**
-     * @param list<string> $asked scenarios or workflows; all when empty
-     *
-     * @return array{list<Scenario>, array<string, string>} the scenarios, and the files that could not be read
-     */
-    private static function scenarios(DevToolsDirectory $directory, array $asked): array
-    {
-        $store = new XmlScenarioStore();
-        $scenarios = [];
-        $invalid = [];
-
-        foreach (glob($directory->path('scenarios/*/*.xml')) ?: [] as $file) {
-            try {
-                $scenario = $store->read($file);
-            } catch (InvalidXml $error) {
-                $invalid[$directory->root->relative($file)] = $error->getMessage();
-
-                continue;
-            }
-
-            if ([] === $asked || \in_array($scenario->id, $asked, true) || \in_array($scenario->workflow->value, $asked, true)) {
-                $scenarios[] = $scenario;
-            }
-        }
-
-        return [$scenarios, $invalid];
-    }
-
-    /**
-     * @return \Closure(): Client
-     */
-    private static function browser(ProjectRoot $root, string $baseUrl, string $viewport, bool $headed): \Closure
-    {
-        return static function () use ($root, $baseUrl, $viewport, $headed): Client {
-            $arguments = ['--window-size='.str_replace('x', ',', $viewport), '--disable-gpu', '--disable-dev-shm-usage', '--force-prefers-reduced-motion'];
-
-            if (!$headed) {
-                $arguments[] = '--headless=new';
-            }
-
-            if (filter_var(getenv('PANTHER_NO_SANDBOX'), \FILTER_VALIDATE_BOOLEAN)) {
-                $arguments[] = '--no-sandbox';
-            }
-
-            // The ChromeDriver of the project — `vendor/bin/bdi detect drivers` puts it there — else Panther's search.
-            $driver = $root->path.'/drivers/chromedriver';
-
-            return Client::createChromeClient(is_file($driver) ? $driver : null, $arguments, [], $baseUrl);
-        };
     }
 
     private static function line(ScenarioResult $result): string

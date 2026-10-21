@@ -32,3 +32,7 @@
 
 # ChromeDriver for the scenario runner (ADR-0021): vendor/bin/bdi detect drivers, or Chrome for Testing
 /drivers/
+
+# DevTools work areas — https://github.com/jul6art/devtools
+/.devtools/runs/
+/.devtools/gate/

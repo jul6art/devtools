@@ -1,0 +1,7 @@
+{
+    "session_id": "abc123",
+    "transcript_path": "/Users/someone/.claude/projects/acme/abc123.jsonl",
+    "cwd": "{PROJECT}",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false
+}

@@ -691,3 +691,47 @@
   audit-bundle et core-bundle l'écartent désormais dans leur `rector.php`, comme admin-bundle.
 - **Une suppression sur variable est refusée par le garde-fou de la session** : écrire `"${VAR:?}"`, qui
   arrête le shell si la variable est vide, au lieu de `$VAR`.
+
+### 2026-10-20 (ter) — Phase 1 : impact, hooks, MCP, scénarios, runner, diff visuel, vérificateur, gate
+
+- ⚠️ **Un test qui supprime calcule ce qu'il supprime à partir de ce qu'il a créé, jamais d'un parent.**
+  `SymfonyMinimalScenariosTest::tearDownAfterClass()` supprimait `dirname(self::$project)` ; sans les
+  prérequis, `$project` était le dossier temporaire lui-même, et son parent le répertoire temporaire du
+  système. Dans la copie du jeu `lowest`, trois passages ont tenté de le vider. Ils ont échoué à la première
+  entrée — `Filesystem::remove()` parcourt la liste **à l'envers**, et l'entrée protégée `com.apple.financed`
+  était la dernière de l'ordre brut — mais l'ordre d'APFS suit un hachage des noms : ce qui le suivait a pu
+  partir, sans qu'on puisse le prouver. **Règle :** garder le chemin exact de ce qu'on a créé, et le vérifier
+  (préfixe du nom) avant de le supprimer.
+- ⚠️ **`php-cs-fixer fix <chemin>` ignore le périmètre de la configuration.** `fix tests` a réécrit des
+  fichiers des projets de fixture (`declare(strict_types=1)`, `static function`) et leur cache `var/`.
+  Rétabli depuis `HEAD` après avoir vérifié que les écarts n'étaient que du style ; caches et
+  `config/reference.php` générés supprimés pour être régénérés. **Règle :** `composer cs` uniquement.
+- **Un `&&` qui suit un `grep -c` court-circuite ce qui vient après quand il ne trouve rien** — ici une
+  édition de l'ADR-0016, perdue sans bruit. Et `"\$x"` entre guillemets doubles devient l'ancre `$` d'une
+  expression régulière. **Règle :** vérifier qu'une édition a eu lieu (`grep` du texte écrit), pas seulement
+  que la commande a rendu la main.
+- **Le jeu `lowest` a trouvé ce que `highest` ne pouvait pas voir.** Panther accepte BrowserKit 6.4, qui émet
+  des dépréciations PHP 8.4 ; et `class_exists(Client::class)`, pour savoir si Panther est installé, le
+  chargeait à chaque commande — le binaire écrivait alors sur la sortie d'erreur. **Règle :** la présence
+  d'un paquet suggéré se lit dans `InstalledVersions` ; un composant Symfony qu'on tire transitivement se
+  contraint en `require-dev` à `^7.4 || ^8.0` comme les autres. Même leçon pour php-webdriver, dont Panther
+  accepte une version sans protocole DevTools.
+- **Une connexion se juge après la navigation.** Juste après la soumission, la page en cours de départ n'a
+  plus de champ mot de passe : le test d'une connexion refusée passait seul et échouait dans la suite.
+  Attendre que l'ancien champ soit détaché (`stalenessOf`) puis `document.readyState`, et seulement ensuite
+  chercher le champ.
+- **Une fixture d'analyse n'est pas une application servable**, et ne doit pas le devenir : ses fichiers
+  sont hachés dans tous les instantanés. Ce qui manque pour la servir vit à part
+  (`tests/Fixtures/runtime/`), posé sur une copie.
+- **Le SDK appelle `stream_select()` sur son entrée** : `php://memory` lève une `ValueError` en PHP 8 ; les
+  tests du serveur MCP passent par de vrais fichiers, et relisent la sortie par son chemin (le transport
+  ferme ses flux).
+- **Un diff « retiré/ajouté » ligne à ligne nomme mal un remplacement** : un `<select>` retiré emporte ses
+  `<option>` avant l'ajout de l'`<input>`. Le résumé découpe en blocs et apparie, dans chacun, le retrait et
+  l'ajout les moins indentés.
+- **Panther démarre le noyau dans `createPantherClient()`** : un projet sans `KERNEL_CLASS` ne peut pas s'en
+  servir. `ScenarioTestCase` démarre lui-même le serveur et Chrome, et ne démarre le noyau que pour y chercher
+  des services. Le fournisseur de données de PHPUnit voit bien la sous-classe (`static::`).
+- **Le classifieur du mode automatique refuse la création d'une surface publique** (commit et étiquette de
+  publication d'un dépôt public) même relayée par une autre session : la publication attend l'accord direct
+  de jul6art. Les dépôts privés, eux, ont été commités puis poussés sur sa demande.

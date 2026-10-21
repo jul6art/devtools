@@ -9,7 +9,7 @@ run/route.order.new/smoke/order-new.png
 scenarios/route.order.new/smoke.xml
 
 <?xml version="1.0" encoding="UTF-8"?>
-<verification-brief xmlns="https://github.com/jul6art/devtools/schema/verification-brief/1" schema-version="1" prepared-at="2026-10-20T13:00:00+00:00" run="2026-10-20-120000">
+<verification-brief xmlns="https://github.com/jul6art/devtools/schema/verification-brief/1" schema-version="1" prepared-at="2026-10-20T13:00:00+00:00" fingerprint="3323f9c54cb0f943038410de76c5cf13384d221479cdafed533aa9b6c1ca1bdc" run="2026-10-20-120000">
   <changed path="templates/order/new.html.twig"/>
   <workflow id="route.order.new" title="GET|POST /orders/new" relation="direct" page="pages/route.order.new.md">
     <file path="config/packages/framework.yaml"/>

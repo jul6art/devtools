@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The last passage of the gate (ADR-0023): .devtools/gate/last.xml, never committed. The Stop hook reads it to
+    run the gate again only when the change moved, and to let Claude stop after the same failure three times; the
+    retrospective of phase 2 (ADR-0029) reads its history.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/gate/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/gate/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="gate">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="changed" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="step" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="failure" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="warning" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="note" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="passed"/>
+                                    <xs:enumeration value="warning"/>
+                                    <xs:enumeration value="failed"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="duration-ms" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="at" type="xs:dateTime" use="required"/>
+            <xs:attribute name="verdict" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="passed"/>
+                        <xs:enumeration value="failed"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <!-- The change as it was: its files and their content. -->
+            <xs:attribute name="changes" type="t:sha256" use="required"/>
+            <!-- What failed, whatever the timings: the same failures give the same one. -->
+            <xs:attribute name="failure" type="t:sha256" use="required"/>
+            <xs:attribute name="consecutive" type="xs:nonNegativeInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="sha256">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-f]{64}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

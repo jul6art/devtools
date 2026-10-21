@@ -29,7 +29,7 @@ final readonly class DevToolsDirectory
     /**
      * Work areas never committed, added to the project's `.gitignore` by `init`.
      */
-    public const array IGNORED = ['pending', 'reports', 'runs'];
+    public const array IGNORED = ['pending', 'reports', 'runs', 'gate'];
 
     public const string DEFAULT_DOCS = 'docs/workflows';
 

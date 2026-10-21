@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Claude\Hook\HookHandlerInterface;
 use Jul6Art\DevTools\Claude\Hook\HookInput;
 use Jul6Art\DevTools\Claude\Hook\PreToolUseHandler;
 use Jul6Art\DevTools\Claude\Hook\SessionStartHandler;
+use Jul6Art\DevTools\Claude\Hook\StopHandler;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -44,7 +45,7 @@ final class ClaudeHookCommand extends Command
     ) {
         $byEvent = [];
 
-        foreach ($handlers ?? [new PreToolUseHandler(), new SessionStartHandler()] as $handler) {
+        foreach ($handlers ?? [new PreToolUseHandler(), new SessionStartHandler(), new StopHandler()] as $handler) {
             $byEvent[$handler->event()] = $handler;
         }
 

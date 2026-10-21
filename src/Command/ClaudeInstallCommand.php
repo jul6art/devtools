@@ -33,9 +33,14 @@ final class ClaudeInstallCommand extends Command
     public const string VERIFIER = 'claude/agents/devtools-verifier.md';
 
     /**
-     * The hooks of ADR-0019: event => matcher.
+     * The hooks of ADR-0019 and the gate of ADR-0023: event => matcher.
      */
-    public const array HOOKS = ['PreToolUse' => 'Edit|Write|MultiEdit', 'SessionStart' => null];
+    public const array HOOKS = ['PreToolUse' => 'Edit|Write|MultiEdit', 'SessionStart' => null, 'Stop' => null];
+
+    /**
+     * Seconds Claude Code waits for each: the gate may replay scenarios in a browser.
+     */
+    public const array TIMEOUTS = ['PreToolUse' => 10, 'SessionStart' => 10, 'Stop' => 600];
 
     public function __construct(
         private readonly AtomicFileWriter $writer = new AtomicFileWriter(),
@@ -86,7 +91,7 @@ final class ClaudeInstallCommand extends Command
 
         if ($hooks) {
             try {
-                new ClaudeSettings($this->writer)->installHooks($root->absolute('.claude/settings.json'), self::HOOKS, self::binary($root));
+                new ClaudeSettings($this->writer)->installHooks($root->absolute('.claude/settings.json'), self::HOOKS, self::binary($root), self::TIMEOUTS);
             } catch (\InvalidArgumentException $refusal) {
                 $io->error($refusal->getMessage());
 

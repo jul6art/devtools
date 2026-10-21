@@ -35,7 +35,7 @@ final class InitializerTest extends TestCase
         self::assertFileExists($directory->configFile());
         self::assertFileExists($directory->path('schemas/workflow-tracking.xsd'));
         self::assertFileEquals(\dirname(__DIR__, 2).'/resources/schemas/index.xsd', $directory->path('schemas/index.xsd'));
-        self::assertStringContainsString("/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n", (string) file_get_contents($this->temporaryDirectory().'/.gitignore'));
+        self::assertStringContainsString("/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n/.devtools/gate/\n", (string) file_get_contents($this->temporaryDirectory().'/.gitignore'));
     }
 
     /**
@@ -57,7 +57,7 @@ final class InitializerTest extends TestCase
     {
         new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory())));
 
-        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n");
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n/.devtools/gate/\n");
     }
 
     /**
@@ -70,15 +70,15 @@ final class InitializerTest extends TestCase
 
         new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory())));
 
-        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "/vendor/\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n");
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "/vendor/\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/pending/\n/.devtools/reports/\n/.devtools/runs/\n/.devtools/gate/\n");
     }
 
     public function testALineWithSpacesAroundItIsTheSameEntry(): void
     {
-        file_put_contents($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n.devtools/runs/\n");
+        file_put_contents($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n.devtools/runs/\n.devtools/gate/\n");
 
         self::assertNotContains('.gitignore', new Initializer()->initialize(new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()))));
-        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n.devtools/runs/\n");
+        self::assertStringEqualsFile($this->temporaryDirectory().'/.gitignore', "  /.devtools/pending/  \n\t.devtools/reports\n.devtools/runs/\n.devtools/gate/\n");
     }
 
     public function testRunningItAgainModifiesNothing(): void
@@ -103,7 +103,7 @@ final class InitializerTest extends TestCase
         self::assertStringStartsWith("/vendor/\n.devtools/pending\n", $gitignore);
         self::assertSame(1, substr_count($gitignore, 'pending'));
         self::assertSame(1, substr_count($gitignore, '/.devtools/reports/'));
-        self::assertSame("/vendor/\n.devtools/pending\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/reports/\n/.devtools/runs/\n", $gitignore, 'One blank line before the block, not two.');
+        self::assertSame("/vendor/\n.devtools/pending\n\n# DevTools work areas — https://github.com/jul6art/devtools\n/.devtools/reports/\n/.devtools/runs/\n/.devtools/gate/\n", $gitignore, 'One blank line before the block, not two.');
     }
 
     public function testItNeverOverwritesAConfigTheProjectEdited(): void

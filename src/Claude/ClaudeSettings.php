@@ -31,14 +31,15 @@ final readonly class ClaudeSettings
     }
 
     /**
-     * @param array<string, string|null> $events event => matcher (null: every occurrence)
-     * @param string                     $binary how the project runs DevTools
+     * @param array<string, string|null> $events   event => matcher (null: every occurrence)
+     * @param string                     $binary   how the project runs DevTools
+     * @param array<string, int>         $timeouts event => seconds Claude Code waits for it; 10 by default
      *
      * @return bool whether the file changed
      *
      * @throws \InvalidArgumentException when the existing file is not a JSON object: it is the team's, and is left alone
      */
-    public function installHooks(string $file, array $events, string $binary): bool
+    public function installHooks(string $file, array $events, string $binary, array $timeouts = []): bool
     {
         $settings = self::read($file);
         $hooks = $settings->hooks ?? new \stdClass();
@@ -61,7 +62,7 @@ final readonly class ClaudeSettings
                 $group->matcher = $matcher;
             }
 
-            $group->hooks = [(object) ['type' => 'command', 'command' => $command, 'timeout' => 10]];
+            $group->hooks = [(object) ['type' => 'command', 'command' => $command, 'timeout' => $timeouts[$event] ?? 10]];
             $groups[] = $group;
             $hooks->{$event} = $groups;
         }
