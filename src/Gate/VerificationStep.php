@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Gate;
 
+use Jul6Art\DevTools\Feedback\Categories;
 use Jul6Art\DevTools\Verification\Finding;
 use Jul6Art\DevTools\Verification\VerificationCollector;
 use Jul6Art\DevTools\Verification\VerificationPreparer;
@@ -40,7 +41,7 @@ final readonly class VerificationStep implements GateStepInterface
         }
 
         $fingerprint = VerificationPreparer::fingerprint($context->directory->root, $context->changed);
-        $folder = VerificationPreparer::folderOf($context->directory, $fingerprint) ?? $this->preparer->prepare($context->directory, $context->types, $context->changed, $context->at);
+        $folder = VerificationPreparer::folderOf($context->directory, $fingerprint) ?? $this->preparer->prepare($context->directory, $context->types, $context->changed, $context->at, Categories::of($context->config));
 
         if (null === $folder) {
             return new GateStep($this->name(), notes: ['The change reaches no route and no component.']);

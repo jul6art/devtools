@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Command;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\XmlConfigReader;
+use Jul6Art\DevTools\Feedback\Categories;
 use Jul6Art\DevTools\Impact\ImpactUnavailable;
 use Jul6Art\DevTools\Inspection\Freshness\GitClient;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
@@ -71,7 +72,8 @@ final class VerifyPrepareCommand extends Command
         $directory = DevToolsDirectory::documented($root);
 
         try {
-            $folder = new VerificationPreparer()->prepare($directory, new WorkflowTypeRegistry(new XmlConfigReader()->read($directory->configFile())->customTypes), $files, $this->clock->now());
+            $config = new XmlConfigReader()->read($directory->configFile());
+            $folder = new VerificationPreparer()->prepare($directory, new WorkflowTypeRegistry($config->customTypes), $files, $this->clock->now(), Categories::of($config));
         } catch (ImpactUnavailable|PathOutsideProject $refusal) {
             $io->error($refusal->getMessage());
 

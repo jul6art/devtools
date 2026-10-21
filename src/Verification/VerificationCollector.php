@@ -46,11 +46,11 @@ final readonly class VerificationCollector
             return new Outcome(VerificationVerdict::Inconclusive, $at, [$invalid->getMessage()]);
         }
 
-        $pages = self::pages($folder);
+        [$pages, $categories] = self::manifest($folder);
         $reasons = [];
 
         foreach ($findings as $finding) {
-            $reasons = [...$reasons, ...self::check($finding, $pages, $folder)];
+            $reasons = [...$reasons, ...self::check($finding, $pages, $categories, $folder)];
         }
 
         $blocking = array_any($findings, static fn (Finding $finding): bool => $finding->isBlocking());
@@ -67,17 +67,18 @@ final readonly class VerificationCollector
     }
 
     /**
-     * @param array<string, list<string>> $pages workflow => the DOMs captured for it
+     * @param array<string, list<string>> $pages      workflow => the DOMs captured for it
+     * @param list<string>                $categories the categories the folder was prepared with
      *
      * @return list<string> what is wrong with the finding
      */
-    private static function check(Finding $finding, array $pages, string $folder): array
+    private static function check(Finding $finding, array $pages, array $categories, string $folder): array
     {
         if (!isset($pages[$finding->workflow])) {
             return [\sprintf('"%s" was not in the folder: the verifier judged a workflow it was not shown.', $finding->workflow)];
         }
 
-        $reasons = \in_array($finding->category, Finding::CATEGORIES, true) ? [] : [\sprintf('"%s" is not a category of feedback: %s.', $finding->category, implode(', ', Finding::CATEGORIES))];
+        $reasons = \in_array($finding->category, $categories, true) ? [] : [\sprintf('"%s" is not a category of feedback: %s.', $finding->category, implode(', ', $categories))];
 
         if (null === $finding->selector) {
             return $reasons;
@@ -101,9 +102,10 @@ final readonly class VerificationCollector
     }
 
     /**
-     * @return array<string, list<string>> workflow => the DOMs captured for it, relative to the folder
+     * @return array{array<string, list<string>>, list<string>} workflow => the DOMs captured for it, relative to the
+     *                                                          folder; and the categories a finding may have
      */
-    private static function pages(string $folder): array
+    private static function manifest(string $folder): array
     {
         $dom = new DomBuilder(VerificationPreparer::NAMESPACE);
         $manifest = $folder.'/manifest.xml';
@@ -114,6 +116,6 @@ final readonly class VerificationCollector
             $pages[$workflow->getAttribute('id')] = array_map(static fn (\DOMElement $capture): string => $capture->getAttribute('dom'), $dom->children($workflow, 'capture'));
         }
 
-        return $pages;
+        return [$pages, array_map(static fn (\DOMElement $category): string => trim($category->textContent), $dom->children($root, 'category'))];
     }
 }

@@ -49,6 +49,7 @@ final class XmlConfigReaderTest extends TestCase
               <groups><group main="app_order_index"><satellite>app_order_export</satellite></group></groups>
               <types><type name="webhooks" prefix="webhook"/></types>
               <language pages="en"/>
+              <feedback><category name="accessibility"/><category name="seo"/></feedback>
             </devtools>
             XML);
 
@@ -67,6 +68,7 @@ final class XmlConfigReaderTest extends TestCase
         self::assertSame(120.5, $config->symfonyTimeout);
         self::assertSame('htdocs', $config->phpWebRoot);
         self::assertSame('en', $config->pagesLanguage);
+        self::assertSame(['accessibility', 'seo'], $config->feedbackCategories);
     }
 
     public function testAnInvalidFileIsRejectedWithItsLine(): void

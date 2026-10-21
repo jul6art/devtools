@@ -152,6 +152,24 @@
                         <xs:attribute name="timeout" type="xs:positiveInteger"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- Categories of feedback of the project's own, added to DevTools' ten (ADR-0025). -->
+                <xs:element name="feedback" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[a-z][a-z0-9]*(-[a-z0-9]+)*"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="language" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="pages" use="required">

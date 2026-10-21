@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The closed list of feedback categories (ADR-0025). A category groups feedback, it does not describe it:
+    the summary does. A project adds its own in .devtools/config.xml: <feedback><category name="…"/></feedback>.
+-->
+<categories xmlns="https://github.com/jul6art/devtools/schema/feedback-categories/1" schema-version="1">
+  <category name="ui-component">A component of the interface: a native select where the others use Select2, a missing date picker.</category>
+  <category name="filter">A filter of a list: missing, wrong, or not applied.</category>
+  <category name="validation">What a form accepts or refuses, and how it says so.</category>
+  <category name="navigation">Where a link, a redirect or a breadcrumb leads.</category>
+  <category name="permission">Who may see or do what.</category>
+  <category name="translation">A label, a message or a date in the wrong language or format.</category>
+  <category name="layout">Where things are on the screen, and whether they fit.</category>
+  <category name="performance">What is slow.</category>
+  <category name="data-display">What a screen shows of the data: missing column, wrong total, wrong order.</category>
+  <category name="error-handling">What happens when something goes wrong.</category>
+</categories>

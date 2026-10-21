@@ -79,6 +79,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             knowledgeLibrary: $knowledge?->hasAttribute('library') ? trim($knowledge->getAttribute('library')) : $defaults->knowledgeLibrary,
             shareKnowledge: $knowledge?->hasAttribute('share') ? 'false' !== $knowledge->getAttribute('share') && '0' !== $knowledge->getAttribute('share') : $defaults->shareKnowledge,
             scenarios: $scenarios instanceof \DOMElement ? $this->scenarios($scenarios) : $defaults->scenarios,
+            feedbackCategories: array_map(static fn (\DOMElement $category): string => $category->getAttribute('name'), $this->dom->children($this->dom->optional($root, 'feedback'), 'category')),
         );
     }
 

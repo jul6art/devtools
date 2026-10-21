@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Verification;
 
+use Jul6Art\DevTools\Feedback\Categories;
 use Jul6Art\DevTools\Impact\ImpactedWorkflow;
 use Jul6Art\DevTools\Impact\ImpactResolver;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
@@ -69,7 +70,7 @@ final readonly class VerificationPreparer
      *
      * @return string|null the folder, or null when the change reaches no route and no component
      */
-    public function prepare(DevToolsDirectory $directory, WorkflowTypeRegistry $types, array $changed, \DateTimeImmutable $at): ?string
+    public function prepare(DevToolsDirectory $directory, WorkflowTypeRegistry $types, array $changed, \DateTimeImmutable $at, Categories $categories = new Categories()): ?string
     {
         $impact = new ImpactResolver($types)->resolve($directory, $changed);
         $workflows = array_values(array_filter($impact->workflows, static fn (ImpactedWorkflow $workflow): bool => \in_array($workflow->type->name, ScenarioGenerator::TYPES, true)));
@@ -113,7 +114,7 @@ final readonly class VerificationPreparer
             $this->scenarios($directory, $folder, $workflow, $run, null === $result ? '' : \dirname($result), $dom, $element);
         }
 
-        foreach (Finding::CATEGORIES as $category) {
+        foreach ($categories->names() as $category) {
             $dom->element($root, 'category', text: $category);
         }
 

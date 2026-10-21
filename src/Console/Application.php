@@ -8,6 +8,9 @@ use Jul6Art\DevTools\Command\BaselinesAcceptCommand;
 use Jul6Art\DevTools\Command\ClaudeHookCommand;
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\ClaudeUninstallCommand;
+use Jul6Art\DevTools\Command\FeedbackAddCommand;
+use Jul6Art\DevTools\Command\FeedbackListCommand;
+use Jul6Art\DevTools\Command\FeedbackResolveCommand;
 use Jul6Art\DevTools\Command\GateCommand;
 use Jul6Art\DevTools\Command\GitInstallHooksCommand;
 use Jul6Art\DevTools\Command\GitUninstallHooksCommand;
@@ -88,6 +91,9 @@ final class Application extends BaseApplication
             new VerifyPrepareCommand(),
             new VerifyCollectCommand(),
             new GateCommand(),
+            new FeedbackAddCommand(),
+            new FeedbackListCommand(),
+            new FeedbackResolveCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

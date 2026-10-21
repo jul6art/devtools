@@ -140,6 +140,8 @@ Usage
 | | `devtools baselines:accept <run>` | after looking at them: the screenshots of a run become the baselines | `.devtools/baselines/` |
 | **Before calling a task finished** | `devtools gate` | freshness, scenarios, verification and assertions on what the change reaches — the `Stop` hook runs it | `.devtools/gate/` |
 | | `devtools verify:prepare` / `verify:collect` | the folder a second agent judges a change to the interface on, then its verdict, checked | `.devtools/pending/` |
+| **After a review** | `devtools feedback:add` | records a remark: its workflow, element or file, its category, one line — or counts it again | `.devtools/feedback/` |
+| | `devtools feedback:list` / `feedback:resolve <id>` | what is open, by category or workflow; closed as fixed or set aside | `.devtools/feedback/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -955,6 +957,48 @@ the repository: past 50 MB, Git LFS is worth it. Without `ext-gd`, the images ar
 schedule: install the driver in the job, not once and for all. Without Panther, `scenarios:run` does not exist
 and says how to install it; generating scenarios needs no browser.
 
+Feedback
+--------
+
+*The filter does not work*, *this needs a select2*: said in the chat, a remark is forgotten by the next task
+and said again. Recorded, it is **data** — what it is about, a category, one line — and the second time it
+comes back, it is counted rather than repeated.
+
+```shell
+vendor/bin/devtools feedback:add "The product field must be a select2, not a native select." \
+        --workflow=route.order.new --selector="#order_product" --category=ui-component
+vendor/bin/devtools feedback:add                       # the same, asked question by question
+vendor/bin/devtools feedback:list [--status=open|fixed|promoted|wont-fix] [--category=…] [--workflow=…]
+vendor/bin/devtools feedback:list --categories         # the closed list
+vendor/bin/devtools feedback:resolve <id> --status=fixed|wont-fix
+```
+
+A feedback is about a **workflow**, an **element** of its page — a CSS selector — or a **file**, at least one of
+them, each checked: a workflow the project has, a file inside it. Its summary is one line of 200 characters at
+most. Its **category** comes from a closed list — `ui-component`, `filter`, `validation`, `navigation`,
+`permission`, `translation`, `layout`, `performance`, `data-display`, `error-handling` — the one the verifier
+files its findings under too; it groups, the summary describes. A project adds its own:
+
+```xml
+<!-- .devtools/config.xml -->
+<feedback>
+    <category name="accessibility"/>
+</feedback>
+```
+
+**Already said.** Before recording, `feedback:add` looks for a feedback of the same category on a target close
+to this one: the same selector, the same file, the same workflow — or two workflows of the same kind rendering
+a component they share. Found, it asks whether this is the same remark: yes adds an **occurrence** to it, no
+records a new one. `--auto` answers yes, `--new` answers no; without anyone to ask and without either, the
+command stops and says which feedback it found. A feedback `fixed` and seen again is open again; one set aside
+as `wont-fix` is not looked for. **Seen twice**, a feedback is worth a rule: the command says so, and the rule
+is the next step.
+
+Each feedback is a file, `.devtools/feedback/<year>/<id>.xml`, its identifier made of the day and of what it is
+about — `fb-2026-10-20-order-product` — and `index.xml` lists them all: it is what `list` and the search for a
+recurrence read, never the files one by one. Both are versioned with the project — a feedback is shared like the
+code it is about.
+
 Writing with Claude Code
 ------------------------
 
@@ -1129,7 +1173,8 @@ src/
 │                            workflows:apply, git:install-hooks, git:uninstall-hooks, claude:install,
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
-│                            knowledge:list, knowledge:promote, knowledge:amend
+│                            feedback:add, feedback:list, feedback:resolve, knowledge:list,
+│                            knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock
 ├── Config/                  .devtools/config.xml
 ├── Xml/                     hardened loading and schema validation of every document read
@@ -1150,6 +1195,7 @@ src/
 │                            runner that replays them in Chrome, one class per action
 ├── Verification/            the folder a verifier judges a change on, and its verdict, checked
 ├── Gate/                    the gate: its steps, its last passage
+├── Feedback/                feedback as data: its categories, its files and index, the search for a recurrence
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
@@ -1157,6 +1203,7 @@ resources/schemas/           the XSD of every format DevTools reads or writes
 resources/templates/         the files init writes
 resources/prompts/           the versioned prompts Claude follows
 resources/knowledge/         the embedded knowledge of each stack, and its canvas
+resources/feedback/          the closed list of feedback categories
 resources/claude/            the Claude Code skill claude:install copies
 tests/
 ├── Fixtures/projects/       six real projects: Symfony 8.1, Symfony 7.4 with YAML, PHP, Express, Angular, a monorepo

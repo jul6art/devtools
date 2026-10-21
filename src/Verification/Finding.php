@@ -14,11 +14,6 @@ final readonly class Finding
 
     public const string MINOR = 'minor';
 
-    /**
-     * The categories of feedback (ADR-0025), provisional until that decision lets a project extend them.
-     */
-    public const array CATEGORIES = ['ui-component', 'filter', 'validation', 'navigation', 'permission', 'translation', 'layout', 'performance', 'data-display', 'error-handling'];
-
     public function __construct(public string $workflow, public string $severity, public string $category, public string $text, public ?string $selector = null)
     {
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    .devtools/feedback/index.xml (ADR-0025): every feedback in one line, which is all the detection of a recurrence
+    reads — never the feedback files themselves.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/feedback-index/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/feedback-index/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="feedback-index">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="feedback" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="category" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="reported-at" type="xs:dateTime" use="required"/>
+                        <xs:attribute name="by" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="occurrences" type="xs:positiveInteger" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="summary" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="workflow" type="t:nonEmpty"/>
+                        <xs:attribute name="selector" type="t:nonEmpty"/>
+                        <xs:attribute name="file" type="t:nonEmpty"/>
+                        <xs:attribute name="commit" type="t:nonEmpty"/>
+                        <xs:attribute name="promoted-to" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

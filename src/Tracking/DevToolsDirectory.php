@@ -140,6 +140,14 @@ final readonly class DevToolsDirectory
     }
 
     /**
+     * `.devtools/feedback/`: the feedback of the project, one directory per year, and its index (ADR-0025).
+     */
+    public function feedbackDirectory(): string
+    {
+        return $this->path('feedback');
+    }
+
+    /**
      * `.devtools/baselines/`: the captures a human accepted (ADR-0022), versioned.
      */
     public function baselinesDirectory(): string
