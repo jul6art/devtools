@@ -47,7 +47,11 @@ final class MemoryLimitTest extends TestCase
 
     public function testALowerLimitIsRaised(): void
     {
-        ini_set('memory_limit', '128M');
+        // Under 1G, yet above what the process already holds: run late — Infection shuffles the suite — it
+        // holds more than 128M, and PHP refuses a limit below its usage.
+        $lower = max(128 * 1024 * 1024, memory_get_usage(true) + 64 * 1024 * 1024);
+        self::assertLessThan(MemoryLimit::bytes(MemoryLimit::MINIMUM), $lower);
+        ini_set('memory_limit', (string) $lower);
 
         self::assertSame('1G', MemoryLimit::raiseTo());
         self::assertSame('1G', \ini_get('memory_limit'));
