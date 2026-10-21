@@ -40,6 +40,8 @@ final class SiteExporterTest extends TestCase
         $page = (string) file_get_contents($site.'/routes/orders.store.html');
 
         self::assertFileEquals($site.'/index.html', $site.'/workflows.html');
+        self::assertStringContainsString('<title>Workflows — acme/laravel-minimal</title>', $index, 'The menu names the project in its heading: the title does not name it twice.');
+        self::assertStringContainsString('<title>POST /orders — acme/laravel-minimal</title>', $page);
         self::assertStringContainsString('<a href="routes/orders.store.html">POST /orders</a>', $index);
         self::assertStringContainsString('<a href="_devtools/knowledge/laravel-13.html">', $index, 'The machinery a page links to is copied beside it.');
         self::assertFileExists($site.'/_devtools/stack.xml.html');

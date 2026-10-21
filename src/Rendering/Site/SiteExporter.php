@@ -119,6 +119,8 @@ final readonly class SiteExporter
         $assets = self::relative($site, 'assets');
         $home = self::relative($site, 'index.html');
         $title = MarkdownRenderer::title($markdown) ?? $projectName;
+        // The menu and the glossary already name the project in their heading: once is enough.
+        $title = str_ends_with($title, $projectName) ? $title : $title.' — '.$projectName;
         $body = new MarkdownRenderer($link)->render($markdown);
         $root = self::relative($site, '');
 
@@ -128,7 +130,7 @@ final readonly class SiteExporter
             <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>{$this->escape($title)} — {$this->escape($projectName)}</title>
+            <title>{$this->escape($title)}</title>
             <link rel="stylesheet" href="{$assets}/site.css">
             </head>
             <body>
