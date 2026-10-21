@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="angular-18">
+<inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="angular-22">
   <workflows>
     <workflow id="route.orders" type="routes" confidence="medium" source="claude">
       <title>/orders — liste des commandes</title>

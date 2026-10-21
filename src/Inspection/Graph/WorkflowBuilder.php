@@ -34,16 +34,17 @@ final readonly class WorkflowBuilder
     }
 
     /**
-     * @param list<EntryPointCandidate> $candidates
-     * @param list<string>              $templateDirectories relative to the stack root
-     * @param list<MechanismAttachment> $mechanisms          listeners and filters to attach (ADR-0043)
+     * @param list<EntryPointCandidate>                       $candidates
+     * @param list<string>                                    $templateDirectories relative to the stack root
+     * @param list<MechanismAttachment>                       $mechanisms          listeners and filters to attach (ADR-0043)
+     * @param \Closure(int): DependencyResolverInterface|null $graph               the graph of a stack that is not PHP (ADR-0031), given the depth; the PHP one otherwise
      */
-    public function build(ProjectRoot $root, StackProfile $stack, array $candidates, array $templateDirectories = [], PhpReferenceExtractor $extractor = new PhpReferenceExtractor(), array $mechanisms = []): BuildResult
+    public function build(ProjectRoot $root, StackProfile $stack, array $candidates, array $templateDirectories = [], PhpReferenceExtractor $extractor = new PhpReferenceExtractor(), array $mechanisms = [], ?\Closure $graph = null, ?TestLocatorInterface $tests = null): BuildResult
     {
         $decisions = new DecisionExtractor($extractor);
         $locator = ClassLocator::for($root, $stack);
-        $resolver = new DependencyResolver($root, $stack, $locator, $extractor, new TwigReferenceExtractor(), $this->config->graphDepth, $templateDirectories);
-        $tests = new TestLocator($root, $stack, $locator, $extractor);
+        $resolver = $graph instanceof \Closure ? $graph($this->config->graphDepth) : new DependencyResolver($root, $stack, $locator, $extractor, new TwigReferenceExtractor(), $this->config->graphDepth, $templateDirectories);
+        $tests ??= new TestLocator($root, $stack, $locator, $extractor);
         $assigner = new WorkflowIdAssigner(new WorkflowIdDeriver($this->config->routePrefix), $this->config->aliases);
 
         $groups = $this->group($candidates);

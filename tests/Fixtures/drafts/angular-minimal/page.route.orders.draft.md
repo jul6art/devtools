@@ -5,12 +5,11 @@ revision: 2026-09-16T15:00:00+02:00
 
 ## Summary
 
-Liste les commandes : `OrderListComponent` charge toutes les commandes via `OrderService.list()` et
-affiche pour chacune le nom du client, avec un lien vers sa fiche `/orders/:id`.
+Liste des commandes, chacune avec son statut, chargée depuis l'API.
 
 ## Preconditions
 
-L'API `/api/orders` est joignable depuis le navigateur (même origine ou proxy de développement).
+Être connecté (`authGuard`).
 
 ## Journey
 
@@ -20,12 +19,10 @@ sequenceDiagram
   participant L as OrderListComponent
   participant S as OrderService
   participant A as API
-  U->>L: navigue vers /orders
+  U->>L: /orders
   L->>S: list()
   S->>A: GET /api/orders
-  A-->>S: Order[]
-  S-->>L: orders$
-  L-->>U: un lien par commande vers /orders/:id
+  A-->>L: commandes
 ```
 
 ## Decisions
@@ -34,15 +31,15 @@ sequenceDiagram
 
 ## Data
 
-Lit des `Order` (`id`, `customer`) depuis l'API HTTP ; aucune écriture.
+Lit les commandes de l'API.
 
 ## Cross-cutting mechanisms
 
-Aucun intercepteur HTTP ni garde de route n'est déclaré dans `src/app`.
+`authGuard`, hérité de la route parente `orders`.
 
 ## Points of attention
 
-Aucun état de chargement ni de gestion d'erreur : si l'API échoue, la liste reste vide sans message.
+Le badge de statut est partagé avec le détail : le modifier change les deux écrans.
 
 ## Change
 

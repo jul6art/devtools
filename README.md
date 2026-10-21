@@ -45,6 +45,7 @@ Requirements
 - `mcp/sdk` ^0.9, optional — only for the MCP server, `mcp:serve`
 - `symfony/panther` ^2.4 and Chrome, optional — only to replay the scenarios, `scenarios:run`; `ext-gd` to compare
   their screenshots with the baselines
+- Node, and TypeScript in the analysed project, optional — only to read Angular and Express natively
 
 Installation
 ------------
@@ -226,7 +227,7 @@ vendor/bin/devtools stack:detect
   Root   Language     Framework     Adapter   Knowledge    Sources
  ------ ------------ ------------- --------- ------------ -----------------------------
   api    php          symfony 7.4   symfony   symfony-7    config, src
-  front  typescript   angular 22.0  claude    angular-22   src/app
+  front  typescript   angular 22.0  angular   angular-22   src/app
  ------ ------------ ------------- --------- ------------ -----------------------------
 ```
 
@@ -236,7 +237,7 @@ reported as framework `node`, and the directories of its entry points join its s
 `package.json` of a build tool (Webpack Encore beside a Symfony application) has neither, and stays
 tooling. A `tsconfig.json` with `checkJs` keeps the language `javascript`. A framework version comes
 from the lock file when there is one, from the constraint otherwise. The adapter says who finds the workflows:
-`symfony`, `laravel` and `generic-php` are native; everything else goes to Claude.
+`symfony`, `laravel`, `angular`, `express` and `generic-php` are native; everything else goes to Claude.
 
 ⚠️ **A wrong detection is corrected in `stack.xml`, not with an option.** Mark the element
 `locked="true"` and every later detection keeps it — the correction is committed and shared:
@@ -515,6 +516,7 @@ Every element is optional; the file `init` writes shows the defaults:
 | `<types><type name="webhooks" prefix="webhook"/></types>` | — | workflow types of your own |
 | `<symfony console="docker compose exec -T php bin/console" env="dev"/>` | `bin/console`, `dev` | how to run the project's console |
 | `<laravel artisan="vendor/bin/sail artisan" env="local" timeout="60"/>` | `php artisan`, the project's `APP_ENV` | how to run a Laravel project's Artisan |
+| `<node binary="node" timeout="120"/>` | `node`, `120` | how to run Node, which reads JavaScript and TypeScript for the Angular and Express adapters |
 | `<routes group="controller"/>` | `entry-point` | one page per route at the root of `routes/`, or the same pages laid out under a directory per controller, with an index |
 | `<php web-root="htdocs"/>` | `public`, `web`, `www` | the web directory of a PHP project without framework |
 | `<language pages="fr"/>` | `en` | language Claude writes the prose of the pages in; `--locale` wins over it |
@@ -1305,11 +1307,56 @@ of the web directory. The binary of a console application is not a workflow of i
 `route.index`, the rest under *Not covered*. Document it through Claude instead, by pinning the adapter in
 `stack.xml`: `<adapter locked="true">claude</adapter>`.
 
+Angular and Express
+-------------------
+
+JavaScript and TypeScript are read **with the project's own TypeScript compiler**, through Node: one
+process per scan, whatever the number of files, running `resources/node/devtools-analyze.mjs` — which has no
+dependency of its own and loads `typescript` from the project's `node_modules`. It reports facts — imports
+resolved with the project's `tsconfig.json` (`paths`, `baseUrl`), decorators and their literal arguments,
+calls, `new` expressions, top-level values — and DevTools' adapters decide what an entry point is. It reads
+nothing outside the project: an import that climbs out of it resolves to nothing.
+
+⚠️ **Node and TypeScript are needed on the machine that inspects**: `npm install --save-dev typescript`
+makes a JavaScript project readable. Without them, the stack goes to Claude (see below), the report says
+why, and the inspection exits `1` — pin `<adapter locked="true">claude</adapter>` in `stack.xml` to make
+that the intended path. With Node in a container, `<node binary="docker compose exec -T front node"/>`
+needs the project mounted at the same path.
+
+**Angular** — `@angular/core` in `package.json`, Ionic included:
+
+| Type | Source | Identifier |
+| --- | --- | --- |
+| routes | the `Routes` given to `provideRouter()` or `RouterModule.forRoot()`, through `children`, `loadChildren` and `loadComponent`; a route with children is their layout, a file of each | `orders/:id` → `route.orders.id`; the empty path → `route.root` |
+| ui | the components no route renders that at least two screens import — one screen's component is part of it | `app-order-status-badge` → `ui.order-status-badge` |
+| integrations | the services injecting `HttpClient`, with the endpoints they call — method and URL, `environment.apiUrl` resolved | `OrderService` → `integration.order-service` |
+
+A route's **security** is its guards — `canActivate`, `canMatch`, inherited from its parents — and their
+files are the route's. Its **navigation** is the `routerLink`s of its template, inline or `templateUrl`, and
+its `router.navigate()` calls, matched against the table: `['/orders', order.id]` reaches `/orders/:id`. A
+lazy route whose import is not literal is documented with a `medium` confidence and a warning. Ionic's tabs
+are child routes of their `TabsPage`.
+
+**Express** — `express` in `package.json`, JavaScript or TypeScript, CommonJS or ESM:
+
+| Type | Source | Identifier |
+| --- | --- | --- |
+| routes | `app.<verb>()` and `router.<verb>()` with a literal path, the prefixes of the `app.use()` mounting each router concatenated | `GET /orders/:id` → `route.get.orders.id` |
+| commands | the `bin` entries of `package.json` and its `scripts` running a file of the project with Node — not the server `main` starts | `command.import-orders` |
+| async | BullMQ `new Worker('<queue>', …)`, node-cron `cron.schedule('<expression>', …)` | `async.emails`, `async.nightly-report` |
+
+A route's **security** is the middleware named before its handler, and those its router is mounted with:
+`app.use('/admin', requireAuth, adminRouter)` then `router.delete('/orders/:id', requireAdmin, remove)` is
+`requireAuth, requireAdmin`. A route is declared where its handler is written — `orderController.list` in
+the controller's file. A listener of the project's emitter (`bus.on('order.created', …)`) is a mechanism of
+the workflows that `emit` that event (ADR-0043). A path computed at run time gives a `medium` confidence,
+a router no application mounts a warning.
+
 Projects without a native adapter
 ---------------------------------
 
-Express, Angular, Django… any stack DevTools has no adapter for is mapped **by Claude Code, from
-files** — never through an API. The first `workflows:inspect` writes a *knowledge* brief (what the stack
+Next.js, Vue, Django, a Node application without a framework… any stack DevTools has no adapter for is
+mapped **by Claude Code, from files** — never through an API. The first `workflows:inspect` writes a *knowledge* brief (what the stack
 is, how a request flows through it); once `workflows:apply` has accepted it, the next run writes a
 *discovery* brief: read the sources, list the entry points and the files each one traverses, in the same
 XML model a native adapter produces.
@@ -1325,7 +1372,8 @@ Angular `front/` through Claude), and identifiers stay unique across both.
 
 ### Switching to a native adapter
 
-A stack Claude documented, that a later version of DevTools reads natively — Laravel since ADR-0030 — is
+A stack Claude documented, that a later version of DevTools reads natively — Laravel, Angular and Express
+since ADR-0030 to 0033 — is
 **not switched silently**: its identifiers may differ, and a page whose identifier goes is orphaned. Every
 inspection keeps it on the Claude path and lists what the switch would do:
 
@@ -1384,7 +1432,9 @@ src/
 ├── Stack/                   stack detection from manifests, .devtools/stack.xml, knowledge of a stack
 ├── Inspection/
 │   ├── Model/               the intermediate model every adapter produces, and its XML form
-│   ├── Adapter/             entry points of a stack: Symfony, Laravel, PHP without a framework, the Claude path
+│   ├── Adapter/             entry points of a stack: Symfony, Laravel, Angular, Express, PHP without a framework,
+│   │                        the Claude path
+│   ├── Node/                the Node bridge: one process reading JavaScript and TypeScript with the project's compiler
 │   ├── Graph/               files a PHP entry point traverses — Twig and Blade views included — grouping, tests, coverage
 │   ├── Freshness/           what changed since the documentation was written: git, then hashes
 │   ├── Diff/                what changed in a workflow, fact by fact, grouped across workflows
@@ -1408,11 +1458,14 @@ resources/schemas/           the XSD of every format DevTools reads or writes
 resources/templates/         the files init writes
 resources/prompts/           the versioned prompts Claude follows
 resources/knowledge/         the embedded knowledge of each stack, and its canvas
+resources/node/              the script the Node bridge runs, without a dependency of its own
 resources/feedback/          the closed list of feedback categories
 resources/review/            the review page: its HTML, stylesheet, script, and the router of its server
 resources/claude/            the Claude Code skill claude:install copies
 tests/
-├── Fixtures/projects/       real projects: Symfony 8.1, Symfony 7.4 with YAML, Laravel 13, PHP, Express, Angular, monorepos
+├── Fixtures/projects/       real projects: Symfony 8.1, Symfony 7.4 with YAML, Laravel 13, PHP, Express 5 in JavaScript
+│                            and in TypeScript, Express 4 without TypeScript, Angular 22, Ionic tabs, monorepos
+├── Node/                    the Node bridge's own tests, run by PHPUnit through `node --test`
 ├── Fixtures/drafts/         what Claude wrote for them, replayed by the tests
 ├── Fixtures/matrix/         the .devtools/ each of them must produce, without AI and written
 ├── EndToEnd/                the binary in a separate process: the matrix, both installations, the bundle

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="ui.order-status-badge" type="ui" schema-version="1">
+  <title>OrderStatusBadgeComponent</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="component" name="order-status-badge" role="main">
+      <declared-in path="src/app/shared/order-status-badge.component.ts" role="component"/>
+      <attribute name="selector" value="app-order-status-badge"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/app/shared/order-status-badge.component.css" role="other" sha256="9aa211ddafe52ceb72a2554baa795d3cccac039c794197c5167c139d99860093"/>
+    <file path="src/app/shared/order-status-badge.component.ts" role="component" sha256="920428c0c7f55c673f676055580c82c858f67d88444d265d44ab9a4282176985"/>
+  </files>
+  <packages>
+    <package name="@angular/core" version="22.2.3"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:angular</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" reason="initial"/>
+  </history>
+</workflow>

@@ -77,7 +77,7 @@ final readonly class AdapterSwitch
         $claude = $this->adapters->for('claude');
         $extractor = new PhpReferenceExtractor();
         $found = $native->extract($directory->root, $stack, $config, $extractor);
-        $nativeIds = self::ids($found->workflows ?? new WorkflowBuilder($config)->build($directory->root, $stack, $found->candidates, $found->templateDirectories, $extractor, $found->mechanisms)->result->workflows);
+        $nativeIds = self::ids($found->workflows ?? new WorkflowBuilder($config)->build($directory->root, $stack, $found->candidates, $found->templateDirectories, $extractor, $found->mechanisms, $found->graph, $found->tests)->result->workflows);
         $claudeIds = $claude instanceof AdapterInterface ? self::ids($claude->extract($directory->root, $before, $config, $extractor)->workflows ?? []) : [];
         $extractor->release();
 

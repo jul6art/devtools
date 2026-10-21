@@ -504,7 +504,7 @@ final readonly class InspectionPipeline
             if (null !== $found->workflows) {
                 [$stackWorkflows, $stackUncovered, $buildWarnings] = [$found->workflows, $found->uncovered, []];
             } else {
-                $built = new WorkflowBuilder($config)->build($root, $stack, $found->candidates, $found->templateDirectories, $extractor, $found->mechanisms);
+                $built = new WorkflowBuilder($config)->build($root, $stack, $found->candidates, $found->templateDirectories, $extractor, $found->mechanisms, $found->graph, $found->tests);
                 [$stackWorkflows, $stackUncovered, $buildWarnings] = [$built->result->workflows, $built->result->uncovered, $built->warnings];
             }
 

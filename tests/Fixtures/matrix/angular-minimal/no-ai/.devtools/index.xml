@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index xmlns="https://github.com/jul6art/devtools/schema/index/1" schema-version="3" scanned-at="2026-09-16T12:00:00+00:00" docs="docs/workflows">
-  <source vcs="git" commit="342fdb0669773b3eaf8903b97f0a7ec69ee4150d" branch="main" dirty="true"/>
+  <source vcs="git" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" branch="main" dirty="true"/>
+  <workflow id="integration.order-service" type="integrations" title="OrderService" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="integrations/order-service.md"/>
+  <workflow id="route.admin.users" type="routes" title="/admin/users" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/admin.users.md"/>
+  <workflow id="route.orders" type="routes" title="/orders" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/orders.md"/>
+  <workflow id="route.orders.id" type="routes" title="/orders/:id" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/orders.id.md"/>
+  <workflow id="route.reports" type="routes" title="/reports" status="fresh" confidence="medium" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/reports.md"/>
+  <workflow id="route.root" type="routes" title="/" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="routes/root.md"/>
+  <workflow id="ui.order-status-badge" type="ui" title="OrderStatusBadgeComponent" status="fresh" confidence="high" mode="no-ai" updated="2026-09-16T12:00:00+00:00" page="ui/order-status-badge.md"/>
 </index>

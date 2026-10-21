@@ -55,6 +55,7 @@ final readonly class Config
      * @param bool                        $shareKnowledge     whether a knowledge file Claude writes is deposited in that library
      * @param string                      $laravelArtisan     how to run the project's Artisan (ADR-0030)
      * @param string|null                 $laravelEnv         the environment Artisan boots in; null for the project's own (APP_ENV)
+     * @param string                      $nodeBinary         how to run Node for the JavaScript and TypeScript adapters (ADR-0031)
      * @param ScenarioSettings            $scenarios          how scenarios:run reaches the application (ADR-0021)
      * @param list<string>                $feedbackCategories the categories of feedback the project adds to DevTools' own (ADR-0025)
      */
@@ -71,6 +72,8 @@ final readonly class Config
         public string $laravelArtisan = 'php artisan',
         public ?string $laravelEnv = null,
         public float $laravelTimeout = 60.0,
+        public string $nodeBinary = 'node',
+        public float $nodeTimeout = 120.0,
         public ?string $pagesLanguage = null,
         public string $routeGrouping = self::ROUTES_BY_ENTRY_POINT,
         public ?string $phpWebRoot = null,
@@ -83,7 +86,7 @@ final readonly class Config
             throw new InvalidConfig('The graph depth cannot be negative.');
         }
 
-        if ($symfonyTimeout <= 0 || $laravelTimeout <= 0) {
+        if ($symfonyTimeout <= 0 || $laravelTimeout <= 0 || $nodeTimeout <= 0) {
             throw new InvalidConfig('The console timeout must be a positive number of seconds.');
         }
 

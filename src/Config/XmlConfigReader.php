@@ -55,6 +55,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
         $identifiers = $this->dom->optional($root, 'identifiers');
         $symfony = $this->dom->optional($root, 'symfony');
         $laravel = $this->dom->optional($root, 'laravel');
+        $node = $this->dom->optional($root, 'node');
         $language = $this->dom->optional($root, 'language');
         $php = $this->dom->optional($root, 'php');
         $routes = $this->dom->optional($root, 'routes');
@@ -77,6 +78,8 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
             laravelArtisan: $laravel?->hasAttribute('artisan') ? $laravel->getAttribute('artisan') : $defaults->laravelArtisan,
             laravelEnv: $laravel?->hasAttribute('env') ? $laravel->getAttribute('env') : $defaults->laravelEnv,
             laravelTimeout: $laravel?->hasAttribute('timeout') ? (float) $laravel->getAttribute('timeout') : $defaults->laravelTimeout,
+            nodeBinary: $node?->hasAttribute('binary') ? $node->getAttribute('binary') : $defaults->nodeBinary,
+            nodeTimeout: $node?->hasAttribute('timeout') ? (float) $node->getAttribute('timeout') : $defaults->nodeTimeout,
             pagesLanguage: $language instanceof \DOMElement ? $language->getAttribute('pages') : $defaults->pagesLanguage,
             routeGrouping: $routes?->hasAttribute('group') ? $routes->getAttribute('group') : $defaults->routeGrouping,
             phpWebRoot: $php?->hasAttribute('web-root') ? trim($php->getAttribute('web-root'), '/') : $defaults->phpWebRoot,

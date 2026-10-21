@@ -19,6 +19,7 @@ use Jul6Art\DevTools\Stack\StackProfile;
 use Jul6Art\DevTools\Stack\XmlStackStore;
 use Jul6Art\DevTools\Tests\Inspection\Adapter\Laravel\RecordedArtisanRunner;
 use Jul6Art\DevTools\Tests\Support\CopiesFixtureProjects;
+use Jul6Art\DevTools\Tests\Support\NodeDependencies;
 use Jul6Art\DevTools\Tracking\DevToolsDirectory;
 use Jul6Art\DevTools\Tracking\Initializer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -90,6 +91,25 @@ final class AdapterSwitchTest extends TestCase
         $after = $pipeline->run(new InspectionOptions($project, noAi: true));
 
         self::assertSame([], array_values(array_filter($after->warnings, static fn (string $warning): bool => str_contains($warning, 'Claude'))), 'Once switched, nothing is said any more.');
+    }
+
+    /**
+     * ADR-0032: the same mechanism for Angular, whose identifiers the Claude path derived otherwise.
+     */
+    public function testAnAngularProjectClaudeDocumentedListsItsChangedIdentifiers(): void
+    {
+        NodeDependencies::install(__DIR__.'/../Fixtures/projects/angular-minimal');
+        $project = $this->copyFixtureProject('angular-minimal', withDependencies: true);
+        $directory = new DevToolsDirectory(new ProjectRoot($project));
+        new Initializer()->initialize($directory);
+        $detected = new StackDetector()->detect($directory->root, new Config())->stacks[0];
+        new XmlStackStore()->write($directory->stackFile(), new StackDocument('acme-back-office', [self::onTheClaudePath($detected)]));
+        mkdir($directory->path('discovery'));
+        copy(__DIR__.'/../Fixtures/drafts/angular-minimal/discovery.project.draft.xml', $directory->path('discovery/project.xml'));
+
+        $held = new InspectionPipeline()->run(new InspectionOptions($project, noAi: true));
+
+        self::assertStringContainsString('angular (.) is documented through Claude, and this version reads it natively (adapter angular): 2 identifiers stay, 1 go (route.orders-id), 5 come (route.admin.users, route.orders.id, route.reports, route.root, ui.order-status-badge). Inspect with --switch-adapter to switch.', implode("\n", $held->warnings));
     }
 
     public function testANativeStackOrOneWithoutDiscoveryIsNoSwitch(): void

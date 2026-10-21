@@ -1,1 +1,14 @@
 flowchart LR
+  subgraph routes["Routes"]
+    w2["route.admin.users"]
+    w3["route.orders"]
+    w4["route.orders.id"]
+    w5["route.reports"]
+    w6["route.root"]
+  end
+  subgraph ui["UI"]
+    w7["ui.order-status-badge"]
+  end
+  subgraph integrations["Integrations"]
+    w1["integration.order-service"]
+  end

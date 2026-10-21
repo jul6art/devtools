@@ -19,7 +19,7 @@ use Jul6Art\DevTools\Stack\StackProfile;
  * the structural files an adapter declares are always included, which is what guards against a false
  * "unchanged" when only configuration moved (§ 11).
  */
-final readonly class DependencyResolver
+final readonly class DependencyResolver implements DependencyResolverInterface
 {
     /**
      * @param list<string> $templateDirectories relative to the stack root, searched in order
@@ -36,10 +36,7 @@ final readonly class DependencyResolver
     ) {
     }
 
-    /**
-     * @param list<string>  $methods    the entry point's methods; empty for the whole file
-     * @param list<FileRef> $structural always part of the workflow
-     */
+    #[\Override]
     public function resolve(FileRef $entryFile, array $methods = [], array $structural = []): ResolvedDependencies
     {
         // Breadth first, one level at a time: the level's depth is the loop variable, so nothing has to

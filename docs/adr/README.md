@@ -50,9 +50,9 @@
 | [0028](0028-interface-de-revue-humaine.md) | Interface de revue humaine | 2 — Retours et règles | Accepted | — |
 | [0029](0029-retrospective-et-metriques.md) | Rétrospective et métriques | 2 — Retours et règles | Accepted | 2026-10-21 |
 | [0030](0030-adaptateur-natif-laravel.md) | Adaptateur natif Laravel | 3 — Généralisation | Accepted | 2026-10-21 |
-| [0031](0031-pont-node-pour-javascript-et-typescript.md) | Pont Node pour l'analyse JavaScript et TypeScript | 3 — Généralisation | Proposed | — |
-| [0032](0032-adaptateur-natif-angular.md) | Adaptateur natif Angular | 3 — Généralisation | Proposed | — |
-| [0033](0033-adaptateur-natif-node-express.md) | Adaptateur natif Node / Express | 3 — Généralisation | Proposed | — |
+| [0031](0031-pont-node-pour-javascript-et-typescript.md) | Pont Node pour l'analyse JavaScript et TypeScript | 3 — Généralisation | Accepted | 2026-10-21 |
+| [0032](0032-adaptateur-natif-angular.md) | Adaptateur natif Angular | 3 — Généralisation | Accepted | 2026-10-21 |
+| [0033](0033-adaptateur-natif-node-express.md) | Adaptateur natif Node / Express | 3 — Généralisation | Accepted | 2026-10-21 |
 | [0034](0034-publication-open-source-et-distribution.md) | Publication open source, phar, Docker, site | 3 — Généralisation | Proposed | — |
 | [0035](0035-client-api-claude-et-redaction-en-ci.md) | Client API Claude et rédaction en CI | Compléments | Proposed | — |
 | [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Proposed | — |

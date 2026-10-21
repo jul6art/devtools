@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.orders" type="routes" schema-version="1">
+  <title>/orders</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="orders" role="main">
+      <declared-in path="src/app/orders/order-list.component.ts" role="component"/>
+      <attribute name="path" value="/orders"/>
+      <attribute name="security" value="authGuard"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/app/app.config.ts" role="config" sha256="362fbbd2b47293ef3150e00fc0df7b780562933cda5ff61ac5477057fb9c7e0a"/>
+    <file path="src/app/app.routes.ts" role="config" sha256="a326db8196408bde7d29be2157dc2531354a571cb8d566a6e8d5834b3749eccc"/>
+    <file path="src/app/auth/auth.guard.ts" role="other" sha256="141b74143b4496d6eadd67b0edd139c404e3bdcd91ede1381fa0a6c329c0343d"/>
+    <file path="src/app/orders/order-list.component.ts" role="component" sha256="72578e6722fa443ed3509fb8488cb0d3457649a80a04902640772d4e4b2fda7c"/>
+    <file path="src/app/orders/order.service.ts" role="service" sha256="b95ece98822b4a768056be8e7bd00c02fa662d535d3fa5a003b221244be58f08"/>
+    <file path="src/app/shared/order-status-badge.component.css" role="other" sha256="9aa211ddafe52ceb72a2554baa795d3cccac039c794197c5167c139d99860093"/>
+    <file path="src/app/shared/order-status-badge.component.ts" role="component" sha256="920428c0c7f55c673f676055580c82c858f67d88444d265d44ab9a4282176985"/>
+    <file path="src/environments/environment.ts" role="other" sha256="30ab689696048b32591345410851b667e41a79d0073adff66050a8d02e058ba1"/>
+  </files>
+  <packages>
+    <package name="@angular/common" version="22.2.3"/>
+    <package name="@angular/core" version="22.2.3"/>
+    <package name="@angular/router" version="22.2.3"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:angular</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" reason="initial"/>
+  </history>
+</workflow>

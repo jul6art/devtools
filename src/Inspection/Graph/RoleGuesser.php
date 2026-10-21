@@ -18,9 +18,13 @@ final class RoleGuesser
         $in = static fn (string ...$directories): bool => [] !== array_intersect($directories, $segments);
 
         return match (true) {
-            str_ends_with($name, '.twig') || str_ends_with($name, '.blade.php') => FileRole::Template,
-            str_ends_with($name, 'Test.php') || $in('tests', 'Tests') => FileRole::Test,
-            str_ends_with($name, 'Controller.php') || $in('Controller') => FileRole::Controller,
+            str_ends_with($name, '.twig') || str_ends_with($name, '.blade.php') || str_ends_with($name, '.component.html') || str_ends_with($name, '.page.html') => FileRole::Template,
+            // Angular's naming (ADR-0032): `order-list.component.ts`, `tab1.page.ts`, `order.service.ts`.
+            1 === preg_match('/\.(component|page)\.[jt]s$/', $name) => FileRole::Component,
+            1 === preg_match('/\.service\.[jt]s$/', $name) => FileRole::Service,
+            1 === preg_match('/\.routes\.[jt]s$|-routing\.module\.[jt]s$|^app\.config\.[jt]s$/', $name) => FileRole::Config,
+            str_ends_with($name, 'Test.php') || $in('tests', 'Tests') || 1 === preg_match('/\.(spec|test)\.[cm]?[jt]sx?$/', $name) => FileRole::Test,
+            str_ends_with($name, 'Controller.php') || $in('Controller', 'controllers') || 1 === preg_match('/Controller\.[cm]?[jt]s$/', $name) => FileRole::Controller,
             $in('Form') && str_ends_with($name, 'Type.php') => FileRole::Form,
             str_ends_with($name, 'Repository.php') || $in('Repository') => FileRole::Repository,
             // Laravel's conventions (ADR-0030): Eloquent models, listeners, queued jobs.
@@ -30,7 +34,7 @@ final class RoleGuesser
             $in('Message', 'Events') => FileRole::Message,
             $in('Components', 'Component', 'Livewire') => FileRole::Component,
             $in('config') || 1 === preg_match('/\.(ya?ml|xml|neon)$/', $name) => FileRole::Config,
-            $in('Service') => FileRole::Service,
+            $in('Service', 'services') || 1 === preg_match('/Service\.[cm]?[jt]s$/', $name) => FileRole::Service,
             default => FileRole::Other,
         };
     }

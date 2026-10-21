@@ -1,18 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
-  <file path="src/app/app.routes.ts">
+  <file path="src/app/admin/admin.routes.ts">
+    <workflow ref="route.admin.users" relation="file"/>
+  </file>
+  <file path="src/app/admin/user-list.component.ts">
+    <workflow ref="route.admin.users" relation="file"/>
+  </file>
+  <file path="src/app/app.config.ts">
+    <workflow ref="route.admin.users" relation="file"/>
     <workflow ref="route.orders" relation="file"/>
-    <workflow ref="route.orders-id" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+    <workflow ref="route.reports" relation="file"/>
+    <workflow ref="route.root" relation="file"/>
+  </file>
+  <file path="src/app/app.routes.ts">
+    <workflow ref="route.admin.users" relation="file"/>
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+    <workflow ref="route.reports" relation="file"/>
+    <workflow ref="route.root" relation="file"/>
+  </file>
+  <file path="src/app/auth/auth.guard.ts">
+    <workflow ref="route.admin.users" relation="file"/>
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+    <workflow ref="route.reports" relation="file"/>
+  </file>
+  <file path="src/app/home/home.component.html">
+    <workflow ref="route.root" relation="file"/>
+  </file>
+  <file path="src/app/home/home.component.ts">
+    <workflow ref="route.root" relation="file"/>
   </file>
   <file path="src/app/orders/order-detail.component.ts">
-    <workflow ref="route.orders-id" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
   </file>
   <file path="src/app/orders/order-list.component.ts">
     <workflow ref="route.orders" relation="file"/>
   </file>
   <file path="src/app/orders/order.service.ts">
-    <workflow ref="integration.orderservice" relation="file"/>
+    <workflow ref="integration.order-service" relation="file"/>
     <workflow ref="route.orders" relation="file"/>
-    <workflow ref="route.orders-id" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+  </file>
+  <file path="src/app/shared/order-status-badge.component.css">
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+    <workflow ref="ui.order-status-badge" relation="file"/>
+  </file>
+  <file path="src/app/shared/order-status-badge.component.ts">
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
+    <workflow ref="ui.order-status-badge" relation="file"/>
+  </file>
+  <file path="src/environments/environment.ts">
+    <workflow ref="integration.order-service" relation="file"/>
+    <workflow ref="route.orders" relation="file"/>
+    <workflow ref="route.orders.id" relation="file"/>
   </file>
 </files-to-workflows>

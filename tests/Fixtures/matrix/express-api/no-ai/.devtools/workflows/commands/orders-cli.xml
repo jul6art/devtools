@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.orders-cli" type="commands" schema-version="1">
+  <title>orders-cli</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="command" name="orders-cli" role="main">
+      <declared-in path="bin/orders-cli.js" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="bin/orders-cli.js" role="other" sha256="50f636662a520f9166dc7dd39d98a1e83857a5672d80c26ea6ddf8c6643a767f"/>
+    <file path="package.json" role="config" sha256="429e08899b16fb85495ce626de3c87c59b96cf36930cf555e9a53d1852a4447f"/>
+    <file path="src/services/orderService.js" role="service" sha256="d5780f86ccaf10518d91eff5680bd7781fc470d60b3e99ce2ee1b5b7bce3ff95"/>
+  </files>
+  <confidence>high</confidence>
+  <producer>native:express</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" reason="initial"/>
+  </history>
+</workflow>

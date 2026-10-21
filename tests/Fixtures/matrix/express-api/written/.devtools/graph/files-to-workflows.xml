@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="bin/orders-cli.js">
+    <workflow ref="command.orders-cli" relation="file"/>
+  </file>
+  <file path="package.json">
+    <workflow ref="command.import-orders" relation="file"/>
+    <workflow ref="command.orders-cli" relation="file"/>
+  </file>
+  <file path="src/app.js">
+    <workflow ref="route.delete.admin.orders.id" relation="file"/>
+    <workflow ref="route.get.health" relation="file"/>
+    <workflow ref="route.get.orders" relation="file"/>
+    <workflow ref="route.get.orders.id" relation="file"/>
+    <workflow ref="route.post.orders" relation="file"/>
+  </file>
+  <file path="src/controllers/orderController.js">
+    <workflow ref="route.delete.admin.orders.id" relation="file"/>
+    <workflow ref="route.get.orders" relation="file"/>
+    <workflow ref="route.get.orders.id" relation="file"/>
+    <workflow ref="route.post.orders" relation="file"/>
+  </file>
+  <file path="src/events/bus.js">
+    <workflow ref="route.delete.admin.orders.id" relation="file"/>
+    <workflow ref="route.get.orders" relation="file"/>
+    <workflow ref="route.get.orders.id" relation="file"/>
+    <workflow ref="route.post.orders" relation="file"/>
+  </file>
+  <file path="src/jobs/nightlyReport.js">
+    <workflow ref="async.nightly-report" relation="file"/>
+  </file>
+  <file path="src/listeners/notifyWarehouse.js">
+    <workflow ref="route.delete.admin.orders.id" relation="dependency"/>
+    <workflow ref="route.get.orders" relation="dependency"/>
+    <workflow ref="route.get.orders.id" relation="dependency"/>
+    <workflow ref="route.post.orders" relation="dependency"/>
+  </file>
+  <file path="src/routes/admin.js">
+    <workflow ref="route.delete.admin.orders.id" relation="file"/>
+  </file>
+  <file path="src/routes/orders.js">
+    <workflow ref="route.get.orders" relation="file"/>
+    <workflow ref="route.get.orders.id" relation="file"/>
+    <workflow ref="route.post.orders" relation="file"/>
+  </file>
+  <file path="src/scripts/import-orders.js">
+    <workflow ref="command.import-orders" relation="file"/>
+  </file>
+  <file path="src/services/orderService.js">
+    <workflow ref="async.nightly-report" relation="file"/>
+    <workflow ref="command.import-orders" relation="file"/>
+    <workflow ref="command.orders-cli" relation="file"/>
+    <workflow ref="route.delete.admin.orders.id" relation="file"/>
+    <workflow ref="route.get.orders" relation="file"/>
+    <workflow ref="route.get.orders.id" relation="file"/>
+    <workflow ref="route.post.orders" relation="file"/>
+  </file>
+  <file path="src/workers/emailWorker.js">
+    <workflow ref="async.emails" relation="file"/>
+  </file>
+  <file path="test/orders.test.js">
+    <workflow ref="route.get.health" relation="test"/>
+    <workflow ref="route.get.orders" relation="test"/>
+    <workflow ref="route.post.orders" relation="test"/>
+  </file>
+</files-to-workflows>

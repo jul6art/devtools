@@ -37,3 +37,7 @@
 /.devtools/runs/
 /.devtools/gate/
 /.devtools/stats/
+
+# JavaScript fixtures install their own dependencies too (ADR-0031): only their lock files are committed.
+/tests/Fixtures/projects/*/node_modules/
+/tests/Fixtures/projects/*/*/node_modules/

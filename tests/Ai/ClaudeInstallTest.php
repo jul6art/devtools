@@ -41,14 +41,16 @@ final class ClaudeInstallTest extends TestCase
     }
 
     /**
-     * ADR-0002: DevTools never talks to Claude, nor to anything else over the network.
+     * ADR-0002: DevTools never talks to Claude, nor to anything else over the network. The name of Angular's
+     * `HttpClient`, which the Angular adapter looks for in the code it reads (ADR-0032), is no connection:
+     * what is searched is a client in use — Symfony's, Guzzle, cURL, a socket, a URL opened as a file.
      */
     public function testNoClassOfTheCoreOpensANetworkConnection(): void
     {
         $offending = [];
 
         foreach ((new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(\dirname(__DIR__, 2).'/src', \FilesystemIterator::SKIP_DOTS))) as $file) {
-            if ($file instanceof \SplFileInfo && str_ends_with($file->getFilename(), '.php') && 1 === preg_match('/\b(curl_init|fsockopen|stream_socket_client|HttpClient|file_get_contents\(\s*[\'"]https?:)/', (string) file_get_contents($file->getPathname()))) {
+            if ($file instanceof \SplFileInfo && str_ends_with($file->getFilename(), '.php') && 1 === preg_match('/\b(curl_init|fsockopen|stream_socket_client|file_get_contents\(\s*[\'"]https?:)|Symfony\\\\Component\\\\HttpClient\\\\|HttpClientInterface|GuzzleHttp\\\\/', (string) file_get_contents($file->getPathname()))) {
                 $offending[] = $file->getFilename();
             }
         }

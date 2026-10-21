@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Inspection\Adapter;
 
+use Jul6Art\DevTools\Inspection\Graph\DependencyResolverInterface;
 use Jul6Art\DevTools\Inspection\Graph\EntryPointCandidate;
 use Jul6Art\DevTools\Inspection\Graph\MechanismAttachment;
+use Jul6Art\DevTools\Inspection\Graph\TestLocatorInterface;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
 
@@ -15,15 +17,17 @@ use Jul6Art\DevTools\Inspection\Model\Workflow;
 final readonly class AdapterResult
 {
     /**
-     * @param list<EntryPointCandidate> $candidates
-     * @param list<string>              $templateDirectories relative to the stack root
-     * @param list<string>              $warnings
-     * @param string|null               $fallbackCause       why the adapter could not use its best source; shown at the top of the report
-     * @param list<Workflow>|null       $workflows           workflows already complete — the Claude path — which skip the PHP graph
-     * @param list<FileRef>             $uncovered           with $workflows: the source files none of them reaches
-     * @param list<string>|null         $discovery           files Claude has to look at: [] for a whole discovery, null when none is needed
-     * @param int                       $consoleCalls        processes the adapter launched on the project's own console (ADR-0042)
-     * @param list<MechanismAttachment> $mechanisms          listeners and filters, and the workflows they run inside (ADR-0043)
+     * @param list<EntryPointCandidate>                       $candidates
+     * @param list<string>                                    $templateDirectories relative to the stack root
+     * @param list<string>                                    $warnings
+     * @param string|null                                     $fallbackCause       why the adapter could not use its best source; shown at the top of the report
+     * @param list<Workflow>|null                             $workflows           workflows already complete — the Claude path — which skip the PHP graph
+     * @param list<FileRef>                                   $uncovered           with $workflows: the source files none of them reaches
+     * @param list<string>|null                               $discovery           files Claude has to look at: [] for a whole discovery, null when none is needed
+     * @param int                                             $consoleCalls        processes the adapter launched on the project's own console (ADR-0042)
+     * @param list<MechanismAttachment>                       $mechanisms          listeners and filters, and the workflows they run inside (ADR-0043)
+     * @param \Closure(int): DependencyResolverInterface|null $graph               the files an entry point traverses, for a stack that is not PHP (ADR-0031), given the depth
+     * @param TestLocatorInterface|null                       $tests               the tests of such a stack
      */
     public function __construct(
         public array $candidates,
@@ -35,6 +39,8 @@ final readonly class AdapterResult
         public ?array $discovery = null,
         public int $consoleCalls = 0,
         public array $mechanisms = [],
+        public ?\Closure $graph = null,
+        public ?TestLocatorInterface $tests = null,
     ) {
     }
 }

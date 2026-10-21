@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.get.health" type="routes" schema-version="1">
+  <title>GET /health</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="get.health" role="main">
+      <declared-in path="src/app.js" role="config"/>
+      <attribute name="methods" value="GET"/>
+      <attribute name="path" value="/health"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/app.js" role="config" sha256="a9f42f9aeb7432bb651711b80b2ba47bd90a63b68eb12402090f4000a71eca31"/>
+  </files>
+  <tests>
+    <file path="test/orders.test.js" role="test"/>
+  </tests>
+  <confidence>high</confidence>
+  <producer>native:express</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" reason="initial"/>
+  </history>
+</workflow>

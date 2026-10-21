@@ -36,7 +36,7 @@ final class KnowledgeTest extends TestCase
     /**
      * The sheets DevTools ships, one per major version of each stack it reads natively.
      */
-    private const array SHIPPED = ['laravel-12.md', 'laravel-13.md', 'symfony-7.md', 'symfony-8.md'];
+    private const array SHIPPED = ['angular-22.md', 'express-5.md', 'laravel-12.md', 'laravel-13.md', 'symfony-7.md', 'symfony-8.md'];
 
     #[DataProvider('embeddedKnowledge')]
     public function testEveryEmbeddedKnowledgeFollowsTheCanvas(string $file): void

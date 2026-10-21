@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="async.emails" type="async" schema-version="1">
+  <title>emails (BullMQ)</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="no-ai"/>
+  <source vcs="git" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="worker" name="emails" role="main">
+      <declared-in path="src/workers/emailWorker.js" role="handler"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/workers/emailWorker.js" role="handler" sha256="9fc5b500c2c81e8213b77c13cc3cfb867a700ce811a1eed9b5d6f075c13dfa9b"/>
+  </files>
+  <packages>
+    <package name="bullmq" version="5.81.5"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:express</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" reason="initial"/>
+  </history>
+</workflow>

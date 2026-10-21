@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="route.reports" type="routes" schema-version="1">
+  <title>/reports</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/4"/>
+  <source vcs="git" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="route" name="reports" role="main">
+      <declared-in path="src/app/app.routes.ts" role="config"/>
+      <attribute name="path" value="/reports"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/app/app.config.ts" role="config" sha256="362fbbd2b47293ef3150e00fc0df7b780562933cda5ff61ac5477057fb9c7e0a"/>
+    <file path="src/app/app.routes.ts" role="config" sha256="a326db8196408bde7d29be2157dc2531354a571cb8d566a6e8d5834b3749eccc"/>
+    <file path="src/app/auth/auth.guard.ts" role="other" sha256="141b74143b4496d6eadd67b0edd139c404e3bdcd91ede1381fa0a6c329c0343d"/>
+  </files>
+  <confidence>medium</confidence>
+  <producer>native:angular</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="e40e7e16aa7ef1a8aa891b061fb760f46ea73895" reason="rédaction initiale"/>
+  </history>
+</workflow>

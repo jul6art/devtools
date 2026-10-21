@@ -7,10 +7,13 @@ namespace Jul6Art\DevTools\Tests\Inspection\Adapter\Claude;
 use Jul6Art\DevTools\Ai\ApplyResult;
 use Jul6Art\DevTools\Ai\DraftApplier;
 use Jul6Art\DevTools\Clock\FrozenClock;
+use Jul6Art\DevTools\Config\Config;
+use Jul6Art\DevTools\Inspection\Adapter\Angular\AngularAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\ClaudeDrivenAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\Discovery;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\DiscoveryBrief;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\XmlDiscoveryBriefStore;
+use Jul6Art\DevTools\Inspection\Adapter\Express\ExpressAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Symfony\ConsoleFailed;
 use Jul6Art\DevTools\Inspection\Adapter\Symfony\SymfonyAdapter;
 use Jul6Art\DevTools\Inspection\AdapterResolver;
@@ -23,6 +26,10 @@ use Jul6Art\DevTools\Inspection\Model\Serialization\ModelXmlSerializer;
 use Jul6Art\DevTools\Inspection\Model\WorkflowTypeRegistry;
 use Jul6Art\DevTools\Project\ProjectRoot;
 use Jul6Art\DevTools\Rendering\PageParser;
+use Jul6Art\DevTools\Stack\StackDetector;
+use Jul6Art\DevTools\Stack\StackDocument;
+use Jul6Art\DevTools\Stack\StackProfile;
+use Jul6Art\DevTools\Stack\XmlStackStore;
 use Jul6Art\DevTools\Tests\Inspection\Adapter\Symfony\RecordedConsoleRunner;
 use Jul6Art\DevTools\Tests\Support\CopiesFixtureProjects;
 use Jul6Art\DevTools\Tests\Support\GitRepository;
@@ -79,12 +86,17 @@ final class ClaudeDrivenTest extends TestCase
         $this->assertMatchesExpected($project, 'node-express');
     }
 
-    public function testAnAngularProjectIsDocumentedTheSameWay(): void
+    /**
+     * Angular has its native adapter (ADR-0032): a project that pins the Claude path in stack.xml keeps it —
+     * and with the knowledge DevTools ships, the first inspection asks for the discovery at once.
+     */
+    public function testAnAngularProjectPinnedToTheClaudePathIsDocumentedTheSameWay(): void
     {
         $project = $this->copyFixtureProject('angular-minimal');
-        $this->inspect($project);
-        $this->draft($project, 'angular-minimal/knowledge.angular-18.draft.md', 'knowledge.angular-18.draft.md');
-        $this->apply($project);
+        $root = new ProjectRoot($project);
+        $detected = new StackDetector()->detect($root, new Config())->stacks[0];
+        mkdir($project.'/.devtools');
+        new XmlStackStore()->write($project.'/.devtools/stack.xml', new StackDocument('acme-back-office', [new StackProfile($detected->root, $detected->language, $detected->framework, $detected->version, $detected->packageManager, $detected->sourceDirs, $detected->testDirs, $detected->excludedDirs, 'claude', $detected->knowledgeKey, ['adapter'])]));
         $this->inspect($project);
         $this->draft($project, 'angular-minimal/discovery.project.draft.xml', 'discovery.project.draft.xml');
         self::assertSame(['discovery.project'], $this->apply($project)->accepted);
@@ -150,12 +162,11 @@ final class ClaudeDrivenTest extends TestCase
     public function testAMonorepoDocumentsItsSymfonyAndItsAngularStacksInOneFolder(): void
     {
         $project = $this->copyFixtureProject('monorepo');
-        $angularKnowledge = str_replace('# Angular 18', '# Angular 22', (string) file_get_contents(self::DRAFTS.'/angular-minimal/knowledge.angular-18.draft.md'));
 
-        $this->inspect($project, monorepo: true);
-        file_put_contents($project.'/.devtools/pending/knowledge.angular-22.draft.md', $angularKnowledge);
-        $this->apply($project);
-        $this->inspect($project, monorepo: true);
+        // Its front has no TypeScript installed: the Angular adapter leaves it to Claude, and the knowledge
+        // DevTools ships for Angular 22 lets the first inspection ask for the discovery at once.
+        $report = $this->inspect($project, monorepo: true);
+        self::assertStringContainsString('TypeScript is not installed in this project', implode("\n", array_column($report->fallbacks, 'cause')));
         file_put_contents($project.'/.devtools/pending/discovery.front.draft.xml', <<<'XML'
             <?xml version="1.0" encoding="UTF-8"?>
             <inspection xmlns="https://github.com/jul6art/devtools/schema/inspection-model/1" schema-version="1" stack="angular-22">
@@ -204,8 +215,9 @@ final class ClaudeDrivenTest extends TestCase
     private function inspect(string $project, bool $noAi = false, bool $monorepo = false): InspectionReport
     {
         $adapters = $monorepo
-            ? [new SymfonyAdapter(new RecordedConsoleRunner(failure: new ConsoleFailed('no vendor in this fixture'))), new ClaudeDrivenAdapter()]
-            : [new ClaudeDrivenAdapter()];
+            ? [new SymfonyAdapter(new RecordedConsoleRunner(failure: new ConsoleFailed('no vendor in this fixture'))), new AngularAdapter(), new ClaudeDrivenAdapter()]
+            // node-express has no TypeScript: the Express adapter leaves it to Claude (ADR-0033).
+            : [new ExpressAdapter(), new AngularAdapter(), new ClaudeDrivenAdapter()];
         $report = new InspectionPipeline(new AdapterResolver($adapters), new FrozenClock(new \DateTimeImmutable('2026-09-16T15:00:00+02:00')))->run(new InspectionOptions($project, noAi: $noAi));
         self::assertSame([], $report->errors, implode("\n", $report->errors));
 

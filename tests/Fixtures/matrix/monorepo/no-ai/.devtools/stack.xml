@@ -26,7 +26,7 @@
     <language>typescript</language>
     <framework version="22.0">angular</framework>
     <package-manager>npm</package-manager>
-    <adapter>claude</adapter>
+    <adapter>angular</adapter>
     <knowledge>angular-22</knowledge>
     <sources>
       <dir>src/app</dir>

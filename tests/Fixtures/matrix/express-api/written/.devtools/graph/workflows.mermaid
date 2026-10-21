@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph routes["Routes"]
+    w5["route.delete.admin.orders.id"]
+    w6["route.get.health"]
+    w7["route.get.orders"]
+    w8["route.get.orders.id"]
+    w9["route.post.orders"]
+  end
+  subgraph commands["Commands"]
+    w3["command.import-orders"]
+    w4["command.orders-cli"]
+  end
+  subgraph async["Async"]
+    w1["async.emails"]
+    w2["async.nightly-report"]
+  end

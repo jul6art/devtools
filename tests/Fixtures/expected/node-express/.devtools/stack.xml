@@ -5,7 +5,7 @@
     <language>javascript</language>
     <framework version="4.21">express</framework>
     <package-manager>npm</package-manager>
-    <adapter>claude</adapter>
+    <adapter>express</adapter>
     <knowledge>express-4</knowledge>
     <sources>
       <dir>src</dir>

@@ -1,6 +1,6 @@
 # ADR-0031 — Pont Node pour l'analyse JavaScript et TypeScript
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; phase 3 lancée par jul6art le 2026-10-21) · Livré le 2026-10-21
 - **Décideurs** : jul6art
 - **Specs** : § 4.3 étapes 3 et 4, § 9 (phase 3 : adaptateurs Angular, Node)
 
@@ -51,13 +51,24 @@ reste disponible) ; analyse de types.
 
 ## Critères d'acceptation
 
-- [ ] `imports` résolus avec `paths` de `tsconfig` sur `angular-minimal`
-- [ ] Décorateurs `@Component`, `@Injectable` et leurs arguments littéraux extraits
-- [ ] `typescript` absent du projet → message explicite, pas de trace Node brute
-- [ ] Un seul processus Node par scan (compteur)
-- [ ] Le script ne lit aucun fichier hors de la racine (test avec un import `../../..`)
-- [ ] Tests du script Node lui-même lancés par PHPUnit via `node --test`, ignorés avec raison si Node
-      absent
+- [x] `imports` résolus avec `paths` de `tsconfig` sur `angular-minimal` *(`NodeBridgeTest`, et les tests Node du script)*
+- [x] Décorateurs `@Component`, `@Injectable` et leurs arguments littéraux extraits
+- [x] `typescript` absent du projet → message explicite, pas de trace Node brute *(et Node absent : « `node` is not on the PATH »)*
+- [x] Un seul processus Node par scan (compteur) *(`NodeBridge::calls()`, rapporté parmi les appels de console)*
+- [x] Le script ne lit aucun fichier hors de la racine (test avec un import `../../..`)
+- [x] Tests du script Node lui-même lancés par PHPUnit via `node --test`, ignorés avec raison si Node
+      absent *(`tests/Node/`, `NodeScriptTest`)*
+
+## Écarts assumés à la livraison
+
+- **Requêtes ajoutées** : `news` (`new Worker(…)` de BullMQ, ADR-0033), `variables` (valeurs littérales de
+  premier niveau : une table `Routes`, `module.exports`), `classes` (ce qu'une classe injecte), et les noms
+  importés de chaque import — sans eux, `provideRouter(routes)` ne mène pas à sa table.
+- **Le TypeScript doit se résoudre dans le projet** : un `typescript` trouvé au-dessus de sa racine est
+  refusé comme absent. Dans un phar (ADR-0034), le script est recopié une fois dans le répertoire
+  temporaire, Node ne lisant pas `phar://`.
+- **Les tests JavaScript** sont les `*.spec.*` / `*.test.*` et les fichiers des dossiers de tests qui
+  importent un fichier du premier saut ; un spec à côté du code n'est plus « non couvert ».
 
 ## Conséquences
 

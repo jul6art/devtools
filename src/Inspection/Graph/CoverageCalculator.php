@@ -40,8 +40,9 @@ final class CoverageCalculator
         foreach (SourceFiles::in($root, $stack, $stack->sourceDirs, self::CODE_EXTENSIONS) as $path) {
             $role = RoleGuesser::guess($path);
 
-            // A PHP file under config/ (bundles.php, a generated reference) configures, it is not orphan code.
-            if (!isset($covered[$path]) && FileRole::Config !== $role) {
+            // A PHP file under config/ (bundles.php, a generated reference) configures, it is not orphan code; a
+            // spec beside the code it tests (Angular's convention) is a test, not a workflow's file.
+            if (!isset($covered[$path]) && FileRole::Config !== $role && FileRole::Test !== $role) {
                 $uncovered[] = new FileRef($path, $role);
             }
         }

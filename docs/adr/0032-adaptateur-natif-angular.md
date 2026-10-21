@@ -1,6 +1,6 @@
 # ADR-0032 — Adaptateur natif Angular
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; phase 3 lancée par jul6art le 2026-10-21) · Livré le 2026-10-21
 - **Décideurs** : jul6art
 - **Specs** : § 1.1 (Angular en interne), § 4.2, § 7.1 (`angular-minimal`), § 8, § 9 (phase 3)
 
@@ -42,13 +42,23 @@ Routes générées dynamiquement ; NgModules hérités au-delà de `forRoot`/`fo
 
 ## Critères d'acceptation
 
-- [ ] `angular-minimal` (routes imbriquées, lazy loading, guard, composant partagé, service HTTP) :
-      workflows attendus
-- [ ] Fixture Ionic à onglets : routes d'onglets extraites
-- [ ] Chemin lazy non littéral → `confidence=medium` et avertissement
-- [ ] Bascule depuis la voie Claude avec écarts listés (même mécanisme que l'ADR-0030)
-- [ ] Matrice de bout en bout étendue
-- [ ] README : Angular ajouté aux stacks natives
+- [x] `angular-minimal` (routes imbriquées, lazy loading, guard, composant partagé, service HTTP) :
+      workflows attendus *(Angular 22 ; vérifié aussi sur une copie de cegeta-mobile : ses huit écrans)*
+- [x] Fixture Ionic à onglets : routes d'onglets extraites *(`ionic-tabs`, Ionic 9)*
+- [x] Chemin lazy non littéral → `confidence=medium` et avertissement
+- [x] Bascule depuis la voie Claude avec écarts listés (même mécanisme que l'ADR-0030)
+- [x] Matrice de bout en bout étendue
+- [x] README : Angular ajouté aux stacks natives
+
+## Écarts assumés à la livraison
+
+- **Une seule fiche embarquée, `angular-22`** : la version de la fixture et des trois applications de
+  l'équipe ; les autres versions restent rédigées par Claude, comme avant.
+- **L'identifiant d'une intégration est `integration.<kebab(service)>`** (`integration.order-service`), et
+  ses `endpoints` (méthode et URL, constantes d'`environment` résolues) sont un attribut : c'est ce que
+  l'ADR-0038 appariera aux routes d'un back.
+- **Une route avec des enfants est leur layout**, pas un écran : son composant est un fichier de chacun.
+- **Sans Node ni TypeScript**, la stack retourne à la voie Claude et le rapport le dit (code de sortie `1`).
 
 ## Conséquences
 

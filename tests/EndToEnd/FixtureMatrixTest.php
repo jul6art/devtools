@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Rendering\PageParser;
 use Jul6Art\DevTools\Tests\Inspection\Adapter\Symfony\RealConsoleTest;
 use Jul6Art\DevTools\Tests\Support\CopiesFixtureProjects;
 use Jul6Art\DevTools\Tests\Support\GitRepository;
+use Jul6Art\DevTools\Tests\Support\NodeDependencies;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -67,6 +68,11 @@ final class FixtureMatrixTest extends TestCase
 
         if (is_dir(self::FIXTURES.'/projects/'.$fixture.'/vendor') || is_file(self::FIXTURES.'/projects/'.$fixture.'/composer.lock')) {
             RealConsoleTest::installDependencies(self::FIXTURES.'/projects/'.$fixture);
+        }
+
+        // A JavaScript stack is read with the project's own TypeScript (ADR-0031).
+        if (is_file(self::FIXTURES.'/projects/'.$fixture.'/package-lock.json')) {
+            NodeDependencies::install(self::FIXTURES.'/projects/'.$fixture);
         }
 
         $project = $this->copyFixtureProject($fixture, withDependencies: true);
@@ -196,16 +202,31 @@ final class FixtureMatrixTest extends TestCase
             'route.index' => 'rewrite: files changed: lib/db.php',
             'route.orders.new' => 'rewrite: files changed: lib/db.php',
         ]];
+        // ADR-0033: Express read natively, on the Node bridge.
+        yield 'express-api' => ['express-api', 'express-api', ['src/services/orderService.js' => "\n// reviewed\n", 'src/workers/emailWorker.js' => null, 'src/utils/money.js' => "module.exports = {};\n"], [
+            'async.emails' => 'orphan: entry point gone',
+            'async.nightly-report' => 'rewrite: files changed: src/services/orderService.js',
+            'command.import-orders' => 'rewrite: files changed: src/services/orderService.js',
+            'command.orders-cli' => 'rewrite: files changed: src/services/orderService.js',
+            'route.delete.admin.orders.id' => 'rewrite: files changed: src/services/orderService.js',
+            'route.get.orders' => 'rewrite: files changed: src/services/orderService.js',
+            'route.get.orders.id' => 'rewrite: files changed: src/services/orderService.js',
+            'route.post.orders' => 'rewrite: files changed: src/services/orderService.js',
+        ]];
         yield 'node-express' => ['node-express', 'node-express', ['src/services/orderService.js' => "\n// reviewed\n", 'test/orders.test.js' => null, 'src/routes/invoices.js' => "module.exports = require('express').Router();\n"], [
             // Without AI, the new router waits for a limited discovery: no decision yet.
             'route.get-orders' => 'rewrite: files changed: src/services/orderService.js; files removed: test/orders.test.js',
             'route.post-orders' => 'rewrite: files changed: src/services/orderService.js',
-        ]];
+            // 1: no TypeScript in this JavaScript project, so the Express adapter leaves it to Claude, and says so.
+        ], 1];
         yield 'angular-minimal' => ['angular-minimal', 'angular-minimal', ['src/app/orders/order.service.ts' => "\n// reviewed\n", 'src/app/orders/order-detail.component.ts' => null, 'src/app/orders/order.model.ts' => "export interface OrderModel {}\n"], [
-            'integration.orderservice' => 'rewrite: files changed: src/app/orders/order.service.ts',
+            'integration.order-service' => 'rewrite: files changed: src/app/orders/order.service.ts',
             'route.orders' => 'rewrite: files changed: src/app/orders/order.service.ts',
-            'route.orders-id' => 'rewrite: files changed: src/app/orders/order.service.ts; files removed: src/app/orders/order-detail.component.ts',
-        ]];
+            'route.orders.id' => 'orphan: entry point gone',
+            // Used by the list alone now: a component of that screen, no longer a shared one.
+            'ui.order-status-badge' => 'orphan: entry point gone',
+            // 1: the lazy route of /reports names its component through a variable, which the report says.
+        ], 1];
         yield 'monorepo' => ['monorepo', 'monorepo', ['api/src/Controller/ItemController.php' => "\n// reviewed\n", 'front/src/app/item-list.component.ts' => null, 'api/src/Controller/HealthController.php' => "<?php\n\nnamespace Api\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\JsonResponse;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\nfinal class HealthController\n{\n    #[Route('/api/health', name: 'api_health')]\n    public function __invoke(): JsonResponse\n    {\n        return new JsonResponse(['status' => 'ok']);\n    }\n}\n"], [
             'route.api.health' => 'create: initial',
             'route.api.item.list' => 'rewrite: files changed: api/src/Controller/ItemController.php',

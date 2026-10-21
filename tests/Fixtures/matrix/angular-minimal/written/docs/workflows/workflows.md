@@ -1,19 +1,26 @@
 # Workflows — acme-back-office
 
-Stack: Angular 18.2 · 3 workflows · last scan: 2026-09-16 (commit 342fdb0)
+Stack: Angular 22.2 · 7 workflows · last scan: 2026-09-16 (commit e40e7e1)
 
-[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge angular-18](../../.devtools/knowledge/angular-18.md)
+[Overview](../../.devtools/graph/workflows.mermaid) · [Stack](../../.devtools/stack.xml) · [Knowledge angular-22](../../.devtools/knowledge/angular-22.md)
 
-## Routes (2)
+## Routes (5)
 
-- [/orders — liste des commandes](routes/orders.md) — `route.orders` · updated 2026-09-16 · confidence medium
-- [/orders/:id — fiche d'une commande](routes/orders-id.md) — `route.orders-id` · updated 2026-09-16 · confidence medium
+- [/admin/users](routes/admin.users.md) — `route.admin.users` · updated 2026-09-16
+- [/orders](routes/orders.md) — `route.orders` · updated 2026-09-16
+- [/orders/:id](routes/orders.id.md) — `route.orders.id` · updated 2026-09-16
+- [/reports](routes/reports.md) — `route.reports` · updated 2026-09-16 · confidence medium
+- [/](routes/root.md) — `route.root` · updated 2026-09-16
+
+## UI (1)
+
+- [OrderStatusBadgeComponent](ui/order-status-badge.md) — `ui.order-status-badge` · updated 2026-09-16
 
 ## Integrations (1)
 
-- [OrderService → /api/orders](integrations/orderservice.md) — `integration.orderservice` · updated 2026-09-16 · confidence medium
+- [OrderService](integrations/order-service.md) — `integration.order-service` · updated 2026-09-16
 
-No workflow found for: Commands, Async, UI, Data.
+No workflow found for: Commands, Async, Data.
 
 ## To check
 
@@ -21,4 +28,6 @@ No workflow found for: Commands, Async, UI, Data.
 
 ## Not covered
 
-—
+- `src/app/app.component.ts` — no workflow references this file
+- `src/app/auth/auth.service.ts` — no workflow references this file
+- `src/app/reports/reports.component.ts` — no workflow references this file

@@ -74,6 +74,13 @@
                         <xs:attribute name="timeout" type="xs:decimal"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- How to run Node for the JavaScript and TypeScript adapters (ADR-0031). -->
+                <xs:element name="node" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="binary" type="t:nonEmpty"/>
+                        <xs:attribute name="timeout" type="xs:decimal"/>
+                    </xs:complexType>
+                </xs:element>
                 <!-- How to run a Laravel project's Artisan (ADR-0030); env defaults to the project's APP_ENV. -->
                 <xs:element name="laravel" minOccurs="0">
                     <xs:complexType>

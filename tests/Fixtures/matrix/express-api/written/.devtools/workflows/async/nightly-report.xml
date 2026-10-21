@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="async.nightly-report" type="async" schema-version="1">
+  <title>nightly-report (0 2 * * *)</title>
+  <generated at="2026-09-16T12:00:00+00:00" tool="devtools" mode="ai" model="claude-opus-5" prompt="page/4"/>
+  <source vcs="git" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" branch="main" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="scheduled" name="nightly-report" role="main">
+      <declared-in path="src/jobs/nightlyReport.js" role="handler"/>
+      <attribute name="schedule" value="0 2 * * *"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/jobs/nightlyReport.js" role="handler" sha256="d0e84bb914b5e6ab24759a9761d9900efebda466ce072038c45aadc604712f06"/>
+    <file path="src/services/orderService.js" role="service" sha256="d5780f86ccaf10518d91eff5680bd7781fc470d60b3e99ce2ee1b5b7bce3ff95"/>
+  </files>
+  <packages>
+    <package name="node-cron" version="4.6.0"/>
+  </packages>
+  <confidence>high</confidence>
+  <producer>native:express</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-09-16T12:00:00+00:00" commit="b3f961c861a39d18573aff36d7d7d463ac8112dc" reason="rédaction initiale"/>
+  </history>
+</workflow>

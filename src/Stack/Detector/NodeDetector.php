@@ -71,7 +71,8 @@ final class NodeDetector implements StackDetectorInterface
             [] === $sources ? ['.'] : $sources,
             self::existingDirectories($directory, ['e2e', 'test', 'tests']),
             $excludes,
-            'claude',
+            // ADR-0032 and 0033: Angular and Express are read natively, on the Node bridge; the others go to Claude.
+            \in_array($framework, ['angular', 'express'], true) ? $framework : 'claude',
             match (true) {
                 null === $framework => $language,
                 null === $version => $framework,

@@ -22,7 +22,7 @@ trait CopiesFixtureProjects
 
         $iterator = new \RecursiveIteratorIterator(new \RecursiveCallbackFilterIterator(
             new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
-            static fn (\SplFileInfo $file): bool => !\in_array($file->getFilename(), $withDependencies ? ['var', '.devtools'] : ['vendor', 'var', '.devtools'], true),
+            static fn (\SplFileInfo $file): bool => !\in_array($file->getFilename(), $withDependencies ? ['var', '.devtools'] : ['vendor', 'node_modules', 'var', '.devtools'], true),
         ), \RecursiveIteratorIterator::SELF_FIRST);
 
         foreach ($iterator as $file) {

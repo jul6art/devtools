@@ -16,7 +16,7 @@ use Jul6Art\DevTools\Stack\StackProfile;
  * A test directory also holds fixtures, factories and base classes; only a file named as a test counts, or
  * the page would list a helper as a test of a workflow it never exercises.
  */
-final class TestLocator
+final class TestLocator implements TestLocatorInterface
 {
     /**
      * @var array<string, list<string>>|null test path => project files it references
@@ -31,11 +31,7 @@ final class TestLocator
     ) {
     }
 
-    /**
-     * @param list<FileRef> $nearFiles the entry point's file and its first hop
-     *
-     * @return list<FileRef>
-     */
+    #[\Override]
     public function testsOf(array $nearFiles): array
     {
         $near = array_map(static fn (FileRef $file): string => $file->path, $nearFiles);

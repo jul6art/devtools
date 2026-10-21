@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Jul6Art\DevTools\Inspection;
 
 use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
+use Jul6Art\DevTools\Inspection\Adapter\Angular\AngularAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Claude\ClaudeDrivenAdapter;
+use Jul6Art\DevTools\Inspection\Adapter\Express\ExpressAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\GenericPhp\GenericPhpAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Laravel\LaravelAdapter;
 use Jul6Art\DevTools\Inspection\Adapter\Symfony\SymfonyAdapter;
@@ -27,7 +29,7 @@ final readonly class AdapterResolver
     {
         $byName = [];
 
-        foreach ($adapters ?? [new SymfonyAdapter(), new LaravelAdapter(), new GenericPhpAdapter(), new ClaudeDrivenAdapter()] as $adapter) {
+        foreach ($adapters ?? [new SymfonyAdapter(), new LaravelAdapter(), new AngularAdapter(), new ExpressAdapter(), new GenericPhpAdapter(), new ClaudeDrivenAdapter()] as $adapter) {
             $byName[$adapter->name()] = $adapter;
         }
 
