@@ -126,6 +126,29 @@ final class GitClient
     }
 
     /**
+     * The files of the project as a commit left them, relative to it, in one process (ADR-0027). Null when git
+     * does not know the commit.
+     *
+     * @return list<string>|null
+     */
+    public function filesAt(ProjectRoot $root, string $commit): ?array
+    {
+        [$ok, $output] = $this->git($root, ['ls-tree', '-r', '--name-only', '-z', $commit, '--', '.']);
+
+        return $ok ? self::nameList($output) : null;
+    }
+
+    /**
+     * A file of the project as a commit left it (ADR-0027). Null when it did not exist then.
+     */
+    public function show(ProjectRoot $root, string $commit, string $path): ?string
+    {
+        [$ok, $output] = $this->git($root, ['show', $commit.':./'.$path]);
+
+        return $ok ? $output : null;
+    }
+
+    /**
      * The directory of the project inside its repository, `app/` or `''` — from the nearest `.git`, a
      * directory or the file of a worktree.
      */

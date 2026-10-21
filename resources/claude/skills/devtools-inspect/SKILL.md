@@ -45,6 +45,10 @@ through files, and DevTools validates everything you write before it reaches `.d
    names (`resources/prompts/rule/v1.md`), write one rule at its `<draft path>` — `status="proposed"`, a human
    activates it — and apply with the pages.
 
+   **Assertion briefs** (`assertion.*.brief.xml`) exist only when someone ran `assertions:propose`: follow the
+   prompt each names (`resources/prompts/assertion/v1.md`), write one assertion at its `<draft path>`, and apply —
+   `apply` runs it, and refuses one that does not pass now or does not fail where the feedback was reported.
+
 4. Apply the drafts:
 
    ```shell

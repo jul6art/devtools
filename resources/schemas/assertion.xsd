@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    One mechanical assertion: .devtools/assertions/<id>.xml (ADR-0027), referenced by the rule it enforces. It watches
+    files — the gate runs it only when a change touches one of them — and checks them one way: a pattern in their
+    text, an element in the DOM the last scenarios captured, or a tool of the project and what it reports.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/assertion/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/assertion/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="assertion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="watch" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="glob" type="t:glob" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:choice>
+                    <!-- A PCRE, delimiters included, on the text of each watched file. -->
+                    <xs:element name="pattern">
+                        <xs:complexType>
+                            <xs:attribute name="regex" type="t:nonEmpty" use="required"/>
+                            <xs:attribute name="expect" use="required">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="must-match"/>
+                                        <xs:enumeration value="must-not-match"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                    <!-- A CSS selector, on the DOM captured by the screenshots of a scenario (ADR-0021). -->
+                    <xs:element name="dom">
+                        <xs:complexType>
+                            <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                            <xs:attribute name="expect" use="required">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="must-exist"/>
+                                        <xs:enumeration value="must-not-exist"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:attribute>
+                            <!-- A scenario, or a workflow: all its scenarios. -->
+                            <xs:attribute name="scenario" type="t:nonEmpty" use="required"/>
+                            <!-- One screenshot of it, by name; without, any of them. -->
+                            <xs:attribute name="capture" type="t:nonEmpty"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <!-- A command of the project; {files} stands for the watched files of the change. -->
+                    <xs:element name="tool">
+                        <xs:complexType>
+                            <xs:attribute name="command" type="t:nonEmpty" use="required"/>
+                            <xs:attribute name="format" use="required">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="phpstan"/>
+                                        <xs:enumeration value="eslint"/>
+                                        <xs:enumeration value="exit-code"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:attribute>
+                            <!-- Only what the tool reports under this identifier: a PHPStan identifier, an ESLint rule. -->
+                            <xs:attribute name="identifier" type="t:nonEmpty"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+                <!-- What is wrong when it fails, in one line. -->
+                <xs:element name="message">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="200"/>
+                            <xs:pattern value="[^\r\n]*\S[^\r\n]*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="id" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="assert-[a-z0-9]+(-[a-z0-9]+)*"/>
+                        <xs:maxLength value="80"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="rule" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="rule-[a-z0-9]+(-[a-z0-9]+)*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Project-relative, no leading slash; DevTools refuses a ".." segment. -->
+    <xs:simpleType name="glob">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\s]\S*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

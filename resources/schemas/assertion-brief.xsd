@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude needs to write the assertion that enforces a rule: .devtools/pending/assertion.<rule-id>.brief.xml
+    (ADR-0027).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/assertion-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/assertion-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="assertion-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prompt">
+                    <xs:complexType>
+                        <xs:attribute name="version" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="vocabulary" type="t:pathElement"/>
+                <!-- The rule to enforce: its file, what it says, where it applies. -->
+                <xs:element name="rule">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="instruction" type="t:nonEmpty"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="globs" type="xs:string" use="required"/>
+                        <xs:attribute name="workflow-types" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- What it was promoted from, and the commit each was reported at: there, the assertion must fail. -->
+                <xs:element name="feedback" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="summary" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="commit" type="t:nonEmpty"/>
+                        <xs:attribute name="workflow" type="t:nonEmpty"/>
+                        <xs:attribute name="selector" type="t:nonEmpty"/>
+                        <xs:attribute name="file" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- Where the assertion must fail: the commits its feedback was reported at, or those rules:propose was given. -->
+                <xs:element name="before" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="commit" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- Files the rule applies to, as they are now. -->
+                <xs:element name="file" type="t:pathElement" minOccurs="0" maxOccurs="unbounded"/>
+                <!-- The DOM the last run captured for the workflows of the feedback. -->
+                <xs:element name="capture" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="scenario" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="dom" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The tools the project has installed. -->
+                <xs:element name="tool" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="draft" type="t:pathElement"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

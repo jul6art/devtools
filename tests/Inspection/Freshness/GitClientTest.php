@@ -107,6 +107,24 @@ final class GitClientTest extends TestCase
     }
 
     /**
+     * A commit read as the project saw it (ADR-0027) — its files and their content relative to the
+     * project, in a subdirectory of the repository too.
+     */
+    public function testACommitIsReadAsTheProjectSawIt(): void
+    {
+        $repository = $this->repositoryWithAProjectIn('app');
+        $root = new ProjectRoot($repository->path.'/app');
+        $first = $repository->head();
+        file_put_contents($repository->path.'/app/src/Order.php', "<?php // changed\n");
+        $git = new GitClient();
+
+        self::assertSame(['src/Order.php', 'src/Other.php'], $git->filesAt($root, $first));
+        self::assertNull($git->filesAt($root, 'f00df00df00df00df00df00df00df00df00df00d'));
+        self::assertSame("<?php\nfinal class Order {}\n", $git->show($root, $first, 'src/Order.php'), 'As it was, whatever the disk says.');
+        self::assertNull($git->show($root, $first, 'src/Gone.php'));
+    }
+
+    /**
      * The files git knows of: tracked or new, never ignored — and a path in conflict, which git lists once per
      * stage of the merge, once. Outside a repository, git cannot say.
      */

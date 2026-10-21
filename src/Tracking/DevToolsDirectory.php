@@ -156,6 +156,14 @@ final readonly class DevToolsDirectory
     }
 
     /**
+     * `.devtools/assertions/`: the mechanical checks of the rules (ADR-0027), versioned.
+     */
+    public function assertionsDirectory(): string
+    {
+        return $this->path('assertions');
+    }
+
+    /**
      * `.devtools/stats/rules.xml`: what each rule did (ADR-0026) — a count that moves on every edit, never committed.
      */
     public function ruleStatsFile(): string

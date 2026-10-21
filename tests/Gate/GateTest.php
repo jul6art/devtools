@@ -186,9 +186,9 @@ final class GateTest extends TestCase
         self::assertStringStartsWith("DevTools gate — failed: verification.\n! freshness (", $text);
         self::assertStringContainsString("\n    ✗ Not verified yet: have the devtools-verifier subagent judge", $text);
         self::assertStringContainsString("\n✓ assertions (", $text);
-        self::assertStringContainsString(') — None before phase 2.', $text);
+        self::assertStringContainsString(') — No active rule has an assertion.', $text);
         self::assertSame('failed', new GateRenderer()->toArray($result)['verdict']);
-        self::assertSame("DevTools gate — passed (1 files changed).\n✓ assertions (0 ms) — None before phase 2.\n", new GateRenderer()->text(new GateResult(new \DateTimeImmutable(), ['a'], [new GateStep('assertions', notes: ['None before phase 2.'])], str_repeat('0', 64))));
+        self::assertSame("DevTools gate — passed (1 files changed).\n✓ assertions (0 ms) — No active rule has an assertion.\n", new GateRenderer()->text(new GateResult(new \DateTimeImmutable(), ['a'], [new GateStep('assertions', notes: ['No active rule has an assertion.'])], str_repeat('0', 64))));
     }
 
     /**

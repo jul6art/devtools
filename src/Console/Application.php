@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Console;
 
+use Jul6Art\DevTools\Command\AssertionsProposeCommand;
 use Jul6Art\DevTools\Command\BaselinesAcceptCommand;
 use Jul6Art\DevTools\Command\ClaudeHookCommand;
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
@@ -100,6 +101,7 @@ final class Application extends BaseApplication
             new RulesPromoteCommand(),
             new RulesActivateCommand(),
             new RulesListCommand(),
+            new AssertionsProposeCommand(),
             new GitInstallHooksCommand(),
             new GitUninstallHooksCommand(),
             new ClaudeInstallCommand(),

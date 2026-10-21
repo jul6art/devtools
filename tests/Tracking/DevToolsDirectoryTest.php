@@ -97,6 +97,7 @@ final class DevToolsDirectoryTest extends TestCase
         self::assertSame($this->temporaryDirectory().'/.devtools/runs/2026-10-20-090507', $directory->runDirectory(new \DateTimeImmutable('2026-10-20T09:05:07+02:00')));
         self::assertContains('runs', DevToolsDirectory::IGNORED, 'Screenshots of a machine, never committed.');
         self::assertSame($this->temporaryDirectory().'/.devtools/rules', $directory->rulesDirectory(), 'Versioned: the rules of the project (ADR-0026).');
+        self::assertSame($this->temporaryDirectory().'/.devtools/assertions', $directory->assertionsDirectory(), 'Versioned: their checks (ADR-0027).');
         self::assertSame($this->temporaryDirectory().'/.devtools/stats/rules.xml', $directory->ruleStatsFile());
         self::assertContains('stats', DevToolsDirectory::IGNORED, 'A count that moves on every edit, never committed.');
     }

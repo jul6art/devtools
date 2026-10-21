@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Ai;
 
+use Jul6Art\DevTools\Assertion\AssertionDraftApplier;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\Config;
@@ -108,6 +109,12 @@ final readonly class DraftApplier
         $rules = new RuleDraftApplier($this->writer)->apply($directory, $config);
         $result->accepted = [...$result->accepted, ...$rules['accepted']];
         $result->refused = [...$result->refused, ...$rules['refused']];
+
+        // Then the assertions (ADR-0027): after the rules they enforce, and run before they are written.
+        $assertions = new AssertionDraftApplier($this->writer)->apply($directory, $config);
+        $result->accepted = [...$result->accepted, ...$assertions['accepted']];
+        $result->refused = [...$result->refused, ...$assertions['refused']];
+        $result->warnings = [...$result->warnings, ...$assertions['warnings']];
         $drafts = glob($directory->path('pending/page.*.draft.md')) ?: [];
 
         if ([] === $drafts) {

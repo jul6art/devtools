@@ -29,7 +29,7 @@ final readonly class Gate
     /**
      * DevTools' own work areas: never a change to judge.
      */
-    private const string OWN = '#^\.devtools/(gate|runs|pending|reports)/#';
+    private const string OWN = '#^\.devtools/(gate|runs|pending|reports|stats)/#';
 
     /**
      * @var list<GateStepInterface>

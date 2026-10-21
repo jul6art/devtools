@@ -144,6 +144,7 @@ Usage
 | | `devtools feedback:list` / `feedback:resolve <id>` | what is open, by category or workflow; closed as fixed or set aside | `.devtools/feedback/` |
 | **Seen twice** | `devtools rules:promote <feedback>` | asks Claude for the rule the feedback should become; `workflows:apply` checks its draft | a brief, then `.devtools/rules/` |
 | | `devtools rules:activate <rule>` / `rules:list` | you agree with a proposed rule: Claude is given it before editing a file it applies to | `.devtools/rules/` |
+| | `devtools assertions:propose <rule>` | asks Claude for the check that enforces the rule in the gate; `workflows:apply` runs it first | a brief, then `.devtools/assertions/` |
 | **Every day** (in the gate, in CI) | `devtools workflows:check` | **fails** on a changed fact, an undocumented workflow, an orphaned page | nothing |
 | | `phpstan analyse` | the same drift, at the line, in the editor | nothing |
 | **When the gate is red** | `devtools workflows:diff --code` | which fact changed, and the code behind it | nothing |
@@ -736,7 +737,7 @@ vendor/bin/devtools gate --commit=HEAD                # or --range=main..feature
 | `freshness` | the facts, as `workflows:check` reads them | a fact changed, an entry point is new or gone |
 | `scenarios` | the scenarios of the routes and components reached — replayed, compared with their baselines | one fails, or differs from its baseline |
 | `verification` | a change to a template or a form, by the verifier | its verdict is not `approved` yet |
-| `assertions` | the checks phase 2 derives from rules | — none yet: green |
+| `assertions` | the [assertions](#assertions) of the active rules that watch a file of the change | one fails |
 
 Every step runs, whatever the first found, so that one passage says everything there is to fix, each line
 naming the workflow, the scenario, the step, the capture. A workflow reached without a scenario, scenarios that
@@ -1045,6 +1046,48 @@ at most**, the most specific first (the longest glob written out, then the rule 
 kind of workflow). Each time a rule is given counts, in `.devtools/stats/rules.xml`: a count that moves on every
 edit is never committed, and `init` adds `stats/` to the `.gitignore`. `rules:list` shows it.
 
+Assertions
+----------
+
+A rule is still an instruction, and an instruction can be missed. An **assertion** cannot: the gate runs it on
+every change to the files it watches, and while it fails, the task is not finished. Feedback, rule, assertion,
+gate — a mistake promoted this far can no longer come back silently.
+
+```shell
+vendor/bin/devtools assertions:propose rule-product-fields-use-select2 [--before=<commit>]
+vendor/bin/devtools workflows:apply      # runs the draft before writing .devtools/assertions/<id>.xml
+```
+
+```xml
+<assertion xmlns="https://github.com/jul6art/devtools/schema/assertion/1" schema-version="1"
+           id="assert-no-native-select" rule="rule-product-fields-use-select2">
+  <watch glob="templates/**/_form.html.twig"/>
+  <pattern regex="/&lt;select\b(?![^>]*data-controller=&quot;select2&quot;)/i" expect="must-not-match"/>
+  <message>A select in a form template uses Select2.</message>
+</assertion>
+```
+
+| Family | Checks | Example |
+| --- | --- | --- |
+| `pattern` | a regular expression on the text of each watched file — any stack | no `<select` without Select2 in a form template |
+| `dom` | a CSS selector on the DOM the screenshots of a scenario captured — no browser started | `#order_product.select2-hidden-accessible` exists after `route.order.new` |
+| `tool` | a command of the project, its report read as `phpstan` or `eslint` JSON or as an `exit-code`, filtered on an identifier | `vendor/bin/phpstan analyse --error-format=json {files}`, identifier `app.select2Required` |
+
+A PHPStan or ESLint rule lives in the project, in its own tooling: DevTools calls it and reads what it reports, it
+writes no analyser. `{files}` in a command stands for the watched files of the change.
+
+**An assertion is run before it is written.** On the project as it is — where the rule is followed — it must
+pass; at the commit its feedback was reported at — where the defect was — a `pattern` must fail, read from git
+without touching the working tree. One that passes in both cannot tell the defect from its fix, and is refused.
+If the defect was not committed yet when it was reported, `--before` names a commit that has it. A `dom` or `tool`
+assertion is checked on the project as it is only, and `workflows:apply` says so.
+
+**In the gate**, the `assertions` step runs the assertions of the **active** rules that watch a file of the
+change — the others are not even started — a tool **once** per command, whatever the number of assertions that
+read it. A failure names the rule, the assertion, the file and the line, and counts as `blocked` for the rule
+(`rules:list`). A `dom` assertion reads the captures of this very passage only: without scenarios replayed, it
+cannot tell, which is a warning — never the captures of an older change.
+
 Writing with Claude Code
 ------------------------
 
@@ -1220,8 +1263,8 @@ src/
 │                            claude:uninstall, claude:hook, mcp:serve, scenarios:generate,
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
-│                            rules:activate, rules:list, knowledge:list, knowledge:promote,
-│                            knowledge:amend
+│                            rules:activate, rules:list, assertions:propose, knowledge:list,
+│                            knowledge:promote, knowledge:amend
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
@@ -1245,6 +1288,7 @@ src/
 ├── Gate/                    the gate: its steps, its last passage
 ├── Feedback/                feedback as data: its categories, its files and index, the search for a recurrence
 ├── Rule/                    rules: their format, globs, the brief and draft of a promotion, what each did
+├── Assertion/               the mechanical checks of the rules: pattern, DOM, tool — and how they are run
 ├── Rendering/               pages, workflows.md and the overview diagram
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
