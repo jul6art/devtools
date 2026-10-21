@@ -46,6 +46,13 @@ attack surface:
 * **The local servers** — the review page (`devtools review`) answering anything but `127.0.0.1` and its
   one-time token, writing outside `.devtools/feedback/` and `.devtools/baselines/`, or executing the
   captured page it shows; the scenario runner reaching beyond the base URL it was given.
+* **The Claude API client** — `ai:run` and `ask` (ADR-0035, 0039) sending anything while the project has not
+  set `<ai enabled="true"/>`, the key read from anywhere but `ANTHROPIC_API_KEY` or written to a file, a
+  report, a log or a message, a request sent over plain HTTP, or a file or page the secret scanner refuses
+  sent anyway.
+* **Linked projects** — `workflows:inspect --link` (ADR-0038) reading a neighbour beyond the relative path its
+  `config.xml` declares, an absolute path written into `graph/links.xml` or a page, or what a neighbour's
+  `.devtools/` holds used as more than workflow identifiers and page paths.
 * **The distribution** — `self-update` installing a phar whose SHA-256 or GitHub provenance attestation
   does not hold, the phar or the Docker image carrying files the repository does not, the exported site
   (`export:site`) running a script from a page's content or fetching anything over the network.
