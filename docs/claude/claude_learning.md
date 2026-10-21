@@ -792,3 +792,23 @@
 - **Des pages réécrites en masse se génèrent depuis la prose existante** : les sections de Claude relues, les
   blocs de décision repris par cible, retirés ou ajoutés selon le modèle — le validateur exige exactement les
   cibles du modèle, et un script qui compare les deux listes avant d'écrire évite 35 refus.
+
+### 2026-10-21 — Publication de la 3.4.0
+
+- ⚠️ **Un `git commit` sans chemin embarque `TODO.md`**, indexé vide en permanence : c'est arrivé deux fois,
+  dont une poussée sur le dépôt public (`a87a81f`, réparé par `cc410df`). **Règle :** `git diff --cached
+  --name-only` avant chaque commit ; `TODO.md` sorti de l'index (`git rm --cached -f`) le temps du commit,
+  remis ensuite. Jamais `git commit -- TODO.md`, qui commiterait les notes.
+- **Le reporter de `node --test` dépend du terminal** : `spec` (« ℹ fail 0 ») en local, TAP (« # fail 0 »)
+  sur le runner — `NodeScriptTest` est tombé en CI alors que les six tests JavaScript passaient. **Règle :**
+  nommer le reporter (`--test-reporter=spec`) dès qu'un test lit la sortie d'un outil.
+- **Des commits rebâtis depuis des instantanés doivent repasser les outils** : pris avant les passes de style,
+  les arbres 0035 à 0039 échouaient à `cs-check` et `rector-check`. Ils ont été normalisés (PHP-CS-Fixer,
+  Rector, PHP-CS-Fixer) puis vérifiés un par un par `composer qa` dans un worktree détaché — et jamais deux
+  suites dans le même worktree : deux ChromeDriver se disputent le port 9515.
+- **Juste après une publication, Composer peut ne pas voir la nouvelle version** (cache des métadonnées) :
+  les deux premiers projets générés ont échoué sur `^3.4`, les suivants l'ont trouvée. Rejouer, pas corriger.
+- **Un générateur peut porter plusieurs copies d'un même fichier d'overlay** (`web` et `admin`) : corriger
+  depuis l'une ne corrige pas l'autre. Chercher toutes les copies par leur nom, pas par leur contenu.
+- **Vu une fois en CI (`lowest`)** : la suppression du dossier temporaire de `WorkflowRenameTest` a échoué
+  (« Directory not empty ») ; la relance a passé. Cause non établie — à surveiller au prochain passage.

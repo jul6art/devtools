@@ -1,6 +1,6 @@
 # ADR-0040 — Intégration à `symfony-skeleton-generator`
 
-- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16) ; à publier après DevTools 3.4.0
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16)
 - **Décideurs** : jul6art
 - **Specs** : § 9 (phase 0 : intégration au générateur de squelettes)
 
@@ -39,9 +39,10 @@ intégration à `symfony-bundle-generator` (un bundle n'a pas de workflows appli
 
 ## Critères d'acceptation
 
-- [ ] Squelette généré dans chaque mode : `composer qa` vert, `workflows:check` à 0 — `workflows:check` à 0
-      dans les cinq modes ; `make qa` vert en `backoffice` seulement, rouge ailleurs pour trois défauts du
-      générateur **antérieurs à cette intégration** et sans fichier de DevTools en cause (voir plus bas)
+- [x] Squelette généré dans chaque mode : `composer qa` vert, `workflows:check` à 0 *(le 2026-10-21,
+      depuis Packagist — DevTools 3.4.0 — après correction des trois défauts du générateur relevés plus
+      bas : `make qa` vert en `web` (16 tests), `api --docker` (8), `admin` (17), `api-platform` (9) et
+      `backoffice` (96) ; `workflows:check` à 0 dans les cinq)*
 - [x] Mode `--docker` : `config.xml` avec la console du mode (`symfony console`, voir la mise en œuvre) ;
       inspection réussie dans la stack
 - [x] `.claude/settings.json` et `.mcp.json` générés et valides
@@ -80,7 +81,7 @@ pont en `dev` + `test`, `.claude/settings.json` et `.mcp.json` valides, deux ski
 complété, 16, 5, 20, 4 et 32 workflows lus par la console native, tout committé, `workflows:check` à 0. En
 `--docker`, base démarrée : l'inspection passe par `symfony console` et ne change rien.
 
-### Ce qui rend `make qa` rouge hors `backoffice` (relevé le 2026-10-21, hors du périmètre de cette ADR)
+### Ce qui rendait `make qa` rouge hors `backoffice` (relevé et corrigé le 2026-10-21)
 
 - `common/overlay/tests/Translation/FlashKeyTest.php` lit `App\Security\BackofficeLocales`, qui n'existe que
   dans le mode `backoffice` : PHPStan (`class.notFound`) et PHPUnit échouent dans `web`, `api`, `admin`,
@@ -89,6 +90,10 @@ complété, 16, 5, 20, 4 et 32 workflows lus par la console native, tout committ
   `@extends` : PHPStan (`missingType.generics`).
 - PHP-CS-Fixer 3.95 importe désormais `Override` et réordonne `use LogicException` dans trois fichiers de
   l'overlay (`web`, `admin`).
+
+Corrigés dans le générateur : le test lit `kernel.enabled_locales`, les voters déclarent
+`@extends AbstractVoter<string, User|null>` (et `<string, null>`), les imports suivent PHP-CS-Fixer — dans
+les deux copies, `web` et `admin`, que portent ces modes.
 
 ## Conséquences
 

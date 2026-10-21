@@ -53,9 +53,11 @@ Homebrew, apt, npm ; hébergement du site ailleurs que GitHub Pages ; télémét
 
 ## Critères d'acceptation
 
-- [ ] Phar construit en CI ; `devtools.phar workflows:inspect` sur `symfony-minimal` = même sortie
-      qu'en Composer *(même sortie vérifiée — `DistributionTest`, Box 4.7, phar de 2 Mo ; le workflow
-      `release.yml` est écrit mais **pas encore joué** : les Actions sont coupées hors du passage mensuel)*
+- [x] Phar construit en CI ; `devtools.phar workflows:inspect` sur `symfony-minimal` = même sortie
+      qu'en Composer *(même sortie vérifiée — `DistributionTest`, Box 4.7 ; `release.yml` joué le
+      2026-10-21 pour la v3.4.0 : phar de 2,1 Mo déposé sur la release avec sa somme SHA-256 — vérifiée —
+      et son attestation de provenance — `gh attestation verify` l'accepte ; image `ghcr.io/jul6art/devtools:3.4.0`
+      de 218 Mo, qui répond `DevTools 3.4.0`)*
 - [x] `self-update` refuse un binaire dont la somme ne correspond pas (test avec un faux serveur)
       *(et une attestation que la CLI GitHub ne vérifie pas, ou l'absence de cette CLI)*
 - [x] Image Docker : inspection de `angular-minimal` monté, sortie identique *(construite en local depuis
@@ -63,9 +65,12 @@ Homebrew, apt, npm ; hébergement du site ailleurs que GitHub Pages ; télémét
 - [x] `export:site` : site fonctionnel hors ligne (aucune requête réseau, vérifié par test navigateur
       Panther réseau coupé) *(`SiteBrowserTest` : ouvert depuis le disque, diagrammes dessinés, recherche,
       aucune ressource hors du site)*
-- [ ] Checklist de publication cochée ; site publié *(`SECURITY.md` à jour des surfaces des phases 1 à 3,
-      Packagist enregistré ; restent : CI réactivée et verte, signalement privé activé, GitHub Pages
-      activé et `site.yml` joué — tous demandent une poussée et l'accord de jul6art)*
+- [x] Checklist de publication cochée ; site publié *(le 2026-10-21 : `SECURITY.md` à jour des surfaces
+      des phases 1 à 4, Packagist annonce la v3.4.0, signalement privé activé, GitHub Pages en mode
+      workflow et `site.yml` joué — https://jul6art.github.io/devtools/ —, CI verte au décompte : 1 145
+      tests en `highest` comme en `lowest`, couverture, MSI 97 %. La CI n'est **pas** laissée active :
+      la règle de jul6art du 2026-10-01 coupe les Actions entre deux passages mensuels, ce qui l'emporte
+      sur le « réactivée » de la décision)*
 - [x] README : installation phar, Docker, export
 
 ## Écarts assumés à la livraison

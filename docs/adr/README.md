@@ -53,13 +53,13 @@
 | [0031](0031-pont-node-pour-javascript-et-typescript.md) | Pont Node pour l'analyse JavaScript et TypeScript | 3 — Généralisation | Accepted | 2026-10-21 |
 | [0032](0032-adaptateur-natif-angular.md) | Adaptateur natif Angular | 3 — Généralisation | Accepted | 2026-10-21 |
 | [0033](0033-adaptateur-natif-node-express.md) | Adaptateur natif Node / Express | 3 — Généralisation | Accepted | 2026-10-21 |
-| [0034](0034-publication-open-source-et-distribution.md) | Publication open source, phar, Docker, site | 3 — Généralisation | Accepted | — |
+| [0034](0034-publication-open-source-et-distribution.md) | Publication open source, phar, Docker, site | 3 — Généralisation | Accepted | 2026-10-21 |
 | [0035](0035-client-api-claude-et-redaction-en-ci.md) | Client API Claude et rédaction en CI | Compléments | Accepted | — |
 | [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Accepted | 2026-10-21 |
 | [0037](0037-glossaire-metier.md) | Glossaire métier | Compléments | Accepted | 2026-10-21 |
 | [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Accepted | 2026-10-21 |
 | [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Accepted | 2026-10-21 |
-| [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Accepted | — |
+| [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Accepted | 2026-10-21 |
 | [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0042](0042-progression-et-compteurs-en-console.md) | Progression et compteurs de la sortie console | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0043](0043-pages-decisions-et-mecanismes.md) | Pages : faits au XML, listeners en mécanismes, décisions en graphiques | MVP+ — Retours d'usage | Superseded by 0044 | 2026-09-18 |

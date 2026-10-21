@@ -271,8 +271,13 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
   `IGNORED_FILES`, la gate ne le juge pas, et toute comparaison d'arborescence l'écarte.
 - `tests/EndToEnd/DistributionTest` (phar, image Docker) ne tourne que si `DEVTOOLS_BOX` désigne un
   `box.phar` : sinon ignoré, en le disant.
-- ⚠️ **Packagist n'a que la v3.3.0**, antérieure aux hooks, au serveur MCP et au vérificateur. Le générateur
-  de squelettes (ADR-0040) exige `^3.4` : **publier DevTools 3.4.0 avant de pousser le générateur**.
+- **v3.4.0 publiée le 2026-10-21** (Packagist, release GitHub avec phar et attestation, image ghcr.io, site
+  sur GitHub Pages). Le générateur de squelettes (ADR-0040) exige `^3.4` : une fonction dont il dépend se
+  publie ici **avant** d'être exigée là-bas.
+- ⚠️ **`TODO.md` est indexé vide en permanence** : jamais de `git commit` sans avoir vérifié
+  `git diff --cached --name-only` — il embarquerait ce fichier (arrivé deux fois le 2026-10-21, dont une
+  poussée, réparée par `cc410df`). Le retirer le temps du commit : `git rm --cached -f TODO.md`, puis
+  `git update-index --add --cacheinfo 100644,e69de29bb2d1d6434b8b29ae775ad8c2e48c5391,TODO.md`.
 
 ---
 
