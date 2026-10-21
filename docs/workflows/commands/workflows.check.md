@@ -1,9 +1,9 @@
 # workflows:check
-`command.workflows.check` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.workflows.check` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
-La gate. Elle échoue quand la documentation ne correspond plus au code — un fait changé, un workflow sans page, une page sans workflow — et **elle n'écrit rien du tout**. La version qu'elle remplace régénérait les pages avant de prévenir : au moment où on lisait l'avertissement, il n'y avait plus rien à comparer.
+La gate. Elle échoue quand la documentation ne correspond plus au code — un fait changé, un workflow sans page, une page sans workflow — ou quand les liens avec un projet voisin ne tiennent plus : un écran appelle une route que l'API n'a plus, un workflow lié a disparu (ADR-0038). Et **elle n'écrit rien du tout**. La version qu'elle remplace régénérait les pages avant de prévenir : au moment où on lisait l'avertissement, il n'y avait plus rien à comparer.
 
 ## Trigger
 
@@ -35,15 +35,6 @@ sequenceDiagram
 ```
 
 ## Decisions
-
-**`DateTimeImmutable::timezone`**
-
-```mermaid
-flowchart TD
-  d1{"SOURCE_DATE_EPOCH est posé et ne contient que des chiffres"}
-  d1 -->|oui| v1["le fuseau par défaut de PHP — l'horloge devient reproductible, et une même exécution rend les mêmes octets"]
-  d1 -->|non| v2["l'instant courant, tel quel"]
-```
 
 **`Jul6Art\DevTools\Command\WorkflowsCheckCommand::execute`**
 
@@ -120,9 +111,18 @@ flowchart TD
   d1 -->|non| v2["aucune : les choix restent sur le formulaire, en confiance moyenne"]
 ```
 
+**`Jul6Art\DevTools\Inspection\InspectionReport::linkProblems`**
+
+```mermaid
+flowchart TD
+  d1{"l'inspection est suivie d'un --link, qui recalcule les liens juste après"}
+  d1 -->|oui| v1["aucun écart : il serait aussitôt périmé"]
+  d1 -->|non| v2["ce que graph/links.xml dit et qui ne tient plus : appel orphelin, workflow lié disparu d'un côté ou de l'autre"]
+```
+
 ## Data
 
-Lecture : les suivis et le code. Aucune écriture.
+Lecture : les suivis, le code, graph/links.xml et, quand il est sur disque, l'index du projet voisin. Aucune écriture.
 
 ## Cross-cutting mechanisms
 
@@ -134,6 +134,7 @@ Lecture : les suivis et le code. Aucune écriture.
 - **`--require-ai` est une exigence distincte** : une page qui ne porte que des faits est juste, mais elle n'explique rien ; les projets qui veulent la prose l'exigent explicitement.
 - **Le format GitHub annote le fichier et la ligne**, pour que la pull request montre l'endroit plutôt qu'un résumé.
 - **Un code changé sans fait changé est COMPTÉ, pas bloquant** : la gate dit combien de workflows sont dans ce cas, parce que leur prose peut être fausse — une condition réécrite dans une méthode, une constante renommée, une valeur par défaut inversée. `--strict` en fait une cause d'échec, pour les projets qui veulent relire à chaque fois.
+- **Un appel orphelin est une cause, des deux côtés** : l'API et le mobile échouent tous deux tant qu'un écran appelle une route disparue. Un voisin absent du disque — une CI qui n'a cloné qu'un dépôt — n'est pas vérifié, sans faire échouer.
 
 ## Related workflows
 
@@ -153,3 +154,5 @@ Lecture : les suivis et le code. Aucune écriture.
 | 2026-10-20 | 4979790 | L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (added test tests/Claude/ClaudeHookTest.php (+7)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+8)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Les liens avec les projets voisins sont une cause d'échec quand ils ne tiennent plus : appel orphelin, workflow lié disparu (ADR-0038). (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+6)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |

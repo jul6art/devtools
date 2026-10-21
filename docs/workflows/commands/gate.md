@@ -1,5 +1,5 @@
 # gate
-`command.gate` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.gate` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -93,9 +93,26 @@ flowchart TD
   d1 -->|non| v2["l'élément reste vide"]
 ```
 
+**`Jul6Art\DevTools\Inspection\InspectionReport::linkProblems`**
+
+```mermaid
+flowchart TD
+  d1{"l'inspection est suivie d'un --link, qui recalcule les liens juste après"}
+  d1 -->|oui| v1["aucun écart : il serait aussitôt périmé"]
+  d1 -->|non| v2["ce que graph/links.xml dit et qui ne tient plus : appel orphelin, workflow lié disparu d'un côté ou de l'autre"]
+```
+
+**`Jul6Art\DevTools\Inspection\InspectionReport::warnings`**
+
+```mermaid
+flowchart TD
+  s1["les avertissements déjà réunis"] --> s2["+ les écarts d'un passage à l'adaptateur natif (--switch-adapter)"]
+  s2 --> s3["+ ceux de l'adaptateur et de la construction du graphe, pile par pile"]
+```
+
 ## Data
 
-Lit l'index, la carte, les fichiers de suivi, les scénarios, la configuration, les règles et leurs assertions ; exécute les outils que ces assertions appellent, une fois par commande, et compte leurs blocages dans .devtools/stats/rules.xml ; écrit une exécution dans .devtools/runs/, un dossier de vérification dans .devtools/pending/ et son dernier passage dans .devtools/gate/, ignorés par git.
+Lit l'index, la carte, les fichiers de suivi, les scénarios, la configuration, les règles et leurs assertions ; exécute les outils que ces assertions appellent, une fois par commande, et compte leurs blocages dans .devtools/stats/rules.xml ; écrit une exécution dans .devtools/runs/, un dossier de vérification dans .devtools/pending/ et son dernier passage dans .devtools/gate/, ignorés par git. Ni ces zones de travail ni .devtools/search.idx, un cache, ne font jamais partie d'un changement jugé.
 
 ## Cross-cutting mechanisms
 
@@ -103,7 +120,7 @@ Aucun.
 
 ## Points of attention
 
-L'étape freshness coûte l'analyse d'un `workflows:check`, proportionnelle au projet et non au changement. Un workflow atteint sans scénario, des scénarios qui ne peuvent pas être rejoués ici — ni Panther ni URL de base — sont des avertissements, que --strict change en échecs : un projet qui démarre ne doit pas être rouge partout. Une assertion qui ne peut pas dire — pas de capture de ce passage, un outil illisible — est un avertissement, jamais un blocage. La décision sur `element::textContent` est celle de DomBuilder, sur le chemin de toute lecture ou écriture XML : elle n'est pas propre à ce workflow.
+L'étape freshness coûte l'analyse d'un `workflows:check`, proportionnelle au projet et non au changement ; elle compte aussi ce que graph/links.xml dit et qui ne tient plus — un appel orphelin, un workflow lié disparu (ADR-0038). Un workflow atteint sans scénario, des scénarios qui ne peuvent pas être rejoués ici — ni Panther ni URL de base — sont des avertissements, que --strict change en échecs : un projet qui démarre ne doit pas être rouge partout. Une assertion qui ne peut pas dire — pas de capture de ce passage, un outil illisible — est un avertissement, jamais un blocage. La décision sur `element::textContent` est celle de DomBuilder, sur le chemin de toute lecture ou écriture XML : elle n'est pas propre à ce workflow.
 
 ## Related workflows
 
@@ -117,3 +134,4 @@ L'étape freshness coûte l'analyse d'un `workflows:check`, proportionnelle au p
 | 2026-10-20 | 58c02fb | L'étape assertions exécute les assertions des règles actives (ADR-0027) ; le dernier passage suit la tâche en cours, ses échecs et les règles qui l'ont bloquée (ADR-0029). (added test tests/Assertion/AssertionProposalTest.php (+10)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le code a été remis en forme (Rector, style), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Gate/Gate.php, src/Gate/XmlGateStore.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | L'analyse de l'étape freshness signale les liens entre projets devenus faux (ADR-0038) ; l'index de recherche, un cache, n'entre jamais dans un changement jugé (ADR-0039). (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+12)) |

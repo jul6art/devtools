@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.stack.detect` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -85,3 +85,4 @@ Un `package.json` à côté d'un projet Symfony n'est une stack que s'il porte u
 | 2026-10-20 | 4979790 | Aucun changement de fond : le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044), et des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Stack/Knowledge/KnowledgeAmendTest.php) |
 | 2026-10-20 | 4979790 | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |

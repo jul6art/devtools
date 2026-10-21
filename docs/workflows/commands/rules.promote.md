@@ -1,5 +1,5 @@
 # rules:promote
-`command.rules.promote` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.rules.promote` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -82,3 +82,4 @@ La commande n'écrit pas la règle, elle la demande. Les retours ne passent prom
 | Date | Commit | Change |
 |---|---|---|
 | 2026-10-20 | 58c02fb | rédaction initiale |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |

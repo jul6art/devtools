@@ -1,9 +1,9 @@
 # workflows:inspect
-`command.workflows.inspect` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.workflows.inspect` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
-Documente tous les workflows d'un projet : détection de stack, extraction des points d'entrée par l'adaptateur, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, index, menu et graphe d'ensemble. Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté. Un scénario dont le workflow a disparu est signalé en avertissement, et ceux qu'une réécriture met à revoir sont listés dans le menu.
+Documente tous les workflows d'un projet, ou de plusieurs à la suite : détection de stack, extraction des points d'entrée par l'adaptateur — natif pour Symfony, Laravel, Angular, Express et PHP sans framework, Claude sinon —, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, glossaire, index, menu, graphe d'ensemble et index de recherche. Avec `--link`, une fois tous les projets inspectés, chacun est relié aux voisins que déclare son config.xml : les appels d'un front appariés aux routes de son API (ADR-0038). Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté.
 
 ## Trigger
 
@@ -41,9 +41,13 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-  d1{"le chemin n'est pas un dossier, ou une option est refusée"}
+  d1{"un des chemins n'est pas un dossier"}
   d1 -->|oui| v1["INVALID — rien n'est écrit"]
-  d1 -->|non| v2["le code de sortie du rapport : 0, 1 ou 2"]
+  d1 -->|non| d2{"--link est demandé avec --dry-run"}
+  d2 -->|oui| v2["INVALID : --link écrit les liens de chaque projet"]
+  d2 -->|non| d3{"une option est refusée"}
+  d3 -->|oui| v3["INVALID"]
+  d3 -->|non| v4["le pire code des projets inspectés, puis du lien : 0, 1 ou 2"]
 ```
 
 **`Jul6Art\DevTools\Console\ConsoleProgressReporter::stage`**
@@ -113,7 +117,7 @@ flowchart TD
 
 ## Data
 
-Lit le code du projet sans jamais l'exécuter, ses manifestes et son dépôt git ; écrit `.devtools/` et le dossier de documentation, plus un rapport horodaté. Les décisions viennent aussi des contraintes de validation d'une entité, des options d'un champ de formulaire et d'une méthode de la même classe appelée pour calculer la valeur ; un voter entre dans les mécanismes des routes qui demandent son attribut (ADR-0044).
+Lit le code du projet sans jamais l'exécuter — par le pont Node pour JavaScript et TypeScript, par la console du framework quand il en a une —, ses manifestes et son dépôt git ; écrit `.devtools/`, dont glossary.xml et l'index de recherche search.idx, le dossier de documentation, plus un rapport horodaté. Avec `--link`, lit l'index et les fichiers de suivi des projets voisins et écrit graph/links.xml de chaque projet nommé. Les décisions viennent aussi des contraintes de validation d'une entité, des options d'un champ de formulaire et d'une méthode de la même classe appelée pour calculer la valeur ; un voter entre dans les mécanismes des routes qui demandent son attribut (ADR-0044).
 
 ## Cross-cutting mechanisms
 
@@ -123,9 +127,9 @@ Aucun listener : c'est une commande console. Le verrou `ProjectLock` interdit de
 
 Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `method`, `truncated` sont des états internes de l'extracteur, pas du métier. C'est la limite de l'extraction : elle trouve toute la logique conditionnelle atteinte, sans savoir laquelle intéresse un lecteur. Sur un projet applicatif, ce sont les champs d'entités qui remontent.
 
-- **`--prune` emporte le dossier avec le README** : un contrôleur dont la dernière route disparaît ne laisse plus derrière lui un répertoire vide qui ne liste rien. Les workflows élagués sont désormais passés aux pages de groupe au lieu d'être écartés en cours de boucle.
-- **Les écouteurs Doctrine entrent dans les mécanismes** : ils vivent sur le gestionnaire d'événements de Doctrine et non sur le répartiteur, donc la console ne les mentionnait jamais. Les deux sources sont fusionnées, et un écouteur déclaré par attribut est résolu.
-- **Une page écrite sous un gabarit antérieur est remise à jour, même quand rien n'a bougé.** La fraîcheur ne réécrit que ce qu'un fait touche ; une page dont le code ne change jamais gardait donc ses titres français indéfiniment. Le rendu est comparé au fichier — la décision étant « inchangé », les deux doivent coïncider — et l'écart est réécrit. Rien d'autre ne bouge : ni révision, ni mode, ni brief.
+- **`--link` relie après avoir tout inspecté** : les liens d'un front dépendent des routes de l'API, et inversement ; chaque projet n'écrit que son propre links.xml, et un voisin jamais inspecté garde ses liens, avec un avertissement.
+- **`--prune` emporte le dossier avec le README** : un contrôleur dont la dernière route disparaît ne laisse plus derrière lui un répertoire vide qui ne liste rien.
+- **Une page écrite sous un gabarit antérieur est remise à jour, même quand rien n'a bougé**, et la section « Related workflows » suit les liens que graph/links.xml garde : une réinspection sans `--link` redonne les mêmes octets.
 
 ## Related workflows
 
@@ -146,3 +150,5 @@ Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `me
 | 2026-10-20 | 4979790 | Signale les scénarios orphelins et liste au menu ceux qu'une réécriture met à revoir ; la limite mémoire passe à 1 Go. (added test tests/Claude/ClaudeHookTest.php (+7)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+8)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Inspecte plusieurs projets à la suite et les relie avec --link (ADR-0038) ; écrit le glossaire (ADR-0037) et l'index de recherche (ADR-0039). (added decision Jul6Art\DevTools\Command\WorkflowsInspectCommand::execute: — → \Symfony\Component\Console\Command\Command::INVALID (+23)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Command/WorkflowsInspectCommand.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |

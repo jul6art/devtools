@@ -1,5 +1,5 @@
 # scenarios:generate
-`command.scenarios.generate` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.scenarios.generate` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -64,3 +64,5 @@ Un squelette n'existe que pour une route sans paramètre : une valeur d'identifi
 |---|---|---|
 | 2026-10-20 | 4979790 | rédaction initiale |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/TrackingDocument.php) |

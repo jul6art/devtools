@@ -1,5 +1,5 @@
 # verify:collect
-`command.verify.collect` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.verify.collect` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -83,3 +83,4 @@ Un approuvé qui porte un constat bloquant, un rejet sans constat bloquant : l'u
 |---|---|---|
 | 2026-10-20 | 4979790 | rédaction initiale |
 | 2026-10-20 | 58c02fb | La liste fermée des catégories se relit dans le manifeste : celle des retours, celles du projet comprises ; des tests s'ajoutent. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |

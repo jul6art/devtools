@@ -1,5 +1,5 @@
 # baselines:accept
-`command.baselines.accept` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.baselines.accept` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -73,3 +73,4 @@ Une baseline acceptée par l'auteur du changement reproduirait le biais que la c
 |---|---|---|
 | 2026-10-20 | 4979790 | rédaction initiale |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la copie d'une capture passe par une classe que partage la page de revue, et le lecteur d'exécution rend aussi l'étape d'échec, que cette commande n'accepte jamais ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |

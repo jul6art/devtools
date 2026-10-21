@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.knowledge.list" type="commands" schema-version="1">
   <title>knowledge:list</title>
-  <generated at="2026-10-20T22:24:55+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="58c02fb9a3a34b43275909170d619195a91b749e" branch="master" dirty="true"/>
+  <generated at="2026-10-21T07:25:33+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="knowledge:list" role="main">
       <declared-in path="src/Command/KnowledgeListCommand.php" role="other"/>
@@ -10,14 +10,14 @@
   </entrypoints>
   <files>
     <file path="src/Command/KnowledgeListCommand.php" role="other" sha256="f86b9359457ab6bbe387c1bc28301c6e75d9085053a44d0ea007b8fffeb7aec1"/>
-    <file path="src/Config/Config.php" role="other" sha256="a25ab646b89394a1bdafc05a4927f998be15c0cd2f455c2588f162d055b0f194"/>
+    <file path="src/Config/Config.php" role="other" sha256="b42607b7e8b07a77f11473012945915f5a971312e2832968c44728d0273f4ed3"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/FixtureSettings.php" role="other" sha256="58f9bb4ca55758a7a3a80d8a8a0e2f357384fc48dad14667425720751c3075fe"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
     <file path="src/Config/LoginSettings.php" role="other" sha256="6ebff405f9d0423103f0e3952785e02d2bacf75a66aaa81552b195a95034dd87"/>
     <file path="src/Config/ScenarioSettings.php" role="other" sha256="1f7f1f9f41f767a8db00b9bf9133771703f2bebbbb56e98dc39d944bf87ad28f"/>
     <file path="src/Config/VisualSettings.php" role="other" sha256="5093a08927cb7b92956b2cd9e42beefc4c09271011df7f3a575ef4707bb4ab2d"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="21f725777842a7a453cdfb041fc2cd56a592f451adfc2e2ace3340c06371aa2a"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="bd6a61eaa7396e615fc02850f9aa3a215bc5002ee57820531039dbfc16c3ec77"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
@@ -28,14 +28,16 @@
     <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
     <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
     <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
+    <file path="src/Link/LinkRole.php" role="other" sha256="09a5bee9e97fa4662b93cdb5d80473534c687ec8c656d7c8d31eda2b9dd9d39a"/>
+    <file path="src/Link/LinkedProject.php" role="other" sha256="3398ada3ce1fd536082745f08a8f157dc31195f31b220fa87793944b819d2012"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
-    <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
+    <file path="src/Resources.php" role="other" sha256="dfe3bce84c26fc820241943c5c8ebc69515312d903b58afb0ac700498416db37"/>
     <file path="src/Stack/Knowledge/DepositOutcome.php" role="other" sha256="b5960860a59b3caead90903b300988eaca9bc227d2ba39af36b5114eb2c23005"/>
     <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="9fbee0f711adc44cdc1938518ec879825ac7995ed4eb77fd4e0667cda18ef390"/>
     <file path="src/Stack/Knowledge/LibraryEntry.php" role="other" sha256="a321896eb57b51d79129850ad40998488ef46789ceb5479988c8e9672da523b8"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="bd38c8b2331427c9c042e218cbd2f1b12709193c2ef52412124033791c327c33"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="feb25ac8ffc204a58c6af38c3b65f95c71f6cc23da71fa7704d8f4617398ac23"/>
     <file path="src/Tracking/GenerationMode.php" role="other" sha256="ce1e4c7a013fc4fc670365772041282e4b8cc747eda425380059b7458efb1d5c"/>
     <file path="src/Tracking/Index.php" role="other" sha256="cdf4799c24bee0bac3b89cb879d6fcfcd0320019564ec056aef2b1056eed5219"/>
     <file path="src/Tracking/IndexEntry.php" role="other" sha256="e946ec4b7854fcc293ea395db2b3207c83f426454f43002624262e14c48e752f"/>
@@ -54,25 +56,34 @@
   <tests>
     <file path="tests/Ai/MenuAfterApplyTest.php" role="test"/>
     <file path="tests/Ai/PageRedactionTest.php" role="test"/>
+    <file path="tests/Ask/AskTest.php" role="test"/>
     <file path="tests/Assertion/AssertionProposalTest.php" role="test"/>
     <file path="tests/Assertion/AssertionTest.php" role="test"/>
     <file path="tests/Config/XmlConfigReaderTest.php" role="test"/>
     <file path="tests/Feedback/FeedbackTest.php" role="test"/>
     <file path="tests/Gate/GateBrowserTest.php" role="test"/>
     <file path="tests/Gate/GateTest.php" role="test"/>
+    <file path="tests/Glossary/GlossaryTest.php" role="test"/>
     <file path="tests/Impact/ImpactTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Angular/AngularAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Express/ExpressAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php" role="test"/>
+    <file path="tests/Inspection/AdapterSwitchTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/FreshnessResolverTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/GitClientTest.php" role="test"/>
     <file path="tests/Inspection/Graph/SourceFilesTest.php" role="test"/>
+    <file path="tests/Inspection/Node/NodeBridgeTest.php" role="test"/>
+    <file path="tests/Link/ProjectLinkTest.php" role="test"/>
     <file path="tests/Mcp/McpServerTest.php" role="test"/>
     <file path="tests/Performance/HookPerformanceTest.php" role="test"/>
     <file path="tests/Performance/ImpactPerformanceTest.php" role="test"/>
     <file path="tests/Project/GitHooksTest.php" role="test"/>
     <file path="tests/Project/ProjectFilesTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Rendering/Site/SiteBrowserTest.php" role="test"/>
+    <file path="tests/Rendering/Site/SiteExporterTest.php" role="test"/>
     <file path="tests/Retro/JournalTest.php" role="test"/>
     <file path="tests/Retro/RetroTest.php" role="test"/>
     <file path="tests/Review/Web/ReviewAppTest.php" role="test"/>
@@ -114,5 +125,6 @@
     <revision at="2026-10-20T15:47:36+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="la bibliothèque garde les révisions d'une fiche amendée, et la liste affiche celle qu'un projet lit ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision: — → \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent (+3))"/>
     <revision at="2026-10-20T20:58:51+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8))"/>
     <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10))"/>
+    <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8))"/>
   </history>
 </workflow>

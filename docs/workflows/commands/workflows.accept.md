@@ -1,5 +1,5 @@
 # workflows:accept
-`command.workflows.accept` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.workflows.accept` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -77,24 +77,6 @@ flowchart TD
   d1 -->|non| v2["aucun rapport : une simulation ne laisse pas de trace"]
 ```
 
-**`Jul6Art\DevTools\Rendering\MarkdownWriter::table`**
-
-```mermaid
-flowchart TD
-  d1{"la table a des lignes"}
-  d1 -->|non| v1["le tiret cadratin — une table vide se lit moins bien qu'un « rien »"]
-  d1 -->|oui| v2["l'en-tête, le séparateur, puis les lignes"]
-```
-
-**`Jul6Art\DevTools\Rendering\PageRenderer::crossCutting`**
-
-```mermaid
-flowchart TD
-  d1{"le workflow porte des mécanismes"}
-  d1 -->|non| v1["le tiret cadratin"]
-  d1 -->|oui| v2["la table : mécanisme, événement, priorité, ce qu'il écrit"]
-```
-
 **`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit`**
 
 ```mermaid
@@ -117,6 +99,23 @@ flowchart TD
   d1 -->|non| d2{"la bibliothèque est accessible en écriture"}
   d2 -->|non| v2["NotWritable — l'amendement reste dans le projet"]
   d2 -->|oui| v3["Deposited — une révision rN succède, l'original reste"]
+```
+
+**`Jul6Art\DevTools\Inspection\InspectionReport::linkProblems`**
+
+```mermaid
+flowchart TD
+  d1{"l'inspection est suivie d'un --link, qui recalcule les liens juste après"}
+  d1 -->|oui| v1["aucun écart : il serait aussitôt périmé"]
+  d1 -->|non| v2["ce que graph/links.xml dit et qui ne tient plus : appel orphelin, workflow lié disparu d'un côté ou de l'autre"]
+```
+
+**`Jul6Art\DevTools\Inspection\InspectionReport::warnings`**
+
+```mermaid
+flowchart TD
+  s1["les avertissements déjà réunis"] --> s2["+ les écarts d'un passage à l'adaptateur natif (--switch-adapter)"]
+  s2 --> s3["+ ceux de l'adaptateur et de la construction du graphe, pile par pile"]
 ```
 
 ## Data
@@ -151,3 +150,5 @@ flowchart TD
 | 2026-10-20 | 4979790 | L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (modified package symfony/process: 8.1.7 → 8.1.9) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (files changed: src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Freshness/GitClient.php, src/Tracking/DevToolsDirectory.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : l'inspection qu'il relance relève aussi les liens entre projets devenus faux (ADR-0038). La prose a été relue et tient. (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+5)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |

@@ -1,5 +1,5 @@
 # workflows:diff
-`command.workflows.diff` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.workflows.diff` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -35,15 +35,6 @@ sequenceDiagram
 ```
 
 ## Decisions
-
-**`DateTimeImmutable::timezone`**
-
-```mermaid
-flowchart TD
-  d1{"SOURCE_DATE_EPOCH est posé et ne contient que des chiffres"}
-  d1 -->|oui| v1["le fuseau par défaut de PHP — l'horloge devient reproductible, et une même exécution rend les mêmes octets"]
-  d1 -->|non| v2["l'instant courant, tel quel"]
-```
 
 **`Jul6Art\DevTools\Command\WorkflowsDiffCommand::execute`**
 
@@ -118,6 +109,15 @@ flowchart TD
   d1 -->|non| v2["aucune : les choix restent sur le formulaire, en confiance moyenne"]
 ```
 
+**`Jul6Art\DevTools\Inspection\InspectionReport::linkProblems`**
+
+```mermaid
+flowchart TD
+  d1{"l'inspection est suivie d'un --link, qui recalcule les liens juste après"}
+  d1 -->|oui| v1["aucun écart : il serait aussitôt périmé"]
+  d1 -->|non| v2["ce que graph/links.xml dit et qui ne tient plus : appel orphelin, workflow lié disparu d'un côté ou de l'autre"]
+```
+
 ## Data
 
 Lecture : les fichiers de suivi et le code du projet. Aucune écriture — pas même un rapport.
@@ -150,3 +150,5 @@ Lecture : les fichiers de suivi et le code du projet. Aucune écriture — pas m
 | 2026-10-20 | 4979790 | L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (added test tests/Claude/ClaudeHookTest.php (+7)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+9)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : l'analyse qu'il lance relève aussi les liens entre projets devenus faux (ADR-0038), que diff ne montre pas — c'est check qui en fait une cause. La prose a été relue et tient. (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+6)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |

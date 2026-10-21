@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="https://github.com/jul6art/devtools/schema/glossary/1" schema-version="1">
+  <term name="claude" status="defined" occurrences="3">
+    <definition>Claude Code, l'agent qui rédige la prose des pages et que DevTools outille : skills, hooks, serveur MCP et vérificateur.</definition>
+    <workflow>command.claude.hook</workflow>
+    <workflow>command.claude.install</workflow>
+    <workflow>command.claude.uninstall</workflow>
+  </term>
+  <term name="feedback" status="defined" occurrences="3">
+    <definition>Une remarque de revue enregistrée comme donnée — son workflow, sa catégorie, une ligne — et comptée quand elle revient.</definition>
+    <label>retour</label>
+    <workflow>command.feedback.add</workflow>
+    <workflow>command.feedback.list</workflow>
+    <workflow>command.feedback.resolve</workflow>
+  </term>
+  <term name="knowledge" status="defined" occurrences="3">
+    <definition>La fiche qui dit comment une pile fonctionne : où le framework met ses routes, ses règles et ses effets de bord. Aucune page de cette pile ne s'écrit sans elle.</definition>
+    <label>connaissance</label>
+    <workflow>command.knowledge.amend</workflow>
+    <workflow>command.knowledge.list</workflow>
+    <workflow>command.knowledge.promote</workflow>
+  </term>
+  <term name="rules" status="defined" occurrences="4">
+    <definition>Une consigne née d'un retour vu deux fois, donnée à Claude avant qu'il modifie un fichier qu'elle vise. Une assertion peut la faire respecter dans la gate.</definition>
+    <label>règle</label>
+    <workflow>command.rules.activate</workflow>
+    <workflow>command.rules.archive</workflow>
+    <workflow>command.rules.list</workflow>
+    <workflow>command.rules.promote</workflow>
+  </term>
+  <term name="workflows" status="defined" occurrences="9">
+    <definition>Un parcours que le code expose — route, commande, message, composant —, avec sa page et son fichier de suivi : l'unité que DevTools documente.</definition>
+    <label>workflow</label>
+    <workflow>command.workflows.accept</workflow>
+    <workflow>command.workflows.apply</workflow>
+    <workflow>command.workflows.check</workflow>
+    <workflow>command.workflows.diff</workflow>
+    <workflow>command.workflows.impact</workflow>
+    <workflow>command.workflows.inspect</workflow>
+    <workflow>command.workflows.reject</workflow>
+    <workflow>command.workflows.rename</workflow>
+    <workflow>command.workflows.review</workflow>
+  </term>
+</glossary>

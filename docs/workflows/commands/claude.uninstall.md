@@ -1,5 +1,5 @@
 # claude:uninstall
-`command.claude.uninstall` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.claude.uninstall` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -115,3 +115,4 @@ Les décisions de `claude:install` et de `mcp:serve` figurent ici parce que la d
 | 2026-10-20 | 4979790 | initial |
 | 2026-10-20 | 4979790 | rédaction initiale (files changed: src/Command/McpServeCommand.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : claude:install pose un second skill et le serveur MCP gagne un outil, ce que claude:uninstall ne touche pas. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |

@@ -1,9 +1,9 @@
 # workflows:apply
-`command.workflows.apply` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.workflows.apply` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
-Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, les scénarios que Claude a écrits (ADR-0020), les règles (ADR-0026) et les assertions (ADR-0027), puis les pages. Une assertion est exécutée avant d'être écrite : elle doit passer sur le projet tel qu'il est, et échouer là où son retour a été signalé. Une fiche de connaissance acceptée est déposée dans la bibliothèque partagée. Dès qu'une page est acceptée, l'index et le sommaire workflows.md sont réécrits depuis ce qui est sur disque, sans nouvelle inspection : un workflow rédigé quitte aussitôt la liste « To check » (ADR-0049).
+Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, les scénarios (ADR-0020), les règles (ADR-0026), les assertions (ADR-0027) et les définitions du glossaire (ADR-0037), puis les pages, qui lisent les termes ainsi définis. Une assertion est exécutée avant d'être écrite. Un brouillon de page qui emploie un synonyme là où le glossaire a un terme est accepté, avec un avertissement. Dès qu'une page est acceptée, l'index et le sommaire workflows.md sont réécrits depuis ce qui est sur disque, sans nouvelle inspection (ADR-0049).
 
 ## Trigger
 
@@ -87,7 +87,7 @@ flowchart TD
 
 ## Data
 
-Lit les briefs, les modèles et les brouillons de `.devtools/pending/`, le fichier de stack et le sommaire existant ; écrit les pages, les fichiers de suivi, l'index et le sommaire, les règles proposées et les assertions — et passe à promus les retours d'une règle —, et dépose les fiches de connaissance. Applique aussi l'amendement d'une fiche demandé par knowledge:amend : la fiche du projet est remplacée, et la bibliothèque en reçoit une révision.
+Lit les briefs, les modèles et les brouillons de `.devtools/pending/`, le fichier de stack, glossary.xml, graph/links.xml et le sommaire existant ; écrit les pages, les fichiers de suivi, l'index et le sommaire, les règles proposées et les assertions — et passe à promus les retours d'une règle —, glossary.xml et docs/workflows/glossary.md, et dépose les fiches de connaissance. Applique aussi l'amendement d'une fiche demandé par knowledge:amend.
 
 ## Cross-cutting mechanisms
 
@@ -95,7 +95,7 @@ Aucun listener. Un brouillon est une donnée non fiable : chaque chemin qu'il ci
 
 ## Points of attention
 
-Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé. Une page rédigée survit aux réécritures factuelles ultérieures : seuls les faits sont régénérés. Un apply qui n'accepte rien ne touche ni l'index ni le sommaire, et sans sommaire — avant la première inspection — il n'en crée pas. ⚠️ La section « Not covered » du sommaire est recopiée telle quelle, pas recalculée : la couverture n'est persistée nulle part, et appliquer une page ne change pas les fichiers d'un workflow. Le jour où apply toucherait aux fichiers d'un workflow, il faudrait persister la couverture. Le sommaire a désormais deux auteurs, l'inspection et apply : un test vérifie qu'une inspection lancée juste après un apply rend le même.
+Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé ; un brouillon de glossaire qui enfreint une règle — une définition de plus de deux phrases, un terme inconnu ou écarté — est refusé en entier. Une page rédigée survit aux réécritures factuelles ultérieures : seuls les faits sont régénérés. Un apply qui n'accepte rien ne touche ni l'index ni le sommaire. ⚠️ La section « Not covered » du sommaire est recopiée telle quelle, pas recalculée : la couverture n'est persistée nulle part. Le sommaire a deux auteurs, l'inspection et apply : un test vérifie qu'une inspection lancée juste après un apply rend le même.
 
 ## Related workflows
 
@@ -115,3 +115,5 @@ Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé
 | 2026-10-20 | 4979790 | Applique aussi les brouillons de scénarios, et le sommaire liste les scénarios à revoir ; le dépôt d'une fiche dans la bibliothèque sort du graphe de ce workflow, sans changer de comportement. (removed decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit: \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent → — (+13)) |
 | 2026-10-20 | 58c02fb | Applique aussi les brouillons de règles et d'assertions — une assertion exécutée avant d'être écrite ; deux décisions de rendu sortent du graphe de ce workflow, sans changer de comportement. (added decision Jul6Art\DevTools\Ai\ApplyResult::accepted: — → [...$result->accepted, ...$scenarios['accepted']] (+18)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Applique les définitions du glossaire avant les pages, et signale un synonyme employé à la place d'un terme (ADR-0037). (added decision Jul6Art\DevTools\Ai\ApplyResult::accepted: — → [...$result->accepted, ...$glossary['accepted']] (+10)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/TrackingDocument.php) |

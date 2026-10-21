@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.gate" type="commands" schema-version="1">
   <title>gate</title>
-  <generated at="2026-10-20T22:55:24+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="58c02fb9a3a34b43275909170d619195a91b749e" branch="master" dirty="true"/>
+  <generated at="2026-10-21T07:25:33+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="gate" role="main">
       <declared-in path="src/Command/GateCommand.php" role="other"/>
@@ -19,19 +19,19 @@
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
     <file path="src/Command/GateCommand.php" role="other" sha256="dc33ae1c3d9d13de8f743c2a1f959b572c741f43b5f9ab935f43529834b88607"/>
     <file path="src/Command/SelectsChanges.php" role="other" sha256="581a9921ed024f32981462155919b0f2c04ab4a80f2c6560a57020c4664fff31"/>
-    <file path="src/Config/Config.php" role="other" sha256="a25ab646b89394a1bdafc05a4927f998be15c0cd2f455c2588f162d055b0f194"/>
+    <file path="src/Config/Config.php" role="other" sha256="b42607b7e8b07a77f11473012945915f5a971312e2832968c44728d0273f4ed3"/>
     <file path="src/Config/ConfigReaderInterface.php" role="other" sha256="302530bad13f9a883709d4b51022d27a3ebdc4142d4c85d7c114fc4b19805323"/>
     <file path="src/Config/FixtureSettings.php" role="other" sha256="58f9bb4ca55758a7a3a80d8a8a0e2f357384fc48dad14667425720751c3075fe"/>
     <file path="src/Config/LoginSettings.php" role="other" sha256="6ebff405f9d0423103f0e3952785e02d2bacf75a66aaa81552b195a95034dd87"/>
     <file path="src/Config/ScenarioSettings.php" role="other" sha256="1f7f1f9f41f767a8db00b9bf9133771703f2bebbbb56e98dc39d944bf87ad28f"/>
     <file path="src/Config/VisualSettings.php" role="other" sha256="5093a08927cb7b92956b2cd9e42beefc4c09271011df7f3a575ef4707bb4ab2d"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="21f725777842a7a453cdfb041fc2cd56a592f451adfc2e2ace3340c06371aa2a"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="bd6a61eaa7396e615fc02850f9aa3a215bc5002ee57820531039dbfc16c3ec77"/>
     <file path="src/Console/ChangeRenderer.php" role="other" sha256="37815a69141923c60447b38fb5c83adf5e83a7c90ee2dce121eb867c36603832"/>
-    <file path="src/Console/CheckRenderer.php" role="other" sha256="216ad6a5c70d073074c021bce7bd845b6eaa08bff4e57f7446fafa10d39af9a8"/>
+    <file path="src/Console/CheckRenderer.php" role="other" sha256="8fdac4bdfe04c0a254b9a092fc520bc00ec2d8c152d0d7d4bc58669ab3e40675"/>
     <file path="src/Feedback/Categories.php" role="other" sha256="9e673c6598029823172097c8c9138bc80fd9b820dc78234308e6c046032fb991"/>
     <file path="src/Gate/AssertionsStep.php" role="other" sha256="41d50caefe45e7709b23871c4c258fd8845361fde2502bedda8749a3dc77f5f4"/>
     <file path="src/Gate/FreshnessStep.php" role="other" sha256="047920178446d11589d19633741e5b1c50eefbe10e0ce6485ba9e189b6080706"/>
-    <file path="src/Gate/Gate.php" role="other" sha256="78fc544e01791eba7cbfc8d1db72869b6222ec3579725ea9cf782d3c4536bb66"/>
+    <file path="src/Gate/Gate.php" role="other" sha256="0a9c459285f9bd82dfdb672001d2444581da72003f2773a6a5c1a7fc86e304dc"/>
     <file path="src/Gate/GateContext.php" role="other" sha256="e5411bd71ec8f13ec46b3f1caf574c7b5e96598bf04129e94e28b6cf96e1c2f3"/>
     <file path="src/Gate/GateRenderer.php" role="other" sha256="91c2d60b85616150d1a2c005a637382704688183c5f6b4ff25cc7d531500a74f"/>
     <file path="src/Gate/GateResult.php" role="other" sha256="50e36e2c08d6efc1bd6c05e051511eb33af91f5f745c8ae9d0c3338d09b7fcfd"/>
@@ -42,7 +42,7 @@
     <file path="src/Gate/ScenariosStep.php" role="other" sha256="705318bac316313be56ec6ebad57daefccbde61d98c9211b08eb837415a91975"/>
     <file path="src/Gate/VerificationStep.php" role="other" sha256="ecc7a5cbf1c3f89580e3a68cbbfba6eb0be7093b29de2d463177c8a93b3cbf2d"/>
     <file path="src/Gate/XmlGateStore.php" role="other" sha256="d50c47e842a5678f6a953135c6767e8f437605c4af46dd78d8aa2dbffd201f42"/>
-    <file path="src/Impact/Impact.php" role="other" sha256="f3a277de562c499c4cbfc9b75f2612fc21c59d5e78b4287418f277c3d283bc6e"/>
+    <file path="src/Impact/Impact.php" role="other" sha256="e837fa8402a243b86637a87832f3652a959fa3e9489759a72f9f4ecf92360f51"/>
     <file path="src/Impact/ImpactRelation.php" role="other" sha256="31933955c737f00abbc7eeb1839ede05ecbd43d4149272e98c7f475e0712d8cc"/>
     <file path="src/Impact/ImpactResolver.php" role="other" sha256="04bb57c20310f15951ad3d842eb5f08901c1fbba337ae8a2124a382a0024e44c"/>
     <file path="src/Impact/ImpactUnavailable.php" role="other" sha256="dde89fa5c66282cac847ca331cae15785de0b88157754c6d8d03984e651d3c3b"/>
@@ -51,8 +51,8 @@
     <file path="src/Inspection/Freshness/DecisionKind.php" role="other" sha256="2aa34286474fe614997d1df37587be16af78ac2f17dc91b95024ad6d7ea8e5ee"/>
     <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="70d09faa2fd03fed29e73aed6484a994c95a73c9af6d1b391b2c83489c9c2c91"/>
     <file path="src/Inspection/Freshness/GitState.php" role="other" sha256="b5a1afba7c2a33c77172b500fe463171b941127175c233c944a87267d7361069"/>
-    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="99410dd4cd19b13106e8834f756091aca96439c8b3be81f392b7afc054a1d44f"/>
+    <file path="src/Inspection/InspectionOptions.php" role="other" sha256="0c657cd1b871a1314108190993c6bde84dbbf42a21db5969c92c566f74a6963f"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="36b51c48bbe97dc30cf79be58eef626a08df003c73e765959a4b6594dcdaad6a"/>
     <file path="src/Inspection/Model/Confidence.php" role="other" sha256="326f31543b4df23dd5e1e59cab11c37812be3d45c34fa3dc36affce963b1f99c"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
@@ -63,9 +63,11 @@
     <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
     <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
     <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
+    <file path="src/Link/LinkRole.php" role="other" sha256="09a5bee9e97fa4662b93cdb5d80473534c687ec8c656d7c8d31eda2b9dd9d39a"/>
+    <file path="src/Link/LinkedProject.php" role="other" sha256="3398ada3ce1fd536082745f08a8f157dc31195f31b220fa87793944b819d2012"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
-    <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
+    <file path="src/Resources.php" role="other" sha256="dfe3bce84c26fc820241943c5c8ebc69515312d903b58afb0ac700498416db37"/>
     <file path="src/Rule/RuleIndexEntry.php" role="other" sha256="5bcf38650f3b0d43a8104aa17aa77406abe77c467f65bf3c8c565004727d033e"/>
     <file path="src/Rule/RuleRepository.php" role="repository" sha256="f09cc332f7d9d66030c6aea758e7758227fe5a8fea3fd196ca5fdb639f59ff5a"/>
     <file path="src/Rule/RuleStatus.php" role="other" sha256="ccd14b6b12f251eeced1a09c024a6e809b89e58244eb03a43a434d29f00ae153"/>
@@ -79,7 +81,7 @@
     <file path="src/Scenario/ScenarioGenerator.php" role="other" sha256="363a15d585cc8b4ee5fd736fe8e76b1a22ac1fe67f572e19069fe854b4905912"/>
     <file path="src/Scenario/XmlScenarioStore.php" role="other" sha256="5f5a573df7d1f8a6a419e54e7fafbb21171047fef349f8cd770731313379f085"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="bd38c8b2331427c9c042e218cbd2f1b12709193c2ef52412124033791c327c33"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="feb25ac8ffc204a58c6af38c3b65f95c71f6cc23da71fa7704d8f4617398ac23"/>
     <file path="src/Tracking/GenerationMode.php" role="other" sha256="ce1e4c7a013fc4fc670365772041282e4b8cc747eda425380059b7458efb1d5c"/>
     <file path="src/Tracking/Index.php" role="other" sha256="cdf4799c24bee0bac3b89cb879d6fcfcd0320019564ec056aef2b1056eed5219"/>
     <file path="src/Tracking/IndexEntry.php" role="other" sha256="e946ec4b7854fcc293ea395db2b3207c83f426454f43002624262e14c48e752f"/>
@@ -104,26 +106,35 @@
   <tests>
     <file path="tests/Ai/MenuAfterApplyTest.php" role="test"/>
     <file path="tests/Ai/PageRedactionTest.php" role="test"/>
+    <file path="tests/Ask/AskTest.php" role="test"/>
     <file path="tests/Assertion/AssertionProposalTest.php" role="test"/>
     <file path="tests/Assertion/AssertionTest.php" role="test"/>
     <file path="tests/Command/WorkflowsDiffCommandTest.php" role="test"/>
     <file path="tests/Feedback/FeedbackTest.php" role="test"/>
     <file path="tests/Gate/GateBrowserTest.php" role="test"/>
     <file path="tests/Gate/GateTest.php" role="test"/>
+    <file path="tests/Glossary/GlossaryTest.php" role="test"/>
     <file path="tests/Impact/ImpactTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Angular/AngularAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
+    <file path="tests/Inspection/Adapter/Express/ExpressAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php" role="test"/>
+    <file path="tests/Inspection/AdapterSwitchTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/FreshnessResolverTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/FreshnessTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/GitClientTest.php" role="test"/>
     <file path="tests/Inspection/Graph/SourceFilesTest.php" role="test"/>
+    <file path="tests/Inspection/Node/NodeBridgeTest.php" role="test"/>
+    <file path="tests/Link/ProjectLinkTest.php" role="test"/>
     <file path="tests/Mcp/McpServerTest.php" role="test"/>
     <file path="tests/Performance/HookPerformanceTest.php" role="test"/>
     <file path="tests/Performance/ImpactPerformanceTest.php" role="test"/>
     <file path="tests/Project/GitHooksTest.php" role="test"/>
     <file path="tests/Project/ProjectFilesTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Rendering/Site/SiteBrowserTest.php" role="test"/>
+    <file path="tests/Rendering/Site/SiteExporterTest.php" role="test"/>
     <file path="tests/Retro/JournalTest.php" role="test"/>
     <file path="tests/Retro/RetroTest.php" role="test"/>
     <file path="tests/Review/Web/ReviewAppTest.php" role="test"/>
@@ -151,7 +162,11 @@
     <decision target="Jul6Art\DevTools\Command\GateCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="null === $files" file="src/Command/GateCommand.php" line="84" confidence="high"/>
     <decision target="Jul6Art\DevTools\Gate\Gate::steps" value="$steps" condition="!(null === $steps)" file="src/Gate/Gate.php" line="46" confidence="high"/>
     <decision target="Jul6Art\DevTools\Gate\Gate::steps" value="[new \Jul6Art\DevTools\Gate\FreshnessStep(), new \Jul6Art\DevTools\Gate\ScenariosStep(), new \Jul6Art\DevTools\Gate\VerificationStep(), new \Jul6Art\DevTools\Gate\AssertionsStep()]" condition="null === $steps" file="src/Gate/Gate.php" line="46" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::path" value="$directory-&gt;path('reports/inspect-' . $report-&gt;startedAt-&gt;format('Y-m-d-His') . '.md')" condition="!$options-&gt;dryRun &amp;&amp; isset($directory) &amp;&amp; is_dir($directory-&gt;path())" file="src/Inspection/InspectionPipeline.php" line="138" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::linkProblems" value="(new \Jul6Art\DevTools\Link\LinkCheck())-&gt;problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string =&gt; $workflow-&gt;id-&gt;value, $workflows))" condition="!($options-&gt;link)" file="src/Inspection/InspectionPipeline.php" line="351" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::linkProblems" value="[]" condition="$options-&gt;link" file="src/Inspection/InspectionPipeline.php" line="351" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::path" value="$directory-&gt;path('reports/inspect-' . $report-&gt;startedAt-&gt;format('Y-m-d-His') . '.md')" condition="!$options-&gt;dryRun &amp;&amp; isset($directory) &amp;&amp; is_dir($directory-&gt;path())" file="src/Inspection/InspectionPipeline.php" line="149" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::warnings" value="[...$report-&gt;warnings, ...$switches]" file="src/Inspection/InspectionPipeline.php" line="172" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::warnings" value="[...$report-&gt;warnings, ...$found-&gt;warnings, ...$buildWarnings]" file="src/Inspection/InspectionPipeline.php" line="556" confidence="high"/>
     <decision target="Jul6Art\DevTools\Scenario\Run\ScenarioResult::verdict" value="\Jul6Art\DevTools\Scenario\Run\Verdict::Error" condition="!(null === $message)" file="src/Scenario/Run/ScenarioResult.php" line="19" confidence="high"/>
     <decision target="Jul6Art\DevTools\Scenario\Run\ScenarioResult::verdict" value="\Jul6Art\DevTools\Scenario\Run\Verdict::worst(array_map(static fn(\Jul6Art\DevTools\Scenario\Run\StepResult $step): \Jul6Art\DevTools\Scenario\Run\Verdict =&gt; $step-&gt;verdict, $steps))" condition="null === $message" file="src/Scenario/Run/ScenarioResult.php" line="19" confidence="high"/>
     <decision target="element::textContent" value="$text" condition="null !== $text" file="src/Xml/DomBuilder.php" line="45" confidence="medium"/>
@@ -164,5 +179,6 @@
     <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="L'étape assertions exécute les assertions des règles actives (ADR-0027) ; le dernier passage suit la tâche en cours, ses échecs et les règles qui l'ont bloquée (ADR-0029). (added test tests/Assertion/AssertionProposalTest.php (+10))"/>
     <revision at="2026-10-20T22:39:07+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le code a été remis en forme (Rector, style), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Gate/Gate.php, src/Gate/XmlGateStore.php)"/>
     <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
+    <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="L'analyse de l'étape freshness signale les liens entre projets devenus faux (ADR-0038) ; l'index de recherche, un cache, n'entre jamais dans un changement jugé (ADR-0039). (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())-&gt;problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string =&gt; $workflow-&gt;id-&gt;value, $workflows)) (+12))"/>
   </history>
 </workflow>

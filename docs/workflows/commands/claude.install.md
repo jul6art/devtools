@@ -1,9 +1,9 @@
 # claude:install
-`command.claude.install` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.claude.install` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
-Installe ce que DevTools ajoute à un projet pour Claude Code : le skill qui rédige les pages (ADR-0011) quand rien d'autre n'est demandé, et à la demande les hooks qui donnent l'impact d'un fichier avant sa modification et lancent la gate en fin de tâche (ADR-0019, ADR-0023), le serveur MCP de .mcp.json (ADR-0018) et l'agent vérificateur (ADR-0024). Tout se fusionne avec la configuration de l'équipe et se committe ; un fichier que l'équipe a adapté n'est jamais écrasé sans --force.
+Installe ce que DevTools ajoute à un projet pour Claude Code : quand rien d'autre n'est demandé, les deux skills — celui qui rédige les pages (ADR-0011) et celui qui répond à une question à partir d'elles (ADR-0039) —, et à la demande les hooks qui donnent l'impact d'un fichier avant sa modification et lancent la gate en fin de tâche (ADR-0019, ADR-0023), le serveur MCP de .mcp.json (ADR-0018) et l'agent vérificateur (ADR-0024). Tout se fusionne avec la configuration de l'équipe et se committe ; un fichier que l'équipe a adapté n'est jamais écrasé sans --force.
 
 ## Trigger
 
@@ -107,7 +107,7 @@ flowchart TD
 
 ## Data
 
-Lit le skill et l'agent livrés ; écrit .claude/skills/, .claude/agents/, et fusionne .claude/settings.json et .mcp.json, lus en objets JSON pour qu'un objet vide reste un objet.
+Lit les skills et l'agent livrés ; écrit .claude/skills/devtools-inspect/, .claude/skills/devtools-ask/, .claude/agents/, et fusionne .claude/settings.json et .mcp.json, lus en objets JSON pour qu'un objet vide reste un objet.
 
 ## Cross-cutting mechanisms
 
@@ -134,3 +134,4 @@ Le hook Stop a un délai de 600 s : la gate peut rejouer des scénarios. Les dé
 | 2026-10-20 | 4979790 | S'étend au serveur MCP (--mcp), à l'agent vérificateur (--agents) et au hook Stop qui lance la gate ; un fichier adapté par l'équipe reste gardé sauf --force. (files changed: src/Command/McpServeCommand.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Installe un second skill, devtools-ask, qui répond à une question à partir des pages (ADR-0039). (added test tests/Ask/AskTest.php (+8)) |

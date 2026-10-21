@@ -1,5 +1,5 @@
 # claude:hook
-`command.claude.hook` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
+`command.claude.hook` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
 
 ## Summary
 
@@ -90,3 +90,5 @@ Le hook Stop peut durer : la gate relance l'analyse de `workflows:check` et rejo
 | 2026-10-20 | 58c02fb | PreToolUse donne aussi les règles actives du fichier (ADR-0026), et Stop inscrit au journal la tâche que la gate laisse finir (ADR-0029). (added test tests/Assertion/AssertionProposalTest.php (+10)) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le code a été remis en forme (Rector, style), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Claude/Hook/StopHandler.php, src/Gate/Gate.php, src/Gate/XmlGateStore.php, src/Retro/XmlJournalStore.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : la gate que lance Stop ne juge jamais l'index de recherche, et son analyse signale les liens entre projets devenus faux (ADR-0038, ADR-0039). La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |
+| 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/TrackingDocument.php) |

@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files-to-workflows xmlns="https://github.com/jul6art/devtools/schema/files-to-workflows/1" schema-version="1">
+  <file path="src/Ai/Api/AiRunReport.php">
+    <workflow ref="command.ai.run" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/AiRunner.php">
+    <workflow ref="command.ai.run" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/AnthropicClient.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/ApiFailed.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/Pricing.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/SecretScanner.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ai/Api/TaskRefused.php">
+    <workflow ref="command.ai.run" relation="file"/>
+  </file>
   <file path="src/Ai/ApplyResult.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Ai/DraftApplier.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Ai/GroupBrief.php">
@@ -17,6 +44,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Ai/PageBrief.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -26,6 +54,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Ai/PageDraft.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -35,9 +64,11 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Ai/PageDraftValidator.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Ai/XmlGroupBriefStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -47,6 +78,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Ai/XmlPageBriefStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -54,6 +86,52 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Ask/Answer.php">
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ask/PageSelector.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+  </file>
+  <file path="src/Ask/QuestionAnswerer.php">
+    <workflow ref="command.ask" relation="file"/>
+  </file>
+  <file path="src/Ask/SearchIndex.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Ask/SearchIndexBuilder.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Ask/SearchIndexStore.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Ask/SelectedPage.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+  </file>
+  <file path="src/Ask/Tokenizer.php">
+    <workflow ref="command.ask" relation="file"/>
   </file>
   <file path="src/Assertion/Assertion.php">
     <workflow ref="command.gate" relation="file"/>
@@ -66,6 +144,7 @@
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Assertion/AssertionDraftApplier.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Assertion/AssertionProposal.php">
@@ -126,6 +205,7 @@
     <workflow ref="command.claude.hook" relation="file"/>
   </file>
   <file path="src/Clock/Clock.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
@@ -142,9 +222,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Clock/SystemClock.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
@@ -161,7 +243,14 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Command/AiRunCommand.php">
+    <workflow ref="command.ai.run" relation="file"/>
+  </file>
+  <file path="src/Command/AskCommand.php">
+    <workflow ref="command.ask" relation="file"/>
   </file>
   <file path="src/Command/AssertionsProposeCommand.php">
     <workflow ref="command.assertions.propose" relation="file"/>
@@ -178,6 +267,9 @@
   </file>
   <file path="src/Command/ClaudeUninstallCommand.php">
     <workflow ref="command.claude.uninstall" relation="file"/>
+  </file>
+  <file path="src/Command/ExportSiteCommand.php">
+    <workflow ref="command.export.site" relation="file"/>
   </file>
   <file path="src/Command/FeedbackAddCommand.php">
     <workflow ref="command.feedback.add" relation="file"/>
@@ -243,6 +335,9 @@
     <workflow ref="command.verify.prepare" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
   </file>
+  <file path="src/Command/SelfUpdateCommand.php">
+    <workflow ref="command.self-update" relation="file"/>
+  </file>
   <file path="src/Command/StackDetectCommand.php">
     <workflow ref="command.stack.detect" relation="file"/>
   </file>
@@ -273,10 +368,15 @@
   <file path="src/Command/WorkflowsRejectCommand.php">
     <workflow ref="command.workflows.reject" relation="file"/>
   </file>
+  <file path="src/Command/WorkflowsRenameCommand.php">
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
   <file path="src/Command/WorkflowsReviewCommand.php">
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Config/Config.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -300,9 +400,12 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Config/ConfigReaderInterface.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -324,8 +427,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Config/FixtureSettings.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -347,8 +453,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Config/InvalidConfig.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.knowledge.list" relation="file"/>
     <workflow ref="command.knowledge.promote" relation="file"/>
@@ -364,9 +473,12 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Config/LoginSettings.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -388,8 +500,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Config/ScenarioSettings.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -411,8 +526,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Config/VisualSettings.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
@@ -434,8 +552,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Config/XmlConfigReader.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
@@ -460,6 +581,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Console/ChangeRenderer.php">
@@ -655,6 +777,72 @@
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.gate" relation="file"/>
   </file>
+  <file path="src/Glossary/Glossary.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Glossary/GlossaryBriefWriter.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Glossary/GlossaryCollector.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Glossary/GlossaryDraftApplier.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+  </file>
+  <file path="src/Glossary/GlossaryRenderer.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Glossary/Term.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Glossary/TermStatus.php">
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Glossary/XmlGlossaryStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
   <file path="src/Impact/Impact.php">
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.gate" relation="file"/>
@@ -709,12 +897,18 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
+  <file path="src/Inspection/Adapter/Angular/AngularAdapter.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php">
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Adapter/Claude/Discovery.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -733,6 +927,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Adapter/Claude/XmlDiscoveryBriefStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -741,7 +936,17 @@
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
+  <file path="src/Inspection/Adapter/Express/ExpressAdapter.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Inspection/Adapter/GenericPhp/GenericPhpAdapter.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Inspection/Adapter/Laravel/LaravelAdapter.php">
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -752,6 +957,14 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/AdapterResolver.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Inspection/AdapterSwitch.php">
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
@@ -855,6 +1068,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/GitState.php">
@@ -874,6 +1088,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Freshness/Reason.php">
@@ -888,6 +1103,11 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Inspection/Graph/BladeReferenceExtractor.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Graph/BuildResult.php">
     <workflow ref="command.workflows.check" relation="file"/>
@@ -942,6 +1162,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
+  <file path="src/Inspection/Graph/TestLocatorInterface.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
   <file path="src/Inspection/Graph/TwigReferenceExtractor.php">
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
@@ -983,9 +1208,12 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Confidence.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1011,6 +1239,7 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/DecisionPoint.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
@@ -1020,7 +1249,9 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Edge.php">
     <workflow ref="command.workflows.apply" relation="file"/>
@@ -1029,6 +1260,7 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/EntryPoint.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -1037,14 +1269,19 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/FileRef.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1074,14 +1311,18 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/FileRole.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1109,9 +1350,11 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/InspectionResult.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1121,11 +1364,14 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/InvalidModel.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1155,6 +1401,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Mechanism.php">
@@ -1166,12 +1413,17 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/NonEmpty.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1197,6 +1449,7 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/PackageRef.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
@@ -1206,7 +1459,9 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Serialization/EntryPointXml.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
@@ -1216,9 +1471,12 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Serialization/ModelXmlSerializer.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1240,9 +1498,12 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/StateMachine.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1267,6 +1528,7 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Transition.php">
     <workflow ref="command.workflows.apply" relation="file"/>
@@ -1275,6 +1537,7 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/Workflow.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1284,9 +1547,12 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowGroup.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1312,12 +1578,16 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowId.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1338,19 +1608,25 @@
     <workflow ref="command.stack.detect" relation="file"/>
     <workflow ref="command.verify.collect" relation="file"/>
     <workflow ref="command.verify.prepare" relation="file"/>
+    <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowIdAssigner.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowIdCollision.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1360,12 +1636,14 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowIdDeriver.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowSource.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -1373,13 +1651,18 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowType.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1407,13 +1690,17 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Model/WorkflowTypeRegistry.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1441,6 +1728,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Inspection/Progress/NullProgressReporter.php">
@@ -1455,6 +1743,128 @@
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Link/Call.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/EndpointMatcher.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/LinkCalculator.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/LinkCheck.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Link/LinkReport.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/LinkRole.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.assertions.propose" relation="file"/>
+    <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.feedback.add" relation="file"/>
+    <workflow ref="command.feedback.list" relation="file"/>
+    <workflow ref="command.feedback.resolve" relation="file"/>
+    <workflow ref="command.gate" relation="file"/>
+    <workflow ref="command.knowledge.amend" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.rules.activate" relation="file"/>
+    <workflow ref="command.rules.promote" relation="file"/>
+    <workflow ref="command.scenarios.generate" relation="file"/>
+    <workflow ref="command.scenarios.run" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.verify.prepare" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="src/Link/LinkSide.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/LinkedImpact.php">
+    <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+  </file>
+  <file path="src/Link/LinkedImpactResolver.php">
+    <workflow ref="command.workflows.impact" relation="file"/>
+  </file>
+  <file path="src/Link/LinkedProject.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
+    <workflow ref="command.assertions.propose" relation="file"/>
+    <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.feedback.add" relation="file"/>
+    <workflow ref="command.feedback.list" relation="file"/>
+    <workflow ref="command.feedback.resolve" relation="file"/>
+    <workflow ref="command.gate" relation="file"/>
+    <workflow ref="command.knowledge.amend" relation="file"/>
+    <workflow ref="command.knowledge.list" relation="file"/>
+    <workflow ref="command.knowledge.promote" relation="file"/>
+    <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.rules.activate" relation="file"/>
+    <workflow ref="command.rules.promote" relation="file"/>
+    <workflow ref="command.scenarios.generate" relation="file"/>
+    <workflow ref="command.scenarios.run" relation="file"/>
+    <workflow ref="command.stack.detect" relation="file"/>
+    <workflow ref="command.verify.prepare" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="src/Link/Links.php">
+    <workflow ref="command.knowledge.amend" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/ProjectLinker.php">
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/ProjectLinks.php">
+    <workflow ref="command.knowledge.amend" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/RelatedLinks.php">
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+  </file>
+  <file path="src/Link/XmlLinksStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
@@ -1478,11 +1888,14 @@
     <workflow ref="command.git.uninstall-hooks" relation="file"/>
   </file>
   <file path="src/Project/PathOutsideProject.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1512,6 +1925,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Project/ProjectFiles.php">
@@ -1528,11 +1942,14 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Project/ProjectRoot.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1562,7 +1979,17 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Release/GitHubReleases.php">
+    <workflow ref="command.self-update" relation="file"/>
+  </file>
+  <file path="src/Release/SelfUpdater.php">
+    <workflow ref="command.self-update" relation="file"/>
+  </file>
+  <file path="src/Release/UpdateRefused.php">
+    <workflow ref="command.self-update" relation="file"/>
   </file>
   <file path="src/Rendering/GraphRenderer.php">
     <workflow ref="command.workflows.accept" relation="file"/>
@@ -1573,6 +2000,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/GroupPageRenderer.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1592,7 +2020,6 @@
   </file>
   <file path="src/Rendering/Labels.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
-    <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
@@ -1606,6 +2033,11 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Rendering/MenuRefresher.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.workflows.apply" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Rendering/MenuRenderer.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
@@ -1624,6 +2056,8 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Rendering/PageParser.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1633,6 +2067,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/PageRenderer.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1642,6 +2077,8 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/PageSection.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1651,6 +2088,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/ParsedPage.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1660,6 +2098,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Rendering/RenderingContext.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -1668,12 +2107,21 @@
     <workflow ref="command.workflows.reject" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
+  <file path="src/Rendering/Site/MarkdownRenderer.php">
+    <workflow ref="command.export.site" relation="file"/>
+  </file>
+  <file path="src/Rendering/Site/SiteExporter.php">
+    <workflow ref="command.export.site" relation="file"/>
+  </file>
   <file path="src/Resources.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -1701,6 +2149,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Retro/Attribution.php">
@@ -1770,6 +2219,7 @@
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Rule/RuleDraftApplier.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Rule/RuleIndex.php">
@@ -1997,6 +2447,7 @@
     <workflow ref="command.verify.prepare" relation="file"/>
   </file>
   <file path="src/Scenario/ScenarioDraftApplier.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
   </file>
   <file path="src/Scenario/ScenarioGeneration.php">
@@ -2128,6 +2579,7 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/DepositOutcome.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.knowledge.list" relation="file"/>
     <workflow ref="command.knowledge.promote" relation="file"/>
@@ -2148,6 +2600,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/KnowledgeCanvas.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
@@ -2159,6 +2612,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/KnowledgeLibrary.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.knowledge.list" relation="file"/>
@@ -2194,6 +2648,7 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
@@ -2221,6 +2676,7 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Stack/StackDocument.php">
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -2236,6 +2692,7 @@
   </file>
   <file path="src/Stack/StackProfile.php">
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -2251,7 +2708,9 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Stack/XmlStackStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -2267,11 +2726,14 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/AtomicFileWriter.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2299,13 +2761,17 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/DevToolsDirectory.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2333,6 +2799,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/FileLink.php">
@@ -2394,6 +2861,7 @@
     <workflow ref="command.workflows.inspect" relation="file"/>
   </file>
   <file path="src/Tracking/Generation.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
     <workflow ref="command.scenarios.generate" relation="file"/>
@@ -2402,14 +2870,19 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/GenerationMode.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2437,12 +2910,16 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/Index.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2470,13 +2947,17 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/IndexEntry.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2502,11 +2983,15 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/IndexGroup.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2532,11 +3017,15 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/IndexReaderInterface.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2562,11 +3051,15 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/IndexWriterInterface.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2592,6 +3085,7 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/Initializer.php">
     <workflow ref="command.init" relation="file"/>
@@ -2603,9 +3097,12 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/ReadsDocumentFiles.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2631,8 +3128,39 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="src/Tracking/Rename/RenameDetector.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
+  </file>
+  <file path="src/Tracking/Rename/RenamePlan.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="src/Tracking/Rename/RenameRefused.php">
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="src/Tracking/Rename/WorkflowRenamer.php">
+    <workflow ref="command.workflows.accept" relation="file"/>
+    <workflow ref="command.workflows.check" relation="file"/>
+    <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+    <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/Revision.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
@@ -2642,11 +3170,14 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/TrackedFile.php">
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
@@ -2656,11 +3187,14 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/TrackingDocument.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
@@ -2676,6 +3210,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/TrackingReaderInterface.php">
@@ -2686,13 +3221,18 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/TrackingStatus.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2720,6 +3260,7 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/TrackingWriterInterface.php">
@@ -2730,7 +3271,9 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/VcsState.php">
     <workflow ref="command.knowledge.amend" relation="file"/>
@@ -2744,9 +3287,12 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/VcsXml.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2772,6 +3318,7 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Tracking/XmlFilesToWorkflowsStore.php">
     <workflow ref="command.claude.hook" relation="file"/>
@@ -2791,10 +3338,13 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/XmlIndexStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2822,9 +3372,12 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Tracking/XmlTrackingStore.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.gate" relation="file"/>
@@ -2838,8 +3391,10 @@
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
     <workflow ref="command.workflows.diff" relation="file"/>
+    <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Verification/Finding.php">
@@ -2873,12 +3428,14 @@
     <workflow ref="command.verify.prepare" relation="file"/>
   </file>
   <file path="src/Version.php">
+    <workflow ref="command.ai.run" relation="file"/>
     <workflow ref="command.claude.install" relation="file"/>
     <workflow ref="command.claude.uninstall" relation="file"/>
     <workflow ref="command.knowledge.amend" relation="file"/>
     <workflow ref="command.knowledge.list" relation="file"/>
     <workflow ref="command.knowledge.promote" relation="file"/>
     <workflow ref="command.mcp.serve" relation="file"/>
+    <workflow ref="command.self-update" relation="file"/>
     <workflow ref="command.workflows.accept" relation="file"/>
     <workflow ref="command.workflows.apply" relation="file"/>
     <workflow ref="command.workflows.check" relation="file"/>
@@ -2888,9 +3445,12 @@
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Xml/DomBuilder.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2916,11 +3476,15 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
   </file>
   <file path="src/Xml/InvalidXml.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2946,12 +3510,16 @@
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
     <workflow ref="command.workflows.reject" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
     <workflow ref="command.workflows.review" relation="file"/>
   </file>
   <file path="src/Xml/SafeXmlLoader.php">
+    <workflow ref="command.ai.run" relation="file"/>
+    <workflow ref="command.ask" relation="file"/>
     <workflow ref="command.assertions.propose" relation="file"/>
     <workflow ref="command.baselines.accept" relation="file"/>
     <workflow ref="command.claude.hook" relation="file"/>
+    <workflow ref="command.export.site" relation="file"/>
     <workflow ref="command.feedback.add" relation="file"/>
     <workflow ref="command.feedback.list" relation="file"/>
     <workflow ref="command.feedback.resolve" relation="file"/>
@@ -2977,6 +3545,14 @@
     <workflow ref="command.workflows.diff" relation="file"/>
     <workflow ref="command.workflows.impact" relation="file"/>
     <workflow ref="command.workflows.inspect" relation="file"/>
+    <workflow ref="command.workflows.rename" relation="file"/>
+  </file>
+  <file path="tests/Ai/AiRunTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
   </file>
   <file path="tests/Ai/ClaudeInstallTest.php">
     <workflow ref="command.claude.install" relation="test"/>
@@ -2984,18 +3560,23 @@
     <workflow ref="command.workflows.apply" relation="test"/>
   </file>
   <file path="tests/Ai/DemonstrationTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.rules.activate" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Ai/MenuAfterApplyTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3023,13 +3604,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Ai/PageRedactionTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3057,13 +3642,53 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Ask/AskTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Assertion/AssertionProposalTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3091,13 +3716,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Assertion/AssertionTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3125,6 +3754,7 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Bridge/PHPStan/WorkflowDriftTest.php">
     <workflow ref="command.workflows.check" relation="test"/>
@@ -3165,6 +3795,8 @@
     <workflow ref="command.workflows.inspect" relation="test"/>
   </file>
   <file path="tests/Config/XmlConfigReaderTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
@@ -3179,6 +3811,7 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Console/MemoryLimitTest.php">
     <workflow ref="command.workflows.inspect" relation="test"/>
@@ -3190,18 +3823,23 @@
     <workflow ref="command.workflows.inspect" relation="test"/>
   </file>
   <file path="tests/EndToEnd/InspectCommandEndToEndTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.rules.activate" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Feedback/FeedbackTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3229,13 +3867,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Gate/GateBrowserTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3263,13 +3905,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Gate/GateTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3297,13 +3943,55 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Glossary/GlossaryTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Impact/ImpactTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3331,13 +4019,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
-  <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php">
+  <file path="tests/Inspection/Adapter/Angular/AngularAdapterTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3361,52 +4053,58 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
-    <workflow ref="command.workflows.check" relation="test"/>
-    <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
-  </file>
-  <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php">
-    <workflow ref="command.assertions.propose" relation="test"/>
-    <workflow ref="command.baselines.accept" relation="test"/>
-    <workflow ref="command.claude.hook" relation="test"/>
-    <workflow ref="command.claude.install" relation="test"/>
-    <workflow ref="command.claude.uninstall" relation="test"/>
-    <workflow ref="command.feedback.add" relation="test"/>
-    <workflow ref="command.feedback.list" relation="test"/>
-    <workflow ref="command.feedback.resolve" relation="test"/>
-    <workflow ref="command.gate" relation="test"/>
-    <workflow ref="command.git.install-hooks" relation="test"/>
-    <workflow ref="command.git.uninstall-hooks" relation="test"/>
-    <workflow ref="command.init" relation="test"/>
-    <workflow ref="command.knowledge.amend" relation="test"/>
-    <workflow ref="command.knowledge.list" relation="test"/>
-    <workflow ref="command.knowledge.promote" relation="test"/>
-    <workflow ref="command.mcp.serve" relation="test"/>
-    <workflow ref="command.retro" relation="test"/>
-    <workflow ref="command.review" relation="test"/>
-    <workflow ref="command.rules.activate" relation="test"/>
-    <workflow ref="command.rules.archive" relation="test"/>
-    <workflow ref="command.rules.list" relation="test"/>
-    <workflow ref="command.rules.promote" relation="test"/>
-    <workflow ref="command.scenarios.generate" relation="test"/>
-    <workflow ref="command.scenarios.run" relation="test"/>
-    <workflow ref="command.stack.detect" relation="test"/>
-    <workflow ref="command.verify.collect" relation="test"/>
-    <workflow ref="command.verify.prepare" relation="test"/>
-    <workflow ref="command.workflows.apply" relation="test"/>
-    <workflow ref="command.workflows.check" relation="test"/>
-    <workflow ref="command.workflows.diff" relation="test"/>
-    <workflow ref="command.workflows.impact" relation="test"/>
-    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
-  <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php">
+  <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/Express/ExpressAdapterTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3431,6 +4129,91 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/Laravel/LaravelAdapterTest.php">
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/Laravel/RealArtisanTest.php">
+    <workflow ref="command.knowledge.amend" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Inspection/Adapter/Symfony/RealConsoleTest.php">
     <workflow ref="command.knowledge.amend" relation="test"/>
@@ -3439,19 +4222,61 @@
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
-  <file path="tests/Inspection/Diff/ChangeGroupTest.php">
-    <workflow ref="command.workflows.review" relation="test"/>
-  </file>
-  <file path="tests/Inspection/Diff/WorkflowDifferTest.php">
-    <workflow ref="command.scenarios.generate" relation="test"/>
-    <workflow ref="command.workflows.review" relation="test"/>
-  </file>
-  <file path="tests/Inspection/Freshness/FreshnessResolverTest.php">
+  <file path="tests/Inspection/AdapterSwitchTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Diff/ChangeGroupTest.php">
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Diff/WorkflowDifferTest.php">
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Freshness/FreshnessResolverTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3477,9 +4302,11 @@
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Freshness/FreshnessTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.gate" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
@@ -3490,13 +4317,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Inspection/Freshness/GitClientTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3522,6 +4353,8 @@
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/DecisionExtractorTest.php">
     <workflow ref="command.workflows.review" relation="test"/>
@@ -3531,14 +4364,18 @@
   </file>
   <file path="tests/Inspection/Graph/MechanismAttachmentTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/SourceFilesTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3563,22 +4400,28 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Graph/WorkflowBuilderTest.php">
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/EntryPointAndValueObjectsTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/FileRefTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/Serialization/ModelXmlSerializerTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.retro" relation="test"/>
@@ -3587,32 +4430,77 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/WorkflowGroupTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/WorkflowIdAssignerTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/WorkflowIdDeriverTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/WorkflowIdTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Inspection/Model/WorkflowTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.rules.activate" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Inspection/Node/NodeBridgeTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Inspection/Pipeline/InspectionPipelineTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.rules.activate" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
@@ -3621,17 +4509,57 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Link/ProjectLinkTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Mcp/McpInstallTest.php">
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
   </file>
   <file path="tests/Mcp/McpServerTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3651,6 +4579,7 @@
     <workflow ref="command.rules.promote" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.self-update" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
@@ -3659,13 +4588,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Performance/HookPerformanceTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3690,13 +4623,18 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Performance/ImpactPerformanceTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3721,6 +4659,8 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Performance/RescanPerformanceTest.php">
     <workflow ref="command.workflows.check" relation="test"/>
@@ -3731,11 +4671,14 @@
     <workflow ref="command.scenarios.run" relation="test"/>
   </file>
   <file path="tests/Project/GitHooksTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3760,13 +4703,18 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Project/ProjectFilesTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3792,13 +4740,18 @@
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Project/ProjectRootTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3823,28 +4776,111 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
+  </file>
+  <file path="tests/Release/SelfUpdateTest.php">
+    <workflow ref="command.self-update" relation="test"/>
   </file>
   <file path="tests/Rendering/GroupPageRendererTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Rendering/MenuRendererTest.php">
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Rendering/PageRendererTest.php">
     <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
-  <file path="tests/Retro/JournalTest.php">
+  <file path="tests/Rendering/Site/SiteBrowserTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Rendering/Site/SiteExporterTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
+    <workflow ref="command.feedback.add" relation="test"/>
+    <workflow ref="command.feedback.list" relation="test"/>
+    <workflow ref="command.feedback.resolve" relation="test"/>
+    <workflow ref="command.gate" relation="test"/>
+    <workflow ref="command.git.install-hooks" relation="test"/>
+    <workflow ref="command.git.uninstall-hooks" relation="test"/>
+    <workflow ref="command.init" relation="test"/>
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.knowledge.list" relation="test"/>
+    <workflow ref="command.knowledge.promote" relation="test"/>
+    <workflow ref="command.mcp.serve" relation="test"/>
+    <workflow ref="command.retro" relation="test"/>
+    <workflow ref="command.review" relation="test"/>
+    <workflow ref="command.rules.activate" relation="test"/>
+    <workflow ref="command.rules.archive" relation="test"/>
+    <workflow ref="command.rules.list" relation="test"/>
+    <workflow ref="command.rules.promote" relation="test"/>
+    <workflow ref="command.scenarios.generate" relation="test"/>
+    <workflow ref="command.scenarios.run" relation="test"/>
+    <workflow ref="command.stack.detect" relation="test"/>
+    <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.verify.prepare" relation="test"/>
+    <workflow ref="command.workflows.apply" relation="test"/>
+    <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Retro/JournalTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
+    <workflow ref="command.assertions.propose" relation="test"/>
+    <workflow ref="command.baselines.accept" relation="test"/>
+    <workflow ref="command.claude.hook" relation="test"/>
+    <workflow ref="command.claude.install" relation="test"/>
+    <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3872,13 +4908,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Retro/RetroTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3906,6 +4946,7 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Review/ChangeReviewTest.php">
     <workflow ref="command.workflows.accept" relation="test"/>
@@ -3916,11 +4957,14 @@
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Review/Web/ReviewAppTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3948,13 +4992,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Review/Web/ReviewBrowserTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -3982,13 +5030,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Review/Web/ReviewServerTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4016,13 +5068,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Rule/RuleTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4050,13 +5106,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Scenario/Runner/PantherRunnerTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4081,8 +5141,12 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Scenario/Runner/RunModelTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.knowledge.list" relation="test"/>
@@ -4095,6 +5159,7 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Scenario/Runner/ScenariosRunCommandTest.php">
     <workflow ref="command.scenarios.run" relation="test"/>
@@ -4105,13 +5170,17 @@
     <workflow ref="command.scenarios.generate" relation="test"/>
     <workflow ref="command.scenarios.run" relation="test"/>
     <workflow ref="command.verify.collect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Scenario/ScenarioGenerationTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4139,6 +5208,7 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Scenario/Visual/BaselinesAcceptCommandTest.php">
     <workflow ref="command.baselines.accept" relation="test"/>
@@ -4148,11 +5218,14 @@
     <workflow ref="command.scenarios.run" relation="test"/>
   </file>
   <file path="tests/Stack/Knowledge/KnowledgeAmendTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4180,13 +5253,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4214,13 +5291,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Stack/Knowledge/KnowledgeTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4248,13 +5329,17 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Stack/StackDetectorTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4279,6 +5364,8 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Tracking/AtomicFileWriterTest.php">
     <workflow ref="command.claude.install" relation="test"/>
@@ -4287,11 +5374,14 @@
     <workflow ref="command.retro" relation="test"/>
   </file>
   <file path="tests/Tracking/DevToolsDirectoryTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4316,13 +5406,18 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Tracking/InitializerTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4347,8 +5442,17 @@
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.apply" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
+  </file>
+  <file path="tests/Tracking/Rename/WorkflowRenameTest.php">
+    <workflow ref="command.workflows.check" relation="test"/>
+    <workflow ref="command.workflows.diff" relation="test"/>
+    <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
   <file path="tests/Tracking/XmlIndexStoresTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.retro" relation="test"/>
@@ -4357,9 +5461,11 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Tracking/XmlTrackingStoreTest.php">
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.knowledge.amend" relation="test"/>
     <workflow ref="command.retro" relation="test"/>
@@ -4368,14 +5474,18 @@
     <workflow ref="command.verify.collect" relation="test"/>
     <workflow ref="command.verify.prepare" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
     <workflow ref="command.workflows.review" relation="test"/>
   </file>
   <file path="tests/Verification/VerificationTest.php">
+    <workflow ref="command.ai.run" relation="test"/>
+    <workflow ref="command.ask" relation="test"/>
     <workflow ref="command.assertions.propose" relation="test"/>
     <workflow ref="command.baselines.accept" relation="test"/>
     <workflow ref="command.claude.hook" relation="test"/>
     <workflow ref="command.claude.install" relation="test"/>
     <workflow ref="command.claude.uninstall" relation="test"/>
+    <workflow ref="command.export.site" relation="test"/>
     <workflow ref="command.feedback.add" relation="test"/>
     <workflow ref="command.feedback.list" relation="test"/>
     <workflow ref="command.feedback.resolve" relation="test"/>
@@ -4403,5 +5513,6 @@
     <workflow ref="command.workflows.diff" relation="test"/>
     <workflow ref="command.workflows.impact" relation="test"/>
     <workflow ref="command.workflows.inspect" relation="test"/>
+    <workflow ref="command.workflows.rename" relation="test"/>
   </file>
 </files-to-workflows>

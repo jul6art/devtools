@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.self-update" type="commands" schema-version="1">
+  <title>self-update</title>
+  <generated at="2026-10-21T07:25:33+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <entrypoints>
+    <entrypoint kind="command" name="self-update" role="main">
+      <declared-in path="src/Command/SelfUpdateCommand.php" role="other"/>
+    </entrypoint>
+  </entrypoints>
+  <files>
+    <file path="src/Command/SelfUpdateCommand.php" role="other" sha256="b4c6bc3047be439352298474b87fe359890da35fafc5bd8016ab18b930e4ee00"/>
+    <file path="src/Release/GitHubReleases.php" role="other" sha256="7c5d0eb8da9b8046df6ec3c0c4cadbe0d170226943eff338b3b7353e02224c84"/>
+    <file path="src/Release/SelfUpdater.php" role="other" sha256="6a920497222c897ade93343575dcf071224afbb72600d3ef686c70ea438d869b"/>
+    <file path="src/Release/UpdateRefused.php" role="other" sha256="2302bb925409d78a502352740116b9419b61f5c0b86fe999082a06eb1463cf64"/>
+    <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
+  </files>
+  <tests>
+    <file path="tests/Mcp/McpServerTest.php" role="test"/>
+    <file path="tests/Release/SelfUpdateTest.php" role="test"/>
+  </tests>
+  <packages>
+    <package name="symfony/console" version="8.1.7"/>
+    <package name="symfony/process" version="8.1.9"/>
+  </packages>
+  <decisions>
+    <decision target="Jul6Art\DevTools\Command\SelfUpdateCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="'' === $phar" file="src/Command/SelfUpdateCommand.php" line="40" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\SelfUpdateCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" file="src/Command/SelfUpdateCommand.php" line="48" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\SelfUpdateCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/SelfUpdateCommand.php" line="57" confidence="high"/>
+  </decisions>
+  <confidence>high</confidence>
+  <producer>native:generic-php</producer>
+  <status>fresh</status>
+  <history>
+    <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="rédaction initiale"/>
+  </history>
+</workflow>

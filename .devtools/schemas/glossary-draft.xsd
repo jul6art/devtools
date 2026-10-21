@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What Claude answers to a glossary brief (ADR-0037): .devtools/pending/glossary.draft.xml. One or two sentences a
+    term, the synonyms the code and the pages use for it, and the label the users read when translations reveal it.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/glossary-draft/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/glossary-draft/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="glossary-draft">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="term" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="definition" type="t:nonEmpty"/>
+                            <xs:element name="label" type="t:nonEmpty" minOccurs="0"/>
+                            <xs:element name="synonym" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required" fixed="1"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

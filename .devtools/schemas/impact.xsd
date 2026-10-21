@@ -43,6 +43,25 @@
                         <xs:attribute name="path" type="t:nonEmpty" use="required"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- With the linked option (ADR-0038): a workflow of a linked project the change reaches. -->
+                <xs:element name="linked" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="project" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="relation" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="calls"/>
+                                    <xs:enumeration value="uses"/>
+                                    <xs:enumeration value="answers"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="via" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="endpoint" type="t:nonEmpty"/>
+                        <xs:attribute name="page" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
         </xs:complexType>
