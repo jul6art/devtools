@@ -9,6 +9,7 @@ use Jul6Art\DevTools\Command\BaselinesAcceptCommand;
 use Jul6Art\DevTools\Command\ClaudeHookCommand;
 use Jul6Art\DevTools\Command\ClaudeInstallCommand;
 use Jul6Art\DevTools\Command\ClaudeUninstallCommand;
+use Jul6Art\DevTools\Command\ExportSiteCommand;
 use Jul6Art\DevTools\Command\FeedbackAddCommand;
 use Jul6Art\DevTools\Command\FeedbackListCommand;
 use Jul6Art\DevTools\Command\FeedbackResolveCommand;
@@ -28,6 +29,7 @@ use Jul6Art\DevTools\Command\RulesListCommand;
 use Jul6Art\DevTools\Command\RulesPromoteCommand;
 use Jul6Art\DevTools\Command\ScenariosGenerateCommand;
 use Jul6Art\DevTools\Command\ScenariosRunCommand;
+use Jul6Art\DevTools\Command\SelfUpdateCommand;
 use Jul6Art\DevTools\Command\StackDetectCommand;
 use Jul6Art\DevTools\Command\VerifyCollectCommand;
 use Jul6Art\DevTools\Command\VerifyPrepareCommand;
@@ -116,6 +118,8 @@ final class Application extends BaseApplication
             new KnowledgeListCommand(),
             new KnowledgePromoteCommand(),
             new KnowledgeAmendCommand(),
+            new ExportSiteCommand(),
+            new SelfUpdateCommand(),
         ]);
 
         if ($this->optional[McpServeCommand::NAME][0]) {

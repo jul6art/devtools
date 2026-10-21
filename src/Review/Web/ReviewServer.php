@@ -43,7 +43,7 @@ final class ReviewServer
     public static function process(DevToolsDirectory $directory, int $port, string $token, ?string $run = null): Process
     {
         return new Process(
-            [\PHP_BINARY, '-S', self::HOST.':'.$port, Resources::path('review/router.php')],
+            [\PHP_BINARY, '-S', self::HOST.':'.$port, Resources::file('review/router.php')],
             $directory->root->path,
             [self::PROJECT => $directory->root->path, self::TOKEN => $token, self::RUN => $run ?? '', self::AUTOLOAD => self::autoload()],
             timeout: null,

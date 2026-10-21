@@ -7,7 +7,7 @@ moment they update. Only the current major line gets one.
 
 | Version | Supported |
 | --- | --- |
-| `1.x` | ✅ |
+| `3.x` | ✅ |
 | any older tag or fork | ❌ |
 
 Support means security fixes on the latest release of that line — upgrade to it before reporting, in
@@ -16,8 +16,9 @@ case the problem is already gone.
 ## What is in scope
 
 DevTools is a development tool, but it reads a whole codebase, runs git on it, parses files it did
-not write, writes files that get committed, and sends source code to a language model. Each of those
-is an attack surface:
+not write, writes files that get committed, runs the analysed project's own console and compiler, serves
+local pages, hooks into Claude Code, and can send source code to a language model. Each of those is an
+attack surface:
 
 * **Source code or secrets leaving the machine unintended** — a file the configuration excludes, an
   `.env*` file, a key, a token or a credential reaching a prompt sent to Claude, a report, or a log.
@@ -35,6 +36,19 @@ is an attack surface:
   must not be able to steer DevTools.
 * **Over-exposure through the MCP server** — a tool that reads outside the project root, or a server
   reachable by something other than the local Claude Code session.
+* **The project's own tools, run by DevTools** — the Symfony console, Laravel's Artisan, Node with the
+  project's TypeScript (ADR-0007, 0030, 0031): a configured command (`<symfony console>`, `<laravel
+  artisan>`, `<node binary>`) reaching a shell instead of being split into arguments, or the Node bridge
+  reading a file outside the project root, whatever an import says.
+* **The Claude Code hooks and the gate** — a hook that blocks or injects on input it should refuse, a
+  `Stop` hook that a crafted change can make pass, a rule or an assertion from the repository executed
+  as more than the pattern, selector or tool command it declares.
+* **The local servers** — the review page (`devtools review`) answering anything but `127.0.0.1` and its
+  one-time token, writing outside `.devtools/feedback/` and `.devtools/baselines/`, or executing the
+  captured page it shows; the scenario runner reaching beyond the base URL it was given.
+* **The distribution** — `self-update` installing a phar whose SHA-256 or GitHub provenance attestation
+  does not hold, the phar or the Docker image carrying files the repository does not, the exported site
+  (`export:site`) running a script from a page's content or fetching anything over the network.
 * **A freshness check that fails open** — a changed file reported as unchanged, so a stale page is
   trusted as current and the gate built on it lets a regression through.
 

@@ -41,3 +41,6 @@
 # JavaScript fixtures install their own dependencies too (ADR-0031): only their lock files are committed.
 /tests/Fixtures/projects/*/node_modules/
 /tests/Fixtures/projects/*/*/node_modules/
+
+# The phar `composer phar` builds and the site `export:site` writes by default (ADR-0034).
+/build/

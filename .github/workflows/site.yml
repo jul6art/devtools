@@ -1,0 +1,44 @@
+name: Documentation site
+
+on:
+    push:
+        branches: [master]
+        paths: ['.devtools/**', 'docs/workflows/**']
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+# ADR-0034: this repository's own documentation, exported by `devtools export:site` and published on
+# GitHub Pages. Actions stay DISABLED between monthly passes, like ci.yml.
+
+jobs:
+    site:
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.5'
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Install
+              run: composer install --no-dev --no-interaction --no-progress
+
+            - name: Export
+              run: bin/devtools export:site --output=build/site
+
+            - uses: actions/upload-pages-artifact@v3
+              with:
+                  path: build/site
+
+            - id: deployment
+              uses: actions/deploy-pages@v4

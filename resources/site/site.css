@@ -1,0 +1,21 @@
+/* DevTools — the exported documentation (ADR-0034). No font, no image, nothing fetched. */
+:root { --ink: #1f2328; --muted: #59636e; --line: #d1d9e0; --soft: #f6f8fa; --accent: #0969da; }
+@media (prefers-color-scheme: dark) { :root { --ink: #e6edf3; --muted: #9198a1; --line: #3d444d; --soft: #151b23; --accent: #4493f8; } body { background: #0d1117; } }
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
+header { position: sticky; top: 0; display: flex; gap: 16px; align-items: center; padding: 10px 24px; border-bottom: 1px solid var(--line); background: var(--soft); }
+header > a { font-weight: 600; color: var(--ink); text-decoration: none; }
+#search { flex: 1; max-width: 420px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--ink); }
+#results { position: absolute; top: 48px; left: 24px; right: 24px; max-width: 720px; max-height: 60vh; overflow: auto; margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); }
+#results li a { display: block; padding: 8px 12px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+#results li a small { display: block; color: var(--muted); }
+main { max-width: 960px; margin: 0 auto; padding: 16px 24px 48px; }
+a { color: var(--accent); }
+code { padding: 1px 4px; border-radius: 4px; background: var(--soft); font-size: 90%; }
+pre { overflow: auto; padding: 12px; border-radius: 6px; background: var(--soft); }
+pre code { padding: 0; background: none; }
+pre.mermaid { background: none; text-align: center; }
+table { border-collapse: collapse; margin: 12px 0; }
+th, td { padding: 6px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+blockquote { margin: 0; padding: 0 16px; border-left: 4px solid var(--line); color: var(--muted); }
+footer { padding: 16px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }

@@ -1,6 +1,6 @@
 # ADR-0034 — Publication open source, phar, image Docker et site de documentation
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16 ; phase 3 lancée par jul6art le 2026-10-21)
 - **Décideurs** : jul6art
 - **Specs** : § 2 (« potentiellement open source »), § 4.8 (export statique), § 9 (phase 3), § 12 question 5
 
@@ -54,13 +54,32 @@ Homebrew, apt, npm ; hébergement du site ailleurs que GitHub Pages ; télémét
 ## Critères d'acceptation
 
 - [ ] Phar construit en CI ; `devtools.phar workflows:inspect` sur `symfony-minimal` = même sortie
-      qu'en Composer
-- [ ] `self-update` refuse un binaire dont la somme ne correspond pas (test avec un faux serveur)
-- [ ] Image Docker : inspection de `angular-minimal` monté, sortie identique
-- [ ] `export:site` : site fonctionnel hors ligne (aucune requête réseau, vérifié par test navigateur
-      Panther réseau coupé)
-- [ ] Checklist de publication cochée ; site publié
-- [ ] README : installation phar, Docker, export
+      qu'en Composer *(même sortie vérifiée — `DistributionTest`, Box 4.7, phar de 2 Mo ; le workflow
+      `release.yml` est écrit mais **pas encore joué** : les Actions sont coupées hors du passage mensuel)*
+- [x] `self-update` refuse un binaire dont la somme ne correspond pas (test avec un faux serveur)
+      *(et une attestation que la CLI GitHub ne vérifie pas, ou l'absence de cette CLI)*
+- [x] Image Docker : inspection de `angular-minimal` monté, sortie identique *(construite en local depuis
+      le phar, 198 Mo ; publiée sur ghcr.io par `release.yml`, pas encore joué)*
+- [x] `export:site` : site fonctionnel hors ligne (aucune requête réseau, vérifié par test navigateur
+      Panther réseau coupé) *(`SiteBrowserTest` : ouvert depuis le disque, diagrammes dessinés, recherche,
+      aucune ressource hors du site)*
+- [ ] Checklist de publication cochée ; site publié *(`SECURITY.md` à jour des surfaces des phases 1 à 3,
+      Packagist enregistré ; restent : CI réactivée et verte, signalement privé activé, GitHub Pages
+      activé et `site.yml` joué — tous demandent une poussée et l'accord de jul6art)*
+- [x] README : installation phar, Docker, export
+
+## Écarts assumés à la livraison
+
+- **`self-update` exige la CLI GitHub** (`gh attestation verify`) pour vérifier l'attestation : sans elle, il
+  refuse et dit comment mettre à jour à la main. C'est, avec le client de l'ADR-0035, la seule classe qui
+  ouvre une connexion ; le test d'architecture de l'ADR-0002 les nomme.
+- **Le phar n'emporte pas le bridge Symfony** (`src/Bridge`, qui exige le kernel) ; le script du pont Node et
+  le routeur de la page de revue en sont recopiés dans le répertoire temporaire, Node et `php -S` ne lisant
+  pas `phar://`.
+- **Mermaid 11.12.1** est embarqué dans `resources/site/mermaid/` avec sa licence MIT ; le site n'utilise
+  aucune police ni image.
+- **Un répertoire de sortie que DevTools n'a pas écrit n'est jamais vidé** : un marqueur `.devtools-site`
+  désigne le sien.
 
 ## Conséquences
 

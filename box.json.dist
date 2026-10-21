@@ -1,0 +1,19 @@
+{
+    "$schema": "https://raw.githubusercontent.com/box-project/box/main/res/schema.json",
+    "main": "bin/devtools",
+    "output": "build/devtools.phar",
+    "directories": [
+        "src",
+        "resources",
+        "vendor"
+    ],
+    "files": [
+        "LICENSE",
+        "composer.json"
+    ],
+    "blacklist": [
+        "src/Bridge"
+    ],
+    "compression": "GZ",
+    "check-requirements": false
+}

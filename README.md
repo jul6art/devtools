@@ -63,6 +63,35 @@ devtools list
 Pass the project to analyse as an argument, or run it from the project root. The analysed project does
 not need PHP: a Node, Angular or Go codebase is inspected the same way.
 
+### Without Composer — the phar
+
+Every release carries `devtools.phar`, its SHA-256 and a provenance attestation of the GitHub workflow that
+built it:
+
+```shell
+curl -LO https://github.com/jul6art/devtools/releases/latest/download/devtools.phar
+gh attestation verify devtools.phar --repo jul6art/devtools   # built by this repository's CI
+chmod +x devtools.phar && mv devtools.phar /usr/local/bin/devtools
+devtools self-update                                          # later: the latest release, verified
+```
+
+`self-update` replaces the phar only once the download matches its published SHA-256 **and** the GitHub
+CLI verified its attestation — without `gh`, it refuses and says how to update by hand. It is the only
+command of DevTools, with `ai:run` (*Writing in CI*), that opens a connection. The commands that need a
+package DevTools only suggests — `mcp:serve`, `scenarios:run` — are absent from the phar and say which
+Composer installation brings them.
+
+### Without PHP — the Docker image
+
+PHP, git and Node, the project mounted:
+
+```shell
+docker run --rm -v "$PWD:/project" ghcr.io/jul6art/devtools:3 workflows:inspect --no-ai
+```
+
+The image runs the release's phar; Node reads an Angular or Express project with the TypeScript of its own
+`node_modules`.
+
 ### Inside a Symfony project
 
 ```shell
@@ -161,6 +190,9 @@ Usage
 | | `devtools workflows:inspect --force` | rewrites every page's facts, whatever the freshness says | every page |
 | | `devtools knowledge:list` / `knowledge:promote` | the stack knowledge shared between projects | the library |
 | | `devtools knowledge:amend <key>` | asks Claude to complete a sheet the project showed to be incomplete | a brief |
+| | `devtools workflows:inspect --switch-adapter` | a stack Claude documented moves to the native adapter that now reads it | `stack.xml`, pages |
+| **To read it elsewhere** | `devtools export:site` | the documentation as a static site that works offline | `build/devtools-site/` |
+| **With the phar** | `devtools self-update` | the latest release, once its checksum and provenance are verified | the phar |
 
 The order matters twice, and only twice: `init` before anything else, and a brief before the draft
 that answers it. Everything else is idempotent — a command run twice on an unchanged project does
@@ -1352,6 +1384,24 @@ the controller's file. A listener of the project's emitter (`bus.on('order.creat
 the workflows that `emit` that event (ADR-0043). A path computed at run time gives a `medium` confidence,
 a router no application mounts a warning.
 
+The documentation as a site
+---------------------------
+
+`devtools export:site` writes the pages, the menu and what they link to in `.devtools/` — the stack, the
+knowledge sheets, the overview — as a static HTML site that works **offline**: open its `index.html`, no
+server needed. The Mermaid diagrams are drawn by the script copied into the site, never fetched from a CDN,
+and a search box finds a workflow by its title, identifier or summary.
+
+```shell
+vendor/bin/devtools export:site                         # build/devtools-site/
+vendor/bin/devtools export:site --output=public/docs    # anywhere — but never into a directory DevTools did not write
+```
+
+Nothing a page holds runs in the site: Claude's prose is escaped, a link the site does not hold keeps its
+text only. The directory is DevTools' own — a `.devtools-site` marker says so — and the next export replaces it
+whole; a non-empty directory without the marker is refused rather than emptied. About a second for three
+hundred workflows.
+
 Projects without a native adapter
 ---------------------------------
 
@@ -1423,7 +1473,8 @@ src/
 │                            scenarios:run, baselines:accept, verify:prepare, verify:collect, gate,
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
 │                            rules:activate, rules:list, rules:archive, assertions:propose,
-│                            review, retro, knowledge:list, knowledge:promote, knowledge:amend
+│                            review, retro, knowledge:list, knowledge:promote, knowledge:amend,
+│                            export:site, self-update
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
@@ -1451,7 +1502,8 @@ src/
 ├── Rule/                    rules: their format, globs, the brief and draft of a promotion, what each did
 ├── Assertion/               the mechanical checks of the rules: pattern, DOM, tool — and how they are run
 ├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
-├── Rendering/               pages, workflows.md and the overview diagram
+├── Rendering/               pages, workflows.md and the overview diagram; the exported site
+├── Release/                 self-update: the latest release, its checksum and provenance verified
 ├── Ai/                      briefs for Claude, validation and application of its drafts
 └── Bridge/Symfony/          DevToolsBundle — the require-dev wrapper — and ScenarioTestCase for PHPUnit
 resources/schemas/           the XSD of every format DevTools reads or writes
@@ -1459,6 +1511,7 @@ resources/templates/         the files init writes
 resources/prompts/           the versioned prompts Claude follows
 resources/knowledge/         the embedded knowledge of each stack, and its canvas
 resources/node/              the script the Node bridge runs, without a dependency of its own
+resources/site/              the exported site's stylesheet, search and Mermaid
 resources/feedback/          the closed list of feedback categories
 resources/review/            the review page: its HTML, stylesheet, script, and the router of its server
 resources/claude/            the Claude Code skill claude:install copies

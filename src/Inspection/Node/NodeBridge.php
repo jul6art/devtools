@@ -53,25 +53,11 @@ class NodeBridge
     }
 
     /**
-     * The script, where Node can read it: inside a phar (ADR-0034) it is copied out once, next to the system's
-     * temporary files, under a name that changes with its content.
+     * The script, where Node can read it — copied out of a phar (ADR-0034).
      */
     public static function script(): string
     {
-        $script = Resources::path('node/devtools-analyze.mjs');
-
-        if (!str_starts_with($script, 'phar://')) {
-            return $script;
-        }
-
-        $content = (string) file_get_contents($script);
-        $copy = sys_get_temp_dir().'/devtools-analyze-'.substr(hash('sha256', $content), 0, 16).'.mjs';
-
-        if (!is_file($copy)) {
-            file_put_contents($copy, $content);
-        }
-
-        return $copy;
+        return Resources::file('node/devtools-analyze.mjs');
     }
 
     /**
