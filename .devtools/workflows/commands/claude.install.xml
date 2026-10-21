@@ -1,51 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.claude.install" type="commands" schema-version="1">
   <title>claude:install</title>
-  <generated at="2026-10-20T14:34:04+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/3"/>
-  <source vcs="git" commit="2885138774af0c08de65091f6b75dafda1802f83" branch="master" dirty="true"/>
+  <generated at="2026-10-20T22:55:24+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="58c02fb9a3a34b43275909170d619195a91b749e" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="claude:install" role="main">
       <declared-in path="src/Command/ClaudeInstallCommand.php" role="other"/>
     </entrypoint>
   </entrypoints>
   <files>
-    <file path="src/Command/ClaudeInstallCommand.php" role="other" sha256="9e80c0a90773d433f3fde802059262fe188561088ecd37e751c63e6486aca698"/>
+    <file path="src/Claude/ClaudeSettings.php" role="other" sha256="67bd897bf6e1d18180615833d132290f849519bd55d6d4db3270fc2c2c5b296d"/>
+    <file path="src/Command/ClaudeInstallCommand.php" role="other" sha256="7bd2abe99131ef0cf06985b22169e7d6a68c0964d7fe7a1f6d9e4d7aad8b9266"/>
+    <file path="src/Command/McpServeCommand.php" role="other" sha256="dc53b8e29107753da35a68a5be55d4dbf7c4530f1c4d6b1d6b29359bd1defb69"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="21f725777842a7a453cdfb041fc2cd56a592f451adfc2e2ace3340c06371aa2a"/>
+    <file path="src/Impact/ImpactResolver.php" role="other" sha256="04bb57c20310f15951ad3d842eb5f08901c1fbba337ae8a2124a382a0024e44c"/>
+    <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="70d09faa2fd03fed29e73aed6484a994c95a73c9af6d1b391b2c83489c9c2c91"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
     <file path="src/Inspection/Model/InvalidModel.php" role="other" sha256="ea5d752b174d526cd64e79f3c4c3ac2a8f3bdbaaeb77a17934591b2373174e0c"/>
+    <file path="src/Inspection/Model/Mechanism.php" role="other" sha256="d8cf485abfee5d84daaf3f66a54754355375bc8670e2c3cfa86569c00ce9e50d"/>
+    <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
+    <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
+    <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
+    <file path="src/Mcp/McpServer.php" role="other" sha256="4c8d42ffae30f62dc4bd4b2f8e1746f463a5f48cbd1e4e88784457d04b5f472c"/>
+    <file path="src/Mcp/ProjectQueries.php" role="other" sha256="8b16fb957aae310051a130d2933092306969a60f7662d3531a82304c3dacf482"/>
+    <file path="src/Mcp/ToolRefused.php" role="other" sha256="e19fb88b777681d2e44dee963405a1ba8c3623d560f74fb01ed3ca14d304c97d"/>
     <file path="src/Project/PathOutsideProject.php" role="other" sha256="0634ece9f557445eec061fbf5cdb47f79ce0491790bcc3cdfb2f9b89e47f1233"/>
     <file path="src/Project/ProjectRoot.php" role="other" sha256="51b4e109e30bd01b0fa0a98a93bb97c50a69705ab32b9e9691e6b996f6bf860c"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
+    <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="9fbee0f711adc44cdc1938518ec879825ac7995ed4eb77fd4e0667cda18ef390"/>
+    <file path="src/Stack/Knowledge/KnowledgeProvider.php" role="other" sha256="07970b00e182c9f5e08289af8cc118fba9d4df7a3a127524362a869d99a6f7d5"/>
+    <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
+    <file path="src/Stack/XmlStackStore.php" role="other" sha256="1a95dc09628b613afbb09dc6014350b6450a53dba24695c03f14da26cd4b0878"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="bd38c8b2331427c9c042e218cbd2f1b12709193c2ef52412124033791c327c33"/>
+    <file path="src/Tracking/IndexEntry.php" role="other" sha256="e946ec4b7854fcc293ea395db2b3207c83f426454f43002624262e14c48e752f"/>
+    <file path="src/Tracking/Revision.php" role="other" sha256="606bc4c26459a1d39bc1803872301e10acf8d088f09637c72700cf8e6d3bcb87"/>
+    <file path="src/Tracking/TrackedFile.php" role="other" sha256="ed52f17ae8539422474b3857ecd6b1a2d5415d4883f6d80724ace29729afb9ae"/>
+    <file path="src/Tracking/TrackingStatus.php" role="other" sha256="9ee0c322594fe0d0a032612b8efe749dc056c2e2e50901c4171b0c9a279ea67c"/>
+    <file path="src/Tracking/XmlIndexStore.php" role="other" sha256="3b5a8b7445b6dc8ba44e3c24fbfc88b56dd20b98f6126c999df86aee162c0e46"/>
+    <file path="src/Tracking/XmlTrackingStore.php" role="other" sha256="fb03144f5c3eb3665bb3975f8349605f15da669a16676ac70595696e41e0dfef"/>
+    <file path="src/Version.php" role="other" sha256="2f22523f251c8ed5fdb0035ed6a34a8247cc2025d18a0aded0c90260b0bb0c55"/>
   </files>
   <tests>
     <file path="tests/Ai/ClaudeInstallTest.php" role="test"/>
     <file path="tests/Ai/MenuAfterApplyTest.php" role="test"/>
     <file path="tests/Ai/PageRedactionTest.php" role="test"/>
+    <file path="tests/Assertion/AssertionProposalTest.php" role="test"/>
+    <file path="tests/Assertion/AssertionTest.php" role="test"/>
+    <file path="tests/Claude/ClaudeHookTest.php" role="test"/>
     <file path="tests/Config/XmlConfigReaderTest.php" role="test"/>
+    <file path="tests/Feedback/FeedbackTest.php" role="test"/>
+    <file path="tests/Gate/GateBrowserTest.php" role="test"/>
+    <file path="tests/Gate/GateTest.php" role="test"/>
+    <file path="tests/Impact/ImpactTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/FreshnessResolverTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/GitClientTest.php" role="test"/>
     <file path="tests/Inspection/Graph/SourceFilesTest.php" role="test"/>
+    <file path="tests/Mcp/McpInstallTest.php" role="test"/>
+    <file path="tests/Mcp/McpServerTest.php" role="test"/>
+    <file path="tests/Performance/HookPerformanceTest.php" role="test"/>
+    <file path="tests/Performance/ImpactPerformanceTest.php" role="test"/>
     <file path="tests/Project/GitHooksTest.php" role="test"/>
+    <file path="tests/Project/ProjectFilesTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Retro/JournalTest.php" role="test"/>
+    <file path="tests/Retro/RetroTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewAppTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewBrowserTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewServerTest.php" role="test"/>
+    <file path="tests/Rule/RuleTest.php" role="test"/>
+    <file path="tests/Scenario/Runner/PantherRunnerTest.php" role="test"/>
+    <file path="tests/Scenario/ScenarioGenerationTest.php" role="test"/>
+    <file path="tests/Stack/Knowledge/KnowledgeAmendTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
     <file path="tests/Stack/StackDetectorTest.php" role="test"/>
     <file path="tests/Tracking/AtomicFileWriterTest.php" role="test"/>
     <file path="tests/Tracking/DevToolsDirectoryTest.php" role="test"/>
     <file path="tests/Tracking/InitializerTest.php" role="test"/>
+    <file path="tests/Verification/VerificationTest.php" role="test"/>
   </tests>
   <packages>
+    <package name="mcp/sdk" version="0.9.0"/>
     <package name="symfony/console" version="8.1.7"/>
     <package name="symfony/filesystem" version="8.1.6"/>
   </packages>
   <decisions>
-    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/ClaudeInstallCommand.php" line="48" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="is_file($target) &amp;&amp; file_get_contents($target) !== $shipped &amp;&amp; true !== $input-&gt;getOption('force')" file="src/Command/ClaudeInstallCommand.php" line="58" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/ClaudeInstallCommand.php" line="64" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/ClaudeInstallCommand.php" line="74" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="$hooks" file="src/Command/ClaudeInstallCommand.php" line="98" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="$mcp" file="src/Command/ClaudeInstallCommand.php" line="110" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::installFile" value="\Symfony\Component\Console\Command\Command::FAILURE" condition="is_file($target) &amp;&amp; file_get_contents($target) !== $shipped &amp;&amp; !$force" file="src/Command/ClaudeInstallCommand.php" line="150" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::installFile" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/ClaudeInstallCommand.php" line="156" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\McpServeCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/McpServeCommand.php" line="66" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Command\McpServeCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/McpServeCommand.php" line="71" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="$this-&gt;has($key)" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="189" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="193" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="201" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="file_get_contents($latest) === $markdown" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="141" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="145" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="152" confidence="high"/>
+    <decision target="stdClass::hooks" value="[(object) ['type' =&gt; 'command', 'command' =&gt; $command, 'timeout' =&gt; $timeouts[$event] ?? 10]]" file="src/Claude/ClaudeSettings.php" line="65" confidence="high"/>
+    <decision target="stdClass::hooks" value="array_values(array_filter($group-&gt;hooks, static fn(mixed $hook): bool =&gt; !self::installed($hook)))" condition="$group instanceof \stdClass &amp;&amp; \is_array($group-&gt;hooks ?? null)" file="src/Claude/ClaudeSettings.php" line="103" confidence="high"/>
+    <decision target="stdClass::matcher" value="$matcher" condition="null !== $matcher" file="src/Claude/ClaudeSettings.php" line="62" confidence="high"/>
   </decisions>
   <confidence>high</confidence>
   <producer>native:generic-php</producer>
@@ -55,5 +115,10 @@
     <revision at="2026-09-19T11:14:18+00:00" commit="d9d6b8f8c21126951f56fddc54902384953f66d7" reason="added test tests/Project/GitHooksTest.php"/>
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
     <revision at="2026-10-20T14:32:43+00:00" commit="2885138774af0c08de65091f6b75dafda1802f83" reason="Aucun changement de fond : seuls des tests se sont ajoutés au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+4))"/>
+    <revision at="2026-10-20T15:47:36+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="Aucun changement de fond : le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044), et des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Stack/Knowledge/KnowledgeAmendTest.php)"/>
+    <revision at="2026-10-20T20:58:51+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="modified decision Jul6Art\DevTools\Command\ClaudeInstallCommand::execute: is_file($target) &amp;&amp; file_get_contents($target) !== $shipped &amp;&amp; true !== $input-&gt;getOption('force') → $hooks (+26)"/>
+    <revision at="2026-10-20T20:59:05+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="S'étend au serveur MCP (--mcp), à l'agent vérificateur (--agents) et au hook Stop qui lance la gate ; un fichier adapté par l'équipe reste gardé sauf --force. (files changed: src/Command/McpServeCommand.php)"/>
+    <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10))"/>
+    <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
   </history>
 </workflow>

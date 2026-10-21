@@ -1,9 +1,9 @@
 # workflows:inspect
-`command.workflows.inspect` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.workflows.inspect` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
-Documente tous les workflows d'un projet : détection de stack, extraction des points d'entrée par l'adaptateur, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, index, menu et graphe d'ensemble. Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté.
+Documente tous les workflows d'un projet : détection de stack, extraction des points d'entrée par l'adaptateur, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, index, menu et graphe d'ensemble. Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté. Un scénario dont le workflow a disparu est signalé en avertissement, et ceux qu'une réécriture met à revoir sont listés dans le menu.
 
 ## Trigger
 
@@ -34,10 +34,6 @@ sequenceDiagram
   P-->>C: rapport et compteurs
   C-->>U: bilan coloré
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -97,27 +93,27 @@ flowchart TD
   d1 -->|non| v2["truncated reste false"]
 ```
 
-**`Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor::parser`**
+**`Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::class`**
 
 ```mermaid
 flowchart TD
-  d1{"un parseur est fourni"}
-  d1 -->|oui| v1["celui-là"]
-  d1 -->|non| v2["celui de la dernière version de PHP supportée"]
+  d1{"la lecture rencontre une déclaration de classe"}
+  d1 -->|oui| v1["cette classe : un appel de méthode s'y résout"]
+  d1 -->|non| v2["la première classe du fichier, trouvée au départ"]
 ```
 
-**`Jul6Art\DevTools\Inspection\Model\Edge::label`**
+**`Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::dataClass`**
 
 ```mermaid
 flowchart TD
-  d1{"l'arête porte un libellé"}
-  d1 -->|oui| v1["le libellé, non vide"]
-  d1 -->|non| v2["label = null"]
+  d1{"le fichier déclare un data_class par constante de classe"}
+  d1 -->|oui| v1["cette entité : les champs du formulaire décident ses propriétés"]
+  d1 -->|non| v2["aucune : les choix restent sur le formulaire, en confiance moyenne"]
 ```
 
 ## Data
 
-Lit le code du projet sans jamais l'exécuter, ses manifestes et son dépôt git ; écrit `.devtools/` et le dossier de documentation, plus un rapport horodaté.
+Lit le code du projet sans jamais l'exécuter, ses manifestes et son dépôt git ; écrit `.devtools/` et le dossier de documentation, plus un rapport horodaté. Les décisions viennent aussi des contraintes de validation d'une entité, des options d'un champ de formulaire et d'une méthode de la même classe appelée pour calculer la valeur ; un voter entre dans les mécanismes des routes qui demandent son attribut (ADR-0044).
 
 ## Cross-cutting mechanisms
 
@@ -145,3 +141,8 @@ Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `me
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Console/SummaryRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/Labels.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
 | 2026-09-21 | e5a6438 | l'inspection remet une page restée sous un gabarit antérieur dans le gabarit courant (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |
 | 2026-10-20 | 2885138 | Aucun changement de fond : la détection reconnaît désormais une application Node sans framework (ADR-0050) et le rendu du menu a gagné la relecture de sa section « Not covered », sans rien changer à ce que fait cette commande. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+1)) |
+| 2026-10-20 | 4979790 | l'extraction lit plus loin — contraintes, formulaires, voters, un saut d'appel — et deux de ses champs entrent dans les huit dessinés quand deux en sortent ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::class: — → (new \PhpParser\NodeFinder())->findFirstInstanceOf($statements, \PhpParser\Node\Stmt\ClassLike::class) (+11)) |
+| 2026-10-20 | 4979790 | files changed: src/Inspection/Freshness/GitClient.php, src/Tracking/FileRelation.php, src/Tracking/FilesToWorkflows.php |
+| 2026-10-20 | 4979790 | Signale les scénarios orphelins et liste au menu ceux qu'une réécriture met à revoir ; la limite mémoire passe à 1 Go. (added test tests/Claude/ClaudeHookTest.php (+7)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+8)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |

@@ -23,6 +23,8 @@
                                             <xs:restriction base="xs:string">
                                                 <xs:enumeration value="file"/>
                                                 <xs:enumeration value="test"/>
+                                                <!-- ADR-0016: a mechanism it carries, a workflow it depends on. -->
+                                                <xs:enumeration value="dependency"/>
                                             </xs:restriction>
                                         </xs:simpleType>
                                     </xs:attribute>

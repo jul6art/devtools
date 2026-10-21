@@ -1,5 +1,5 @@
 # knowledge:list
-`command.knowledge.list` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.knowledge.list` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
@@ -29,10 +29,6 @@ sequenceDiagram
   C-->>U: chemin, écriture possible, table
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 **`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit`**
@@ -53,6 +49,19 @@ flowchart TD
   d1{"un texte est donné à l'élément XML"}
   d1 -->|oui| v1["le texte devient le contenu"]
   d1 -->|non| v2["l'élément reste vide"]
+```
+
+**`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision`**
+
+```mermaid
+flowchart TD
+  d0{"la bibliothèque n'a pas encore cette fiche"}
+  d0 -->|oui| v0["premier dépôt, comme deposit()"]
+  d0 -->|non| d1{"la fiche amendée est identique à la dernière révision"}
+  d1 -->|oui| v1["AlreadyPresent — aucune révision de plus"]
+  d1 -->|non| d2{"la bibliothèque est accessible en écriture"}
+  d2 -->|non| v2["NotWritable — l'amendement reste dans le projet"]
+  d2 -->|oui| v3["Deposited — une révision rN succède, l'original reste"]
 ```
 
 ## Data
@@ -79,3 +88,6 @@ Une fiche déposée à la main dans le dossier est listée même si `library.xml
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
 | 2026-10-20 | 2885138 | Aucun changement de fond : seuls des tests se sont ajoutés au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+4)) |
+| 2026-10-20 | 4979790 | la bibliothèque garde les révisions d'une fiche amendée, et la liste affiche celle qu'un projet lit ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision: — → \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent (+3)) |
+| 2026-10-20 | 4979790 | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |

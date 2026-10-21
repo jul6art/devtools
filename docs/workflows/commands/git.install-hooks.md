@@ -1,5 +1,5 @@
 # git:install-hooks
-`command.git.install-hooks` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.git.install-hooks` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
@@ -34,10 +34,6 @@ sequenceDiagram
     C-->>U: les hooks écrits
   end
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -78,3 +74,6 @@ flowchart TD
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Project/GitHooks.php) |
 | 2026-10-20 | 2885138 | Aucun changement de fond : seuls des tests se sont ajoutés au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+4)) |
+| 2026-10-20 | 4979790 | Aucun changement de fond : le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044), et des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Stack/Knowledge/KnowledgeAmendTest.php) |
+| 2026-10-20 | 4979790 | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |

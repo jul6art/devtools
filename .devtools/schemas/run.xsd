@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    One execution of scenarios:run: .devtools/runs/<timestamp>/result.xml (ADR-0021). A verdict per scenario and
+    per step, and for a step that failed or captured the screen, the screenshot and the DOM written next to it —
+    and for a screenshot, how it compares with its baseline (ADR-0022).
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/run/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/run/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="run">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="scenario" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Why it could not run: a login, a fixture. -->
+                            <xs:element name="message" type="xs:string" minOccurs="0"/>
+                            <xs:element name="step" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="message" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="url" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="screenshot" type="t:pathElement" minOccurs="0"/>
+                                        <xs:element name="dom" type="t:pathElement" minOccurs="0"/>
+                                        <!-- A screenshot against its baseline (ADR-0022): what changed, in one line. -->
+                                        <xs:element name="visual" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute name="verdict" use="required">
+                                                            <xs:simpleType>
+                                                                <xs:restriction base="xs:string">
+                                                                    <xs:enumeration value="identical"/>
+                                                                    <xs:enumeration value="within-threshold"/>
+                                                                    <xs:enumeration value="different"/>
+                                                                    <xs:enumeration value="no-baseline"/>
+                                                                </xs:restriction>
+                                                            </xs:simpleType>
+                                                        </xs:attribute>
+                                                        <!-- Percent of the pixels. -->
+                                                        <xs:attribute name="difference" type="xs:decimal"/>
+                                                        <xs:attribute name="diff" type="t:nonEmpty"/>
+                                                        <xs:attribute name="dom-diff" type="t:nonEmpty"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+                                    <xs:attribute name="action" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="verdict" type="t:verdict" use="required"/>
+                                    <xs:attribute name="duration-ms" type="xs:nonNegativeInteger" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="verdict" type="t:verdict" use="required"/>
+                        <xs:attribute name="duration-ms" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="started-at" type="xs:dateTime" use="required"/>
+            <xs:attribute name="base-url" type="t:nonEmpty" use="required"/>
+            <xs:attribute name="passed" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="failed" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="errors" type="xs:nonNegativeInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="verdict">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="passed"/>
+            <xs:enumeration value="failed"/>
+            <xs:enumeration value="error"/>
+            <xs:enumeration value="skipped"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

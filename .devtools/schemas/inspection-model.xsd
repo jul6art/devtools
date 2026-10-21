@@ -205,6 +205,8 @@
             <xs:enumeration value="subscriber"/>
             <xs:enumeration value="middleware"/>
             <xs:enumeration value="doctrine-filter"/>
+            <!-- ADR-0044: what it decides is access, granted or denied. -->
+            <xs:enumeration value="voter"/>
         </xs:restriction>
     </xs:simpleType>
 

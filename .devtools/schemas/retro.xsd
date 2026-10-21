@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    A retrospective, for a tool to read: .devtools/reports/retro-<date>.xml (ADR-0029), never committed — the same
+    sections as its Markdown.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/retro/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/retro/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="retro">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="month" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="month" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="tasks" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="human" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="per-task" type="xs:decimal"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="trend" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="month" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="per-task" type="xs:decimal" use="required"/>
+                        <xs:attribute name="before" type="xs:decimal" use="required"/>
+                        <xs:attribute name="change" type="xs:integer" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="recent" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="before" type="xs:decimal" use="required"/>
+                        <xs:attribute name="trend" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="up"/>
+                                    <xs:enumeration value="down"/>
+                                    <xs:enumeration value="steady"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="blocking" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="rule" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="tasks" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="blocked" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="inactive" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="rule" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="last" type="xs:date" use="required"/>
+                        <xs:attribute name="days" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="unpromoted" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="feedback" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="occurrences" type="xs:positiveInteger" use="required"/>
+                        <xs:attribute name="summary" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="passes">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="task" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="failed" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="step" type="t:nonEmpty" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="attempts" type="xs:positiveInteger" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="tasks" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="attempts" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="source" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="category" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="verifier" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="human" type="xs:nonNegativeInteger" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="since" type="xs:dateTime" use="required"/>
+            <xs:attribute name="until" type="xs:dateTime" use="required"/>
+            <xs:attribute name="unattributed" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="inactive-days" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,5 +1,5 @@
 # workflows:check
-`command.workflows.check` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.workflows.check` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
@@ -33,10 +33,6 @@ sequenceDiagram
     C-->>U: 1, ce qu'il faut relire, et leur nombre
   end
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -106,22 +102,22 @@ flowchart TD
   d1 -->|non| v2["celui de la dernière version de PHP supportée par php-parser"]
 ```
 
-**`Jul6Art\DevTools\Inspection\InspectionReport::path`**
+**`Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::class`**
 
 ```mermaid
 flowchart TD
-  d1{"l'exécution écrit, et le dossier .devtools existe"}
-  d1 -->|oui| v1["le rapport est écrit dans reports/, horodaté — hors git"]
-  d1 -->|non| v2["aucun rapport : une simulation ne laisse pas de trace"]
+  d1{"la lecture rencontre une déclaration de classe"}
+  d1 -->|oui| v1["cette classe : un appel de méthode s'y résout"]
+  d1 -->|non| v2["la première classe du fichier, trouvée au départ"]
 ```
 
-**`Jul6Art\DevTools\Inspection\Model\Edge::label`**
+**`Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::dataClass`**
 
 ```mermaid
 flowchart TD
-  d1{"un libellé est donné"}
-  d1 -->|oui| v1["le libellé, refusé s'il est vide — un libellé blanc dans un graphe est un bruit"]
-  d1 -->|non| v2["null : l'arête n'est pas étiquetée"]
+  d1{"le fichier déclare un data_class par constante de classe"}
+  d1 -->|oui| v1["cette entité : les champs du formulaire décident ses propriétés"]
+  d1 -->|non| v2["aucune : les choix restent sur le formulaire, en confiance moyenne"]
 ```
 
 ## Data
@@ -152,3 +148,8 @@ Lecture : les suivis et le code. Aucune écriture.
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsCheckCommand.php, src/Console/ChangeRenderer.php, src/Console/CheckRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/Labels.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
 | 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |
 | 2026-10-20 | 2885138 | Aucun changement de fond : la détection reconnaît désormais une application Node sans framework (ADR-0050) et le rendu du menu a gagné la relecture de sa section « Not covered », sans rien changer à ce que fait cette commande. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php) |
+| 2026-10-20 | 4979790 | l'extraction lit plus loin — contraintes, formulaires, voters, un saut d'appel — et deux de ses champs entrent dans les huit dessinés quand deux en sortent ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Inspection\Graph\DecisionExtractor::class: — → (new \PhpParser\NodeFinder())->findFirstInstanceOf($statements, \PhpParser\Node\Stmt\ClassLike::class) (+10)) |
+| 2026-10-20 | 4979790 | files changed: src/Inspection/Freshness/GitClient.php, src/Tracking/FileRelation.php, src/Tracking/FilesToWorkflows.php |
+| 2026-10-20 | 4979790 | L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (added test tests/Claude/ClaudeHookTest.php (+7)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+8)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |

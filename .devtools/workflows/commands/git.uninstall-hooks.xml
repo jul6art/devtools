@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.git.uninstall-hooks" type="commands" schema-version="1">
   <title>git:uninstall-hooks</title>
-  <generated at="2026-10-20T14:34:04+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/3"/>
-  <source vcs="git" commit="2885138774af0c08de65091f6b75dafda1802f83" branch="master" dirty="true"/>
+  <generated at="2026-10-20T22:24:55+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="58c02fb9a3a34b43275909170d619195a91b749e" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="git:uninstall-hooks" role="main">
       <declared-in path="src/Command/GitUninstallHooksCommand.php" role="other"/>
@@ -20,23 +20,43 @@
   <tests>
     <file path="tests/Ai/MenuAfterApplyTest.php" role="test"/>
     <file path="tests/Ai/PageRedactionTest.php" role="test"/>
+    <file path="tests/Assertion/AssertionProposalTest.php" role="test"/>
+    <file path="tests/Assertion/AssertionTest.php" role="test"/>
+    <file path="tests/Feedback/FeedbackTest.php" role="test"/>
+    <file path="tests/Gate/GateBrowserTest.php" role="test"/>
+    <file path="tests/Gate/GateTest.php" role="test"/>
+    <file path="tests/Impact/ImpactTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Claude/ClaudeDrivenTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/GenericPhp/GenericPhpAdapterTest.php" role="test"/>
     <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/FreshnessResolverTest.php" role="test"/>
     <file path="tests/Inspection/Freshness/GitClientTest.php" role="test"/>
     <file path="tests/Inspection/Graph/SourceFilesTest.php" role="test"/>
+    <file path="tests/Mcp/McpServerTest.php" role="test"/>
+    <file path="tests/Performance/HookPerformanceTest.php" role="test"/>
+    <file path="tests/Performance/ImpactPerformanceTest.php" role="test"/>
     <file path="tests/Project/GitHooksTest.php" role="test"/>
+    <file path="tests/Project/ProjectFilesTest.php" role="test"/>
     <file path="tests/Project/ProjectRootTest.php" role="test"/>
+    <file path="tests/Retro/JournalTest.php" role="test"/>
+    <file path="tests/Retro/RetroTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewAppTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewBrowserTest.php" role="test"/>
+    <file path="tests/Review/Web/ReviewServerTest.php" role="test"/>
+    <file path="tests/Rule/RuleTest.php" role="test"/>
+    <file path="tests/Scenario/Runner/PantherRunnerTest.php" role="test"/>
+    <file path="tests/Scenario/ScenarioGenerationTest.php" role="test"/>
+    <file path="tests/Stack/Knowledge/KnowledgeAmendTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeLibraryTest.php" role="test"/>
     <file path="tests/Stack/Knowledge/KnowledgeTest.php" role="test"/>
     <file path="tests/Stack/StackDetectorTest.php" role="test"/>
     <file path="tests/Tracking/DevToolsDirectoryTest.php" role="test"/>
     <file path="tests/Tracking/InitializerTest.php" role="test"/>
+    <file path="tests/Verification/VerificationTest.php" role="test"/>
   </tests>
   <packages>
     <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/process" version="8.1.7"/>
+    <package name="symfony/process" version="8.1.9"/>
   </packages>
   <decisions>
     <decision target="Jul6Art\DevTools\Command\GitUninstallHooksCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/GitUninstallHooksCommand.php" line="45" confidence="high"/>
@@ -50,5 +70,8 @@
     <revision at="2026-09-20T09:57:23+00:00" commit="9e40da936df304b8daa7fa64e6870bfd04476b4f" reason="Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php)"/>
     <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Project/GitHooks.php)"/>
     <revision at="2026-10-20T14:32:43+00:00" commit="2885138774af0c08de65091f6b75dafda1802f83" reason="Aucun changement de fond : seuls des tests se sont ajoutés au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Ai/MenuAfterApplyTest.php (+4))"/>
+    <revision at="2026-10-20T15:47:36+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="Aucun changement de fond : le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044), et des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Stack/Knowledge/KnowledgeAmendTest.php)"/>
+    <revision at="2026-10-20T20:58:51+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8))"/>
+    <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Assertion/AssertionProposalTest.php (+10))"/>
   </history>
 </workflow>

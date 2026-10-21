@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    One rule: .devtools/rules/<id>.xml (ADR-0026). What came back twice, said once, where it applies: files, kinds of
+    workflow, or both — never everywhere, which is what the project's CLAUDE.md is for. Its instruction is one to three
+    sentences, which DevTools counts: a rule that needs a paragraph is two rules.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/rule/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/rule/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="rule">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- The feedback it was promoted from. -->
+                <xs:element name="origin">
+                    <xs:complexType>
+                        <xs:attribute name="feedback" type="t:feedbackIds" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="applies-to" type="t:appliesTo"/>
+                <xs:element name="instruction" type="t:instruction"/>
+                <!-- The mechanical check that enforces it (ADR-0027). -->
+                <xs:element name="assertion" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="ref" type="t:assertionId" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="id" type="t:ruleId" use="required"/>
+            <xs:attribute name="status" type="t:status" use="required"/>
+            <xs:attribute name="created" type="xs:date" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Files, kinds of workflow, or both — at least one of them; a category, to group. -->
+    <xs:complexType name="appliesTo">
+        <xs:sequence>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="files" type="t:files" maxOccurs="unbounded"/>
+                    <xs:element name="workflow-type" type="t:name" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:element name="workflow-type" type="t:name" maxOccurs="unbounded"/>
+            </xs:choice>
+            <xs:element name="category" type="t:name" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="files">
+        <xs:attribute name="glob" type="t:glob" use="required"/>
+    </xs:complexType>
+
+    <!-- Whitespace collapsed: written on several lines, it is still one text. -->
+    <xs:simpleType name="instruction">
+        <xs:restriction base="xs:token">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="600"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ruleId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="rule-[a-z0-9]+(-[a-z0-9]+)*"/>
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="assertionId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="assert-[a-z0-9]+(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="feedbackIds">
+        <xs:restriction>
+            <xs:simpleType>
+                <xs:list>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="fb-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="proposed"/>
+            <xs:enumeration value="active"/>
+            <xs:enumeration value="archived"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Project-relative, no leading slash; DevTools refuses a ".." segment. -->
+    <xs:simpleType name="glob">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^/\s]\S*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="name">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9]*(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

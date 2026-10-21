@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    One feedback: .devtools/feedback/<year>/<id>.xml (ADR-0025). Data, not prose: tied to a workflow, an element or a
+    file, filed under a closed category, counted. DevTools checks on writing what a schema cannot: at least one
+    target, a category of the list, a workflow that exists, a file inside the project.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/feedback/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/feedback/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="feedback">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="reported">
+                    <xs:complexType>
+                        <xs:attribute name="at" type="xs:dateTime" use="required"/>
+                        <xs:attribute name="by" type="t:source" use="required"/>
+                        <xs:attribute name="commit" type="t:commit"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="target" type="t:target"/>
+                <xs:element name="category" type="t:category"/>
+                <!-- One line, 200 characters at most: a feedback that needs a paragraph is two. -->
+                <xs:element name="summary">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="200"/>
+                            <xs:pattern value="[^\r\n]*\S[^\r\n]*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="occurrences">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="occurrence" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="at" type="xs:dateTime" use="required"/>
+                                    <xs:attribute name="by" type="t:source" use="required"/>
+                                    <xs:attribute name="workflow" type="t:workflowId"/>
+                                    <xs:attribute name="selector" type="t:nonEmpty"/>
+                                    <xs:attribute name="file" type="t:nonEmpty"/>
+                                    <xs:attribute name="commit" type="t:commit"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The rule it became (ADR-0026). -->
+                <xs:element name="promoted-to" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="rule" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="id" type="t:id" use="required"/>
+            <xs:attribute name="status" type="t:status" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- At least one of the three: DevTools checks it on writing. -->
+    <xs:complexType name="target">
+        <xs:attribute name="workflow" type="t:workflowId"/>
+        <xs:attribute name="selector" type="t:nonEmpty"/>
+        <xs:attribute name="file" type="t:nonEmpty"/>
+    </xs:complexType>
+
+    <xs:simpleType name="id">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="fb-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="open"/>
+            <xs:enumeration value="fixed"/>
+            <xs:enumeration value="promoted"/>
+            <xs:enumeration value="wont-fix"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="source">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="human"/>
+            <xs:enumeration value="verifier"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="category">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9]*(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="workflowId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="commit">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-f]{7,40}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

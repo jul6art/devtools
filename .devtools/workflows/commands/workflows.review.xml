@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.review" type="commands" schema-version="1">
   <title>workflows:review</title>
-  <generated at="2026-10-20T14:34:04+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/3"/>
-  <source vcs="git" commit="2885138774af0c08de65091f6b75dafda1802f83" branch="master" dirty="true"/>
+  <generated at="2026-10-20T22:55:24+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="58c02fb9a3a34b43275909170d619195a91b749e" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:review" role="main">
       <declared-in path="src/Command/WorkflowsReviewCommand.php" role="other"/>
@@ -17,10 +17,11 @@
     <file path="src/Clock/Clock.php" role="other" sha256="50317350e1da2e3f1754696d80f60b5a8108b18612d3bc9ee57c450561593ad9"/>
     <file path="src/Clock/SystemClock.php" role="other" sha256="b21323ac28cfa0d7b58c40649bcf609e7fcb9e4b504124700971c7d195ae688d"/>
     <file path="src/Command/WorkflowsReviewCommand.php" role="other" sha256="0889fe7fe161fc601e2c5cceefa880b1f03534ae51ed913ee233e34312ce1bde"/>
-    <file path="src/Config/Config.php" role="other" sha256="dd73cf356e4b9d738a893448b578dc61d916ca4ab72d75c3f1384bcec28b1362"/>
+    <file path="src/Config/Config.php" role="other" sha256="a25ab646b89394a1bdafc05a4927f998be15c0cd2f455c2588f162d055b0f194"/>
     <file path="src/Config/InvalidConfig.php" role="other" sha256="d46b341b3c31914c8773130bfb0a13799ead5c4c8b34d57fe92b6bec5dc98ae2"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="8ebcf2be6b5a1f36a80fb5db1a81c98a6d91a772105ffab2168fe4423576dc16"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="21f725777842a7a453cdfb041fc2cd56a592f451adfc2e2ace3340c06371aa2a"/>
     <file path="src/Console/ChangeRenderer.php" role="other" sha256="37815a69141923c60447b38fb5c83adf5e83a7c90ee2dce121eb867c36603832"/>
+    <file path="src/Console/MemoryLimit.php" role="other" sha256="bb3727cc81b5d070ca5c839697f5965aa2999979cabd83bda139171100722023"/>
     <file path="src/Inspection/Adapter/AdapterInterface.php" role="other" sha256="75f0f6887c4e2b0f62c7e96f97ceef8812a2148e715bed3ddca32670ae688303"/>
     <file path="src/Inspection/Adapter/Claude/Discovery.php" role="other" sha256="4679a5bea91159d351aa7612c11ef3dfc30e6b935e55f6e45ce8ff569c726f64"/>
     <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php" role="other" sha256="0a8a74bcb184945bfb6c474f08ce81ad864a1cdc14ceabcee147045944209ef0"/>
@@ -35,13 +36,13 @@
     <file path="src/Inspection/Freshness/FileHasher.php" role="other" sha256="b3cc2ae43a3a8aa250da108b7bbd2b1b2619e51d7ea8e77223fb4a2e4d59b235"/>
     <file path="src/Inspection/Freshness/FreshnessDecision.php" role="other" sha256="3756595629166555fb21d574b1dce8a9c151436e8b01f817f054b678b2bb5c23"/>
     <file path="src/Inspection/Freshness/FreshnessResolver.php" role="other" sha256="e0f09d0e7ce559da35e338e6bc859a92764036a876cf118fbdaf1b50b7372a13"/>
-    <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="e22c9e322713bf343e6061e07a160d987f0a33bddc61acaffc89ae13fff6abba"/>
+    <file path="src/Inspection/Freshness/GitClient.php" role="other" sha256="70d09faa2fd03fed29e73aed6484a994c95a73c9af6d1b391b2c83489c9c2c91"/>
     <file path="src/Inspection/Freshness/GitState.php" role="other" sha256="b5a1afba7c2a33c77172b500fe463171b941127175c233c944a87267d7361069"/>
     <file path="src/Inspection/Freshness/ReasonKind.php" role="other" sha256="c0047a7b7d364b1cf07cfd734fa1d3d69f7311b56348157a794688957987ceff"/>
     <file path="src/Inspection/Graph/PhpReferenceExtractor.php" role="other" sha256="dfc4ce88b8a13698d375948eaea99a3422db8b9ea7e719ee42230e4cf1f530b7"/>
-    <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="53b03418c05cf978ab29b80c20af7b8caf98413c023f8cbd8855618bd232809b"/>
+    <file path="src/Inspection/Graph/WorkflowBuilder.php" role="other" sha256="2eb0b3685a22618178d7dfc849e94c1e124709c3c1cd2ccb96dab4199c1d879a"/>
     <file path="src/Inspection/InspectionOptions.php" role="other" sha256="653744db189d7e49c10297d626f2e655e1bb2b3ed9f377b7d57cffeed68f5f0b"/>
-    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="05123b652695fd115f0f20ec867c1c9e3511ed52b411a4c80a169d09ab1c9b3b"/>
+    <file path="src/Inspection/InspectionPipeline.php" role="other" sha256="99410dd4cd19b13106e8834f756091aca96439c8b3be81f392b7afc054a1d44f"/>
     <file path="src/Inspection/InspectionReport.php" role="other" sha256="ab1ac6a0fb3cbf68f072ea2fb6d8ef811c4dbafa578d5e83a8bdf544ab568e2d"/>
     <file path="src/Inspection/Model/FileRef.php" role="other" sha256="d2884d69f87ca8f30149ae6ec47a854b24c22237f110d363fbf91a4e862c95b3"/>
     <file path="src/Inspection/Model/FileRole.php" role="other" sha256="4dc83b5dd5e365eb584f8bab5222035f60b415d460e3d9f012883bf57ba9ed19"/>
@@ -61,27 +62,29 @@
     <file path="src/Rendering/GroupPageRenderer.php" role="other" sha256="df2e219c4ee1a8a37632d88992b2b1e08bb56fb5b2f63d9e37d36128c96a6749"/>
     <file path="src/Rendering/GroupPageSection.php" role="other" sha256="61e8a37c69cf52d70686aac050c7fe5d8f520f46fbd91d88fb8a0c2bf35922a7"/>
     <file path="src/Rendering/MarkdownWriter.php" role="other" sha256="916c3cf232e71d06f639ed6c7ad4899791a4cb86bf2c8f73666664849d28da7f"/>
-    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="e8c2f3d273b08613e091773dd95423eba6ccb12848bd4a8d2acc83266cc03d2f"/>
+    <file path="src/Rendering/MenuRenderer.php" role="other" sha256="6baaa972930fe48ae3bd5dfbaab8d93658cbeded5ef3678ea41d884ebe4800c1"/>
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
-    <file path="src/Rendering/PageRenderer.php" role="other" sha256="59ea67146f8938e9b7841ceb069ec60591ae5b692693b87ca1e30e3be93e245e"/>
-    <file path="src/Rendering/PageSection.php" role="other" sha256="72731f989521539bc02804047e1d228690396935dddda8e4f29ab2c39043c371"/>
-    <file path="src/Rendering/ParsedPage.php" role="other" sha256="7f57c8ae6f54d194cc1f2b5cfd1dc12ba1012fcbaf5a5848ee744cc67edc3939"/>
+    <file path="src/Rendering/PageRenderer.php" role="other" sha256="02849ce088c1e5fd803e79dcd3e51a4dd42ab460ba4b4d29f7adae84eb280602"/>
+    <file path="src/Rendering/PageSection.php" role="other" sha256="8476008589cd61709b527c2e1bfe4d45b2843407c353de6082abd7fe684befec"/>
+    <file path="src/Rendering/ParsedPage.php" role="other" sha256="4d39000d6d0910a0e3ffb7a90f8bfd373b77584d7aeda9c87ea2ff9d7093d875"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="de077ce6d59cbad6ec31ae45d8248034500f02c9a2a9979ef7bf6575aad7dd46"/>
     <file path="src/Resources.php" role="other" sha256="02e832d83743f2d127c931b95cf86c7c51793af2a3bca5da093a59f2d28dba73"/>
     <file path="src/Review/ChangeReview.php" role="other" sha256="f18cf69dfdd739c717d9710bd3ad4789b6bd98b09fae538ee821d4e9737a2b07"/>
-    <file path="src/Stack/Knowledge/KnowledgeBrief.php" role="other" sha256="04e60f81ad1e88dd9485758897148622e014d877682ec1d1094525d763eb578a"/>
-    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="62c327e63acc158cb4f79210cc51081bfe0a0f93a8f9f1b035a0f25ffdcbab0d"/>
-    <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="2414179d85e5038390d1bc75b303dc39f37a53074f9843aafa01a93502755c81"/>
-    <file path="src/Stack/Knowledge/KnowledgeProvider.php" role="other" sha256="2286681d4a6e89ba6bb9d73a29ec1b20e47dbd19b185f8215d87337b555138a6"/>
-    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="a96ac1e8ff041e0912387e7b26d25be1533cb217a1d0370e5bdae03321ec2b4e"/>
+    <file path="src/Scenario/ScenarioReview.php" role="other" sha256="98bb0757cb2748b5aa5c25e9f15b9db1e2454f46276b43e34f1d56882335cebe"/>
+    <file path="src/Scenario/XmlScenarioIndexStore.php" role="other" sha256="0e2643e23150ff7a9ea0af4282b419dedd755aaef2c400111a53d8a7ee88881f"/>
+    <file path="src/Stack/Knowledge/KnowledgeBrief.php" role="other" sha256="31febb95261736d1f60d2778195f7402dc805fc08857c5b67790ad2237e2685d"/>
+    <file path="src/Stack/Knowledge/KnowledgeCanvas.php" role="other" sha256="693a811941960b521e1bd984f723969b5c1dd0320886fe8fc5f51e832e735c65"/>
+    <file path="src/Stack/Knowledge/KnowledgeLibrary.php" role="other" sha256="9fbee0f711adc44cdc1938518ec879825ac7995ed4eb77fd4e0667cda18ef390"/>
+    <file path="src/Stack/Knowledge/KnowledgeProvider.php" role="other" sha256="07970b00e182c9f5e08289af8cc118fba9d4df7a3a127524362a869d99a6f7d5"/>
+    <file path="src/Stack/Knowledge/XmlKnowledgeBriefStore.php" role="other" sha256="efe1c36f30f5d683d1a8abee9f1cd5e804174339ca41ddfe90106a2aa176ee1a"/>
     <file path="src/Stack/StackDetectionFailed.php" role="other" sha256="64103014694438f7fa0f503a331bc30c063a04e7f703f6401b7e4b36bfa3e44f"/>
     <file path="src/Stack/StackDetector.php" role="other" sha256="a7383a37516a144e0f29310336b5c902f49c04e8dfdfd3f185e6a67294a194e2"/>
     <file path="src/Stack/StackDocument.php" role="other" sha256="d074c3b3869c5f55c2d3f2b91799cac06a373b17d788d78c7202909cb1df3b3f"/>
     <file path="src/Stack/StackProfile.php" role="other" sha256="542524c504c07243c8e5aef718be699d8313b6f37e2950d1ade27e9b021ff825"/>
     <file path="src/Stack/XmlStackStore.php" role="other" sha256="1a95dc09628b613afbb09dc6014350b6450a53dba24695c03f14da26cd4b0878"/>
     <file path="src/Tracking/AtomicFileWriter.php" role="other" sha256="dae40d9fda21e680099b027b2423730acb65a1667829fd0b274fd47d8a4855f1"/>
-    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="e32c0b7840c745103bba7c093c63c681d892304fa78e06ce3081cc1309c985b1"/>
-    <file path="src/Tracking/FilesToWorkflows.php" role="other" sha256="9da44c960e0007397a45df196fffaecab430198b5407d8139a82d699db891f85"/>
+    <file path="src/Tracking/DevToolsDirectory.php" role="other" sha256="bd38c8b2331427c9c042e218cbd2f1b12709193c2ef52412124033791c327c33"/>
+    <file path="src/Tracking/FilesToWorkflows.php" role="other" sha256="8ddb164284976d8bcb39b8e3f5a4e3c73715124e27c21aa3fb24a55991a20a75"/>
     <file path="src/Tracking/Generation.php" role="other" sha256="86acaa57b5c6cfdb63dac21331acaf84bbd2b99ee1054b1894d060b17b306e2f"/>
     <file path="src/Tracking/GenerationMode.php" role="other" sha256="ce1e4c7a013fc4fc670365772041282e4b8cc747eda425380059b7458efb1d5c"/>
     <file path="src/Tracking/Index.php" role="other" sha256="cdf4799c24bee0bac3b89cb879d6fcfcd0320019564ec056aef2b1056eed5219"/>
@@ -121,12 +124,13 @@
     <file path="tests/Rendering/MenuRendererTest.php" role="test"/>
     <file path="tests/Rendering/PageRendererTest.php" role="test"/>
     <file path="tests/Review/ChangeReviewTest.php" role="test"/>
+    <file path="tests/Tracking/XmlIndexStoresTest.php" role="test"/>
     <file path="tests/Tracking/XmlTrackingStoreTest.php" role="test"/>
   </tests>
   <packages>
     <package name="symfony/console" version="8.1.7"/>
     <package name="symfony/filesystem" version="8.1.6"/>
-    <package name="symfony/process" version="8.1.7"/>
+    <package name="symfony/process" version="8.1.9"/>
   </packages>
   <decisions>
     <decision target="DateTimeImmutable::timezone" value="new \DateTimeZone(date_default_timezone_get())" condition="\is_string($epoch) &amp;&amp; 1 === preg_match('/^\d+$/', $epoch)" file="src/Clock/SystemClock.php" line="18" confidence="high"/>
@@ -137,14 +141,15 @@
     <decision target="Jul6Art\DevTools\Command\WorkflowsReviewCommand::execute" value="\Symfony\Component\Console\Command\Command::SUCCESS" file="src/Command/WorkflowsReviewCommand.php" line="113" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor::parser" value="$parser" condition="!(null === $parser)" file="src/Inspection/Graph/PhpReferenceExtractor.php" line="59" confidence="high"/>
     <decision target="Jul6Art\DevTools\Inspection\Graph\PhpReferenceExtractor::parser" value="(new \PhpParser\ParserFactory())-&gt;createForNewestSupportedVersion()" condition="null === $parser" file="src/Inspection/Graph/PhpReferenceExtractor.php" line="59" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::path" value="$directory-&gt;path('reports/inspect-' . $report-&gt;startedAt-&gt;format('Y-m-d-His') . '.md')" condition="!$options-&gt;dryRun &amp;&amp; isset($directory) &amp;&amp; is_dir($directory-&gt;path())" file="src/Inspection/InspectionPipeline.php" line="132" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Inspection\InspectionReport::path" value="$directory-&gt;path('reports/inspect-' . $report-&gt;startedAt-&gt;format('Y-m-d-His') . '.md')" condition="!$options-&gt;dryRun &amp;&amp; isset($directory) &amp;&amp; is_dir($directory-&gt;path())" file="src/Inspection/InspectionPipeline.php" line="138" confidence="high"/>
     <decision target="Jul6Art\DevTools\Rendering\MarkdownWriter::table" value="self::EMPTY" condition="[] === $rows" file="src/Rendering/MarkdownWriter.php" line="35" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Rendering\PageRenderer::crossCutting" value="\Jul6Art\DevTools\Rendering\MarkdownWriter::EMPTY" condition="[] === $workflow-&gt;mechanisms" file="src/Rendering/PageRenderer.php" line="136" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="$this-&gt;has($key)" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="135" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="139" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="147" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Stack\StackDetector::detectors" value="$detectors" condition="!(null === $detectors)" file="src/Stack/StackDetector.php" line="32" confidence="high"/>
-    <decision target="Jul6Art\DevTools\Stack\StackDetector::detectors" value="[new \Jul6Art\DevTools\Stack\Detector\ComposerDetector(), new \Jul6Art\DevTools\Stack\Detector\NodeDetector(), ...\Jul6Art\DevTools\Stack\Detector\LanguageOnlyDetector::all()]" condition="null === $detectors" file="src/Stack/StackDetector.php" line="32" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Rendering\PageRenderer::crossCutting" value="\Jul6Art\DevTools\Rendering\MarkdownWriter::EMPTY" condition="[] === $workflow-&gt;mechanisms" file="src/Rendering/PageRenderer.php" line="156" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="$this-&gt;has($key)" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="189" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="193" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="201" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent" condition="file_get_contents($latest) === $markdown" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="141" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::NotWritable" condition="!$this-&gt;isWritable()" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="145" confidence="high"/>
+    <decision target="Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision" value="\Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::Deposited" file="src/Stack/Knowledge/KnowledgeLibrary.php" line="152" confidence="high"/>
   </decisions>
   <confidence>high</confidence>
   <producer>native:generic-php</producer>
@@ -155,5 +160,10 @@
     <revision at="2026-09-21T21:15:01+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsReviewCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php)"/>
     <revision at="2026-09-21T21:19:02+00:00" commit="e5a6438b0e6cfad1985c959f9330dd53292fe47e" reason="l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php)"/>
     <revision at="2026-10-20T14:32:43+00:00" commit="2885138774af0c08de65091f6b75dafda1802f83" reason="Aucun changement de fond : le rendu du menu a gagné la relecture de sa section « Not covered », que seul workflows:apply appelle ; des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Command/WorkflowsDiffCommandTest.php (+3))"/>
+    <revision at="2026-10-20T15:47:36+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="le chemin d'application gagne le dépôt en révision d'une fiche amendée, et un champ moins riche sort des huit dessinés ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision: — → \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent (+4))"/>
+    <revision at="2026-10-20T16:04:37+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="added test tests/Tracking/XmlIndexStoresTest.php"/>
+    <revision at="2026-10-20T20:58:51+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (modified package symfony/process: 8.1.7 → 8.1.9)"/>
+    <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (files changed: src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Freshness/GitClient.php, src/Tracking/DevToolsDirectory.php)"/>
+    <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
   </history>
 </workflow>

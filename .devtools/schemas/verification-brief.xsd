@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What the verifier is given (ADR-0024): .devtools/pending/verification.<timestamp>/manifest.xml. The files it
+    names are copies inside the folder, except the code, named by its path in the project. Nothing of the
+    conversation of the agent that wrote the change, nor of its commit messages.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/verification-brief/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/verification-brief/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="verification-brief">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- The files the change touches, relative to the project. -->
+                <xs:element name="changed" type="t:pathElement" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="workflow" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Its code, relative to the project: what the verifier may read besides the folder. -->
+                            <xs:element name="file" type="t:pathElement" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="scenario" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="verdict" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="capture" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="screenshot" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="dom" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="baseline" type="t:nonEmpty"/>
+                                    <xs:attribute name="diff" type="t:nonEmpty"/>
+                                    <xs:attribute name="dom-diff" type="t:nonEmpty"/>
+                                    <xs:attribute name="visual" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="relation" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="page" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- The rules that apply (ADR-0026): none before phase 2. -->
+                <xs:element name="rule" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="category" type="t:nonEmpty" maxOccurs="unbounded"/>
+                <!-- Where the session that called the verifier writes its answer. -->
+                <xs:element name="verdict" type="t:pathElement"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="prepared-at" type="xs:dateTime" use="required"/>
+            <!-- The change as it was: its files and their content. The gate reuses the folder while it does not move. -->
+            <xs:attribute name="fingerprint">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{64}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="run" type="t:nonEmpty"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="pathElement">
+        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

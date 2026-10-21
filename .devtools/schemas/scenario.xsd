@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    A reproducible scenario of a workflow: .devtools/scenarios/<workflow-id>/<name>.xml (ADR-0020), replayed by a
+    runner (ADR-0021). The draft Claude writes holds one or more of them under <scenarios>.
+
+    The vocabulary is closed: an action added is a minor version, an action removed a major one, and each
+    action exists here only once the runner implements it.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/scenario/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/scenario/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="scenario">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="t:scenario">
+                    <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- A draft: the scenarios Claude wrote for one workflow. -->
+    <xs:element name="scenarios">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="scenario" type="t:scenario" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="scenario">
+        <xs:sequence>
+            <xs:element name="given" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <!-- Names, resolved by the project (ADR-0021): never a password, never data. -->
+                        <xs:element name="login" minOccurs="0">
+                            <xs:complexType>
+                                <xs:attribute name="role" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="fixture" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="steps">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded">
+                        <xs:element name="goto">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                            <xs:attribute name="value" type="t:nonEmpty" use="required"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="route" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="fill">
+                            <xs:complexType>
+                                <xs:attribute name="field" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="value" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="select">
+                            <xs:complexType>
+                                <xs:attribute name="field" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="value" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="check">
+                            <xs:complexType>
+                                <xs:attribute name="field" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <!-- Exactly one of text and selector: DevTools checks it on reading. -->
+                        <xs:element name="click">
+                            <xs:complexType>
+                                <xs:attribute name="text" type="t:nonEmpty"/>
+                                <xs:attribute name="selector" type="t:nonEmpty"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="submit">
+                            <xs:complexType>
+                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="wait-for">
+                            <xs:complexType>
+                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                                <!-- Milliseconds. -->
+                                <xs:attribute name="timeout" type="xs:positiveInteger"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="assert-route">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="assert-visible">
+                            <xs:complexType>
+                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="assert-text">
+                            <xs:complexType>
+                                <xs:attribute name="text" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="selector" type="t:nonEmpty"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="assert-count">
+                            <xs:complexType>
+                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="screenshot">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="t:name" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <!-- Business actions, one at a time: a Select2 field, searched then picked. -->
+                        <xs:element name="select2">
+                            <xs:complexType>
+                                <xs:attribute name="field" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="search" type="t:nonEmpty" use="required"/>
+                                <xs:attribute name="pick" type="t:nonEmpty" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <!-- <workflow-id>/<name>: the name is the file's, the workflow its directory's. -->
+        <xs:attribute name="id" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+/[a-z0-9]+(-[a-z0-9]+)*"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="workflow" type="t:workflowId" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="workflowId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="name">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

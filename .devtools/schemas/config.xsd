@@ -97,6 +97,79 @@
                         <xs:attribute name="share" type="xs:boolean"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- How scenarios:run reaches the application (ADR-0021). No credential here: environment variables. -->
+                <xs:element name="scenarios" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="login" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="role" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="type" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="form"/>
+                                                <xs:enumeration value="http-basic"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="username-env" type="t:environmentVariable" use="required"/>
+                                    <xs:attribute name="password-env" type="t:environmentVariable" use="required"/>
+                                    <xs:attribute name="url" type="t:nonEmpty"/>
+                                    <xs:attribute name="username-field" type="t:nonEmpty"/>
+                                    <xs:attribute name="password-field" type="t:nonEmpty"/>
+                                    <xs:attribute name="submit" type="t:nonEmpty"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="fixture" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="t:nonEmpty" use="required"/>
+                                    <xs:attribute name="command" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- How a capture is compared with its baseline (ADR-0022). -->
+                            <xs:element name="visual" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- Hidden before every capture: what changes on every run. -->
+                                        <xs:element name="mask" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="selector" type="t:nonEmpty" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <!-- The share of the pixels that may differ: 0.1%. -->
+                                    <xs:attribute name="threshold">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="\d+(\.\d+)?%"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="base-url" type="t:nonEmpty"/>
+                        <xs:attribute name="timeout" type="xs:positiveInteger"/>
+                    </xs:complexType>
+                </xs:element>
+                <!-- Categories of feedback of the project's own, added to DevTools' ten (ADR-0025). -->
+                <xs:element name="feedback" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="name" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:pattern value="[a-z][a-z0-9]*(-[a-z0-9]+)*"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="language" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="pages" use="required">
@@ -124,6 +197,12 @@
     <xs:simpleType name="path">
         <xs:restriction base="xs:string">
             <xs:pattern value="[^/\\]([^:].*)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="environmentVariable">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z_][A-Za-z0-9_]*"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    What a change reaches (ADR-0016), the xml format of `workflows:impact`.
+
+    ⚠️ Public contract, read by tools (hooks, CI): an incompatible change is a new schema-version.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/impact/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/impact/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="impact">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="warning" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="workflow" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="file" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="type" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="title" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="relation" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="direct"/>
+                                    <xs:enumeration value="test"/>
+                                    <xs:enumeration value="dependency"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="page" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="uncovered" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="path" type="t:nonEmpty" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

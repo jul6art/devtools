@@ -1,5 +1,5 @@
 # workflows:review
-`command.workflows.review` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.workflows.review` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
@@ -35,10 +35,6 @@ sequenceDiagram
     C-->>U: les pages réécrites, puis les commandes de restauration des refus
   end
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -111,13 +107,17 @@ flowchart TD
   d2 -->|non| v3["Deposited"]
 ```
 
-**`Jul6Art\DevTools\Stack\StackDetector::detectors`**
+**`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision`**
 
 ```mermaid
 flowchart TD
-  d1{"une liste de détecteurs est fournie"}
-  d1 -->|oui| v1["celle-là"]
-  d1 -->|non| v2["les détecteurs natifs, dans l'ordre : Composer, Node, puis le repli par langage"]
+  d0{"la bibliothèque n'a pas encore cette fiche"}
+  d0 -->|oui| v0["premier dépôt, comme deposit()"]
+  d0 -->|non| d1{"la fiche amendée est identique à la dernière révision"}
+  d1 -->|oui| v1["AlreadyPresent — aucune révision de plus"]
+  d1 -->|non| d2{"la bibliothèque est accessible en écriture"}
+  d2 -->|non| v2["NotWritable — l'amendement reste dans le projet"]
+  d2 -->|oui| v3["Deposited — une révision rN succède, l'original reste"]
 ```
 
 ## Data
@@ -146,3 +146,8 @@ flowchart TD
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/PageDraft.php, src/Command/WorkflowsReviewCommand.php, src/Console/ChangeRenderer.php, src/Inspection/InspectionPipeline.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/MenuRenderer.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
 | 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Inspection/InspectionPipeline.php, src/Rendering/PageRenderer.php) |
 | 2026-10-20 | 2885138 | Aucun changement de fond : le rendu du menu a gagné la relecture de sa section « Not covered », que seul workflows:apply appelle ; des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Command/WorkflowsDiffCommandTest.php (+3)) |
+| 2026-10-20 | 4979790 | le chemin d'application gagne le dépôt en révision d'une fiche amendée, et un champ moins riche sort des huit dessinés ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision: — → \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent (+4)) |
+| 2026-10-20 | 4979790 | added test tests/Tracking/XmlIndexStoresTest.php |
+| 2026-10-20 | 4979790 | L'analyse relève désormais la limite mémoire de PHP à 1 Go, comme l'inspection ; des tests s'ajoutent au périmètre et symfony/process passe en 8.1.9. La prose a été relue et tient. (modified package symfony/process: 8.1.7 → 8.1.9) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (files changed: src/Config/Config.php, src/Config/XmlConfigReader.php, src/Inspection/Freshness/GitClient.php, src/Tracking/DevToolsDirectory.php) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |

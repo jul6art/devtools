@@ -1,9 +1,9 @@
 # workflows:apply
-`command.workflows.apply` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.workflows.apply` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
-Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, puis les pages. Une fiche de connaissance acceptée est déposée dans la bibliothèque partagée. Dès qu'une page est acceptée, l'index et le sommaire workflows.md sont réécrits depuis ce qui est sur disque, sans nouvelle inspection : un workflow rédigé quitte aussitôt la liste « To check » (ADR-0049).
+Relit les brouillons que Claude a écrits dans `.devtools/pending/`, les refuse ou les applique, et reconstruit la page : les faits viennent du modèle, la prose du brouillon. Les connaissances passent d'abord — une page ne se rédige pas sans savoir comment la stack fonctionne — puis les découvertes, les scénarios que Claude a écrits (ADR-0020), les règles (ADR-0026) et les assertions (ADR-0027), puis les pages. Une assertion est exécutée avant d'être écrite : elle doit passer sur le projet tel qu'il est, et échouer là où son retour a été signalé. Une fiche de connaissance acceptée est déposée dans la bibliothèque partagée. Dès qu'une page est acceptée, l'index et le sommaire workflows.md sont réécrits depuis ce qui est sur disque, sans nouvelle inspection : un workflow rédigé quitte aussitôt la liste « To check » (ADR-0049).
 
 ## Trigger
 
@@ -38,10 +38,6 @@ sequenceDiagram
   C-->>U: bilan
 ```
 
-## Navigation / states
-
-—
-
 ## Decisions
 
 **`Jul6Art\DevTools\Command\WorkflowsApplyCommand::execute`**
@@ -51,35 +47,6 @@ flowchart TD
   d1{"le chemin n'est pas un dossier"}
   d1 -->|oui| v1["INVALID"]
   d1 -->|non| v2["SUCCESS, ou 1 si un brouillon est refusé"]
-```
-
-**`Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit`**
-
-```mermaid
-flowchart TD
-  d1{"la bibliothèque a déjà cette fiche"}
-  d1 -->|oui| v1["AlreadyPresent — jamais d'écrasement"]
-  d1 -->|non| d2{"accessible en écriture"}
-  d2 -->|non| v2["NotWritable — un avertissement, pas une erreur"]
-  d2 -->|oui| v3["Deposited"]
-```
-
-**`Jul6Art\DevTools\Rendering\PageRenderer::crossCutting`**
-
-```mermaid
-flowchart TD
-  d1{"le workflow porte des mécanismes"}
-  d1 -->|non| v1["la section vaut —"]
-  d1 -->|oui| v2["une table : mécanisme, événement, priorité, champs écrits"]
-```
-
-**`Jul6Art\DevTools\Rendering\MarkdownWriter::table`**
-
-```mermaid
-flowchart TD
-  d1{"la table n'a aucune ligne"}
-  d1 -->|oui| v1["— à la place de la table"]
-  d1 -->|non| v2["l'en-tête et les lignes"]
 ```
 
 **`Jul6Art\DevTools\Inspection\Model\Edge::label`**
@@ -100,9 +67,27 @@ flowchart TD
   d1 -->|non| v2["maintenant, fuseau par défaut"]
 ```
 
+**`Jul6Art\DevTools\Ai\ApplyResult::accepted`**
+
+```mermaid
+flowchart TD
+  d1{"un brouillon de scénario, de règle ou d'assertion passe ses vérifications"}
+  d1 -->|oui| v1["il s'ajoute aux acceptés, dans cet ordre : scénarios, règles, assertions"]
+  d1 -->|non| v2["il rejoint les refusés"]
+```
+
+**`Jul6Art\DevTools\Ai\ApplyResult::refused`**
+
+```mermaid
+flowchart TD
+  d1{"un brouillon de scénario, de règle ou d'assertion enfreint une règle"}
+  d1 -->|oui| v1["refusé avec ses raisons, gardé dans pending/ pour être corrigé"]
+  d1 -->|non| v2["il rejoint les acceptés"]
+```
+
 ## Data
 
-Lit les briefs, les modèles et les brouillons de `.devtools/pending/`, le fichier de stack et le sommaire existant ; écrit les pages, les fichiers de suivi, l'index et le sommaire, et dépose les fiches de connaissance.
+Lit les briefs, les modèles et les brouillons de `.devtools/pending/`, le fichier de stack et le sommaire existant ; écrit les pages, les fichiers de suivi, l'index et le sommaire, les règles proposées et les assertions — et passe à promus les retours d'une règle —, et dépose les fiches de connaissance. Applique aussi l'amendement d'une fiche demandé par knowledge:amend : la fiche du projet est remplacée, et la bibliothèque en reçoit une révision.
 
 ## Cross-cutting mechanisms
 
@@ -126,3 +111,7 @@ Un brouillon refusé ne change rien et reste dans `pending/` pour être corrigé
 | 2026-09-21 | e5a6438 | l'outil passe en anglais : ce que la commande écrit, et les titres des pages qu'elle produit (files changed: src/Ai/DraftApplier.php, src/Ai/PageDraft.php, src/Ai/PageDraftValidator.php, src/Console/SummaryRenderer.php, src/Rendering/GroupPageRenderer.php, src/Rendering/GroupPageSection.php, src/Rendering/PageRenderer.php, src/Rendering/PageSection.php, src/Rendering/ParsedPage.php, src/Stack/Knowledge/KnowledgeCanvas.php, src/Stack/Knowledge/XmlKnowledgeBriefStore.php, src/Tracking/TrackingStatus.php) |
 | 2026-09-21 | e5a6438 | l'en-tête de l'historique passe en anglais, et une page restée sous un gabarit antérieur est remise à jour (files changed: src/Rendering/PageRenderer.php) |
 | 2026-10-20 | 2885138 | apply réécrit le sommaire depuis le disque : un workflow rédigé quitte « To check » sans attendre la prochaine inspection (ADR-0049) (added test tests/Ai/MenuAfterApplyTest.php (+4)) |
+| 2026-10-20 | 4979790 | apply applique aussi l'amendement d'une fiche, déposé en révision dans la bibliothèque ; le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044) (added decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::depositRevision: — → \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent (+3)) |
+| 2026-10-20 | 4979790 | Applique aussi les brouillons de scénarios, et le sommaire liste les scénarios à revoir ; le dépôt d'une fiche dans la bibliothèque sort du graphe de ce workflow, sans changer de comportement. (removed decision Jul6Art\DevTools\Stack\Knowledge\KnowledgeLibrary::deposit: \Jul6Art\DevTools\Stack\Knowledge\DepositOutcome::AlreadyPresent → — (+13)) |
+| 2026-10-20 | 58c02fb | Applique aussi les brouillons de règles et d'assertions — une assertion exécutée avant d'être écrite ; deux décisions de rendu sortent du graphe de ce workflow, sans changer de comportement. (added decision Jul6Art\DevTools\Ai\ApplyResult::accepted: — → [...$result->accepted, ...$scenarios['accepted']] (+18)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |

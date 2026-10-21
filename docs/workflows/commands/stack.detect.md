@@ -1,5 +1,5 @@
 # stack:detect
-`command.stack.detect` · type: commands · last updated: 2026-10-20 · commit: 2885138
+`command.stack.detect` · type: commands · last updated: 2026-10-20 · commit: 58c02fb
 
 ## Summary
 
@@ -28,10 +28,6 @@ sequenceDiagram
   C->>S: écriture (nom de projet verrouillé conservé)
   C-->>U: la table des stacks trouvées
 ```
-
-## Navigation / states
-
-—
 
 ## Decisions
 
@@ -86,3 +82,6 @@ Un `package.json` à côté d'un projet Symfony n'est une stack que s'il porte u
 | 2026-09-19 | d9d6b8f | added test tests/Project/GitHooksTest.php |
 | 2026-09-20 | 9e40da9 | Aucun changement de fond : seul un test s'est ajouté au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php) |
 | 2026-10-20 | 2885138 | une application Node sans framework devient une stack : un point d'entrée et des dépendances d'exécution suffisent (ADR-0050) (added test tests/Ai/MenuAfterApplyTest.php (+4)) |
+| 2026-10-20 | 4979790 | Aucun changement de fond : le gabarit passe à neuf sections : la navigation et la machine à états ouvrent « Decisions » (ADR-0044), et des tests se sont ajoutés. La prose a été relue contre le code et tient. (added test tests/Stack/Knowledge/KnowledgeAmendTest.php) |
+| 2026-10-20 | 4979790 | Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Gate/GateBrowserTest.php (+8)) |
+| 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |

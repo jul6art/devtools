@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Every rule of the project, with where it applies and what it says: .devtools/rules/index.xml (ADR-0026). The hook
+    that gives Claude the rules of a file reads this file alone, never the rules one by one.
+
+    ⚠️ Public contract: an incompatible change is a new schema-version and a major release.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="https://github.com/jul6art/devtools/schema/rule-index/1"
+           targetNamespace="https://github.com/jul6art/devtools/schema/rule-index/1"
+           elementFormDefault="qualified">
+
+    <xs:element name="rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="files" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="glob" type="t:nonEmpty" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="workflow-type" type="t:nonEmpty" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="instruction" type="t:nonEmpty"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="status" type="t:status" use="required"/>
+                        <xs:attribute name="created" type="xs:date" use="required"/>
+                        <xs:attribute name="origin" type="t:nonEmpty" use="required"/>
+                        <xs:attribute name="category" type="t:nonEmpty"/>
+                        <xs:attribute name="assertion" type="t:nonEmpty"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="schema-version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+        <xs:unique name="ruleId">
+            <xs:selector xpath="t:rule"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:simpleType name="status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="proposed"/>
+            <xs:enumeration value="active"/>
+            <xs:enumeration value="archived"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value=".*\S.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
