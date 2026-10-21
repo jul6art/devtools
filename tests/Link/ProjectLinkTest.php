@@ -275,7 +275,7 @@ final class ProjectLinkTest extends TestCase
         $tree = [];
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($project, \FilesystemIterator::SKIP_DOTS)) as $file) {
-            if ($file instanceof \SplFileInfo && !str_contains($file->getPathname(), '/node_modules/') && !str_contains($file->getPathname(), '/.git/') && !str_contains($file->getPathname(), '/.devtools/reports/')) {
+            if ($file instanceof \SplFileInfo && !str_contains($file->getPathname(), '/node_modules/') && !str_contains($file->getPathname(), '/.git/') && !str_contains($file->getPathname(), '/.devtools/reports/') && !str_ends_with($file->getPathname(), '/.devtools/search.idx')) {
                 $tree[substr($file->getPathname(), \strlen($project))] = (string) file_get_contents($file->getPathname());
             }
         }

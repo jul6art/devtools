@@ -31,6 +31,11 @@ final readonly class DevToolsDirectory
      */
     public const array IGNORED = ['pending', 'reports', 'runs', 'gate', 'stats'];
 
+    /**
+     * Files never committed, added after them: the search index, a cache any question rebuilds (ADR-0039).
+     */
+    public const array IGNORED_FILES = ['search.idx'];
+
     public const string DEFAULT_DOCS = 'docs/workflows';
 
     public string $docs;

@@ -1,6 +1,6 @@
 # ADR-0039 — Mode question : `devtools ask`
 
-- **Statut** : Proposed — 2026-09-16
+- **Statut** : Accepted — 2026-10-21 (proposée le 2026-09-16)
 - **Décideurs** : jul6art
 - **Specs** : § 4.8 (mode question)
 
@@ -41,12 +41,36 @@ Questions sur le code non documenté ; conversation à plusieurs tours ; embeddi
 
 ## Critères d'acceptation
 
-- [ ] Jeu de questions de fixture sur `symfony-minimal` : pages attendues dans les trois premières
-- [ ] Élargissement par `dependsOn` vérifié
-- [ ] `search_workflows` exposé par le serveur MCP
-- [ ] Réponse simulée qui cite une page absente du contexte → signalée
-- [ ] Source périmée → avertissement
-- [ ] README : section « Poser une question »
+- [x] Jeu de questions de fixture sur `symfony-minimal` : pages attendues dans les trois premières
+      (`AskTest`, huit questions, en français et en anglais)
+- [x] Élargissement par `dependsOn` vérifié (`laravel-minimal` : la planification mène à la commande)
+- [x] `search_workflows` exposé par le serveur MCP
+- [x] Réponse simulée qui cite une page absente du contexte → signalée
+- [x] Source périmée → avertissement
+- [x] README : section « Asking the documentation »
+
+## Mise en œuvre (2026-10-21)
+
+- Paquet `src/Ask/` : `Tokenizer` (minuscules, accents ôtés, identifiants découpés, mots vides français
+  et anglais, racinisation par le plus long suffixe commun qui laisse quatre lettres — `valide`,
+  `validate`, `validation` se rejoignent), `SearchIndex` (BM25, k1 = 1,2, b = 0,75), `SearchIndexBuilder`,
+  `SearchIndexStore`, `PageSelector`, `SelectedPage`, `QuestionAnswerer`, `Answer` ; commande `ask`.
+- L'index pèse les mots selon leur place : titre et identifiant ×3, résumé et termes du glossaire
+  (nom, libellé, synonymes) ×2, reste de la page et noms de fichiers ×1 ; l'historique et les workflows
+  liés n'y entrent pas. Ce que la sélection élargit (dépendances et navigation) est gardé à part.
+- `.devtools/search.idx` est du JSON (jamais `unserialize`), écrit à chaque inspection et reconstruit
+  par une question quand son empreinte — l'index, le glossaire, taille et date de chaque page — ne
+  correspond plus : `workflows:apply` écrit des pages sans inspecter. Ignoré par git (`init` l'ajoute au
+  `.gitignore` comme les zones de travail), ignoré par la gate, écarté des instantanés.
+- Sélection : les pages à au moins un quart du meilleur score, puis un saut depuis les trois meilleures ;
+  huit au plus. 15 ms sur `symfony-minimal`, sous 200 ms sur 300 workflows (test).
+- Réponse hors session : refusée tant que `<ai enabled="true"/>` manque (comme `ai:run`, à la demande de
+  l'utilisateur : « peur des tokens »), clé lue dans `ANTHROPIC_API_KEY` seulement ; les pages passent le
+  `SecretScanner` de l'ADR-0035 avant de partir ; effort `low`, 4 000 jetons de sortie au plus ; une
+  question qui ne partage aucun mot avec les pages n'est pas envoyée.
+- L'outil MCP `search_workflows` reconstruit un index périmé en mémoire sans l'écrire : tous les outils du
+  serveur restent en lecture seule.
+- `claude:install` installe désormais deux skills : `devtools-inspect` et `devtools-ask`.
 
 ## Conséquences
 

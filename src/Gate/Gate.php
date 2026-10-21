@@ -31,7 +31,7 @@ final readonly class Gate
      * DevTools' own work areas, and the journal the Stop hook writes when the gate passes (ADR-0029): never a change
      * to judge — or a delivered task would start the next one.
      */
-    private const string OWN = '#^\.devtools/(gate|runs|pending|reports|stats|journal)/#';
+    private const string OWN = '#^\.devtools/((gate|runs|pending|reports|stats|journal)/|search\.idx$)#';
 
     /**
      * @var list<GateStepInterface>

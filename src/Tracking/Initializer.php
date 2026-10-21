@@ -58,16 +58,17 @@ final readonly class Initializer
         $current = is_file($path) ? (string) file_get_contents($path) : '';
         $present = array_map(static fn (string $line): string => trim(trim($line), '/'), explode("\n", $current));
 
+        // A directory is written with its trailing slash, a file without.
         $missing = array_values(array_filter(
-            array_map(static fn (string $area): string => DevToolsDirectory::NAME.'/'.$area, DevToolsDirectory::IGNORED),
-            static fn (string $entry): bool => !\in_array($entry, $present, true),
+            [...array_map(static fn (string $area): string => DevToolsDirectory::NAME.'/'.$area.'/', DevToolsDirectory::IGNORED), ...array_map(static fn (string $file): string => DevToolsDirectory::NAME.'/'.$file, DevToolsDirectory::IGNORED_FILES)],
+            static fn (string $entry): bool => !\in_array(rtrim($entry, '/'), $present, true),
         ));
 
         if ([] === $missing) {
             return false;
         }
 
-        $block = "\n# DevTools work areas — https://github.com/jul6art/devtools\n".implode('', array_map(static fn (string $entry): string => '/'.$entry."/\n", $missing));
+        $block = "\n# DevTools work areas — https://github.com/jul6art/devtools\n".implode('', array_map(static fn (string $entry): string => '/'.$entry."\n", $missing));
         $separator = '' === $current || str_ends_with($current, "\n") ? '' : "\n";
 
         return $this->writer->write($path, ltrim($current.$separator.$block, "\n"));

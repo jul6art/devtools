@@ -71,7 +71,7 @@ final class McpServerTest extends TestCase
         $lines = $this->dialogue((string) file_get_contents(__DIR__.'/../Fixtures/mcp/dialogue.jsonl'));
         $responses = array_map(static fn (string $line): mixed => json_decode($line, flags: \JSON_THROW_ON_ERROR), $lines);
 
-        self::assertSame([1, 2, 3, 4, 5, 6, 7], array_map(static fn (mixed $response): mixed => $response instanceof \stdClass ? $response->id : null, $responses), 'One answer per request, none to the notification.');
+        self::assertSame([1, 2, 3, 4, 5, 6, 7, 8], array_map(static fn (mixed $response): mixed => $response instanceof \stdClass ? $response->id : null, $responses), 'One answer per request, none to the notification.');
         self::assertStringContainsString('"version":"'.Version::current().'"', $lines[0]);
 
         // Objects, not arrays: `{}` stays `{}`, as on the wire. The version and the copy's path vary.
@@ -91,7 +91,7 @@ final class McpServerTest extends TestCase
     {
         $tools = self::decode($this->dialogue((string) file_get_contents(__DIR__.'/../Fixtures/mcp/dialogue.jsonl'))[1], 'result', 'tools');
 
-        self::assertSame(['list_workflows', 'get_workflow', 'impact', 'get_knowledge'], array_column($tools, 'name'));
+        self::assertSame(['list_workflows', 'get_workflow', 'search_workflows', 'impact', 'get_knowledge'], array_column($tools, 'name'));
 
         foreach ($tools as $tool) {
             self::assertIsArray($tool);

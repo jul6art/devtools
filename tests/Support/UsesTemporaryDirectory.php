@@ -96,7 +96,7 @@ trait UsesTemporaryDirectory
 
         foreach (['.devtools', $docs] as $directory) {
             foreach (is_dir($project.'/'.$directory) ? self::tree($project.'/'.$directory) : [] as $path => $content) {
-                if (!preg_match('#^(reports|pending|schemas)/#', $path)) {
+                if (!preg_match('#^((reports|pending|schemas)/|search\.idx$)#', $path)) {
                     $files[$directory.'/'.$path] = $content;
                 }
             }

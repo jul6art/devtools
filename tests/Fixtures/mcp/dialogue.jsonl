@@ -6,3 +6,4 @@
 {"jsonrpc":"2.0","id":5,"method":"tools/call","params":{"name":"impact","arguments":{"files":["src/Repository/OrderRepository.php"]}}}
 {"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"get_workflow","arguments":{"id":"route.order.nope"}}}
 {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"impact","arguments":{"files":["../outside.php"]}}}
+{"jsonrpc":"2.0","id":8,"method":"tools/call","params":{"name":"search_workflows","arguments":{"question":"Is the health of the application checked without logging in?","limit":3}}}

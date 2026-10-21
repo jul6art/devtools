@@ -9,6 +9,7 @@ use Jul6Art\DevTools\Ai\PageBrief;
 use Jul6Art\DevTools\Ai\PageDraft;
 use Jul6Art\DevTools\Ai\XmlGroupBriefStore;
 use Jul6Art\DevTools\Ai\XmlPageBriefStore;
+use Jul6Art\DevTools\Ask\SearchIndexStore;
 use Jul6Art\DevTools\Clock\Clock;
 use Jul6Art\DevTools\Clock\SystemClock;
 use Jul6Art\DevTools\Config\Config;
@@ -391,6 +392,9 @@ final readonly class InspectionPipeline
 
         $this->writer->write($directory->menuFile(), new MenuRenderer()->render($stacks, $index, $uncovered, $pending, $config->customTypes, $directory->docs, $scenarios, is_file($directory->root->absolute($directory->docs.'/glossary.md')), $links));
         $this->writer->write($directory->overviewFile(), new GraphRenderer()->render($workflows));
+
+        // ADR-0039: what a question is answered from, once the pages are written.
+        new SearchIndexStore($this->writer)->write($directory, $types);
     }
 
     /**

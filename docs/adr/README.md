@@ -58,7 +58,7 @@
 | [0036](0036-renommage-de-workflows.md) | Renommage de workflows : `workflows:rename` | Compléments | Accepted | 2026-10-21 |
 | [0037](0037-glossaire-metier.md) | Glossaire métier | Compléments | Accepted | 2026-10-21 |
 | [0038](0038-multi-projets.md) | Multi-projets : relier un front et son API | Compléments | Accepted | 2026-10-21 |
-| [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Proposed | — |
+| [0039](0039-mode-question.md) | Mode question : `devtools ask` | Compléments | Accepted | 2026-10-21 |
 | [0040](0040-integration-symfony-skeleton-generator.md) | Intégration à `symfony-skeleton-generator` | Compléments | Proposed | — |
 | [0041](0041-bibliotheque-de-connaissances.md) | Bibliothèque de connaissances partagée | MVP+ — Retours d'usage | Accepted | 2026-09-18 |
 | [0042](0042-progression-et-compteurs-en-console.md) | Progression et compteurs de la sortie console | MVP+ — Retours d'usage | Accepted | 2026-09-18 |

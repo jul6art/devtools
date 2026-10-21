@@ -88,7 +88,7 @@ final class ChangeReviewTest extends TestCase
 
         self::assertSame(
             ['order.new.md', 'order.new.xml'],
-            self::sorted(array_map(basename(...), array_filter($changed, static fn (string $file): bool => !str_contains($file, '/reports/') && !str_ends_with($file, 'index.xml') && !str_contains($file, '/graph/')))),
+            self::sorted(array_map(basename(...), array_filter($changed, static fn (string $file): bool => !str_contains($file, '/reports/') && !str_ends_with($file, 'index.xml') && !str_ends_with($file, 'search.idx') && !str_contains($file, '/graph/')))),
             'Everything was stale; only the page and the tracking of the named workflow moved.',
         );
     }

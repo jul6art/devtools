@@ -44,3 +44,6 @@
 
 # The phar `composer phar` builds and the site `export:site` writes by default (ADR-0034).
 /build/
+
+# The search index of DevTools (ADR-0039): a cache any question rebuilds.
+/.devtools/search.idx

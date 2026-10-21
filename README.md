@@ -167,6 +167,7 @@ Usage
 | | `/devtools-inspect` *(in Claude Code)* | the skill: Claude writes one draft per brief in `.devtools/pending/`, applies them, and loops | drafts |
 | | `devtools workflows:apply` | checks each draft, rebuilds its page, and takes the workflow off the menu's « To check » list | pages, tracking, `workflows.md` |
 | **Before changing a file** | `devtools workflows:impact <file>` | the workflows it reaches, and their pages — with `--linked`, the screens of the front calling them | nothing |
+| **A question about behaviour** | `devtools ask --pages "<question>"` | the pages that answer it, selected without AI; `/devtools-ask` in Claude Code answers from them | nothing |
 | **A front and its API** | `devtools workflows:inspect ../api ../mobile --link` | both inspected, then each front call matched against an API route | `graph/links.xml`, pages, menus |
 | **Writing scenarios** (on demand) | `devtools scenarios:generate` | a skeleton per GET route, a brief for Claude for the rest; `workflows:apply` applies its drafts | `.devtools/scenarios/` |
 | | `devtools scenarios:run --base-url=…` | replays them in Chrome against the running application | `.devtools/runs/` |
@@ -770,6 +771,44 @@ The `json` format is for tools:
 
 The `xml` format follows `impact.xsd`, copied into `.devtools/schemas/` like every schema.
 
+Asking the documentation
+------------------------
+
+"What happens when an operator validates an order?" — the answer is in the pages, and nobody has to read the
+code again for it. Every inspection indexes them in `.devtools/search.idx` (a cache git ignores, built again
+by a question whenever a page changed since): their titles, identifiers, summaries and prose, the names of
+their files, and the words the glossary gives them.
+
+```shell
+vendor/bin/devtools ask --pages "Que se passe-t-il quand un opérateur valide une commande ?"
+```
+
+```
+ --- ---------------------------- ------- ----------------------------------------------- ------------ -------------------------
+  #   Workflow                     Score   Page                                            Revised      Found
+ --- ---------------------------- ------- ----------------------------------------------- ------------ -------------------------
+  1   route.order.new              4.18    docs/workflows/routes/order.new.md              2026-09-16   by its words
+  2   route.order.validate         3.11    docs/workflows/routes/order.validate.md         2026-09-16   by its words
+  3   command.app.import-catalog   2.50    docs/workflows/commands/app.import-catalog.md   2026-09-16   by its words
+  4   route.customer.edit          1.62    docs/workflows/routes/customer.edit.md          2026-09-16   by its words
+  5   route.order.show             0.73    docs/workflows/routes/order.show.md             2026-09-16   next to route.order.new
+ --- ---------------------------- ------- ----------------------------------------------- ------------ -------------------------
+```
+
+No AI, nothing sent: BM25 over the words of the pages — lowercase, accents and stems aside, so that
+`valide`, `validate` and `validation` meet — then, one hop away from the three best, the workflows they depend
+on or lead to. Eight pages at most, the stale ones said. `--format=json` is for tools; the MCP server answers
+the same through `search_workflows`.
+
+**In Claude Code**, the `devtools-ask` skill (installed by `claude:install`) runs that selection, reads the
+pages, and answers from them alone, citing the identifiers of the workflows and the dates of their pages.
+
+**Out of a session** — a terminal, a CI job — `devtools ask "<question>"` answers through the Claude API, with
+the selected pages as its only context and the instruction to say "Not documented." rather than invent. It is
+`ai:run`'s client, **off unless the project turns it on** (`<ai enabled="true"/>`, the key in
+`ANTHROPIC_API_KEY`): it spends tokens. The answer lists its sources with their revision dates, and warns when
+it rests on a stale page or cites a workflow it was not given — which nothing then checks.
+
 Linked projects
 ---------------
 
@@ -921,13 +960,14 @@ vendor/bin/devtools claude:uninstall --mcp      # takes back exactly what it add
 | --- | --- | --- |
 | `list_workflows` | `type?`, `status?` | identifier, type, title, freshness, confidence and page of each workflow |
 | `get_workflow` | `id` | its page, then its files, tests, dependencies, mechanisms and history |
+| `search_workflows` | `question`, `limit?` | the pages that answer it, as `ask --pages --format=json` lists them |
 | `impact` | `files` or `changed: true` | what `workflows:impact --format=json` answers |
 | `get_knowledge` | `stack?` — a root or a key | the knowledge sheet of the stack, read where the inspection would find it |
 
 Every tool **reads**: none writes, none inspects, none reads the code — a call reads the index, one page
-and its tracking file, or the impact map. A project never inspected gets the command to run; an unknown
-identifier, a path outside the project or an unreadable file is an error Claude reads, never a crash of the
-server.
+and its tracking file, the impact map or the search index — built again in memory, never on disk, when a
+page changed since. A project never inspected gets the command to run; an unknown identifier, a path
+outside the project or an unreadable file is an error Claude reads, never a crash of the server.
 
 The entry it writes is `{"type": "stdio", "command": "${CLAUDE_PROJECT_DIR:-.}/vendor/bin/devtools",
 "args": ["mcp:serve"]}` when the project installs DevTools, with `"command": "devtools"` for a global
@@ -1639,7 +1679,7 @@ src/
 │                            feedback:add, feedback:list, feedback:resolve, rules:promote,
 │                            rules:activate, rules:list, rules:archive, assertions:propose,
 │                            review, retro, knowledge:list, knowledge:promote, knowledge:amend,
-│                            export:site, self-update, ai:run
+│                            export:site, self-update, ai:run, ask
 ├── Project/                 the project root, last guard against a path leaving it; the inspection lock;
 │                            the files of a project
 ├── Config/                  .devtools/config.xml
@@ -1669,6 +1709,7 @@ src/
 ├── Retro/                   the journal of the tasks delivered, and the retrospective read from it
 ├── Glossary/                the project's terms: collected from the model, defined by Claude, given to the pages
 ├── Link/                    a front and its API: their calls matched, links.xml, the pages and the impact across both
+├── Ask/                     the search index of the pages, the pages a question selects, the answer from them
 ├── Rendering/               pages, workflows.md and the overview diagram; the exported site
 ├── Release/                 self-update: the latest release, its checksum and provenance verified
 ├── Ai/                      briefs for Claude, validation and application of its drafts; ai:run and its
@@ -1682,7 +1723,7 @@ resources/node/              the script the Node bridge runs, without a dependen
 resources/site/              the exported site's stylesheet, search and Mermaid
 resources/feedback/          the closed list of feedback categories
 resources/review/            the review page: its HTML, stylesheet, script, and the router of its server
-resources/claude/            the Claude Code skill claude:install copies
+resources/claude/            the Claude Code skills claude:install copies
 tests/
 ├── Fixtures/projects/       real projects: Symfony 8.1, Symfony 7.4 with YAML, Laravel 13, PHP, Express 5 in JavaScript
 │                            and in TypeScript, Express 4 without TypeScript, Angular 22, Ionic tabs, monorepos,

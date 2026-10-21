@@ -32,6 +32,7 @@ final class ClaudeInstallTest extends TestCase
 
         self::assertSame(0, $tester->execute(['path' => $this->temporaryDirectory()]));
         self::assertFileEquals(\dirname(__DIR__, 2).'/resources/claude/skills/devtools-inspect/SKILL.md', $skill);
+        self::assertFileEquals(\dirname(__DIR__, 2).'/resources/claude/skills/devtools-ask/SKILL.md', $this->temporaryDirectory().'/.claude/skills/devtools-ask/SKILL.md', 'ADR-0039: the skill that answers from the pages.');
         self::assertSame(0, $tester->execute(['path' => $this->temporaryDirectory()]), 'Installing again the same skill is fine.');
 
         file_put_contents($skill, "# adapted to this project\n", \FILE_APPEND);

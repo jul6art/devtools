@@ -14,7 +14,7 @@
                 "version": "VERSION",
                 "description": "The workflows of this project, as DevTools documents them"
             },
-            "instructions": "DevTools documents the workflows of this project — routes, commands, messages, components — and maps each source file to the workflows it takes part in. Before modifying a file, call `impact` with it: the workflows it reaches are the behaviour to keep, and their pages say what that behaviour is. Call `get_workflow` to read one page instead of opening the documentation directory, `list_workflows` to find an identifier, `get_knowledge` for the conventions of the stack. Nothing here writes: the documentation is as fresh as the last `devtools workflows:inspect`."
+            "instructions": "DevTools documents the workflows of this project — routes, commands, messages, components — and maps each source file to the workflows it takes part in. Before modifying a file, call `impact` with it: the workflows it reaches are the behaviour to keep, and their pages say what that behaviour is. Call `search_workflows` with a question about how the project behaves to find the pages that answer it, `get_workflow` to read one page instead of opening the documentation directory, `list_workflows` to find an identifier, `get_knowledge` for the conventions of the stack. Nothing here writes: the documentation is as fresh as the last `devtools workflows:inspect`."
         }
     },
     {
@@ -81,6 +81,37 @@
                     "description": "Returns the page of one workflow — what it does, what it decides, what to watch — then its files, tests, dependencies, mechanisms and history. Call it before changing a behaviour, instead of opening the documentation directory.",
                     "annotations": {
                         "title": "Read a workflow",
+                        "readOnlyHint": true,
+                        "destructiveHint": false,
+                        "idempotentHint": true,
+                        "openWorldHint": false
+                    }
+                },
+                {
+                    "name": "search_workflows",
+                    "title": "Search the workflows",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "question": {
+                                "type": "string",
+                                "description": "The question, in plain words, in any language the pages are written in"
+                            },
+                            "limit": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 8,
+                                "description": "At most this many pages"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "question"
+                        ]
+                    },
+                    "description": "Returns the pages that answer a question about how the project behaves — \"what happens when an operator validates an order?\" — ranked on their words, then those they lead to; eight at most, the stale ones said. Read them with get_workflow and answer from them alone, citing their identifiers.",
+                    "annotations": {
+                        "title": "Search the workflows",
                         "readOnlyHint": true,
                         "destructiveHint": false,
                         "idempotentHint": true,
@@ -208,6 +239,19 @@
                 }
             ],
             "isError": true
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": "{\"question\":\"Is the health of the application checked without logging in?\",\"pages\":[{\"id\":\"route.health\",\"title\":\"GET /health\",\"page\":\"docs/workflows/routes/health.md\",\"score\":3.952,\"status\":\"fresh\",\"updated\":\"2026-09-16\",\"via\":null}],\"warnings\":[]}"
+                }
+            ],
+            "isError": false
         }
     }
 ]

@@ -25,6 +25,11 @@ final class ToolRefused extends \RuntimeException
         return new self('Give either "files" or "changed": true — not both, not neither.');
     }
 
+    public static function search(): self
+    {
+        return new self('Give a question, and a limit from 1 to 8 if any.');
+    }
+
     public static function noGit(): self
     {
         return new self('git could not list the changes: the project is not in a repository. Give the files instead.');

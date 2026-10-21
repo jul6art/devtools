@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Mcp;
 
+use Jul6Art\DevTools\Ask\PageSelector;
 use Jul6Art\DevTools\Version;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\Content\TextContent;
@@ -13,7 +14,7 @@ use Mcp\Server;
 use Mcp\Server\Transport\StdioTransport;
 
 /**
- * The MCP server of a project (ADR-0018): four read-only tools on stdio, launched by Claude Code inside the
+ * The MCP server of a project (ADR-0018): five read-only tools on stdio, launched by Claude Code inside the
  * project — the page of one workflow instead of a directory to read.
  *
  * The only place that knows the SDK. It is pre-1.0 and only suggested: when it is missing, `mcp:serve` is not
@@ -33,7 +34,7 @@ final readonly class McpServer
      */
     public const string INSTRUCTIONS = 'DevTools documents the workflows of this project — routes, commands, messages, components — and maps each source file to the workflows it takes part in. '
         .'Before modifying a file, call `impact` with it: the workflows it reaches are the behaviour to keep, and their pages say what that behaviour is. '
-        .'Call `get_workflow` to read one page instead of opening the documentation directory, `list_workflows` to find an identifier, `get_knowledge` for the conventions of the stack. '
+        .'Call `search_workflows` with a question about how the project behaves to find the pages that answer it, `get_workflow` to read one page instead of opening the documentation directory, `list_workflows` to find an identifier, `get_knowledge` for the conventions of the stack. '
         .'Nothing here writes: the documentation is as fresh as the last `devtools workflows:inspect`.';
 
     public function __construct(private ProjectQueries $queries)
@@ -81,6 +82,17 @@ final readonly class McpServer
                 self::schema(['id' => ['type' => 'string', 'description' => 'The identifier of the workflow, e.g. route.order.create']], ['id']),
             )
             ->addTool(
+                $this->searchWorkflows(...),
+                'search_workflows',
+                'Search the workflows',
+                'Returns the pages that answer a question about how the project behaves — "what happens when an operator validates an order?" — ranked on their words, then those they lead to; eight at most, the stale ones said. Read them with get_workflow and answer from them alone, citing their identifiers.',
+                self::readOnly('Search the workflows'),
+                self::schema([
+                    'question' => ['type' => 'string', 'description' => 'The question, in plain words, in any language the pages are written in'],
+                    'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => PageSelector::LIMIT, 'description' => 'At most this many pages'],
+                ], ['question']),
+            )
+            ->addTool(
                 $this->impact(...),
                 'impact',
                 'Impact of a change',
@@ -110,6 +122,11 @@ final readonly class McpServer
     public function getWorkflow(string $id): CallToolResult
     {
         return self::answer(fn (): array => $this->queries->getWorkflow($id));
+    }
+
+    public function searchWorkflows(string $question, int $limit = PageSelector::LIMIT): CallToolResult
+    {
+        return self::answer(fn (): array => $this->queries->searchWorkflows($question, $limit));
     }
 
     /**

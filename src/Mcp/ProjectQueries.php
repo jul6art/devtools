@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Jul6Art\DevTools\Mcp;
 
+use Jul6Art\DevTools\Ask\PageSelector;
+use Jul6Art\DevTools\Ask\SearchIndexStore;
+use Jul6Art\DevTools\Ask\SelectedPage;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Impact\ImpactResolver;
 use Jul6Art\DevTools\Inspection\Freshness\GitClient;
@@ -116,6 +119,29 @@ final readonly class ProjectQueries
                 'history' => array_map(static fn (Revision $revision): array => ['date' => $revision->at->format('Y-m-d'), 'commit' => $revision->commit, 'change' => $revision->reason], $tracking->history),
             ]),
         ];
+    }
+
+    /**
+     * The pages that answer a question (ADR-0039), as `devtools ask --pages --format=json` lists them: selected
+     * without AI, best first, then those they lead to; the stale ones said.
+     *
+     * @return list<string>
+     */
+    public function searchWorkflows(string $question, int $limit = PageSelector::LIMIT): array
+    {
+        if ('' === trim($question) || $limit < 1 || $limit > PageSelector::LIMIT) {
+            throw ToolRefused::search();
+        }
+
+        [$directory] = $this->index();
+        // Read only, as every tool: a stale index is built again in memory, never written.
+        $pages = new PageSelector()->select(new SearchIndexStore()->current($directory, $this->types, save: false), $question, $limit);
+
+        return [self::json([
+            'question' => $question,
+            'pages' => array_map(static fn (SelectedPage $page): array => $page->toArray(), $pages),
+            'warnings' => array_values(array_map(static fn (SelectedPage $page): string => \sprintf('%s is %s: its page may describe the code as it was (revised %s).', $page->id, $page->status, $page->updated), array_filter($pages, static fn (SelectedPage $page): bool => $page->isStale()))),
+        ])];
     }
 
     /**
