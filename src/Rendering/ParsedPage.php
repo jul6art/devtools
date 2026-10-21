@@ -131,10 +131,13 @@ final readonly class ParsedPage
 
     /**
      * The value of the "Preconditions" row of the trigger table — the one cell of a DevTools section Claude fills.
+     *
+     * ⚠️ Unescaped: the table writes `|` as `\|`, and a value read back as written was escaped once more on
+     * every rewrite.
      */
     public function preconditions(): ?string
     {
-        return 1 === preg_match('/^\| Pr(?:é|e)conditions \| (.*) \|$/m', $this->section(PageSection::Trigger) ?? '', $matches) ? $matches[1] : null;
+        return 1 === preg_match('/^\| Pr(?:é|e)conditions \| (.*) \|$/m', $this->section(PageSection::Trigger) ?? '', $matches) ? str_replace('\|', '|', $matches[1]) : null;
     }
 
     /**

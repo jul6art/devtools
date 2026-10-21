@@ -195,6 +195,27 @@ final class PageRendererTest extends TestCase
     }
 
     /**
+     * ⚠️ **A pipe in the preconditions is escaped once, however many rewrites follow.** The cell was read
+     * back as written — `\|` included — and the table escaped it again: every `workflows:accept` added a
+     * backslash (`\|`, `\\|`, `\\\|`…), seen on a command page of devinlive.
+     */
+    public function testAPipeInThePreconditionsSurvivesEveryRewrite(): void
+    {
+        $renderer = new PageRenderer();
+        $workflow = RenderingFixtures::workflows()['routes'];
+        $page = strtr($renderer->render($workflow, RenderingFixtures::history(), RenderingFixtures::context()), [
+            '| Preconditions | — |' => '| Preconditions | stock \\| commande |',
+        ]);
+
+        self::assertSame('stock | commande', new PageParser()->parse($page)->preconditions());
+
+        foreach ([1, 2] as $rewrite) {
+            $page = $renderer->render($workflow, RenderingFixtures::history(), RenderingFixtures::context(), new PageParser()->parse($page));
+            self::assertStringContainsString('| Preconditions | stock \\| commande |', $page, \sprintf('Rewrite %d.', $rewrite));
+        }
+    }
+
+    /**
      * ⚠️ **A page written before v3 carries French headings, and its prose must survive the upgrade.**
      * Re-rendering reads the sections of the CURRENT page: a heading nobody recognises is a section that
      * comes back empty, so without the legacy map the first inspection after the upgrade would have
