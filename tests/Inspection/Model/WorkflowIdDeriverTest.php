@@ -70,7 +70,7 @@ final class WorkflowIdDeriverTest extends TestCase
     public function testANameWithNothingUsableIsRefusedWithTheEntryPointNamed(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"___"');
+        $this->expectExceptionMessageIsOrContains('"___"');
 
         new WorkflowIdDeriver()->derive(WorkflowType::routes(), new EntryPoint('route', '___', new FileRef('src/X.php')));
     }

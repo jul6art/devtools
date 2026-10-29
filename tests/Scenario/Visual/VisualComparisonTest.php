@@ -68,7 +68,7 @@ final class VisualComparisonTest extends TestCase
     {
         file_put_contents($this->temporaryDirectory().'/broken.png', 'not an image');
 
-        $this->expectExceptionMessage('broken.png is not a PNG image.');
+        $this->expectExceptionMessageIsOrContains('broken.png is not a PNG image.');
 
         new ImageComparator()->compare($this->temporaryDirectory().'/broken.png', $this->png('a', 10, 10));
     }

@@ -50,7 +50,7 @@ final class ConfigurationTest extends TestCase
     public function testALanguageThatIsNotTwoLowercaseLettersIsRefused(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('is not a language');
+        $this->expectExceptionMessageIsOrContains('is not a language');
 
         $this->process([['language' => 'french']]);
     }

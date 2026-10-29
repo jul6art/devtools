@@ -42,7 +42,7 @@ final class FileRefTest extends TestCase
     public function testItRejectsAPathThatDoesNotBelongToTheProject(string $path, string $reason): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage($reason);
+        $this->expectExceptionMessageIsOrContains($reason);
 
         new FileRef($path);
     }

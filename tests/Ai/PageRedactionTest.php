@@ -105,7 +105,7 @@ final class PageRedactionTest extends TestCase
     public function testALanguageThatIsNotTwoLettersIsRefused(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('"french" is not a language');
+        $this->expectExceptionMessageIsOrContains('"french" is not a language');
 
         new InspectionOptions($this->project, language: 'french');
     }

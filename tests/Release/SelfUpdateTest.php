@@ -91,7 +91,7 @@ final class SelfUpdateTest extends TestCase
     public function testOnlyHttpsIsEverAsked(): void
     {
         $this->expectException(UpdateRefused::class);
-        $this->expectExceptionMessage('http://example.com/latest is not an HTTPS address.');
+        $this->expectExceptionMessageIsOrContains('http://example.com/latest is not an HTTPS address.');
 
         new GitHubReleases('http://example.com/latest')->latest();
     }

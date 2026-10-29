@@ -47,7 +47,7 @@ final class WorkflowTest extends TestCase
     public function testItRejectsADuplicateFile(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('src/Form/OrderType.php');
+        $this->expectExceptionMessageIsOrContains('src/Form/OrderType.php');
 
         ModelFixtures::orderNewWorkflow([
             new FileRef('src/Form/OrderType.php', FileRole::Form),
@@ -58,7 +58,7 @@ final class WorkflowTest extends TestCase
     public function testTheIdentifierPrefixMustMatchTheType(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"command"');
+        $this->expectExceptionMessageIsOrContains('"command"');
 
         new Workflow(
             id: new WorkflowId('route.app.import-catalog'),
@@ -119,7 +119,7 @@ final class WorkflowTest extends TestCase
         self::assertSame('event', WorkflowType::custom('events', 'event')->idPrefix);
 
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"events"');
+        $this->expectExceptionMessageIsOrContains('"events"');
 
         new WorkflowTypeRegistry()->get('events');
     }
@@ -127,7 +127,7 @@ final class WorkflowTest extends TestCase
     public function testTheRegistryRejectsAnUnknownType(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"webhooks"');
+        $this->expectExceptionMessageIsOrContains('"webhooks"');
 
         new WorkflowTypeRegistry()->get('webhooks');
     }
@@ -152,7 +152,7 @@ final class WorkflowTest extends TestCase
         self::assertSame(['src/Util/Clock.php', 'src/Util/StringHelper.php'], array_map(static fn (FileRef $file): string => $file->path, $result->uncovered));
 
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('route.order.new');
+        $this->expectExceptionMessageIsOrContains('route.order.new');
 
         new InspectionResult('symfony-7', [ModelFixtures::orderNewWorkflow(), ModelFixtures::orderNewWorkflow()]);
     }

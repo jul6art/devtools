@@ -81,7 +81,7 @@ final class EntryPointAndValueObjectsTest extends TestCase
     public function testATransitionMustOnlyReferencePlacesOfItsMachine(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"cancelled"');
+        $this->expectExceptionMessageIsOrContains('"cancelled"');
 
         new StateMachine('order', ['draft', 'validated'], [new Transition('cancel', ['draft'], ['cancelled'])]);
     }

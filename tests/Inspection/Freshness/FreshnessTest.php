@@ -166,7 +166,7 @@ final class FreshnessTest extends TestCase
     public function testASinceThatIsNotACommitIsRefusedBeforeGitSeesIt(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('--since takes a commit');
+        $this->expectExceptionMessageIsOrContains('--since takes a commit');
 
         new InspectionOptions($this->project, since: '--output=/tmp/devtools-audit');
     }

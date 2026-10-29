@@ -94,7 +94,7 @@ final class ModelXmlSerializerTest extends TestCase
         $xml = str_replace('path="src/Form/OrderType.php"', 'path="../../etc/passwd"', new ModelXmlSerializer(new WorkflowTypeRegistry())->serialize($this->inspectionResult()));
 
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('outside the project root');
+        $this->expectExceptionMessageIsOrContains('outside the project root');
 
         new ModelXmlSerializer(new WorkflowTypeRegistry())->deserialize($xml);
     }
@@ -104,7 +104,7 @@ final class ModelXmlSerializerTest extends TestCase
         $xml = str_replace('type="commands"', 'type="webhooks"', new ModelXmlSerializer(new WorkflowTypeRegistry())->serialize($this->inspectionResult()));
 
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"webhooks"');
+        $this->expectExceptionMessageIsOrContains('"webhooks"');
 
         new ModelXmlSerializer(new WorkflowTypeRegistry())->deserialize($xml);
     }

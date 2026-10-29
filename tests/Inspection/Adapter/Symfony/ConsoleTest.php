@@ -92,7 +92,7 @@ final class ConsoleTest extends TestCase
         $runner = new RecordedConsoleRunner(['router' => "PHP Deprecated:  Something is deprecated in /x.php on line 3\n{\"a\": 1}"]);
 
         $this->expectException(ConsoleFailed::class);
-        $this->expectExceptionMessage('PHP Deprecated:  Something is deprecated');
+        $this->expectExceptionMessageIsOrContains('PHP Deprecated:  Something is deprecated');
 
         new SymfonyConsole($runner, '/project', ['php', 'bin/console'], 'dev')->json(['debug:router']);
     }
@@ -107,7 +107,7 @@ final class ConsoleTest extends TestCase
         };
 
         $this->expectException(ConsoleFailed::class);
-        $this->expectExceptionMessage('Class "Doctrine\Bundle" not found');
+        $this->expectExceptionMessageIsOrContains('Class "Doctrine\Bundle" not found');
 
         new SymfonyConsole($runner, '/project', ['php', 'bin/console'], 'dev')->json(['debug:router']);
     }

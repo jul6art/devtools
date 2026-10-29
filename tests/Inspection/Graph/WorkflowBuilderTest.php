@@ -64,7 +64,7 @@ final class WorkflowBuilderTest extends TestCase
     public function testAGroupReferencingAnUnknownEntryPointFailsWithItsName(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('app_order_export');
+        $this->expectExceptionMessageIsOrContains('app_order_export');
 
         $this->build(new Config(groups: ['app_order_index' => ['app_order_export']]));
     }
@@ -160,7 +160,7 @@ final class WorkflowBuilderTest extends TestCase
     public function testAnUnknownWayOfGroupingRoutesIsRefused(): void
     {
         $this->expectException(InvalidConfig::class);
-        $this->expectExceptionMessage('is not a way of grouping routes');
+        $this->expectExceptionMessageIsOrContains('is not a way of grouping routes');
 
         new Config(routeGrouping: 'par-écran');
     }

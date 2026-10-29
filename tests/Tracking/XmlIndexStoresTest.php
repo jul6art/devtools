@@ -124,7 +124,7 @@ final class XmlIndexStoresTest extends TestCase
             XML;
 
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('"2026-09-16T12:00:00" is not an ISO 8601 date.');
+        $this->expectExceptionMessageIsOrContains('"2026-09-16T12:00:00" is not an ISO 8601 date.');
 
         new XmlIndexStore(new WorkflowTypeRegistry())->unserialize($xml, 'index.xml');
     }

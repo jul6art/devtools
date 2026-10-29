@@ -93,7 +93,7 @@ final class RunModelTest extends TestCase
             self::assertSame('The route "nowhere" is unknown to the last inspection: run workflows:inspect.', $unknown->getMessage());
         }
 
-        $this->expectExceptionMessage('The route "show" needs the parameter "id": <param name="id" value="…"/>.');
+        $this->expectExceptionMessageIsOrContains('The route "show" needs the parameter "id": <param name="id" value="…"/>.');
         $this->routes->url('show');
     }
 
@@ -194,7 +194,7 @@ final class RunModelTest extends TestCase
         $fixture = new FixtureSettings('catalog', 'true');
 
         $this->expectException(InvalidConfig::class);
-        $this->expectExceptionMessage($message);
+        $this->expectExceptionMessageIsOrContains($message);
 
         match ($case) {
             0 => new ScenarioSettings(timeout: 0),

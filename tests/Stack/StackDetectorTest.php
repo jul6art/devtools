@@ -222,7 +222,7 @@ final class StackDetectorTest extends TestCase
         file_put_contents($this->temporaryDirectory().'/composer.json', '{"name": ');
 
         $this->expectException(StackDetectionFailed::class);
-        $this->expectExceptionMessage('composer.json');
+        $this->expectExceptionMessageIsOrContains('composer.json');
 
         new StackDetector()->detect(new ProjectRoot($this->temporaryDirectory()), new Config());
     }

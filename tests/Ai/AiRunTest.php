@@ -181,7 +181,7 @@ final class AiRunTest extends TestCase
         self::assertNull(Pricing::estimate('claude-unknown', ['input' => 1, 'output' => 1, 'cacheRead' => 0, 'cacheWrite' => 0]));
 
         $this->expectException(ApiFailed::class);
-        $this->expectExceptionMessage('http://example.com/v1/messages is not an HTTPS address: the key is never sent in clear.');
+        $this->expectExceptionMessageIsOrContains('http://example.com/v1/messages is not an HTTPS address: the key is never sent in clear.');
 
         new AnthropicClient(self::KEY, 'http://example.com/v1/messages')->messages(['model' => 'claude-opus-5-5']);
     }

@@ -117,7 +117,7 @@ final class DevToolsDirectoryTest extends TestCase
     public function testADocumentationDirectoryOutsideTheProjectIsRefused(string $docs): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('is not a directory of the project');
+        $this->expectExceptionMessageIsOrContains('is not a directory of the project');
 
         new DevToolsDirectory(new ProjectRoot($this->temporaryDirectory()), $docs);
     }

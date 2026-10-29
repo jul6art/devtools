@@ -292,7 +292,7 @@ final class ScenarioGenerationTest extends TestCase
     public function testOnlyRoutesAndComponentsHaveScenarios(): void
     {
         $this->expectException(ScenariosUnavailable::class);
-        $this->expectExceptionMessage('"command.app.import-catalog" is not a route or a component documented in this project');
+        $this->expectExceptionMessageIsOrContains('"command.app.import-catalog" is not a route or a component documented in this project');
 
         $this->generate(only: 'command.app.import-catalog');
     }

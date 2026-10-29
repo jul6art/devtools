@@ -103,7 +103,7 @@ final class McpServerTest extends TestCase
     public function testAnUnknownIdentifierIsAToolErrorNotAnException(): void
     {
         $this->expectException(ToolCallException::class);
-        $this->expectExceptionMessage('No workflow "route.order.nope" in this project: list_workflows gives the identifiers.');
+        $this->expectExceptionMessageIsOrContains('No workflow "route.order.nope" in this project: list_workflows gives the identifiers.');
 
         $this->server()->getWorkflow('route.order.nope');
     }
@@ -135,7 +135,7 @@ final class McpServerTest extends TestCase
     public function testImpactTakesFilesOrTheWorkingTreeNeitherBothNorNone(array $files, bool $changed): void
     {
         $this->expectException(ToolRefused::class);
-        $this->expectExceptionMessage('Give either "files" or "changed": true — not both, not neither.');
+        $this->expectExceptionMessageIsOrContains('Give either "files" or "changed": true — not both, not neither.');
 
         $this->queries()->impact($files, $changed);
     }
@@ -161,7 +161,7 @@ final class McpServerTest extends TestCase
     public function testWithoutGitTheWorkingTreeIsRefusedAndNamedAsSuch(): void
     {
         $this->expectException(ToolRefused::class);
-        $this->expectExceptionMessage('git could not list the changes');
+        $this->expectExceptionMessageIsOrContains('git could not list the changes');
 
         $this->queries()->impact(changed: true);
     }
@@ -257,7 +257,7 @@ final class McpServerTest extends TestCase
     public function testAnUnknownStackNamesTheKnownOnes(): void
     {
         $this->expectException(ToolRefused::class);
-        $this->expectExceptionMessage('No stack "front" with knowledge in this project; known: symfony-8.');
+        $this->expectExceptionMessageIsOrContains('No stack "front" with knowledge in this project; known: symfony-8.');
 
         $this->queries()->knowledge('front');
     }
@@ -268,7 +268,7 @@ final class McpServerTest extends TestCase
         file_put_contents($stack, (string) preg_replace('/\s*<knowledge[^>]*>symfony-8<\/knowledge>/', '', (string) file_get_contents($stack)));
 
         $this->expectException(ToolRefused::class);
-        $this->expectExceptionMessage('No stack of this project has knowledge: its stack is unknown to DevTools.');
+        $this->expectExceptionMessageIsOrContains('No stack of this project has knowledge: its stack is unknown to DevTools.');
 
         $this->queries()->knowledge();
     }

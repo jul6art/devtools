@@ -110,7 +110,7 @@ final class ScenarioFormatTest extends TestCase
         self::assertSame(['route.order.new/happy-path', 'route.order.new/second'], array_map(static fn (Scenario $scenario): string => $scenario->id, new XmlScenarioStore()->readDraft($draft)));
 
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('expected <scenarios>, found <scenario>');
+        $this->expectExceptionMessageIsOrContains('expected <scenarios>, found <scenario>');
         new XmlScenarioStore()->readDraft(self::EXAMPLE);
     }
 
@@ -119,7 +119,7 @@ final class ScenarioFormatTest extends TestCase
     public function testANameIsAFileName(string $name, string $cause): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage($cause);
+        $this->expectExceptionMessageIsOrContains($cause);
 
         new Scenario(new WorkflowId('route.health'), $name, [new Step('goto', ['route' => 'app_health'])]);
     }
@@ -127,7 +127,7 @@ final class ScenarioFormatTest extends TestCase
     public function testAScenarioHasAtLeastOneStep(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('has no step');
+        $this->expectExceptionMessageIsOrContains('has no step');
 
         new Scenario(new WorkflowId('route.health'), 'empty', []);
     }
@@ -143,7 +143,7 @@ final class ScenarioFormatTest extends TestCase
     public function testAStepOutsideTheVocabularyIsRefused(string $action, array $arguments, array $parameters, string $cause): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage($cause);
+        $this->expectExceptionMessageIsOrContains($cause);
 
         new Step($action, $arguments, $parameters);
     }

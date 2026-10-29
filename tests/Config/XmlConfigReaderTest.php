@@ -92,7 +92,7 @@ final class XmlConfigReaderTest extends TestCase
     public function testAConsoleTimeoutOfZeroOrLessIsRejected(): void
     {
         $this->expectException(InvalidConfig::class);
-        $this->expectExceptionMessage('timeout');
+        $this->expectExceptionMessageIsOrContains('timeout');
 
         new Config(symfonyTimeout: 0.0);
     }

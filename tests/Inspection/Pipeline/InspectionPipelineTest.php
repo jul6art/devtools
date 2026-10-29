@@ -126,7 +126,7 @@ final class InspectionPipelineTest extends TestCase
     public function testADocumentationDirectoryOutsideTheProjectIsRefused(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('is not a directory of the project');
+        $this->expectExceptionMessageIsOrContains('is not a directory of the project');
 
         new InspectionOptions($this->copyFixtureProject('symfony-minimal'), docs: '../elsewhere');
     }

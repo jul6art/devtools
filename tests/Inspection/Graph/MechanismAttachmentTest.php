@@ -98,7 +98,7 @@ final class MechanismAttachmentTest extends TestCase
     public function testAMechanismNeedsAKindTheModelKnows(): void
     {
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"cron" is not a kind of mechanism');
+        $this->expectExceptionMessageIsOrContains('"cron" is not a kind of mechanism');
 
         new Mechanism('cron', 'App\Whatever', 'kernel.request', new FileRef('src/Whatever.php'));
     }

@@ -110,7 +110,7 @@ final class XmlTrackingStoreTest extends TestCase
         self::assertNotSame($xml, $mutated, 'The mutation was applied.');
 
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('exactly one main entry point');
+        $this->expectExceptionMessageIsOrContains('exactly one main entry point');
 
         new XmlTrackingStore(new WorkflowTypeRegistry())->unserialize($mutated, 'order.new.xml');
     }
@@ -122,7 +122,7 @@ final class XmlTrackingStoreTest extends TestCase
         self::assertNotSame($xml, $mutated, 'The mutation was applied.');
 
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('this document declares none');
+        $this->expectExceptionMessageIsOrContains('this document declares none');
 
         new XmlTrackingStore(new WorkflowTypeRegistry())->unserialize($mutated, 'order.new.xml');
     }
@@ -155,7 +155,7 @@ final class XmlTrackingStoreTest extends TestCase
     public function testAMissingFileIsRefusedByName(): void
     {
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('the file does not exist or cannot be read');
+        $this->expectExceptionMessageIsOrContains('the file does not exist or cannot be read');
 
         new XmlTrackingStore(new WorkflowTypeRegistry())->read($this->temporaryDirectory().'/missing.xml');
     }
@@ -204,7 +204,7 @@ final class XmlTrackingStoreTest extends TestCase
         $xml = str_replace('schema-version="1"', 'schema-version="2"', new XmlTrackingStore(new WorkflowTypeRegistry())->serialize(TrackingFixtures::orderNew()));
 
         $this->expectException(InvalidXml::class);
-        $this->expectExceptionMessage('Update DevTools');
+        $this->expectExceptionMessageIsOrContains('Update DevTools');
 
         new XmlTrackingStore(new WorkflowTypeRegistry())->unserialize($xml, 'order.new.xml');
     }
@@ -234,7 +234,7 @@ final class XmlTrackingStoreTest extends TestCase
     public function testTheGeneratingToolMustBeNamed(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The generating tool must be named.');
+        $this->expectExceptionMessageIsOrContains('The generating tool must be named.');
 
         new Generation(new \DateTimeImmutable(), '  ', GenerationMode::NoAi);
     }
@@ -247,7 +247,7 @@ final class XmlTrackingStoreTest extends TestCase
     public function testAValueThatCannotBeTrueIsRefusedWhenBuilt(callable $build, string $class, string $message): void
     {
         $this->expectException($class);
-        $this->expectExceptionMessage($message);
+        $this->expectExceptionMessageIsOrContains($message);
 
         $build();
     }

@@ -69,7 +69,7 @@ final class WorkflowIdAssignerTest extends TestCase
         $assigner = new WorkflowIdAssigner(new WorkflowIdDeriver(), ['app_order_new' => 'command.order.new']);
 
         $this->expectException(InvalidModel::class);
-        $this->expectExceptionMessage('"route"');
+        $this->expectExceptionMessageIsOrContains('"route"');
 
         $assigner->assign(WorkflowType::routes(), $this->route('app_order_new', 'src/Controller/OrderController.php'));
     }
