@@ -67,13 +67,17 @@ final readonly class ConfiguredLoginProvider implements LoginProviderInterface
     }
 
     /**
-     * A clean browser for the next scenario: no cookie, no header of the previous login.
+     * A clean browser for the next scenario: no cookie, no header of the previous login, and nothing the application
+     * stored in it — a table that keeps its search in `sessionStorage` would open the next scenario on the previous
+     * one's results. The storage cleared is that of the page the previous scenario left, the application's; before
+     * the first scenario there is none, and the blank page refuses the access.
      */
     public static function reset(Client $client): void
     {
         $devTools = self::devTools($client);
         $devTools->execute('Network.setExtraHTTPHeaders', ['headers' => new \stdClass()]);
         $devTools->execute('Network.clearBrowserCookies');
+        $client->executeScript('try { window.localStorage.clear(); window.sessionStorage.clear(); } catch (refused) {}');
     }
 
     private static function devTools(Client $client): ChromeDevToolsDriver

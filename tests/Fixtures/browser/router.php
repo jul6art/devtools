@@ -141,6 +141,21 @@ if ('/private' === $path) {
     return true;
 }
 
+// What an application keeps in the browser, as a table keeps its search: `?keep` stores, every visit shows.
+if ('/memory' === $path) {
+    $page('Memory', <<<'HTML'
+        <h1>Memory</h1>
+        <p class="local"></p><p class="session"></p>
+        <script>
+          if (new URLSearchParams(location.search).has('keep')) { localStorage.setItem('kept', 'local'); sessionStorage.setItem('kept', 'session'); }
+          document.querySelector('.local').textContent = localStorage.getItem('kept') || 'no local';
+          document.querySelector('.session').textContent = sessionStorage.getItem('kept') || 'no session';
+        </script>
+        HTML);
+
+    return true;
+}
+
 http_response_code(404);
 $page('Not found', '<h1>Not found</h1>');
 

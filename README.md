@@ -1057,8 +1057,9 @@ final class ScenariosTest extends ScenarioTestCase
 ```
 
 One test per scenario, named after it. Both modes run the same runner: one browser for the run, cleaned
-between scenarios; every step waits for what it looks for — never a fixed pause — up to the timeout. The
-first step that fails stops its scenario.
+between scenarios — no cookie, and nothing the application kept in `localStorage` or `sessionStorage`, so that a
+scenario never opens on what the previous one left; every step waits for what it looks for — never a fixed
+pause — up to the timeout. The first step that fails stops its scenario.
 
 A scenario names a role and fixtures; the project resolves them. In the URL mode, `.devtools/config.xml`
 says how — and never holds a credential, only the environment variables that do:

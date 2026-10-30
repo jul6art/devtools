@@ -812,3 +812,14 @@
   depuis l'une ne corrige pas l'autre. Chercher toutes les copies par leur nom, pas par leur contenu.
 - **Vu une fois en CI (`lowest`)** : la suppression du dossier temporaire de `WorkflowRenameTest` a échoué
   (« Directory not empty ») ; la relance a passé. Cause non établie — à surveiller au prochain passage.
+
+### 2026-10-30 — Le navigateur des scénarios oubliait les cookies, pas le stockage
+
+- ⚠️ **`reset()` vidait les cookies et les en-têtes, pas `localStorage` ni `sessionStorage`** : le README promettait
+  pourtant « un navigateur nettoyé entre les scénarios ». Sur devingame, les tableaux de datatable-bundle gardent leur
+  recherche dans `sessionStorage` : « bruno_c » tapé par un scénario restait dans le suivant, et 11 scénarios sur 39
+  échouaient selon leur ordre. **Règle :** « propre » se dit de tout ce qu'une application peut garder dans le
+  navigateur ; un test d'isolement enchaîne deux scénarios dans le même navigateur, le premier qui écrit, le second qui
+  lit (`testAScenarioDoesNotInheritWhatThePreviousOneStoredInTheBrowser`, rouge sans le correctif).
+- Vu une fois, non reproduit (dix passes ensuite, avec et sans le correctif) : le test des connexions
+  (`testTheLoginsComeFromTheEnvironmentAndNothingRepeatsThem`) a échoué sur sa ligne d'assertion des étapes.

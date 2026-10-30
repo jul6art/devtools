@@ -80,7 +80,7 @@ final class PantherRunnerTest extends TestCase
 {
     use UsesTemporaryDirectory;
 
-    private const array ROUTES = ['home' => '/', 'form' => '/form', 'done' => '/done', 'item' => '/items/{id}', 'select2' => '/select2', 'login' => '/login', 'private' => '/private', 'clock' => '/clock'];
+    private const array ROUTES = ['home' => '/', 'form' => '/form', 'done' => '/done', 'item' => '/items/{id}', 'select2' => '/select2', 'login' => '/login', 'private' => '/private', 'clock' => '/clock', 'memory' => '/memory'];
 
     private static ?Process $server = null;
 
@@ -311,6 +311,17 @@ final class PantherRunnerTest extends TestCase
         $xml = new XmlRunWriter()->serialize(new RunResult(new \DateTimeImmutable('2026-10-20T12:00:00+00:00'), self::$baseUrl, [$form, $basic, $anonymous]));
         self::assertStringNotContainsString('tester', $xml);
         self::assertStringNotContainsString('s3cret', $xml);
+    }
+
+    public function testAScenarioDoesNotInheritWhatThePreviousOneStoredInTheBrowser(): void
+    {
+        [$keeping, $next] = $this->runner(new ScenarioSettings(timeout: 1), new Secrets())->run([
+            new Scenario(new WorkflowId('route.test'), 'keeping', [new Step('goto', ['route' => 'memory'], ['keep' => '1']), new Step('assert-text', ['text' => 'session', 'selector' => '.session'])]),
+            new Scenario(new WorkflowId('route.test'), 'next', [new Step('goto', ['route' => 'memory']), new Step('assert-text', ['text' => 'no local', 'selector' => '.local']), new Step('assert-text', ['text' => 'no session', 'selector' => '.session'])]),
+        ], $this->artifacts);
+
+        $this->assertPassed($keeping);
+        $this->assertPassed($next);
     }
 
     public function testALoginThatCannotHappenStopsTheScenarioBeforeItsFirstStep(): void
