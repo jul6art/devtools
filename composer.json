@@ -50,6 +50,9 @@
         "symfony/var-dumper": "^7.4 || ^8.0",
         "symfony/yaml": "^7.4 || ^8.0"
     },
+    "conflict": {
+        "phpdocumentor/type-resolver": "<1.10"
+    },
     "suggest": {
         "ext-gd": "To compare the screenshots of the scenarios with their baselines pixel by pixel",
         "mcp/sdk": "^0.9 — to serve the documentation to Claude Code over MCP: devtools mcp:serve",
