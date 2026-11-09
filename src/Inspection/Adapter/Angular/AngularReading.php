@@ -20,6 +20,16 @@ final class AngularReading
     private const array HTTP = ['get', 'post', 'put', 'patch', 'delete', 'request', 'head'];
 
     /**
+     * The client of the house kit (ADR-0051): `@jul6art/web-kit`'s `ApiClient`, its methods and the HTTP method of
+     * each. `<kit-table path="…">` reads its rows with `GET`.
+     */
+    public const array KIT = ['collection' => 'GET', 'item' => 'GET', 'get' => 'GET', 'create' => 'POST', 'post' => 'POST', 'replace' => 'PUT', 'update' => 'PATCH', 'remove' => 'DELETE'];
+
+    private const string KIT_PACKAGE = '@jul6art/web-kit';
+
+    private const string KIT_CLIENT = 'ApiClient';
+
+    /**
      * @var list<string>
      */
     private array $warnings = [];
@@ -104,53 +114,112 @@ final class AngularReading
     }
 
     /**
-     * The services injecting `HttpClient`, and the endpoints they call: method and URL, the URL's constants
-     * resolved — `${environment.apiUrl}/orders/${id}` is `/api/orders/:param`.
+     * The classes calling an API, and the endpoints they call: method and URL, the URL's constants resolved —
+     * `${environment.apiUrl}/orders/${id}` is `/api/orders/:param`. A class calls one when it injects `HttpClient`,
+     * or the house kit's `ApiClient` (ADR-0051), or when its template holds the kit's `<kit-table path="…">`. A
+     * call of the kit's client whose URL has no literal segment — an IRI read in an answer — is not one the
+     * analysis can name.
      *
      * @param list<string> $files
      *
-     * @return list<array{name: string, class: string, file: string, endpoints: list<string>}>
+     * @return list<array{name: string, class: string, file: string, endpoints: list<string>, component: bool}>
      */
     public function httpServices(array $files): array
     {
         $services = [];
 
         foreach ($files as $file) {
-            foreach ($this->facts->classes($file) as $class) {
-                if (!\in_array('HttpClient', $class['injects'], true)) {
-                    continue;
-                }
+            $kit = array_keys(array_merge([], ...array_map(
+                static fn (array $import): array => self::KIT_PACKAGE === $import['specifier'] ? array_filter($import['names'], static fn (string $imported): bool => self::KIT_CLIENT === $imported) : [],
+                $this->facts->imports($file),
+            )));
 
-                $clients = [];
+            foreach ($this->facts->classes($file) as $class) {
+                $clients = ['http' => [], 'kit' => []];
 
                 foreach ($class['properties'] as $property) {
                     $value = $property['value'];
-
                     $arguments = \is_array($value) && \is_array($value['$arguments'] ?? null) ? $value['$arguments'] : [];
+                    $injected = $property['type'] ?? (\is_array($value) && 'inject' === ($value['$call'] ?? null) ? NodeFacts::identifier($arguments[0] ?? null) : null);
 
-                    if ('HttpClient' === $property['type'] || (\is_array($value) && 'inject' === ($value['$call'] ?? null) && 'HttpClient' === NodeFacts::identifier($arguments[0] ?? null))) {
-                        $clients[] = $property['name'];
+                    if ('HttpClient' === $injected && \in_array('HttpClient', $class['injects'], true)) {
+                        $clients['http'][] = $property['name'];
+                    } elseif (null !== $injected && \in_array($injected, $kit, true)) {
+                        $clients['kit'][] = $property['name'];
                     }
                 }
 
-                $endpoints = [];
+                [$template, $component] = $this->template($file, $class['name']);
+                preg_match_all('/<kit-table\b[^>]*?\spath="([^"]+)"/', $template, $tables);
+
+                if ([] === $clients['http'] && [] === $clients['kit'] && [] === $tables[1]) {
+                    continue;
+                }
+
+                $endpoints = array_map(static fn (string $path): string => 'GET '.$path, $tables[1]);
 
                 foreach ($this->facts->calls($file) as $call) {
-                    if ($call['class'] !== $class['name'] || 1 !== preg_match('/^this\.([A-Za-z_$][\w$]*)\.([a-z]+)$/', $call['callee'], $matches) || !\in_array($matches[1], $clients, true) || !\in_array($matches[2], self::HTTP, true)) {
+                    if ($call['class'] !== $class['name'] || 1 !== preg_match('/^this\.([A-Za-z_$][\w$]*)\.([a-z]+)$/', $call['callee'], $matches)) {
                         continue;
                     }
 
-                    $url = $this->url($file, $call['arguments'][0] ?? null);
-                    $endpoints[] = strtoupper($matches[2]).' '.$url;
+                    if (\in_array($matches[1], $clients['http'], true) && \in_array($matches[2], self::HTTP, true)) {
+                        $endpoints[] = strtoupper($matches[2]).' '.$this->url($file, $call['arguments'][0] ?? null);
+                    } elseif (\in_array($matches[1], $clients['kit'], true) && isset(self::KIT[$matches[2]])) {
+                        $url = $this->url($file, $call['arguments'][0] ?? null);
+
+                        if (self::named($url)) {
+                            $endpoints[] = self::KIT[$matches[2]].' '.$url;
+                        }
+                    }
                 }
 
                 $endpoints = array_values(array_unique($endpoints));
                 sort($endpoints, \SORT_STRING);
-                $services[] = ['name' => self::kebab($class['name']), 'class' => $class['name'], 'file' => $file, 'endpoints' => $endpoints];
+                $services[] = ['name' => self::kebab($class['name']), 'class' => $class['name'], 'file' => $file, 'endpoints' => $endpoints, 'component' => $component];
             }
         }
 
         return $services;
+    }
+
+    /**
+     * Whether a URL has a segment of its own, written in the code: `/api/loans/*` has, `*` — an IRI — has not.
+     */
+    private static function named(string $url): bool
+    {
+        return array_any(explode('/', (string) preg_replace('/[?#].*$/', '', $url)), static fn (string $segment): bool => '' !== $segment && 1 !== preg_match('/^:|[*{]|\$\{/', $segment));
+    }
+
+    /**
+     * The template of a file's components — of one class only, when it is named —, inline or in its `templateUrl`,
+     * and whether the class is a component at all.
+     *
+     * @return array{string, bool}
+     */
+    private function template(string $file, ?string $class = null): array
+    {
+        $template = '';
+        $component = false;
+
+        foreach ($this->facts->decorators($file) as $decorator) {
+            $options = 'Component' === $decorator['name'] && (null === $class || $class === $decorator['target']) ? ($decorator['arguments'][0] ?? null) : null;
+
+            if (!\is_array($options)) {
+                continue;
+            }
+
+            $component = true;
+            $template .= self::templateText($options['template'] ?? null);
+            $url = NodeFacts::text($options['templateUrl'] ?? null);
+            $html = null === $url ? null : $this->root->absolute(\dirname($file).'/'.$url);
+
+            if (null !== $html && is_file($html) && str_starts_with((string) realpath($html), $this->root->path.'/')) {
+                $template .= (string) file_get_contents($html);
+            }
+        }
+
+        return [$template, $component];
     }
 
     /**
@@ -162,23 +231,7 @@ final class AngularReading
     public function links(string $component): array
     {
         $links = [];
-        $template = '';
-
-        foreach ($this->facts->decorators($component) as $decorator) {
-            $options = 'Component' === $decorator['name'] ? ($decorator['arguments'][0] ?? null) : null;
-
-            if (!\is_array($options)) {
-                continue;
-            }
-
-            $template .= self::templateText($options['template'] ?? null);
-            $url = NodeFacts::text($options['templateUrl'] ?? null);
-            $html = null === $url ? null : $this->root->absolute(\dirname($component).'/'.$url);
-
-            if (null !== $html && is_file($html) && str_starts_with((string) realpath($html), $this->root->path.'/')) {
-                $template .= (string) file_get_contents($html);
-            }
-        }
+        [$template] = $this->template($component);
 
         preg_match_all('/(?<![\[\w-])routerLink\s*=\s*"([^"]*)"/', $template, $static);
 

@@ -26,7 +26,8 @@ use Jul6Art\DevTools\Stack\StackProfile;
 /**
  * The Angular adapter (ADR-0032), on the Node bridge (ADR-0031): the route tables `provideRouter()` and
  * `RouterModule.forRoot()` receive, followed through their children and their lazy loading; the components
- * two screens share; the services that call an API through `HttpClient`. Ionic's tabs are Angular routes.
+ * two screens share; the classes that call an API through `HttpClient` or the house kit's client (ADR-0051).
+ * Ionic's tabs are Angular routes.
  */
 final readonly class AngularAdapter implements AdapterInterface
 {
@@ -52,7 +53,7 @@ final readonly class AngularAdapter implements AdapterInterface
         $bridge = $this->bridge ?? JavaScriptSources::bridge($config);
 
         try {
-            $sources = JavaScriptSources::read($bridge, $root, $stack, ['src'], [...self::ROUTER, ...self::HTTP, ...self::NAVIGATION]);
+            $sources = JavaScriptSources::read($bridge, $root, $stack, ['src'], array_values(array_unique([...self::ROUTER, ...self::HTTP, ...self::NAVIGATION, ...array_keys(AngularReading::KIT)])));
         } catch (NodeBridgeFailed $failure) {
             return JavaScriptSources::claudePath($root, $stack, $config, $extractor, $failure->getMessage(), $bridge->calls());
         }
@@ -82,7 +83,7 @@ final readonly class AngularAdapter implements AdapterInterface
         }
 
         foreach ($reading->httpServices($sources->files) as $service) {
-            $candidates[] = new EntryPointCandidate(WorkflowType::integrations(), new EntryPoint('http-client', $service['name'], new FileRef($service['file'], FileRole::Service), [] === $service['endpoints'] ? [] : ['endpoints' => implode(', ', $service['endpoints'])]), $service['class'], confidence: Confidence::High, source: $source);
+            $candidates[] = new EntryPointCandidate(WorkflowType::integrations(), new EntryPoint('http-client', $service['name'], new FileRef($service['file'], $service['component'] ? FileRole::Component : FileRole::Service), [] === $service['endpoints'] ? [] : ['endpoints' => implode(', ', $service['endpoints'])]), $service['class'], confidence: Confidence::High, source: $source);
         }
 
         return new AdapterResult(

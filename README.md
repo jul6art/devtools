@@ -1557,7 +1557,12 @@ needs the project mounted at the same path.
 | --- | --- | --- |
 | routes | the `Routes` given to `provideRouter()` or `RouterModule.forRoot()`, through `children`, `loadChildren` and `loadComponent`; a route with children is their layout, a file of each | `orders/:id` → `route.orders.id`; the empty path → `route.root` |
 | ui | the components no route renders that at least two screens import — one screen's component is part of it | `app-order-status-badge` → `ui.order-status-badge` |
-| integrations | the services injecting `HttpClient`, with the endpoints they call — method and URL, `environment.apiUrl` resolved | `OrderService` → `integration.order-service` |
+| integrations | the classes calling an API — injecting `HttpClient`, or the `ApiClient` of `@jul6art/web-kit`, or rendering its `<kit-table path="…">` —, with the endpoints they call: method and URL, `environment.apiUrl` resolved | `OrderService` → `integration.order-service` |
+
+The house kit (ADR-0051): `collection`, `item` and `get` of its `ApiClient` are `GET`, `create` and `post`
+are `POST`, `replace` is `PUT`, `update` is `PATCH`, `remove` is `DELETE`, and its table reads its `path` with
+`GET`. A call whose URL has no literal segment — `this.api.item(deal.company)`, an IRI read in an answer — is
+not an endpoint; a class named `ApiClient` imported from elsewhere is not the kit's.
 
 A route's **security** is its guards — `canActivate`, `canMatch`, inherited from its parents — and their
 files are the route's. Its **navigation** is the `routerLink`s of its template, inline or `templateUrl`, and

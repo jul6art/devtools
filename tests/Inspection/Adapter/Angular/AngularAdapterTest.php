@@ -32,6 +32,8 @@ final class AngularAdapterTest extends TestCase
 
     private const string IONIC = __DIR__.'/../../../Fixtures/projects/ionic-tabs';
 
+    private const string KIT = __DIR__.'/../../../Fixtures/projects/angular-kit';
+
     public const array EXPECTED_WORKFLOWS = [
         'integration.order-service',
         'route.admin.users',
@@ -116,6 +118,29 @@ final class AngularAdapterTest extends TestCase
         self::assertSame(['selector' => 'app-order-status-badge'], $badge->main->attributes);
         self::assertSame('OrderStatusBadgeComponent', $badge->title);
         self::assertSame(['endpoints' => 'GET /api/orders, GET /api/orders/:param, POST /api/orders/:param/cancel'], $service->main->attributes, 'environment.apiUrl resolved to /api.');
+    }
+
+    /**
+     * ADR-0051: the kit's ApiClient and its table are clients HTTP — but not a class of the same name from
+     * elsewhere, nor a call to an IRI read in an answer.
+     */
+    public function testTheKitsClientAndItsTableAreHttpClients(): void
+    {
+        [$result] = $this->inspect(self::KIT);
+
+        self::assertSame([
+            'integration.borrower-service',
+            'integration.loan-detail',
+            'integration.loan-list',
+            'integration.loan-service',
+            'route.loans',
+            'route.loans.id',
+        ], $this->ids($result), 'The service of the project\'s own ApiClient is no integration.');
+        self::assertSame(['endpoints' => 'GET /api/loans'], $this->workflow($result, 'integration.loan-list')->main->attributes, 'The table\'s path is its call.');
+        self::assertSame(['endpoints' => 'GET /api/loans/*, POST /api/loans/*/return'], $this->workflow($result, 'integration.loan-detail')->main->attributes, 'The IRI of the item is no endpoint.');
+        self::assertSame(['endpoints' => 'GET /api/stats, POST /api/loans'], $this->workflow($result, 'integration.loan-service')->main->attributes, 'HttpClient and the kit\'s client, under an alias, in one integration.');
+        self::assertSame(['endpoints' => 'PATCH /api/borrowers/:param'], $this->workflow($result, 'integration.borrower-service')->main->attributes, 'Injected by its constructor.');
+        self::assertSame('component', $this->workflow($result, 'integration.loan-detail')->main->declaredIn->role->value, 'A component stays a component.');
     }
 
     public function testIonicTabsAreAngularRoutesAndTheirTabsPageIsTheirLayout(): void
