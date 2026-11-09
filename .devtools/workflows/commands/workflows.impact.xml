@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.impact" type="commands" schema-version="1">
   <title>workflows:impact</title>
-  <generated at="2026-10-21T07:55:44+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <generated at="2026-11-09T00:03:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="21630f957072784a23d8c8e1b1955823adf9b71f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:impact" role="main">
       <declared-in path="src/Command/WorkflowsImpactCommand.php" role="other"/>
@@ -18,7 +18,7 @@
     <file path="src/Config/LoginSettings.php" role="other" sha256="6ebff405f9d0423103f0e3952785e02d2bacf75a66aaa81552b195a95034dd87"/>
     <file path="src/Config/ScenarioSettings.php" role="other" sha256="1f7f1f9f41f767a8db00b9bf9133771703f2bebbbb56e98dc39d944bf87ad28f"/>
     <file path="src/Config/VisualSettings.php" role="other" sha256="5093a08927cb7b92956b2cd9e42beefc4c09271011df7f3a575ef4707bb4ab2d"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="bd6a61eaa7396e615fc02850f9aa3a215bc5002ee57820531039dbfc16c3ec77"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="6154b8a0cb5af876bcc13d5ec562ac18162f45fc4aeb78a9f9e467f117b6ac83"/>
     <file path="src/Console/ImpactRenderer.php" role="other" sha256="d231bffa019d85b17e059bb8323228c9bdca287b8315397c00faf38be75bbc01"/>
     <file path="src/Impact/Impact.php" role="other" sha256="e837fa8402a243b86637a87832f3652a959fa3e9489759a72f9f4ecf92360f51"/>
     <file path="src/Impact/ImpactRelation.php" role="other" sha256="31933955c737f00abbc7eeb1839ede05ecbd43d4149272e98c7f475e0712d8cc"/>
@@ -48,7 +48,7 @@
     <file path="src/Link/LinkRole.php" role="other" sha256="09a5bee9e97fa4662b93cdb5d80473534c687ec8c656d7c8d31eda2b9dd9d39a"/>
     <file path="src/Link/LinkedImpact.php" role="other" sha256="c91b351338791af57f107c5ecba09be0b8972568c53caa1cb9337f865652d332"/>
     <file path="src/Link/LinkedImpactResolver.php" role="other" sha256="f888ad54589a85d6ab9f5ea599ae5f3f9f3e455a19102b0ae452c4ff48677270"/>
-    <file path="src/Link/LinkedProject.php" role="other" sha256="3398ada3ce1fd536082745f08a8f157dc31195f31b220fa87793944b819d2012"/>
+    <file path="src/Link/LinkedProject.php" role="other" sha256="9ab2f9fdf422993ce243090848b73b75e594d85e5c5c9cef556e414b76570f5c"/>
     <file path="src/Link/Links.php" role="other" sha256="0950bced10f2c6d5c4b32dc52bc29d26c3381ab9b3745159a4b738e1fa091edd"/>
     <file path="src/Link/ProjectLinks.php" role="other" sha256="27b637be0ea7aabb098daa1c8c204935a7b7523f20ed927dcc06398f819cd434"/>
     <file path="src/Link/XmlLinksStore.php" role="other" sha256="930ee688fb24c462277c020cfc83ddb99179b43a5c195f776c600978ca589f8d"/>
@@ -145,9 +145,9 @@
     <file path="tests/Verification/VerificationTest.php" role="test"/>
   </tests>
   <packages>
-    <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/filesystem" version="8.1.6"/>
-    <package name="symfony/process" version="8.1.9"/>
+    <package name="symfony/console" version="8.1.10"/>
+    <package name="symfony/filesystem" version="8.1.9"/>
+    <package name="symfony/process" version="8.1.10"/>
   </packages>
   <decisions>
     <decision target="Jul6Art\DevTools\Command\WorkflowsImpactCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="null !== $refused" file="src/Command/WorkflowsImpactCommand.php" line="74" confidence="high"/>
@@ -165,5 +165,6 @@
     <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
     <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="--linked ajoute les workflows des projets voisins qu'un changement atteint : les intégrations qui appellent ses routes, puis les écrans qui passent par elles (ADR-0038). (added test tests/Ask/AskTest.php (+8))"/>
     <revision at="2026-10-21T07:55:31+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Link/LinkedImpactResolver.php, src/Tracking/TrackingDocument.php)"/>
+    <revision at="2026-11-09T00:02:36+00:00" commit="21630f957072784a23d8c8e1b1955823adf9b71f" reason="Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+2))"/>
   </history>
 </workflow>

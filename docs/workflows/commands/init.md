@@ -1,5 +1,5 @@
 # init
-`command.init` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.init` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -80,3 +80,4 @@ Le `.gitignore` appartient au projet : `init` y ajoute les lignes qui manquent, 
 | 2026-10-20 | 58c02fb | Une zone de travail de plus est ignorée, stats/ — les compteurs des règles —, et init copie les schémas des retours, des règles, des assertions et du journal. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
 | 2026-10-21 | 240bcc3 | Ajoute aussi l'index de recherche, un cache, au .gitignore du projet (ADR-0039). (added test tests/Ask/AskTest.php (+8)) |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/Initializer.php) |
+| 2026-11-09 | 21630f9 | modified package symfony/console: 8.1.7 → 8.1.10 (+1) |

@@ -1,5 +1,5 @@
 # workflows:check
-`command.workflows.check` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.workflows.check` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -156,3 +156,4 @@ Lecture : les suivis, le code, graph/links.xml et, quand il est sur disque, l'in
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
 | 2026-10-21 | 240bcc3 | Les liens avec les projets voisins sont une cause d'échec quand ils ne tiennent plus : appel orphelin, workflow lié disparu (ADR-0038). (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+6)) |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+2)) |

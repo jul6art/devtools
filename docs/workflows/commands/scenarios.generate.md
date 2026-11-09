@@ -1,5 +1,5 @@
 # scenarios:generate
-`command.scenarios.generate` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.scenarios.generate` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -66,3 +66,4 @@ Un squelette n'existe que pour une route sans paramètre : une valeur d'identifi
 | 2026-10-20 | 58c02fb | Aucun changement de fond : la configuration apprend les catégories de retours du projet, le client git et les chemins de .devtools ce que demandent les retours, les règles et le journal, sans rien changer de ce que fait la commande ; des tests s'ajoutent. La prose tient. (added test tests/Assertion/AssertionProposalTest.php (+10)) |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/TrackingDocument.php) |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+1)) |

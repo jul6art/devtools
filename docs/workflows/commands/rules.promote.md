@@ -1,5 +1,5 @@
 # rules:promote
-`command.rules.promote` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.rules.promote` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -83,3 +83,4 @@ La commande n'écrit pas la règle, elle la demande. Les retours ne passent prom
 |---|---|---|
 | 2026-10-20 | 58c02fb | rédaction initiale |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8)) |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+1)) |

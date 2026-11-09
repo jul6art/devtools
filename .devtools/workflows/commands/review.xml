@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.review" type="commands" schema-version="1">
   <title>review</title>
-  <generated at="2026-10-21T07:25:33+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <generated at="2026-11-09T00:04:36+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="21630f957072784a23d8c8e1b1955823adf9b71f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="review" role="main">
       <declared-in path="src/Command/ReviewCommand.php" role="other"/>
@@ -86,8 +86,8 @@
     <file path="tests/Verification/VerificationTest.php" role="test"/>
   </tests>
   <packages>
-    <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/process" version="8.1.9"/>
+    <package name="symfony/console" version="8.1.10"/>
+    <package name="symfony/process" version="8.1.10"/>
   </packages>
   <decisions>
     <decision target="Jul6Art\DevTools\Command\ReviewCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path) || $port &lt; 1 || $port &gt; 65535" file="src/Command/ReviewCommand.php" line="62" confidence="high"/>
@@ -103,5 +103,6 @@
     <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="rédaction initiale"/>
     <revision at="2026-10-20T22:39:07+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Le serveur est tenu pour prêt quand PHP annonce qu'il écoute, sans sonder le port (ADR-0002) ; un port déjà pris se dit par ce que PHP en dit. (modified decision Jul6Art\DevTools\Command\ReviewCommand::execute: \Jul6Art\DevTools\Review\Web\ReviewServer::listening($port) → null !== $failure (+1))"/>
     <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : la configuration lit désormais les projets liés (ADR-0038) et le dossier .devtools/ connaît l'index de recherche (ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8))"/>
+    <revision at="2026-11-09T00:04:36+00:00" commit="21630f957072784a23d8c8e1b1955823adf9b71f" reason="modified package symfony/console: 8.1.7 → 8.1.10 (+1)"/>
   </history>
 </workflow>

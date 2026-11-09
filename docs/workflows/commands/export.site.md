@@ -1,5 +1,5 @@
 # export:site
-`command.export.site` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.export.site` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -75,3 +75,4 @@ Le dossier de sortie est remplacé en entier : une page ajoutée à la main y di
 | Date | Commit | Change |
 |---|---|---|
 | 2026-10-21 | 240bcc3 | rédaction initiale |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+1)) |

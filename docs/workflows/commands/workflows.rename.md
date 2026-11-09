@@ -1,5 +1,5 @@
 # workflows:rename
-`command.workflows.rename` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.workflows.rename` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -85,3 +85,4 @@ Tout est calculé, validé, puis écrit : un renommage refusé n'écrit rien. Le
 |---|---|---|
 | 2026-10-21 | 240bcc3 | rédaction initiale |
 | 2026-10-21 | 240bcc3 | Le dossier baselines/ de l'ancien identifiant ne reste plus, vide, après le renommage ; seuls bougent les liens qui visent l'ancienne page, leur ancre gardée. (files changed: src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+2)) |

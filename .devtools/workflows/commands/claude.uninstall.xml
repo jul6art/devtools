@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.claude.uninstall" type="commands" schema-version="1">
   <title>claude:uninstall</title>
-  <generated at="2026-10-21T07:25:33+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <generated at="2026-11-09T00:04:36+00:00" tool="devtools dev-master" mode="no-ai"/>
+  <source vcs="git" commit="21630f957072784a23d8c8e1b1955823adf9b71f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="claude:uninstall" role="main">
       <declared-in path="src/Command/ClaudeUninstallCommand.php" role="other"/>
@@ -77,8 +77,8 @@
   </tests>
   <packages>
     <package name="mcp/sdk" version="0.9.0"/>
-    <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/filesystem" version="8.1.6"/>
+    <package name="symfony/console" version="8.1.10"/>
+    <package name="symfony/filesystem" version="8.1.9"/>
   </packages>
   <decisions>
     <decision target="Jul6Art\DevTools\Command\ClaudeInstallCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/ClaudeInstallCommand.php" line="78" confidence="high"/>
@@ -104,5 +104,6 @@
     <revision at="2026-10-20T20:59:05+00:00" commit="4979790f75e32c795fc3fe3c678367adf18549fa" reason="rédaction initiale (files changed: src/Command/McpServeCommand.php)"/>
     <revision at="2026-10-20T22:21:22+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : des tests s'ajoutent au périmètre du workflow. La prose a été relue contre le code et tient. (added test tests/Assertion/AssertionProposalTest.php (+10))"/>
     <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : claude:install pose un second skill et le serveur MCP gagne un outil, ce que claude:uninstall ne touche pas. La prose a été relue et tient. (added test tests/Ask/AskTest.php (+8))"/>
+    <revision at="2026-11-09T00:04:36+00:00" commit="21630f957072784a23d8c8e1b1955823adf9b71f" reason="modified package symfony/console: 8.1.7 → 8.1.10 (+1)"/>
   </history>
 </workflow>

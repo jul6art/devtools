@@ -823,3 +823,26 @@
   lit (`testAScenarioDoesNotInheritWhatThePreviousOneStoredInTheBrowser`, rouge sans le correctif).
 - Vu une fois, non reproduit (dix passes ensuite, avec et sans le correctif) : le test des connexions
   (`testTheLoginsComeFromTheEnvironmentAndNothingRepeatsThem`) a échoué sur sa ligne d'assertion des étapes.
+
+### 2026-11-09 — ADR-0051 : les opérations d'API Platform, le client du kit, un lien limité à un dossier
+
+- ⚠️ **Une route du vendor n'est pas toujours du vendor.** L'adaptateur Symfony écartait toute route dont le
+  contrôleur n'est pas une classe du projet : les 82 opérations d'API Platform de devinthecode n'avaient aucune page,
+  et un front sur le kit aurait vu chaque appel « orphelin ». **Règle :** une route se juge sur ce qui la déclare —
+  pour API Platform, `_api_resource_class` dans les `defaults` du `debug:router` —, pas sur le seul `_controller`.
+- **Les attributs d'un point d'entrée sont triés par clé** (`EntryPoint` les range) : une attente de test s'écrit
+  dans cet ordre, pas dans celui où l'adaptateur les pose.
+- **`${id}` donne `:param` et `${encodeURIComponent(id)}` donne `*`** dans l'URL d'un appel (un identifiant, puis
+  une expression) : une attente de test le recopie de la règle d'ADR-0032, elle ne le devine pas.
+- ⚠️ **zsh, encore** : une variable d'arguments non citée (`$t` = `--filter X fichier`) est passée en UN argument ;
+  PHPUnit a refusé, le `grep` du décompte n'a rien trouvé, et trois vérifications par mutation ont semblé muettes
+  au lieu de rouges. **Règle :** le script de mutation est un fichier `bash` qui reçoit ses arguments par `"$@"`,
+  et un résultat vide se lit comme un échec du script, jamais comme un vert.
+- **Un commentaire du gabarit `config.xml` est recopié dans 19 instantanés** (`tests/Fixtures/expected/`,
+  `tests/Fixtures/matrix/`) : la même phrase s'y applique, et la suite le vérifie.
+- **Un fait de paquet seul ne rouvre pas de brief** : `workflows:inspect` laissait onze pages « inchangées » que
+  `workflows:check` signalait encore (une montée de `symfony/console` sans code changé). `workflows:accept --all
+  --no-ai` les réécrit, la prose intacte.
+- Vérifié par mutation : le filtre `client-dir` du calcul et sa reprise sur la déclaration du voisin, le `.{_format}`
+  retiré, l'IRI écartée, le paquet du kit exigé, les contrôleurs d'API Platform, le préfixe `api` de l'identifiant,
+  le `..` refusé dans `client-dir` — chacun rouge sans son correctif.

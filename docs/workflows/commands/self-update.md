@@ -1,5 +1,5 @@
 # self-update
-`command.self-update` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.self-update` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -65,3 +65,4 @@ Sans gh, la provenance ne se vérifie pas et rien n'est remplacé : c'est voulu,
 | Date | Commit | Change |
 |---|---|---|
 | 2026-10-21 | 240bcc3 | rédaction initiale |
+| 2026-11-09 | 21630f9 | modified package symfony/console: 8.1.7 → 8.1.10 (+1) |

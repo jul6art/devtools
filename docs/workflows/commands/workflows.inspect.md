@@ -1,9 +1,9 @@
 # workflows:inspect
-`command.workflows.inspect` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.workflows.inspect` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
-Documente tous les workflows d'un projet, ou de plusieurs à la suite : détection de stack, extraction des points d'entrée par l'adaptateur — natif pour Symfony, Laravel, Angular, Express et PHP sans framework, Claude sinon —, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, glossaire, index, menu, graphe d'ensemble et index de recherche. Avec `--link`, une fois tous les projets inspectés, chacun est relié aux voisins que déclare son config.xml : les appels d'un front appariés aux routes de son API (ADR-0038). Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté.
+Documente tous les workflows d'un projet, ou de plusieurs à la suite : détection de stack, extraction des points d'entrée par l'adaptateur — natif pour Symfony, Laravel, Angular, Express et PHP sans framework, Claude sinon —, graphe de dépendances, décision de fraîcheur, écriture des pages et des fichiers de suivi, glossaire, index, menu, graphe d'ensemble et index de recherche. Avec `--link`, une fois tous les projets inspectés, chacun est relié aux voisins que déclare son config.xml : les appels d'un front appariés aux routes de son API (ADR-0038), ou ceux d'un seul dossier du client quand la déclaration le limite (ADR-0051). Une seconde exécution sur un projet inchangé ne modifie aucun fichier hors `reports/`. La commande annonce chaque étape et finit sur ce qu'elle a fait et ce que ça a coûté.
 
 ## Trigger
 
@@ -130,6 +130,7 @@ Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `me
 - **`--link` relie après avoir tout inspecté** : les liens d'un front dépendent des routes de l'API, et inversement ; chaque projet n'écrit que son propre links.xml, et un voisin jamais inspecté garde ses liens, avec un avertissement.
 - **`--prune` emporte le dossier avec le README** : un contrôleur dont la dernière route disparaît ne laisse plus derrière lui un répertoire vide qui ne liste rien.
 - **Une page écrite sous un gabarit antérieur est remise à jour, même quand rien n'a bougé**, et la section « Related workflows » suit les liens que graph/links.xml garde : une réinspection sans `--link` redonne les mêmes octets.
+- **Une opération d'API Platform est une route** (ADR-0051), déclarée par sa classe ressource, son identifiant préfixé de `api` ; la console seule les donne : sans elle, l'adaptateur Symfony ne les devine pas et le rapport le dit.
 
 ## Related workflows
 
@@ -152,3 +153,4 @@ Les champs décidés listés ici sont ceux de l'outil lui-même — `scope`, `me
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
 | 2026-10-21 | 240bcc3 | Inspecte plusieurs projets à la suite et les relie avec --link (ADR-0038) ; écrit le glossaire (ADR-0037) et l'index de recherche (ADR-0039). (added decision Jul6Art\DevTools\Command\WorkflowsInspectCommand::execute: — → \Symfony\Component\Console\Command\Command::INVALID (+23)) |
 | 2026-10-21 | 240bcc3 | Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Command/WorkflowsInspectCommand.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php) |
+| 2026-11-09 | 21630f9 | L'inspection lit aussi les opérations d'API Platform et le client du kit, et un lien peut se limiter à un dossier du client (ADR-0051) ; montée des composants Symfony (console, filesystem, process). (modified package symfony/console: 8.1.7 → 8.1.10 (+2)) |

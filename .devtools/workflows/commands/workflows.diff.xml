@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.diff" type="commands" schema-version="1">
   <title>workflows:diff</title>
-  <generated at="2026-10-21T07:55:44+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <generated at="2026-11-09T00:03:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="21630f957072784a23d8c8e1b1955823adf9b71f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:diff" role="main">
       <declared-in path="src/Command/WorkflowsDiffCommand.php" role="other"/>
@@ -27,7 +27,7 @@
     <file path="src/Config/LoginSettings.php" role="other" sha256="6ebff405f9d0423103f0e3952785e02d2bacf75a66aaa81552b195a95034dd87"/>
     <file path="src/Config/ScenarioSettings.php" role="other" sha256="1f7f1f9f41f767a8db00b9bf9133771703f2bebbbb56e98dc39d944bf87ad28f"/>
     <file path="src/Config/VisualSettings.php" role="other" sha256="5093a08927cb7b92956b2cd9e42beefc4c09271011df7f3a575ef4707bb4ab2d"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="bd6a61eaa7396e615fc02850f9aa3a215bc5002ee57820531039dbfc16c3ec77"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="6154b8a0cb5af876bcc13d5ec562ac18162f45fc4aeb78a9f9e467f117b6ac83"/>
     <file path="src/Console/ChangeRenderer.php" role="other" sha256="37815a69141923c60447b38fb5c83adf5e83a7c90ee2dce121eb867c36603832"/>
     <file path="src/Console/MemoryLimit.php" role="other" sha256="bb3727cc81b5d070ca5c839697f5965aa2999979cabd83bda139171100722023"/>
     <file path="src/Glossary/Glossary.php" role="other" sha256="078c80b767358121d52f2de900afc96cd3128a4f68eb496813f9c81e03704c23"/>
@@ -39,7 +39,7 @@
     <file path="src/Glossary/XmlGlossaryStore.php" role="other" sha256="181fe62b215e7a3e0e5b6d3e51ea733277ce8aedb2c338a1363e28545d03e6db"/>
     <file path="src/Inspection/Adapter/AdapterInterface.php" role="other" sha256="75f0f6887c4e2b0f62c7e96f97ceef8812a2148e715bed3ddca32670ae688303"/>
     <file path="src/Inspection/Adapter/AdapterResult.php" role="other" sha256="31a17e49e543fb94ab835be542f5cf3bfd703b61420979ff0b7481d37e81a42e"/>
-    <file path="src/Inspection/Adapter/Angular/AngularAdapter.php" role="other" sha256="33ed3e32fdcce5bfa26623d22282f3251a457d164b9ae337e75055e830e26a9a"/>
+    <file path="src/Inspection/Adapter/Angular/AngularAdapter.php" role="other" sha256="47578dcaed390dfcd7260d26b22a65ebd8c04554ade90416cdffaefad372f826"/>
     <file path="src/Inspection/Adapter/Claude/ClaudeDrivenAdapter.php" role="other" sha256="da3e506e2905d5dd1095f1ae0c446b61260ea766559563475e01c74f30ed9ede"/>
     <file path="src/Inspection/Adapter/Claude/Discovery.php" role="other" sha256="4679a5bea91159d351aa7612c11ef3dfc30e6b935e55f6e45ce8ff569c726f64"/>
     <file path="src/Inspection/Adapter/Claude/DiscoveryBrief.php" role="other" sha256="0a8a74bcb184945bfb6c474f08ce81ad864a1cdc14ceabcee147045944209ef0"/>
@@ -47,7 +47,7 @@
     <file path="src/Inspection/Adapter/Express/ExpressAdapter.php" role="other" sha256="0575335c2b70f637e212000ce809d5660ae6c589dfdf859553a4ae65a9835eec"/>
     <file path="src/Inspection/Adapter/GenericPhp/GenericPhpAdapter.php" role="other" sha256="a64a8b6356f8020dbfdc3facee9e815cbe4040a925a200299a8c92b876dfbb79"/>
     <file path="src/Inspection/Adapter/Laravel/LaravelAdapter.php" role="other" sha256="6834ca8ea571894a8e4156d693cb369ebf3f95fe12d27d9c8cbb7c3627867970"/>
-    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="db6e819c1b7f6b6c119ccdb25ba7f7d6ee1a8149016889cf7bc5b121c5bf0bd2"/>
+    <file path="src/Inspection/Adapter/Symfony/SymfonyAdapter.php" role="other" sha256="b75c73d0b0beacd01684ebf6c90c0df662ed785e8e74620d60efdda2461e2fd2"/>
     <file path="src/Inspection/AdapterResolver.php" role="other" sha256="da79e3173dcceec1ed7745c7a49bebfb6b976eda0b3707d7655aa5d6a55ef441"/>
     <file path="src/Inspection/AdapterSwitch.php" role="other" sha256="49b5378b18a0727adf24a8cab250f07d5195ba0e99cd0e9ab66cbed9a91d14b2"/>
     <file path="src/Inspection/Diff/ChangeGroup.php" role="other" sha256="6619c7fa9d7bbab89d1c37a8cea43cb66388bd1682f6093fa3acbe520177e45d"/>
@@ -101,7 +101,7 @@
     <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
     <file path="src/Inspection/Model/WorkflowIdAssigner.php" role="other" sha256="6234738d7be752467e4845d17a2cf3eb8bd31d2f49ef5ad504c3d9cbe5c4ca11"/>
     <file path="src/Inspection/Model/WorkflowIdCollision.php" role="other" sha256="efd35a831766473a756c2c0687eed183775a0a803f01b0b6821b32f748f729c6"/>
-    <file path="src/Inspection/Model/WorkflowIdDeriver.php" role="other" sha256="d97fc0702db283a141843817da6e797b2f1ab73088916be9e0834095651b4da8"/>
+    <file path="src/Inspection/Model/WorkflowIdDeriver.php" role="other" sha256="8b00d4b97aaef39debbe636b4cacb07d41fadccc4fd8ffb37ba00258fcf8ee8b"/>
     <file path="src/Inspection/Model/WorkflowSource.php" role="other" sha256="5fb8df93f841037e46658e9bc405d17f8b855ccfda781b371f277a7ed1b1562a"/>
     <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
     <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
@@ -110,7 +110,7 @@
     <file path="src/Link/Call.php" role="other" sha256="c3c060093a1c77c99269703005ed0563e03fb456d1ca29949eea9f2237aa8a40"/>
     <file path="src/Link/LinkCheck.php" role="other" sha256="c499eb62bd612030fd88f757973b584dde45b134165376f3976573d3509f1eb8"/>
     <file path="src/Link/LinkRole.php" role="other" sha256="09a5bee9e97fa4662b93cdb5d80473534c687ec8c656d7c8d31eda2b9dd9d39a"/>
-    <file path="src/Link/LinkedProject.php" role="other" sha256="3398ada3ce1fd536082745f08a8f157dc31195f31b220fa87793944b819d2012"/>
+    <file path="src/Link/LinkedProject.php" role="other" sha256="9ab2f9fdf422993ce243090848b73b75e594d85e5c5c9cef556e414b76570f5c"/>
     <file path="src/Link/Links.php" role="other" sha256="0950bced10f2c6d5c4b32dc52bc29d26c3381ab9b3745159a4b738e1fa091edd"/>
     <file path="src/Link/ProjectLinks.php" role="other" sha256="27b637be0ea7aabb098daa1c8c204935a7b7523f20ed927dcc06398f819cd434"/>
     <file path="src/Link/RelatedLinks.php" role="other" sha256="aac238bd5b623945555cf38a8e0ecea76b7cddc8ddde1e976e02336deb4fc8e1"/>
@@ -128,7 +128,7 @@
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
     <file path="src/Rendering/PageRenderer.php" role="other" sha256="3aeca72372254461977f87e9c51baa517266593b185d605f49ac3fcf3a8c19a0"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="8476008589cd61709b527c2e1bfe4d45b2843407c353de6082abd7fe684befec"/>
-    <file path="src/Rendering/ParsedPage.php" role="other" sha256="4d39000d6d0910a0e3ffb7a90f8bfd373b77584d7aeda9c87ea2ff9d7093d875"/>
+    <file path="src/Rendering/ParsedPage.php" role="other" sha256="ea0aec50c0076bca94f4a96d9a32ae3b59d0bf55b0031cac1f029c08163db2fe"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="d3cc667bf8f2f537a650714ec3fc9bf00638c3c9053957aa3618f46d8cb5e53a"/>
     <file path="src/Resources.php" role="other" sha256="dfe3bce84c26fc820241943c5c8ebc69515312d903b58afb0ac700498416db37"/>
     <file path="src/Scenario/ScenarioIndex.php" role="other" sha256="1d57059ec8a16b126145efdaf9ccc284430a5652f50228db0bd20b16d868b4d2"/>
@@ -230,9 +230,9 @@
   </tests>
   <packages>
     <package name="nikic/php-parser" version="5.9.0"/>
-    <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/filesystem" version="8.1.6"/>
-    <package name="symfony/process" version="8.1.9"/>
+    <package name="symfony/console" version="8.1.10"/>
+    <package name="symfony/filesystem" version="8.1.9"/>
+    <package name="symfony/process" version="8.1.10"/>
   </packages>
   <decisions>
     <decision target="Jul6Art\DevTools\Command\WorkflowsDiffCommand::execute" value="\Symfony\Component\Console\Command\Command::INVALID" condition="!is_dir($path)" file="src/Command/WorkflowsDiffCommand.php" line="58" confidence="high"/>
@@ -277,5 +277,6 @@
     <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
     <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : l'analyse qu'il lance relève aussi les liens entre projets devenus faux (ADR-0038), que diff ne montre pas — c'est check qui en fait une cause. La prose a été relue et tient. (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())-&gt;problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string =&gt; $workflow-&gt;id-&gt;value, $workflows)) (+6))"/>
     <revision at="2026-10-21T07:55:31+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Ask/SearchIndexBuilder.php, src/Glossary/GlossaryCollector.php, src/Tracking/Initializer.php, src/Tracking/Rename/RenameDetector.php, src/Tracking/Rename/RenamePlan.php, src/Tracking/Rename/WorkflowRenamer.php, src/Tracking/TrackingDocument.php)"/>
+    <revision at="2026-11-09T00:02:36+00:00" commit="21630f957072784a23d8c8e1b1955823adf9b71f" reason="Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+2))"/>
   </history>
 </workflow>

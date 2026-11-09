@@ -1,5 +1,5 @@
 # gate
-`command.gate` · type: commands · last updated: 2026-10-21 · commit: 240bcc3
+`command.gate` · type: commands · last updated: 2026-11-09 · commit: 21630f9
 
 ## Summary
 
@@ -135,3 +135,4 @@ L'étape freshness coûte l'analyse d'un `workflows:check`, proportionnelle au p
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le code a été remis en forme (Rector, style), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Gate/Gate.php, src/Gate/XmlGateStore.php) |
 | 2026-10-20 | 58c02fb | Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php) |
 | 2026-10-21 | 240bcc3 | L'analyse de l'étape freshness signale les liens entre projets devenus faux (ADR-0038) ; l'index de recherche, un cache, n'entre jamais dans un changement jugé (ADR-0039). (added decision Jul6Art\DevTools\Inspection\InspectionReport::linkProblems: — → (new \Jul6Art\DevTools\Link\LinkCheck())->problems($directory, $links, array_map(static fn(\Jul6Art\DevTools\Inspection\Model\Workflow $workflow): string => $workflow->id->value, $workflows)) (+12)) |
+| 2026-11-09 | 21630f9 | Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+2)) |

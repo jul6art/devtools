@@ -4179,6 +4179,10 @@
   <file path="tests/Inspection/Adapter/Laravel/RealArtisanTest.php">
     <workflow ref="command.knowledge.amend" relation="test"/>
   </file>
+  <file path="tests/Inspection/Adapter/Symfony/ApiPlatformOperationsTest.php">
+    <workflow ref="command.knowledge.amend" relation="test"/>
+    <workflow ref="command.workflows.review" relation="test"/>
+  </file>
   <file path="tests/Inspection/Adapter/Symfony/DoctrineListenersTest.php">
     <workflow ref="command.ai.run" relation="test"/>
     <workflow ref="command.ask" relation="test"/>

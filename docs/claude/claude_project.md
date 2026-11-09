@@ -274,6 +274,9 @@ périmètre de `.php-cs-fixer.dist.php`, exclusions comprises — `fix tests` a 
 - **v3.4.0 publiée le 2026-10-21** (Packagist, release GitHub avec phar et attestation, image ghcr.io, site
   sur GitHub Pages). Le générateur de squelettes (ADR-0040) exige `^3.4` : une fonction dont il dépend se
   publie ici **avant** d'être exigée là-bas.
+- **v3.5.0 étiquetée le 2026-11-09** (ADR-0051, pour la migration pilote de devinthecode) : Packagist la voit dès
+  la poussée de l'étiquette ; sa release GitHub (phar, attestation, image) se construit au prochain passage mensuel,
+  les Actions étant coupées.
 - ⚠️ **`TODO.md` est indexé vide en permanence** : jamais de `git commit` sans avoir vérifié
   `git diff --cached --name-only` — il embarquerait ce fichier (arrivé deux fois le 2026-10-21, dont une
   poussée, réparée par `cc410df`). Le retirer le temps du commit : `git rm --cached -f TODO.md`, puis

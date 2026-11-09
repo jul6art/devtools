@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1" id="command.workflows.apply" type="commands" schema-version="1">
   <title>workflows:apply</title>
-  <generated at="2026-10-21T07:55:44+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
-  <source vcs="git" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" branch="master" dirty="true"/>
+  <generated at="2026-11-09T00:03:57+00:00" tool="devtools dev-master" mode="ai" model="claude-opus-5-5" prompt="page/4"/>
+  <source vcs="git" commit="21630f957072784a23d8c8e1b1955823adf9b71f" branch="master" dirty="true"/>
   <entrypoints>
     <entrypoint kind="command" name="workflows:apply" role="main">
       <declared-in path="src/Command/WorkflowsApplyCommand.php" role="other"/>
@@ -37,7 +37,7 @@
     <file path="src/Config/LoginSettings.php" role="other" sha256="6ebff405f9d0423103f0e3952785e02d2bacf75a66aaa81552b195a95034dd87"/>
     <file path="src/Config/ScenarioSettings.php" role="other" sha256="1f7f1f9f41f767a8db00b9bf9133771703f2bebbbb56e98dc39d944bf87ad28f"/>
     <file path="src/Config/VisualSettings.php" role="other" sha256="5093a08927cb7b92956b2cd9e42beefc4c09271011df7f3a575ef4707bb4ab2d"/>
-    <file path="src/Config/XmlConfigReader.php" role="other" sha256="bd6a61eaa7396e615fc02850f9aa3a215bc5002ee57820531039dbfc16c3ec77"/>
+    <file path="src/Config/XmlConfigReader.php" role="other" sha256="6154b8a0cb5af876bcc13d5ec562ac18162f45fc4aeb78a9f9e467f117b6ac83"/>
     <file path="src/Console/SummaryRenderer.php" role="other" sha256="5d61d84934fa059d556111de8e1a9fc8062122a51b36db5329d7f3b02a364b56"/>
     <file path="src/Feedback/Categories.php" role="other" sha256="9e673c6598029823172097c8c9138bc80fd9b820dc78234308e6c046032fb991"/>
     <file path="src/Feedback/FeedbackNotFound.php" role="other" sha256="adfa292190e3c6bf4f1279a070eb9627f93f936cc2ab150a910de837b2ad2ab6"/>
@@ -79,13 +79,13 @@
     <file path="src/Inspection/Model/WorkflowId.php" role="other" sha256="8297cbea94d048665ae3e167713d24915dda5e01a5f0de23f21e0f263c2a3a92"/>
     <file path="src/Inspection/Model/WorkflowIdAssigner.php" role="other" sha256="6234738d7be752467e4845d17a2cf3eb8bd31d2f49ef5ad504c3d9cbe5c4ca11"/>
     <file path="src/Inspection/Model/WorkflowIdCollision.php" role="other" sha256="efd35a831766473a756c2c0687eed183775a0a803f01b0b6821b32f748f729c6"/>
-    <file path="src/Inspection/Model/WorkflowIdDeriver.php" role="other" sha256="d97fc0702db283a141843817da6e797b2f1ab73088916be9e0834095651b4da8"/>
+    <file path="src/Inspection/Model/WorkflowIdDeriver.php" role="other" sha256="8b00d4b97aaef39debbe636b4cacb07d41fadccc4fd8ffb37ba00258fcf8ee8b"/>
     <file path="src/Inspection/Model/WorkflowSource.php" role="other" sha256="5fb8df93f841037e46658e9bc405d17f8b855ccfda781b371f277a7ed1b1562a"/>
     <file path="src/Inspection/Model/WorkflowType.php" role="other" sha256="09f9883526473fbcff79a3ffd03284ac690782b97dede69a270bf5cb467bd304"/>
     <file path="src/Inspection/Model/WorkflowTypeRegistry.php" role="other" sha256="a0e2602c101d5dbf9924dc5895c725610bae4b327cf015d742f453e4e510b670"/>
     <file path="src/Link/Call.php" role="other" sha256="c3c060093a1c77c99269703005ed0563e03fb456d1ca29949eea9f2237aa8a40"/>
     <file path="src/Link/LinkRole.php" role="other" sha256="09a5bee9e97fa4662b93cdb5d80473534c687ec8c656d7c8d31eda2b9dd9d39a"/>
-    <file path="src/Link/LinkedProject.php" role="other" sha256="3398ada3ce1fd536082745f08a8f157dc31195f31b220fa87793944b819d2012"/>
+    <file path="src/Link/LinkedProject.php" role="other" sha256="9ab2f9fdf422993ce243090848b73b75e594d85e5c5c9cef556e414b76570f5c"/>
     <file path="src/Link/Links.php" role="other" sha256="0950bced10f2c6d5c4b32dc52bc29d26c3381ab9b3745159a4b738e1fa091edd"/>
     <file path="src/Link/ProjectLinks.php" role="other" sha256="27b637be0ea7aabb098daa1c8c204935a7b7523f20ed927dcc06398f819cd434"/>
     <file path="src/Link/RelatedLinks.php" role="other" sha256="aac238bd5b623945555cf38a8e0ecea76b7cddc8ddde1e976e02336deb4fc8e1"/>
@@ -102,7 +102,7 @@
     <file path="src/Rendering/PageParser.php" role="other" sha256="ca31cf068b531b920ac5cc9b500a8152d954bfdffeaa934a033f494a3758d28e"/>
     <file path="src/Rendering/PageRenderer.php" role="other" sha256="3aeca72372254461977f87e9c51baa517266593b185d605f49ac3fcf3a8c19a0"/>
     <file path="src/Rendering/PageSection.php" role="other" sha256="8476008589cd61709b527c2e1bfe4d45b2843407c353de6082abd7fe684befec"/>
-    <file path="src/Rendering/ParsedPage.php" role="other" sha256="4d39000d6d0910a0e3ffb7a90f8bfd373b77584d7aeda9c87ea2ff9d7093d875"/>
+    <file path="src/Rendering/ParsedPage.php" role="other" sha256="ea0aec50c0076bca94f4a96d9a32ae3b59d0bf55b0031cac1f029c08163db2fe"/>
     <file path="src/Rendering/RenderingContext.php" role="other" sha256="d3cc667bf8f2f537a650714ec3fc9bf00638c3c9053957aa3618f46d8cb5e53a"/>
     <file path="src/Resources.php" role="other" sha256="dfe3bce84c26fc820241943c5c8ebc69515312d903b58afb0ac700498416db37"/>
     <file path="src/Rule/Glob.php" role="other" sha256="001a219fe87582b0b4abc0c54721bb2ae7682b734ece19211f0a7bbb8ae42d4f"/>
@@ -206,8 +206,8 @@
     <file path="tests/Verification/VerificationTest.php" role="test"/>
   </tests>
   <packages>
-    <package name="symfony/console" version="8.1.7"/>
-    <package name="symfony/filesystem" version="8.1.6"/>
+    <package name="symfony/console" version="8.1.10"/>
+    <package name="symfony/filesystem" version="8.1.9"/>
   </packages>
   <decisions>
     <decision target="DateTimeImmutable::timezone" value="new \DateTimeZone(date_default_timezone_get())" condition="\is_string($epoch) &amp;&amp; 1 === preg_match('/^\d+$/', $epoch)" file="src/Clock/SystemClock.php" line="18" confidence="high"/>
@@ -239,5 +239,6 @@
     <revision at="2026-10-20T22:55:23+00:00" commit="58c02fb9a3a34b43275909170d619195a91b749e" reason="Aucun changement de fond : le client git lit plus simplement les fichiers du projet et les commits d'une plage, sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Inspection/Freshness/GitClient.php)"/>
     <revision at="2026-10-21T07:21:07+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Applique les définitions du glossaire avant les pages, et signale un synonyme employé à la place d'un terme (ADR-0037). (added decision Jul6Art\DevTools\Ai\ApplyResult::accepted: — → [...$result-&gt;accepted, ...$glossary['accepted']] (+10))"/>
     <revision at="2026-10-21T07:55:31+00:00" commit="240bcc3692d0ab45a24887c30b90e74fe2041c3b" reason="Aucun changement de fond : le suivi d'un workflow sait s'allonger d'une révision, le renommage et l'initialisation ont été simplifiés (ADR-0036, ADR-0039), sans rien changer de ce que fait la commande. La prose a été relue et tient. (files changed: src/Tracking/TrackingDocument.php)"/>
+    <revision at="2026-11-09T00:02:36+00:00" commit="21630f957072784a23d8c8e1b1955823adf9b71f" reason="Aucun changement de fond : montée des composants Symfony (console, filesystem, process) et ce que l'ADR-0051 ajoute à l'analyse (opérations d'API Platform, client du kit, client-dir des liens), sans rien changer de ce que fait la commande. La prose tient. (modified package symfony/console: 8.1.7 → 8.1.10 (+1))"/>
   </history>
 </workflow>
