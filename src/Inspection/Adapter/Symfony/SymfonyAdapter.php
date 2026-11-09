@@ -41,6 +41,12 @@ final readonly class SymfonyAdapter implements AdapterInterface
 
     private const string TEMPLATES = 'templates';
 
+    /**
+     * The controllers API Platform answers its operations with (ADR-0051): 4.x, then 3.x. Its `not_exposed` one
+     * answers 404 — an operation behind it is not a route.
+     */
+    private const array API_PLATFORM_CONTROLLERS = ['api_platform.symfony.main_controller', 'api_platform.action.placeholder'];
+
     public function __construct(private ConsoleRunnerInterface $runner = new ProcessConsoleRunner())
     {
     }
@@ -112,6 +118,8 @@ final readonly class SymfonyAdapter implements AdapterInterface
             );
         }
 
+        $candidates = [...$candidates, ...$this->apiOperations($console, $scanner, $files, [...$routeConfiguration, ...$services], $confidence, $source)];
+
         foreach ($console instanceof ConsoleIntrospection ? $console->commands : $scanner->commands() as $class => $command) {
             $file = $scanner->fileOf($class);
 
@@ -157,7 +165,100 @@ final readonly class SymfonyAdapter implements AdapterInterface
             }
         }
 
-        return new AdapterResult($candidates, [self::TEMPLATES], $scanner->warnings(), $fallbackCause, consoleCalls: $symfonyConsole->calls(), mechanisms: $mechanisms);
+        $warnings = $scanner->warnings();
+        $resources = $console instanceof ConsoleIntrospection ? [] : $scanner->apiResources();
+
+        if ([] !== $resources) {
+            $warnings[] = \sprintf('%d API Platform resources (%s): their operations are read from the console only, which did not answer.', \count($resources), implode(', ', $resources));
+        }
+
+        return new AdapterResult($candidates, [self::TEMPLATES], $warnings, $fallbackCause, consoleCalls: $symfonyConsole->calls(), mechanisms: $mechanisms);
+    }
+
+    /**
+     * The API Platform operations of the project's resources, each a route (ADR-0051): declared by its resource
+     * class, which reaches its provider and processor; its security, provider and processor read in the resource's
+     * attributes. Without the console, none: the path of an operation without a URI template is API Platform's
+     * to compute, and guessing it would invent a fact.
+     *
+     * @param list<FileRef> $configuration
+     *
+     * @return list<EntryPointCandidate>
+     */
+    private function apiOperations(?ConsoleIntrospection $console, StaticSymfonyScanner $scanner, ProjectFiles $files, array $configuration, Confidence $confidence, WorkflowSource $source): array
+    {
+        if (!$console instanceof ConsoleIntrospection) {
+            return [];
+        }
+
+        $candidates = [];
+        $structural = [...$configuration, ...$files->existing(['config/packages/api_platform.yaml'], FileRole::Config)];
+
+        foreach ($console->routes as $route) {
+            $file = null === $route['resource'] || !\in_array($route['controller'], self::API_PLATFORM_CONTROLLERS, true) ? null : $scanner->fileOf($route['resource']);
+
+            // A resource of the vendor (API Platform's errors) is not the project's.
+            if (!$file instanceof FileRef) {
+                continue;
+            }
+
+            $operation = self::operationOf($scanner->apiOperations((string) $route['resource']), $route);
+            $attributes = array_filter([
+                'path' => $route['path'],
+                'methods' => 'ANY' === $route['methods'] ? null : $route['methods'],
+                'security' => implode(', ', array_values(array_unique([...self::accessControlRoles($console, $route['path']), ...$operation['security'] ?? []]))),
+                'provider' => $operation['provider'] ?? null,
+                'processor' => $operation['processor'] ?? null,
+            ], static fn (?string $value): bool => null !== $value && '' !== $value);
+
+            $candidates[] = new EntryPointCandidate(
+                type: WorkflowType::routes(),
+                entryPoint: new EntryPoint('api-operation', $route['name'], $file, $attributes),
+                title: trim(('ANY' === $route['methods'] ? '' : $route['methods']).' '.$route['path']),
+                structuralFiles: $structural,
+                extraTests: $files->testsRequesting((string) preg_replace('/\.\{_format\}$/', '', $route['path'])),
+                confidence: $confidence,
+                source: $source,
+            );
+        }
+
+        return $candidates;
+    }
+
+    /**
+     * The operation of the resource behind a route: by its name, then by its URI template and its method, then by
+     * its kind — a collection or not — and its method.
+     *
+     * @param list<array{method: string, collection: bool, name: string|null, uriTemplate: string|null, provider: string|null, processor: string|null, security: list<string>}> $operations
+     * @param array{name: string, path: string, methods: string}                                                                                                                $route
+     *
+     * @return array{method: string, collection: bool, name: string|null, uriTemplate: string|null, provider: string|null, processor: string|null, security: list<string>}|null
+     */
+    private static function operationOf(array $operations, array $route): ?array
+    {
+        $withoutFormat = static fn (string $path): string => str_replace(['{._format}', '.{_format}'], '', $path);
+        $methods = explode('|', $route['methods']);
+        $collection = str_ends_with($route['name'], '_collection');
+
+        foreach ($operations as $operation) {
+            if ($operation['name'] === $route['name']) {
+                return $operation;
+            }
+        }
+
+        foreach ($operations as $operation) {
+            if (null !== $operation['uriTemplate'] && \in_array($operation['method'], $methods, true) && str_ends_with($withoutFormat($route['path']), $withoutFormat($operation['uriTemplate']))) {
+                return $operation;
+            }
+        }
+
+        foreach ($operations as $operation) {
+            if (null === $operation['name'] && null === $operation['uriTemplate'] && \in_array($operation['method'], $methods, true) && ('GET' !== $operation['method'] || $operation['collection'] === $collection)) {
+                return $operation;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -286,7 +387,7 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $routes = [];
 
         foreach ($console->routes as $route) {
-            if (null === $route['controller']) {
+            if (null === $route['controller'] || null !== $route['resource']) {
                 continue;
             }
 

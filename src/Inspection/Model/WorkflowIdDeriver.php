@@ -36,7 +36,7 @@ final readonly class WorkflowIdDeriver
     public function derive(WorkflowType $type, EntryPoint $entryPoint): WorkflowId
     {
         $segments = match ($type->name) {
-            'routes' => self::split($this->withoutRoutePrefix($entryPoint->name), '/[_.]+/'),
+            'routes' => 'api-operation' === $entryPoint->kind ? $this->apiOperation($entryPoint->name) : self::split($this->withoutRoutePrefix($entryPoint->name), '/[_.]+/'),
             'commands' => self::split($entryPoint->name, '/[:.]+/'),
             'async' => [self::kebab($entryPoint->attributes['message'] ?? $entryPoint->name)],
             'ui' => [self::kebab($entryPoint->name)],
@@ -50,6 +50,25 @@ final readonly class WorkflowIdDeriver
         }
 
         return new WorkflowId($type->idPrefix.'.'.implode('.', $segments));
+    }
+
+    /**
+     * An API Platform operation (ADR-0051): `api`, then the URI template, the method and `collection` of the name API
+     * Platform generates — `_api_/loans/{id}/return_post` is `api.loans.id.return.post` —, or the name the operation
+     * chose (`loan_return` is `api.loan.return`). The prefix keeps it apart from the screen it replaces,
+     * `app_loan_return`.
+     *
+     * @return list<string>
+     */
+    private function apiOperation(string $name): array
+    {
+        if (1 !== preg_match('/^_api_(.*)_(get|post|put|patch|delete|head|options)(_collection)?$/', $name, $generated)) {
+            return ['api', ...self::split($this->withoutRoutePrefix($name), '/[_.]+/')];
+        }
+
+        $template = preg_split('#[/{}]+#', str_replace(['{._format}', '.{_format}'], '', $generated[1])) ?: [];
+
+        return ['api', ...$template, $generated[2], ...'' === ($generated[3] ?? '') ? [] : ['collection']];
     }
 
     private function withoutRoutePrefix(string $name): string

@@ -1,0 +1,16 @@
+{
+    "name": "acme/lending-api",
+    "description": "DevTools fixture: API Platform operations next to a Twig route (ADR-0051).",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.5",
+        "api-platform/symfony": "^4.2",
+        "symfony/framework-bundle": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

@@ -14,13 +14,13 @@ use Jul6Art\DevTools\Inspection\Model\Transition;
 final readonly class ConsoleIntrospection
 {
     /**
-     * @param list<array{name: string, path: string, methods: string, controller: string|null}> $routes
-     * @param array<string, string>                                                             $commands      class => command name
-     * @param array<string, string|null>                                                        $handlers      class => handled message, when the container knows it
-     * @param array<string, list<array{event: string, method: string, priority: int|null}>>     $listeners     class => what it listens to
-     * @param array<string, StateMachine>                                                       $stateMachines
-     * @param list<array{path: string, roles: list<string>}>                                    $accessControl
-     * @param array<string, list<string>>                                                       $supports      state machine => the entity classes it drives
+     * @param list<array{name: string, path: string, methods: string, controller: string|null, resource: string|null}> $routes        resource: the API Platform resource class of an operation (ADR-0051)
+     * @param array<string, string>                                                                                    $commands      class => command name
+     * @param array<string, string|null>                                                                               $handlers      class => handled message, when the container knows it
+     * @param array<string, list<array{event: string, method: string, priority: int|null}>>                            $listeners     class => what it listens to
+     * @param array<string, StateMachine>                                                                              $stateMachines
+     * @param list<array{path: string, roles: list<string>}>                                                           $accessControl
+     * @param array<string, list<string>>                                                                              $supports      state machine => the entity classes it drives
      */
     private function __construct(
         public array $routes,
@@ -43,6 +43,7 @@ final readonly class ConsoleIntrospection
                 'path' => Json::string($route, 'path') ?? '/',
                 'methods' => Json::string($route, 'method') ?? 'ANY',
                 'controller' => Json::string(Json::array($route, 'defaults'), '_controller'),
+                'resource' => Json::string(Json::array($route, 'defaults'), '_api_resource_class'),
             ];
         }
 

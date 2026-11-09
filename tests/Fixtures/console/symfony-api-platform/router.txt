@@ -1,0 +1,226 @@
+{
+    "api_entrypoint": {
+        "path": "/api/{index}.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.action.entrypoint",
+            "_format": "",
+            "_api_respond": "true",
+            "index": "index"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "api_doc": {
+        "path": "/api/docs.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.action.documentation",
+            "_format": "",
+            "_api_respond": "true"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_errors": {
+        "path": "/api/errors/{status}.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "ApiPlatform\\State\\ApiResource\\Error",
+            "_api_operation_name": "_api_errors",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/loans{._format}_get_collection": {
+        "path": "/api/loans.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Loan",
+            "_api_operation_name": "_api_/loans{._format}_get_collection",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/loans/{id}{._format}_get": {
+        "path": "/api/loans/{id}.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Loan",
+            "_api_operation_name": "_api_/loans/{id}{._format}_get",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/loans{._format}_post": {
+        "path": "/api/loans.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "POST",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Loan",
+            "_api_operation_name": "_api_/loans{._format}_post",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "loan_return": {
+        "path": "/api/loans/{id}/return",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "POST",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Loan",
+            "_api_operation_name": "loan_return",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/items{._format}_get_collection": {
+        "path": "/api/items.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Item",
+            "_api_operation_name": "_api_/items{._format}_get_collection",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/items/{id}{._format}_get": {
+        "path": "/api/items/{id}.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.action.not_exposed",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Item",
+            "_api_operation_name": "_api_/items/{id}{._format}_get",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_api_/items/{id}{._format}_delete": {
+        "path": "/api/items/{id}.{_format}",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "DELETE",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "api_platform.symfony.main_controller",
+            "_stateless": null,
+            "_api_resource_class": "App\\Entity\\Item",
+            "_api_operation_name": "_api_/items/{id}{._format}_delete",
+            "_format": null
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_loan_return": {
+        "path": "/loans/{id}/give-back",
+        "pathRegex": "",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "POST",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\LoanController::giveBack"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    }
+}

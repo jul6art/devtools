@@ -1,0 +1,8 @@
+
+Current configuration for "framework.workflows"
+===============================================
+
+{
+    "enabled": false,
+    "workflows": []
+}

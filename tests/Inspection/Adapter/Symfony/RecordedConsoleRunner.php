@@ -8,7 +8,8 @@ use Jul6Art\DevTools\Inspection\Adapter\Symfony\ConsoleRun;
 use Jul6Art\DevTools\Inspection\Adapter\Symfony\ConsoleRunnerInterface;
 
 /**
- * Replays the real outputs of the symfony-minimal console, recorded in tests/Fixtures/console/.
+ * Replays the real outputs of a fixture's console, recorded in tests/Fixtures/console/<project>/ —
+ * symfony-minimal's by default.
  */
 final class RecordedConsoleRunner implements ConsoleRunnerInterface
 {
@@ -29,7 +30,7 @@ final class RecordedConsoleRunner implements ConsoleRunnerInterface
     /**
      * @param array<string, string> $overrides recording name => output replacing the recorded one
      */
-    public function __construct(private readonly array $overrides = [], private readonly ?\Throwable $failure = null)
+    public function __construct(private readonly array $overrides = [], private readonly ?\Throwable $failure = null, private readonly string $project = 'symfony-minimal')
     {
     }
 
@@ -45,7 +46,7 @@ final class RecordedConsoleRunner implements ConsoleRunnerInterface
         $question = \array_slice($command, (int) array_search('bin/console', $command, true) + 1);
         $arguments = implode(' ', array_values(array_filter($question, static fn (string $argument): bool => !str_starts_with($argument, '--format=') && !str_starts_with($argument, '--env='))));
         $name = self::FILES[$arguments] ?? throw new \LogicException(\sprintf('No recording for "%s".', $arguments));
-        $output = $this->overrides[$name] ?? (string) file_get_contents(__DIR__.'/../../../Fixtures/console/symfony-minimal/'.$name.'.txt');
+        $output = $this->overrides[$name] ?? (string) file_get_contents(__DIR__.'/../../../Fixtures/console/'.$this->project.'/'.$name.'.txt');
 
         return new ConsoleRun(0, $output, '');
     }

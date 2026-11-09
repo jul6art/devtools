@@ -16,8 +16,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -88,6 +90,20 @@ final class StaticSymfonyScanner
     private const array SCHEDULED = ['Symfony\Component\Scheduler\Attribute\AsCronTask', 'Symfony\Component\Scheduler\Attribute\AsPeriodicTask'];
 
     private const array COMPONENT = ['Symfony\UX\LiveComponent\Attribute\AsLiveComponent' => true, 'Symfony\UX\TwigComponent\Attribute\AsTwigComponent' => false];
+
+    private const string API_RESOURCE = 'ApiPlatform\Metadata\ApiResource';
+
+    /**
+     * The operations of API Platform a resource declares (ADR-0051), and the HTTP method of each.
+     */
+    private const array API_OPERATIONS = [
+        'ApiPlatform\Metadata\Get' => 'GET',
+        'ApiPlatform\Metadata\GetCollection' => 'GET',
+        'ApiPlatform\Metadata\Post' => 'POST',
+        'ApiPlatform\Metadata\Put' => 'PUT',
+        'ApiPlatform\Metadata\Patch' => 'PATCH',
+        'ApiPlatform\Metadata\Delete' => 'DELETE',
+    ];
 
     /**
      * @var array<string, array{file: FileRef, class: ClassLike}>|null
@@ -350,6 +366,113 @@ final class StaticSymfonyScanner
         ksort($voters, \SORT_STRING);
 
         return $voters;
+    }
+
+    /**
+     * The classes of the project that declare API Platform resources (ADR-0051), sorted.
+     *
+     * @return list<string>
+     */
+    public function apiResources(): array
+    {
+        $resources = array_keys(array_filter(
+            $this->classes(),
+            fn (array $declared): bool => [] !== $this->attributes($declared['class']->attrGroups, [self::API_RESOURCE, ...array_keys(self::API_OPERATIONS)]),
+        ));
+        sort($resources, \SORT_STRING);
+
+        return $resources;
+    }
+
+    /**
+     * The operations a resource declares in its attributes (ADR-0051) — inside `#[ApiResource(operations: […])]` or
+     * as attributes of their own —, each with what it inherits from its resource: its HTTP method, whether it reads a
+     * collection, its name and URI template when it has them, its provider and processor, and the attributes its
+     * security expression asks `is_granted()` for.
+     *
+     * @return list<array{method: string, collection: bool, name: string|null, uriTemplate: string|null, provider: string|null, processor: string|null, security: list<string>}>
+     */
+    public function apiOperations(string $class): array
+    {
+        $node = $this->classes()[ltrim($class, '\\')]['class'] ?? null;
+
+        if (null === $node) {
+            return [];
+        }
+
+        $resources = $this->attributes($node->attrGroups, [self::API_RESOURCE]);
+        $defaults = [] === $resources ? ['provider' => null, 'processor' => null, 'security' => []] : $this->operationSettings($resources[0], $class);
+        $declared = [];
+
+        foreach ($resources as $resource) {
+            $settings = $this->operationSettings($resource, $class);
+            $list = AttributeArgument::of($resource, -1, 'operations');
+
+            foreach ($list instanceof Array_ ? $list->items : [] as $item) {
+                if ($item->value instanceof New_ && $item->value->class instanceof Name) {
+                    $declared[] = [new Attribute($item->value->class, array_values(array_filter($item->value->args, static fn (Node $argument): bool => $argument instanceof Arg))), $settings];
+                }
+            }
+        }
+
+        foreach ($this->attributes($node->attrGroups, array_keys(self::API_OPERATIONS)) as $attribute) {
+            $declared[] = [$attribute, $defaults];
+        }
+
+        $operations = [];
+
+        foreach ($declared as [$attribute, $inherited]) {
+            $method = self::API_OPERATIONS[$attribute->name->toString()] ?? null;
+
+            if (null === $method) {
+                continue;
+            }
+
+            $own = $this->operationSettings($attribute, $class);
+            $operations[] = [
+                'method' => $method,
+                'collection' => str_ends_with($attribute->name->toString(), 'Collection'),
+                'name' => self::stringArgument($attribute, -1, 'name'),
+                'uriTemplate' => self::stringArgument($attribute, -1, 'uriTemplate'),
+                'provider' => $own['provider'] ?? $inherited['provider'],
+                'processor' => $own['processor'] ?? $inherited['processor'],
+                'security' => AttributeArgument::of($attribute, -1, 'security') instanceof Expr ? $own['security'] : $inherited['security'],
+            ];
+        }
+
+        return $operations;
+    }
+
+    /**
+     * @return array{provider: string|null, processor: string|null, security: list<string>}
+     */
+    private function operationSettings(Attribute $attribute, string $class): array
+    {
+        $classOf = (static fn (?Expr $value): ?string => $value instanceof ClassConstFetch && $value->class instanceof Name && $value->name instanceof Identifier && 'class' === $value->name->toString() ? $value->class->toString() : null);
+        $expression = $this->concatenated(AttributeArgument::of($attribute, -1, 'security'), $class);
+        preg_match_all('/is_granted\(\s*["\']([^"\']+)["\']/', $expression ?? '', $granted);
+
+        return [
+            'provider' => $classOf(AttributeArgument::of($attribute, -1, 'provider')),
+            'processor' => $classOf(AttributeArgument::of($attribute, -1, 'processor')),
+            'security' => array_values(array_unique($granted[1])),
+        ];
+    }
+
+    /**
+     * A string written in pieces — `"is_granted('".LoanVoter::LIST."')"` —, or null when one of them is not known
+     * without running the code.
+     */
+    private function concatenated(?Expr $value, string $class): ?string
+    {
+        if (!$value instanceof Concat) {
+            return $this->stringValue($value, $class);
+        }
+
+        $left = $this->concatenated($value->left, $class);
+        $right = $this->concatenated($value->right, $class);
+
+        return null === $left || null === $right ? null : $left.$right;
     }
 
     private static function isVoter(Class_ $class): bool

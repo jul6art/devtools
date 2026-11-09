@@ -1461,6 +1461,17 @@ machine** it drives, found by Symfony's naming convention (`WorkflowInterface $o
 `order`); the tests that request its path literally; and a dependency on every project listener of a
 `kernel.*` event.
 
+**API Platform** — an operation of a resource of the project is a route (ADR-0051), found in the console's
+routes by its resource class. It is declared by that class (`#[ApiResource]`, an entity or a DTO), whose
+references carry its provider, its processor and what they call; its attributes name the **provider** and
+the **processor** of the operation, read in the resource's attributes — its own, or `#[ApiResource]`'s —, and
+its **security** is what its `security` expression asks `is_granted()` for, so the voter of that attribute is
+one of its mechanisms. Its identifier starts with `api`: `_api_/loans/{id}/return_post` →
+`route.api.loans.id.return.post`, a chosen `name: 'loan_return'` → `route.api.loan.return` — never the
+`route.loan.return` of the screen `app_loan_return` it may replace. The vendor's resources (errors) and the
+operations API Platform does not expose are not routes. Without the console, the operations are not
+guessed: the report names the resources it left aside.
+
 ⚠️ **The project must boot in its `dev` environment.** In a Docker-first project, tell DevTools how to
 reach the console:
 

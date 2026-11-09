@@ -1,0 +1,4 @@
+api_platform:
+    title: Lending
+    defaults:
+        stateless: false
