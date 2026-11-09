@@ -65,8 +65,10 @@ final readonly class ProjectLinker
             $remoteDirectory = DevToolsDirectory::documented(new ProjectRoot($path));
             $remoteConfig = new XmlConfigReader()->read($remoteDirectory->configFile());
             $remote = LinkSide::read($remoteDirectory, new WorkflowTypeRegistry($remoteConfig->customTypes));
-            $baseUrl = $neighbour->baseUrl ?? self::declaredBack($remoteConfig, $path, $root)?->baseUrl;
-            $calls = LinkRole::Client === $neighbour->role ? $this->calculator->calls($remote, $local, $baseUrl) : $this->calculator->calls($local, $remote, $baseUrl);
+            $back = self::declaredBack($remoteConfig, $path, $root);
+            $baseUrl = $neighbour->baseUrl ?? $back?->baseUrl;
+            $clientDir = $neighbour->clientDir ?? $back?->clientDir;
+            $calls = LinkRole::Client === $neighbour->role ? $this->calculator->calls($remote, $local, $baseUrl, $clientDir) : $this->calculator->calls($local, $remote, $baseUrl, $clientDir);
             $linked = new ProjectLinks($neighbour->name, $neighbour->path, $neighbour->role, $calls);
             $projects[] = $linked;
             $report->projects[$neighbour->name] = ['calls' => \count($calls) - \count($linked->orphans()), 'orphans' => \count($linked->orphans())];
@@ -110,7 +112,8 @@ final readonly class ProjectLinker
     }
 
     /**
-     * The neighbour's own declaration of this project, which may carry the base URL of the client's calls.
+     * The neighbour's own declaration of this project, which may carry the base URL of the client's calls and the
+     * directory of the client the link is limited to.
      */
     private static function declaredBack(Config $config, string $neighbour, ProjectRoot $root): ?LinkedProject
     {

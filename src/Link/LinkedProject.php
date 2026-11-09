@@ -11,7 +11,8 @@ use Jul6Art\DevTools\Config\InvalidConfig;
  *
  * The path is relative to the project, so that two clones side by side link wherever they are; the base URL
  * is what a client's calls start with when the code does not say — an `environment.apiUrl` read from a
- * file the analysis cannot resolve.
+ * file the analysis cannot resolve. The client directory limits the link to the integrations under it, in the
+ * client project — one application of a workspace (ADR-0051).
  */
 final readonly class LinkedProject
 {
@@ -20,6 +21,7 @@ final readonly class LinkedProject
         public string $path,
         public LinkRole $role,
         public ?string $baseUrl = null,
+        public ?string $clientDir = null,
     ) {
         if (1 !== preg_match('/^[a-z][a-z0-9-]*$/', $name)) {
             throw new InvalidConfig(\sprintf('"%s" is not a project name: lowercase letters, digits and dashes.', $name));
@@ -27,6 +29,10 @@ final readonly class LinkedProject
 
         if ('' === $path || str_starts_with($path, '/') || 1 === preg_match('/^[A-Za-z]:/', $path)) {
             throw new InvalidConfig(\sprintf('The path of the linked project "%s" must be relative to this one, such as "../%s".', $name, $name));
+        }
+
+        if (null !== $clientDir && ('' === trim($clientDir, '/') || str_starts_with($clientDir, '/') || \in_array('..', explode('/', $clientDir), true))) {
+            throw new InvalidConfig(\sprintf('The client directory of the link to "%s" must be a directory of the client project, such as "projects/front".', $name));
         }
     }
 }

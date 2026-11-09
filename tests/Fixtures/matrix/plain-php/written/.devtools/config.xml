@@ -46,7 +46,8 @@
     <!-- The projects this one is linked to: a mobile front and its API. Inspected together with the link
          option of workflows:inspect, the calls of the front's integrations are matched against the routes of
          the API. The path is relative to this project; role is what the neighbour is to it; base-url is what
-         the client's URLs start with when the analysis cannot read it (an environment variable, for instance).
+         the client's URLs start with when the analysis cannot read it (an environment variable, for instance);
+         client-dir limits the link to the client's integrations under that directory of the client project.
          <links>
              <project name="mobile" path="../mobile" role="client"/>
          </links> -->

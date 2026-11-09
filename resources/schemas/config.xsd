@@ -113,6 +113,8 @@
                                         </xs:simpleType>
                                     </xs:attribute>
                                     <xs:attribute name="base-url" type="t:nonEmpty"/>
+                                    <!-- ADR-0051: only the client's integrations under this directory of the client project. -->
+                                    <xs:attribute name="client-dir" type="t:path"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

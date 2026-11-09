@@ -6,6 +6,7 @@ namespace Jul6Art\DevTools\Tests\Link;
 
 use Jul6Art\DevTools\Command\WorkflowsImpactCommand;
 use Jul6Art\DevTools\Command\WorkflowsInspectCommand;
+use Jul6Art\DevTools\Config\InvalidConfig;
 use Jul6Art\DevTools\Config\XmlConfigReader;
 use Jul6Art\DevTools\Console\Application;
 use Jul6Art\DevTools\Link\Call;
@@ -14,6 +15,7 @@ use Jul6Art\DevTools\Link\LinkCalculator;
 use Jul6Art\DevTools\Link\LinkCheck;
 use Jul6Art\DevTools\Link\LinkedImpactResolver;
 use Jul6Art\DevTools\Link\LinkedProject;
+use Jul6Art\DevTools\Link\LinkRole;
 use Jul6Art\DevTools\Link\Links;
 use Jul6Art\DevTools\Link\LinkSide;
 use Jul6Art\DevTools\Link\ProjectLinker;
@@ -90,6 +92,16 @@ final class ProjectLinkTest extends TestCase
         yield 'an Express parameter' => ['GET /orders/42', [['id' => 'express', 'methods' => ['GET'], 'path' => '/orders/:id']], ['express']];
         yield 'two routes alike both answer' => ['GET */items', [['id' => 'b', 'methods' => ['GET'], 'path' => '/b/items'], ['id' => 'a', 'methods' => ['GET'], 'path' => '/a/items']], ['a', 'b']];
         yield 'a longer client path matches no shorter route' => ['GET /api/items/1/history', $symfony, []];
+
+        // ADR-0051: API Platform's optional format does not turn a resource into a parameter.
+        $apiPlatform = [
+            ['id' => 'items', 'methods' => ['GET'], 'path' => '/api/items.{_format}'],
+            ['id' => 'item', 'methods' => ['GET'], 'path' => '/api/items/{id}.{_format}'],
+            ['id' => 'borrowers', 'methods' => ['GET'], 'path' => '/api/borrowers.{_format}'],
+        ];
+
+        yield 'an optional format is no parameter' => ['GET /api/borrowers', $apiPlatform, ['borrowers']];
+        yield 'an item behind an optional format' => ['GET /api/items/*', $apiPlatform, ['item']];
     }
 
     /**
@@ -216,6 +228,35 @@ final class ProjectLinkTest extends TestCase
         file_put_contents($mobile.'/.devtools/config.xml', '<devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1"/>');
         self::assertSame(['mobile declares no linked project: add <links> to its .devtools/config.xml.'], new ProjectLinker()->link(new ProjectRoot($mobile))->warnings);
         self::assertSame(2, $this->inspect([$mobile, $api], ['--dry-run' => true, '--link' => true])->getStatusCode(), '--link writes: no dry run.');
+    }
+
+    /**
+     * ADR-0051: a link limited to one directory of the client — one application of a workspace — matches only
+     * the calls of its integrations; the others are neither linked nor orphans. Declared by the client only,
+     * the limit holds on both sides.
+     */
+    public function testALinkLimitedToADirectoryOfTheClientLeavesItsOtherCallsAlone(): void
+    {
+        [$api, $mobile] = $this->linkedProjects();
+        file_put_contents($mobile.'/.devtools/config.xml', '<devtools xmlns="https://github.com/jul6art/devtools/schema/config/1" schema-version="1"><links><project name="api" path="../api" role="server" client-dir="src/app/items"/></links></devtools>');
+
+        $display = (string) preg_replace('/\s+/', ' ', $this->inspect([$api, $mobile])->getDisplay());
+
+        self::assertStringContainsString('api ↔ mobile: 4 calls linked', $display);
+        self::assertStringContainsString('mobile ↔ api: 4 calls linked', $display);
+
+        foreach ([$api, $mobile] as $project) {
+            $calls = new XmlLinksStore()->read($project.'/.devtools/graph/links.xml')->projects[0]->calls;
+
+            self::assertSame(['integration.item-service'], array_values(array_unique(array_map(static fn (Call $call): string => $call->client, $calls))), 'The sign-in\'s service is outside src/app/items.');
+            self::assertSame([], array_values(array_filter($calls, static fn (Call $call): bool => $call->isOrphan())));
+        }
+    }
+
+    public function testALinkLimitedToADirectoryNamesItRelativeToTheClient(): void
+    {
+        $this->expectException(InvalidConfig::class);
+        new LinkedProject('front', '../front', LinkRole::Client, clientDir: '../other');
     }
 
     public function testALinkedProjectIsDeclaredRelativeToThisOne(): void

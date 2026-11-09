@@ -16,8 +16,8 @@ use Jul6Art\DevTools\Tracking\XmlTrackingStore;
 final readonly class LinkSide
 {
     /**
-     * @param list<array{id: string, methods: list<string>, path: string, page: string}> $routes
-     * @param list<array{id: string, endpoints: list<string>, page: string}>             $clients
+     * @param list<array{id: string, methods: list<string>, path: string, page: string}>    $routes
+     * @param list<array{id: string, endpoints: list<string>, page: string, file?: string}> $clients file: where the integration is declared
      */
     public function __construct(public array $routes = [], public array $clients = [])
     {
@@ -44,7 +44,7 @@ final readonly class LinkSide
             }
 
             if ('integrations' === $entry->type->name && isset($attributes['endpoints'])) {
-                $clients[] = ['id' => $entry->id->value, 'endpoints' => array_values(array_filter(array_map(trim(...), explode(', ', $attributes['endpoints'])))), 'page' => $page];
+                $clients[] = ['id' => $entry->id->value, 'endpoints' => array_values(array_filter(array_map(trim(...), explode(', ', $attributes['endpoints'])))), 'page' => $page, 'file' => $tracking->read($directory->trackingFile($entry->type, $entry->id))->main->declaredIn->path];
             }
         }
 

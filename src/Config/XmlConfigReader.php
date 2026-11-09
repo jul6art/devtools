@@ -102,6 +102,7 @@ final readonly class XmlConfigReader implements ConfigReaderInterface
                 $project->getAttribute('path'),
                 LinkRole::from($project->getAttribute('role')),
                 $project->hasAttribute('base-url') ? $project->getAttribute('base-url') : null,
+                $project->hasAttribute('client-dir') ? rtrim($project->getAttribute('client-dir'), '/') : null,
             ), $this->dom->children($this->dom->optional($root, 'links'), 'project')),
         );
     }

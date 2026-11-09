@@ -80,7 +80,8 @@ final class EndpointMatcher
      */
     public static function server(string $path): array
     {
-        return self::segments((string) preg_replace('/[?#].*$/', '', $path));
+        // ADR-0051: `.{_format}` is optional in a Symfony route — `/api/items.{_format}` answers `/api/items`.
+        return self::segments((string) preg_replace(['/[?#].*$/', '/\.\{_format\}$/'], '', $path));
     }
 
     /**

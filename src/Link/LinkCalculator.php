@@ -11,14 +11,20 @@ namespace Jul6Art\DevTools\Link;
 final class LinkCalculator
 {
     /**
+     * @param string|null $clientDir only the integrations of the client declared under it (ADR-0051)
+     *
      * @return list<Call> sorted by client, endpoint, server; an endpoint no route answers is an orphan
      */
-    public function calls(LinkSide $client, LinkSide $server, ?string $baseUrl = null): array
+    public function calls(LinkSide $client, LinkSide $server, ?string $baseUrl = null, ?string $clientDir = null): array
     {
         $pages = array_column($server->routes, 'page', 'id');
         $calls = [];
 
         foreach ($client->clients as $integration) {
+            if (null !== $clientDir && !str_starts_with($integration['file'] ?? '', $clientDir.'/')) {
+                continue;
+            }
+
             foreach ($integration['endpoints'] as $endpoint) {
                 $answering = EndpointMatcher::answering($endpoint, $server->routes, $baseUrl);
 

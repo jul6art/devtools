@@ -837,7 +837,18 @@ Each call of an integration of the client (`GET ${environment.apiUrl}/items/${id
 adapter) is matched against the routes of the server by method and path: the host goes, a parameter matches
 any segment, and the routes alike the most win — `/items/${id}` is `/items/{id}` rather than
 `/items/export`. When the start of a URL cannot be read, it is matched by its end, or replaced by the
-`base-url` a `<project>` declares.
+`base-url` a `<project>` declares. A route's optional `.{_format}` does not count: `/api/items.{_format}`
+answers `/api/items`.
+
+A client project holding several applications — an Angular workspace — links one of them with `client-dir`:
+only the integrations declared under that directory of the client are matched against this neighbour, and
+the others are neither linked nor orphans. Like `base-url`, it is read on either project's declaration.
+
+```xml
+<links>
+    <project name="legacy" path="demo/legacy" role="server" client-dir="front/projects/legacy"/>
+</links>
+```
 
 The calls land in `.devtools/graph/links.xml` in **each** project — the neighbour's name, its relative path,
 the workflows on both sides, never an absolute path — and in their pages, after their own related
