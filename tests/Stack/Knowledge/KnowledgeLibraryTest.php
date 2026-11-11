@@ -198,7 +198,7 @@ final class KnowledgeLibraryTest extends TestCase
 
     public function testKnowledgeListShowsThePathAndWhatTheLibraryHolds(): void
     {
-        KnowledgeLibrary::locate()->deposit('fictional-9', self::SHEET, 'cereezer');
+        KnowledgeLibrary::locate()->deposit('fictional-9', self::SHEET, 'acme');
 
         $tester = new CommandTester(new Application()->find('knowledge:list'));
         $tester->execute(['path' => $this->copyFixtureProject('symfony-minimal')]);
@@ -206,7 +206,7 @@ final class KnowledgeLibraryTest extends TestCase
 
         self::assertStringContainsString(KnowledgeLibrary::locate()->path, $display);
         self::assertStringContainsString('fictional-9', $display);
-        self::assertStringContainsString('cereezer', $display);
+        self::assertStringContainsString('acme', $display);
         self::assertStringContainsString('symfony-7', $display, 'What DevTools ships and the library does not hold is named too.');
     }
 

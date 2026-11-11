@@ -19,7 +19,7 @@ réécrit pas le sommaire. Elle rafraîchit pourtant déjà l'index (`DraftAppli
 celui que lit l'humain ne l'est pas. L'asymétrie n'est écrite nulle part, elle est le résultat d'un
 oubli.
 
-Mesure, le 2026-09-19 sur **superp** : 951 workflows documentés en une campagne, 951 pages écrites
+Mesure, le 2026-09-19 sur **une application de l'écosystème** : 951 workflows documentés en une campagne, 951 pages écrites
 et appliquées, `workflows:check` vert — et un sommaire qui réclamait la rédaction des 951, une ligne
 chacune, sur 952 lignes. Sur ce dépôt même, 7 lignes sur 14. Le fichier est faux **entre la fin
 d'une campagne de rédaction et la prochaine inspection**, c'est-à-dire exactement au moment où on
@@ -66,7 +66,7 @@ d'un format de plus à tenir.
 
 Une lecture de `stack.xml`, une lecture du sommaire existant, un `glob` sur `pending/`, une
 écriture. Aucun parcours de code, aucun hachage, aucun processus git : le coût ne croît pas avec la
-taille du projet. Sur superp (951 workflows), le sommaire fait 1 562 lignes avant correction et 612
+taille du projet. Sur cette application (951 workflows), le sommaire fait 1 562 lignes avant correction et 612
 après — l'ordre de grandeur est le fichier lui-même.
 
 ## Hors périmètre

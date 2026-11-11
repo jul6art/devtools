@@ -1,20 +1,20 @@
 # ADR-0051 — Les opérations d'API Platform, le client du kit, et un lien limité à un dossier
 
-- **Statut** : Accepted — 2026-11-09 (décidé par jul6art pour la migration pilote de devinthecode, ADR-0048 de ce
-  dépôt-là : « Apprendre le kit à devtools », puis « Les deux dans devtools ») · Livré le 2026-11-09 (v3.5.0)
+- **Statut** : Accepted — 2026-11-09 (décidé par jul6art pour une migration pilote : « Apprendre le kit à devtools », puis
+  « Les deux dans devtools ») · Livré le 2026-11-09 (v3.5.0)
 - **Décideurs** : jul6art
 - **Specs** : § 4.2 (adaptateurs), § 4.8 (multi-projets)
 - **Dépend de** : ADR-0007 (adaptateur Symfony), ADR-0032 (adaptateur Angular), ADR-0038 (multi-projets)
 
 ## Contexte
 
-devinthecode migre `legacy`, une application Symfony, de ses écrans Twig vers un front Angular construit sur le kit
+Une plateforme de l'écosystème migre une application Symfony de ses écrans Twig vers un front Angular construit sur le kit
 de la maison (`@jul6art/web-kit`). Le critère de sa migration : devtools ne signale **aucun appel orphelin** entre
 le front et l'API. Mesuré le 2026-11-09, la preuve serait vide des deux côtés :
 
 - **Côté back**, les opérations d'API Platform n'entrent pas dans la carte. Leur contrôleur est celui d'API Platform
   (`api_platform.symfony.main_controller`), que l'adaptateur Symfony écarte comme un contrôleur du vendor. L'ADR-0007
-  les laissait hors périmètre. La plateforme devinthecode a 82 opérations à elle ; aucune n'a de page.
+  les laissait hors périmètre. Cette plateforme a 82 opérations à elle ; aucune n'a de page.
 - **Côté front**, l'adaptateur Angular ne voit que les classes qui injectent `HttpClient`. Les écrans du kit passent
   par son `ApiClient` (`collection`, `item`, `create`, `update`, `remove`…) et par `<kit-table path="/api/…">` :
   aucun de leurs appels n'est lu.
@@ -131,6 +131,6 @@ ressource, comme pour un contrôleur.
 
 ## Conséquences
 
-- Toute application API Platform de la maison voit son API dans sa carte : la plateforme devinthecode, ses
+- Toute application API Platform de la maison voit son API dans sa carte : cette plateforme, ses
   démonstrations, et à l'étape 2 de sa migration, les applications de jul6art.
 - Un changement de ressource API se voit, par `impact --linked`, dans les écrans du kit qui l'appellent.

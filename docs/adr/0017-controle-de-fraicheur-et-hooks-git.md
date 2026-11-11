@@ -19,7 +19,7 @@ $DEVTOOLS workflows:inspect --no-ai --locale=fr
 if [ -n "$(git status --porcelain docs/workflows .devtools)" ]; then …
 ```
 
-Deux défauts, tous deux vérifiés sur cereezer :
+Deux défauts, tous deux vérifiés sur une application de l'écosystème :
 
 1. **Elle régénère avant de dire quoi que ce soit.** Au moment où l'humain lit l'avertissement, les pages
    ont déjà été réécrites : il ne peut plus comparer, seulement relire 127 fichiers modifiés.
@@ -50,7 +50,7 @@ Une seule commande de contrôle, en **lecture seule**, dont l'échec se lit :
 ⚠️ **Un fichier modifié sans fait changé n'est PAS une cause d'échec.** C'est la différence avec la
 fraîcheur, et elle est délibérée : la gate ne réveille personne pour un commentaire ajouté.
 
-⚠️ **Il est en revanche COMPTÉ**, et `--strict` en fait une cause. Éprouvé sur cereezer le
+⚠️ **Il est en revanche COMPTÉ**, et `--strict` en fait une cause. Éprouvé sur une application de l'écosystème le
 2026-09-19 : le modèle ne retient que les affectations, donc une condition réécrite dans une méthode,
 une constante renommée, un voter qui rend une autre permission ou une valeur par défaut inversée ne
 changent aucun fait — et rendent pourtant la prose d'une page fausse. Les capturer toutes comme des
@@ -89,7 +89,7 @@ La régénération redevient un geste délibéré (`workflows:inspect`), suivi d
 ## Budget d'exécution
 
 `check` : le coût d'un `inspect --dry-run` (ADR-0010 : < 10 s pour 300 routes ; 5 s mesurées sur
-cereezer, 259 workflows). Aucune écriture, donc aucun verrou.
+une application de 259 workflows). Aucune écriture, donc aucun verrou.
 
 ## Hors périmètre
 

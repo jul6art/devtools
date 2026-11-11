@@ -293,7 +293,7 @@ bin/console devtools:workflows:inspect           # through the bundle, the appli
 ```
 
 ```
- DevTools — cereezer                                        Symfony 7.4
+ DevTools — acme                                            Symfony 7.4
 
  ✔ 84 workflows      12 created · 3 updated · 69 unchanged · 0 orphaned
  ✔ 1,247 files parsed · 412 hashed · 3 git processes · 4 console calls
@@ -364,7 +364,7 @@ What changed **in the workflows** since their pages were written — not that so
 fact, what it said, and what it says now:
 
 ```
- DevTools — cereezer   workflow diff
+ DevTools — acme   workflow diff
 
  ⚠ 1 fact changed · 87 workflows
  731 files parsed · 532 hashed
@@ -406,7 +406,7 @@ into its facts.
 Fails when the documentation no longer matches the code, and **writes nothing**:
 
 ```
- DevTools — cereezer   workflow check
+ DevTools — acme   workflow check
 
  ✖ 2 causes
 

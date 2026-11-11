@@ -7,7 +7,7 @@
 ## Contexte
 
 Deux rédactions du même projet appellent la même chose « commande », « ordre » ou « order » ; un
-nouveau venu ne sait pas qu'un `Item` est ce que l'interface nomme « objet » (cegeta). Le § 4.8
+nouveau venu ne sait pas qu'un `Item` est ce que l'interface nomme « objet » (dans une application de l'écosystème). Le § 4.8
 propose un `glossary.md` alimenté à partir des noms d'entités, de routes et de messages, **réutilisé
 dans les pages** pour un vocabulaire cohérent.
 

@@ -24,7 +24,7 @@ La règle **n'analyse rien**. Elle s'accroche à `CollectedDataNode` — le nœu
 à la fin de l'analyse — et appelle le **pipeline d'inspection en lecture seule**, celui de l'ADR-0046.
 Ce qu'elle rend est la liste des faits changés, une erreur par fait, à la ligne où le fait est écrit.
 
-Coût : celui d'un `workflows:diff`, une fois par analyse (5 s mesurées sur cereezer, pour une analyse
+Coût : celui d'un `workflows:diff`, une fois par analyse (5 s mesurées sur une application de l'écosystème, pour une analyse
 PHPStan qui en prend soixante). ⚠️ Sur `CollectedDataNode` et non sur un nœud de fichier : le cache de
 résultats de PHPStan ne peut donc pas masquer une dérive apparue depuis la dernière analyse.
 

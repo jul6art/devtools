@@ -7,7 +7,7 @@
 ## Contexte
 
 Les ADR-0041 et ADR-0043 ont livré deux choses volontairement incomplètes, et ont nommé ce qu'elles
-laissaient de côté. L'usage réel — 76 workflows sur cereezer, 7 sur ce dépôt — a montré que ces
+laissaient de côté. L'usage réel — 76 workflows sur une application de l'écosystème, 7 sur ce dépôt — a montré que ces
 manques sont les six mêmes, tous du même côté : **DevTools voit la logique conditionnelle écrite
 droit devant lui, et rien de ce qui la porte ailleurs.**
 
@@ -22,7 +22,7 @@ droit devant lui, et rien de ce qui la porte ailleurs.**
 4. Une **contrainte de validation** (`Assert\Choice`, `Assert\Expression`, `Assert\When`) borne un
    champ avant qu'il n'existe en base. C'est une décision sur la valeur, écrite en attribut.
 5. L'extraction est **intra-procédurale** : `$order->setStatus($this->decide($order))` n'enregistre
-   rien, parce que la condition est dans `decide()`. Sur cereezer, c'est la forme la plus courante
+   rien, parce que la condition est dans `decide()`. Sur cette application, c'est la forme la plus courante
    du code propre — celle qu'on récompense en revue.
 6. Le `stateDiagram` d'une machine à états vit dans « Navigation / états » alors qu'il **est** une
    décision, sur le champ `marking`. L'ADR-0043 l'a laissé là en disant d'attendre d'avoir lu de

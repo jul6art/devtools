@@ -18,11 +18,11 @@ l'appellent est exactement le « qu'est-ce que ça impacte ? » du § 1.3, à tr
 
 ```xml
 <links>
-  <project name="cegeta-mobile" path="../cegeta-mobile" role="client"/>
+  <project name="acme-mobile" path="../acme-mobile" role="client"/>
 </links>
 ```
 
-`devtools workflows:inspect ../cegeta ../cegeta-mobile --link` (§ 4.8) inspecte chacun normalement, puis
+`devtools workflows:inspect ../acme ../acme-mobile --link` (§ 4.8) inspecte chacun normalement, puis
 calcule les liens.
 
 ### Appariement

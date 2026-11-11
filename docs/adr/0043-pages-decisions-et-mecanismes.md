@@ -7,7 +7,7 @@
 
 ## Contexte
 
-Le MVP a produit 84 pages sur cereezer. Trois défauts se lisent sur la page
+Le MVP a produit 84 pages sur une application de l'écosystème. Trois défauts se lisent sur la page
 `docs/workflows/routes/admin.asset.md` :
 
 **1. La page est un inventaire.** Elle fait 344 lignes, dont **250 de tables « Composants
@@ -17,7 +17,7 @@ impliqués » et « Tests existants »** — 88 fichiers et 160 tests, listés u
 fait le lien avec le workflow et que la fraîcheur lit. Les répéter en Markdown n'apporte rien à un
 lecteur humain et noie les cinq sections qu'il vient chercher.
 
-**2. Un listener n'est pas un workflow.** Le menu de cereezer ouvre une section « Événements » de
+**2. Un listener n'est pas un workflow.** Le menu de cette application ouvre une section « Événements » de
 huit entrées (`event.locale-listener`, `event.soft-delete-filter-listener`…). Personne n'ouvre la
 page d'un subscriber. Ce qu'on veut savoir d'un listener, c'est **ce qu'il peut faire pendant un
 workflow précis** — et cela se lit depuis la page du workflow, pas depuis la sienne.
@@ -192,7 +192,7 @@ l'ADR-0008 reconduite).
 
 ⚠️ **Un listener Doctrine n'est pas dans `debug:event-dispatcher`** : il vit sur le gestionnaire
 d'événements de Doctrine, pas sur le répartiteur de Symfony. La console était la seule source des
-mécanismes quand elle répondait, et deux listeners de cereezer — qui écrivent des totaux avant chaque
+mécanismes quand elle répondait, et deux listeners de cette application — qui écrivent des totaux avant chaque
 `persist` — n'apparaissaient sur aucune page. Les supprimer ne changeait rien à la documentation.
 
 Les deux sources sont désormais **fusionnées** : la console pour ce que le conteneur a compilé (elle
@@ -205,7 +205,7 @@ n'écoute.
 ## Conséquences
 
 - **Changement cassant du gabarit.** Toutes les pages existantes sont réécrites une fois, y compris
-  celles de ce dépôt (`docs/workflows/`) et celles de cereezer. Les sections rédigées par Claude
+  celles de ce dépôt (`docs/workflows/`) et celles de cette application. Les sections rédigées par Claude
   qui survivent sont Résumé, Parcours, Données, Mécanismes transverses, Points d'attention ;
   « Décisions » naît vide et se remplit à la rédaction suivante.
 - **Perte assumée.** Un lecteur qui voulait la liste des fichiers ouvre le XML. Le lien

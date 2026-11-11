@@ -20,7 +20,7 @@ attributs (`path`, `methods`, `security`), ses fichiers avec leur `sha256`, ses 
 leurs propres décisions), ses dépendances, ses tests, ses paquets — et le **commit** de sa dernière
 écriture. Il ne manque qu'une comparaison.
 
-⚠️ **Le piège est l'échelle, et il est mesuré** : sur cereezer, **233 des 259 workflows partagent
+⚠️ **Le piège est l'échelle, et il est mesuré** : sur une application de l'écosystème, **233 des 259 workflows partagent
 `src/Entity/User.php`**. Une ligne changée dans un mutateur de cette entité produit 233 workflows
 « dérivés ». Une revue présentée par workflow serait morte à sa première utilisation réelle — c'est
 exactement le défaut que l'ADR-0045 a corrigé pour les pages, et il se reproduirait ici.
@@ -108,7 +108,7 @@ presque toujours le même commit.
 
 ## Budget d'exécution
 
-Le coût d'un `inspect --dry-run`, plus une comparaison d'ensembles en mémoire : sur cereezer (259
+Le coût d'un `inspect --dry-run`, plus une comparaison d'ensembles en mémoire : sur cette application (259
 workflows, 731 fichiers), l'inspection mesure 5 s et le diff n'ajoute ni entrée-sortie ni processus.
 `--code` ajoute un processus git par référence distincte.
 

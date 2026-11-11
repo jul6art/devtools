@@ -16,13 +16,13 @@ L'usage l'a démenti sur la moitié de son promesse. Trois générations réelle
 
 | Projet | Routes | Pages en mode `controller` |
 |---|---|---|
-| cereezer | 244 | 50 |
-| cegeta | 99 | 33 |
-| devinlive | 89 | 23 |
+| A | 244 | 50 |
+| B | 99 | 33 |
+| C | 89 | 23 |
 
 **Une page de contrôleur à une route se lit ; une page de contrôleur à treize routes ne se lit
-pas.** `docs/workflows/routes/home.md` de devinlive (une route) porte un `sequenceDiagram` qu'on
-suit du regard. `docs/workflows/routes/admin.user.md` de cereezer (treize routes) porte :
+pas.** `docs/workflows/routes/home.md` de C (une route) porte un `sequenceDiagram` qu'on
+suit du regard. `docs/workflows/routes/admin.user.md` de A (treize routes) porte :
 
 - un « Déclencheur » de quatorze lignes de table, une par satellite ;
 - **un seul** diagramme « Parcours » qui doit raconter treize gestes différents — liste, création,
@@ -105,8 +105,8 @@ Un projet en `entry-point` — le défaut — ne change ni d'arborescence ni de 
 
 ## Budget d'exécution
 
-- **La première régénération d'un projet en mode `controller` est complète** : cereezer passe de 50
-  à 244 pages à rédiger, cegeta de 33 à 99, devinlive de 23 à 89. La fraîcheur (ADR-0010) borne le
+- **La première régénération d'un projet en mode `controller` est complète** : A passe de 50
+  à 244 pages à rédiger, B de 33 à 99, C de 23 à 89. La fraîcheur (ADR-0010) borne le
   coût **courant** : une route modifiée réécrit sa page, pas celles de son contrôleur.
 - La page du groupe se réécrit quand la **liste** de ses routes change, ou quand le fichier qui le
   déclare change — jamais parce qu'une route a changé de contenu.
@@ -155,7 +155,7 @@ Un projet en `entry-point` — le défaut — ne change ni d'arborescence ni de 
 - **Changement cassant pour un projet en mode `controller`.** Ses pages actuelles deviennent
   orphelines, ses identifiants de workflow changent (`route.admin.user` disparaît au profit de
   `route.admin.user.index`, `route.admin.user.edit`…), et sa documentation se régénère en entier.
-  Les trois projets concernés — cereezer, cegeta, devinlive — sont à régénérer avec `--prune`, puis
+  Les trois projets concernés sont à régénérer avec `--prune`, puis
   à rédiger.
 - Le coût de rédaction d'une première passe est multiplié par quatre à cinq sur ces projets. C'est
   le prix de la lisibilité, et il est payé une fois.

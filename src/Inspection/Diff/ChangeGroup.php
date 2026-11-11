@@ -7,8 +7,8 @@ namespace Jul6Art\DevTools\Inspection\Diff;
 /**
  * One fact, and every workflow that carries it (ADR-0046 § 5).
  *
- * ⚠️ The review is grouped by fact and not by workflow because of a measured order of magnitude: on
- * cereezer, 233 of the 259 workflows traverse `src/Entity/User.php`. One changed line in a setter of
+ * ⚠️ The review is grouped by fact and not by workflow because of a measured order of magnitude: in
+ * one application of the ecosystem, 233 of its 259 workflows traverse `src/Entity/User.php`. One changed line in a setter of
  * that entity is one thing to read, not 233.
  */
 final readonly class ChangeGroup

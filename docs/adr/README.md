@@ -98,8 +98,8 @@ Phase 2 — Retours et règles (0025–0029)      Phase 3 — Généralisation (
     plus revenir sans casser la gate »           API Claude, rename, glossaire, multi-projets,
                                                  ask, intégration au générateur de squelettes
 
-MVP+ — Retours d'usage (0041–0045), nés de la première inspection d'un projet réel (cereezer,
-84 workflows). Indépendants les uns des autres, chacun jouable dès le MVP livré.
+MVP+ — Retours d'usage (0041–0045), nés de la première inspection d'un projet réel (84
+workflows). Indépendants les uns des autres, chacun jouable dès le MVP livré.
   0041 la connaissance d'une stack inconnue grandit une bibliothèque au lieu de rester au projet
   0042 la console dit ce qu'elle fait, où elle en est, et ce que l'exécution a coûté
   0043 la page cesse d'être un inventaire : les faits au XML, les listeners rattachés aux

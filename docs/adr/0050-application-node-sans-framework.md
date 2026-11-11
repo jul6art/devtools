@@ -7,8 +7,8 @@
 
 ## Contexte
 
-Tradebot est un monorepo : un back-office Symfony à la racine et, dans `bot/`, le runtime de trading
-en Node 24 — sans framework (`mysql2`, `ccxt`, `ajv`…), avec ses points d'entrée dans `bin/`
+Une application de l'écosystème est un monorepo : un back-office Symfony à la racine et, dans `bot/`,
+un runtime en Node 24 — sans framework (`mysql2`, `ccxt`, `ajv`…), avec ses points d'entrée dans `bin/`
 (`runtime.js`, `account-worker.js`, `backtest-worker.js`). Mesuré le 2026-10-17 :
 
 ```
@@ -58,7 +58,7 @@ connaissance est `node-<majeure>`, ou `node` sans version. L'adaptateur reste `c
 ### 3. Ses sources : `src/` et les dossiers de ses points d'entrée
 
 `main` et chaque entrée de `bin` désignent un fichier ; leurs dossiers rejoignent les sources
-(`bin/` pour Tradebot), avec `src/` s'il existe.
+(`bin/` pour cette application), avec `src/` s'il existe.
 
 ### 4. JavaScript vérifié n'est pas TypeScript
 
@@ -80,7 +80,7 @@ le projet écrit du JavaScript que `tsc` vérifie, et sa langue reste `javascrip
       reste de l'outillage (tests).
 - [x] La version vient d'`engines.node`, sinon de `.nvmrc`, sinon reste vide (tests).
 - [x] `checkJs` garde la langue `javascript` ; un `tsconfig.json` sans lui donne `typescript` (tests).
-- [x] Sur Tradebot : `bot` apparaît, `javascript`, `node`, adaptateur `claude`, sources `src`, `bin`.
+- [x] Sur cette application : `bot` apparaît, `javascript`, `node`, adaptateur `claude`, sources `src`, `bin`.
 - [x] Les fixtures existantes gardent leur `stack.xml` attendu, sauf la ligne du § 2 pour une
       application Node à la racine.
 - [x] `composer qa` vert (520 tests), jeux `highest` et `lowest` (Symfony 7.4.0, dans une copie).

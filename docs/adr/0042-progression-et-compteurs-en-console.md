@@ -6,7 +6,7 @@
 
 ## Contexte
 
-`workflows:inspect` sur cereezer prend une douzaine de secondes et n'affiche rien avant la fin :
+`workflows:inspect` sur une application de l'écosystème prend une douzaine de secondes et n'affiche rien avant la fin :
 ni ce qu'il fait, ni où il en est. La fin est un tableau nu de quatre colonnes, sans couleur, sans
 durée, sans rien qui dise ce que l'exécution a coûté. Une commande Symfony de l'écosystème
 `jul6art/*` annonce son titre, sa progression et son bilan ; celle-ci non.
@@ -59,7 +59,7 @@ verbosité est `quiet` : dans ces cas l'étape s'annonce en une ligne et rien d'
 Un `Console\SummaryRenderer` rend le même bilan pour `workflows:inspect` et `workflows:apply` :
 
 ```
- DevTools — cereezer                                        Symfony 7.4
+ DevTools — acme                                            Symfony 7.4
 
  ✔ 84 workflows      12 créés · 3 mis à jour · 69 inchangés · 0 orphelins
  ✔ 1 247 fichiers parcourus · 412 hachés · 3 processus git · 4 appels console

@@ -43,7 +43,7 @@ Routes générées dynamiquement ; NgModules hérités au-delà de `forRoot`/`fo
 ## Critères d'acceptation
 
 - [x] `angular-minimal` (routes imbriquées, lazy loading, guard, composant partagé, service HTTP) :
-      workflows attendus *(Angular 22 ; vérifié aussi sur une copie de cegeta-mobile : ses huit écrans)*
+      workflows attendus *(Angular 22 ; vérifié aussi sur une application Angular de l'écosystème : ses huit écrans)*
 - [x] Fixture Ionic à onglets : routes d'onglets extraites *(`ionic-tabs`, Ionic 9)*
 - [x] Chemin lazy non littéral → `confidence=medium` et avertissement
 - [x] Bascule depuis la voie Claude avec écarts listés (même mécanisme que l'ADR-0030)

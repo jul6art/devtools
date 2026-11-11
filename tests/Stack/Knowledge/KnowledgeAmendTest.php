@@ -132,7 +132,7 @@ final class KnowledgeAmendTest extends TestCase
     {
         $library = KnowledgeLibrary::locate();
         $current = (string) file_get_contents($this->project.'/.devtools/knowledge/symfony-8.md');
-        self::assertSame(DepositOutcome::Deposited, $library->deposit('symfony-8', $current, 'cereezer'), 'The library holds the original.');
+        self::assertSame(DepositOutcome::Deposited, $library->deposit('symfony-8', $current, 'acme'), 'The library holds the original.');
 
         $this->amend();
         $amended = str_replace('## Known traps', "## Known traps\n\n- Voters are mechanisms: they decide access inside the routes asking for their attribute.\n", $current);
