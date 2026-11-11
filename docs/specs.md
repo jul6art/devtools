@@ -68,7 +68,7 @@ Stack existante : Symfony, PHP, PhpUnit, Claude / Claude Code, MCP Chrome. Voir 
 
 **DevTools** est composé de :
 
-1. un **cœur PHP autonome** (`provencale/devtools`, Symfony Console) exécutable en standalone (`vendor/bin/devtools` ou phar) et intégrable comme bundle via `require-dev` ;
+1. un **cœur PHP autonome** (`jul6art/devtools`, Symfony Console) exécutable en standalone (`vendor/bin/devtools` ou phar) et intégrable comme bundle via `require-dev` ;
 2. un **dossier versionné `.devtools/`** à la racine du projet analysé ;
 3. des **adaptateurs de stack** (Symfony, Laravel, générique piloté par Claude…) ;
 4. une **couche Claude** (API ou Claude Code) pour l'analyse sémantique, la découverte de stacks inconnues et la rédaction ;
@@ -289,7 +289,7 @@ Règles :
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<workflow xmlns="https://devtools.provencale.lu/schema/workflow-tracking/1"
+<workflow xmlns="https://github.com/jul6art/devtools/schema/workflow-tracking/1"
           id="route.order.create" type="routes" schema-version="1">
   <generated at="2026-09-16T14:22:31+02:00" tool="devtools 0.2" model="claude-…" mode="ai"/>
   <source vcs="git" commit="a1b2c3d4…" branch="main" dirty="false"/>
@@ -412,7 +412,7 @@ Schémas détaillés des entrées `feedback`, `rule`, `scenario` : conservés de
 ## 6. Architecture logicielle du cœur
 
 ```
-provencale/devtools
+jul6art/devtools
 ├── bin/devtools                      # Symfony Console standalone
 ├── src/
 │   ├── Command/                      # workflows:inspect, :check, :impact, gate…
@@ -493,7 +493,7 @@ Cible : couverture > 90 % sur le cœur, 100 % sur `Freshness/` et `Tracking/`. L
 - XML de suivi + XSD, fraîcheur git + hash, `--dry-run`, `--force`, `--prune`.
 - Rendu normé, menu, historique cumulé, mode `--no-ai`.
 - Voie Claude pour stacks sans adaptateur ; acquisition de `knowledge` avec recherche.
-- Bundle wrapper `require-dev`, intégration à `provencale/symfony-skeleton-generator`.
+- Bundle wrapper `require-dev`, intégration à `jul6art/symfony-skeleton-generator`.
 - Armée de tests (§7), CI.
 
 ### Phase 1 — Impact, MCP et gate

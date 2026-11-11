@@ -87,7 +87,7 @@ l'identifiant stable quand un handler s'ajoute, au lieu d'exiger un alias par ha
 `ModelXmlSerializer` lit et écrit ce format ; il sert à la voie Claude (ADR-0013) et aux snapshots
 de test. Namespace XML : `https://github.com/jul6art/devtools/schema/inspection-model/1`.
 
-⚠️ Les specs utilisent `https://devtools.provencale.lu/schema/…` : l'URI d'un namespace XML n'a pas
+⚠️ Les specs utilisaient un domaine d'URI sans rapport avec le dépôt : l'URI d'un namespace XML n'a pas
 besoin d'être résolvable, mais elle ne se change plus une fois publiée. Elle suit le dépôt réel.
 
 ## Budget d'exécution

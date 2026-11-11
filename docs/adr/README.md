@@ -209,7 +209,7 @@ MVP+
 | § 5.4 : extension du MCP Chrome pour la revue | page locale uniquement | 0028 |
 | § 4.8 : export via Docsify/MkDocs | générateur intégré, sans outil externe | 0034 |
 | § 9 phase 0 : intégration à `symfony-skeleton-generator` | après la première version publiée | 0001, 0040 |
-| § 6, § 4.6.1 : `provencale/devtools`, `devtools.provencale.lu` | `jul6art/devtools`, namespaces XML sous `github.com/jul6art/devtools` | 0003 |
+| § 6, § 4.6.1 : l'ancien nom du paquet et son domaine d'URI | `jul6art/devtools`, namespaces XML sous `github.com/jul6art/devtools` | 0003 |
 | § 5 : schémas `feedback`, `rule`, `scenario` de la v0.1 | réécrits contre les formats du MVP ; à relire après la phase 1 | 0020, 0025, 0026 |
 | § 12 question 3 : remontée d'une connaissance par pull request manuelle | dépôt automatique dans une bibliothèque partagée ; `knowledge:promote` reste manuel | 0041 |
 | § 4.2 : sept types de déclencheur, dont `events` | six : un listener est un mécanisme rattaché aux workflows qu'il intercepte, pas un workflow | 0043 |
