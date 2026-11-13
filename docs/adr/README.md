@@ -71,6 +71,7 @@
 | [0049](0049-sommaire-apres-apply.md) | Le sommaire ment jusqu'à la prochaine inspection — et les planchers de couverture de l'ADR-0015 | MVP+ — Retours d'usage | Accepted | 2026-10-20 |
 | [0050](0050-application-node-sans-framework.md) | Une application Node sans framework est une stack | MVP+ — Retours d'usage | Accepted | 2026-10-17 |
 | [0051](0051-api-platform-et-client-du-kit.md) | Les opérations d'API Platform, le client du kit, et un lien limité à un dossier | MVP+ — Retours d'usage | Accepted | 2026-11-09 |
+| [0052](0052-controleur-d-un-paquet-route-par-le-projet.md) | Le contrôleur d'un paquet, routé par le projet, est un workflow du projet | MVP+ — Retours d'usage | Accepted | 2026-11-13 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 

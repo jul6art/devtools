@@ -62,7 +62,7 @@ repli silencieux.
 
 | Type | Workflow par | Remarque |
 |---|---|---|
-| routes | route (ADR-0003 pour les satellites) | les routes de `vendor/` (profiler, bundles) sont exclues : contrôleur hors projet |
+| routes | route (ADR-0003 pour les satellites) | les routes de `vendor/` (profiler, bundles) sont exclues : contrôleur hors projet — sauf celles que le projet déclare lui-même dans ses fichiers de routes (ADR-0052) |
 | commands | commande du projet | |
 | async | handler Messenger ; tâche planifiée | |
 | events | listener/subscriber **du projet** | les listeners `kernel.*` du projet sont ajoutés en `dependsOn` de **chaque** route (§ 11) |
