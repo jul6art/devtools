@@ -7,7 +7,7 @@ Workflow cartography and feedback loop for projects built with Claude Code
 
 <p align="left">
     <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-    <img src="https://img.shields.io/static/v1?label=stable&message=v3.6.0&color=0ea5e9" alt="Version">
+    <img src="https://img.shields.io/static/v1?label=stable&message=v3.7.0&color=0ea5e9" alt="Version">
 </p>
 
 **DevTools** gives a project a `.devtools/` folder — versioned next to `.git` — in which Claude Code
@@ -581,6 +581,11 @@ block names that controller, the route gets its page — declared in that file, 
 dependency, the controller an attribute. A route a bundle declares and the project imports (`resource:`), and the
 profiler's, stay out. Its page has no navigation, state machine or decisions: those are read in the controller's
 PHP, which is no file of the project.
+
+**A package's command in the project's name is the project's** (ADR-0053): a command whose class is a package's and
+whose name starts with `app:` — the namespace a bundle only takes when the project turns its command on, as
+auth-bundle's `app:user:create` — gets its page, declared in `composer.json`, its package a dependency, its class an
+attribute. A bundle's commands under its own name (`acl:…`) and the framework's stay out.
 
 **A back-office has twenty routes per resource, and a menu of 233 entries is a list nobody reads.**
 `<routes group="controller"/>` groups them — and it groups the **navigation**, not the workflows: every

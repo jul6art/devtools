@@ -33,6 +33,9 @@ use Jul6Art\DevTools\Stack\StackProfile;
  */
 final readonly class SymfonyAdapter implements AdapterInterface
 {
+    /** The project's namespace of commands: a package's command that bears it is the project's (ADR-0053). */
+    private const string PROJECT_COMMANDS = 'app:';
+
     private const array KERNEL_EVENTS = ['kernel.request', 'kernel.controller', 'kernel.controller_arguments', 'kernel.view', 'kernel.response', 'kernel.finish_request', 'kernel.exception', 'kernel.terminate'];
 
     /**
@@ -143,10 +146,32 @@ final readonly class SymfonyAdapter implements AdapterInterface
 
         foreach ($console instanceof ConsoleIntrospection ? $console->commands : $scanner->commands() as $class => $command) {
             $file = $scanner->fileOf($class);
+            $packages = [];
 
-            if ($file instanceof FileRef) {
-                $candidates[] = new EntryPointCandidate(WorkflowType::commands(), new EntryPoint('command', $command, $file), $command, structuralFiles: $services, confidence: $confidence, source: $source);
+            // The command of a package is the project's workflow when it bears the project's name — `app:` — that a
+            // bundle only takes when the project turns it on (auth-bundle's `app:user:create`, ADR-0053). It is
+            // declared where the project requires its packages; the bundle's own commands (`acl:…`) stay out.
+            if (!$file instanceof FileRef) {
+                $package = str_starts_with($command, self::PROJECT_COMMANDS) ? ($locator ??= ClassLocator::for($root, $stack))->locate($class) : null;
+                $declared = $package instanceof PackageRef ? ($files->existing(['composer.json'], FileRole::Config)[0] ?? null) : null;
+
+                if (!$declared instanceof FileRef || !$package instanceof PackageRef) {
+                    continue;
+                }
+
+                [$file, $packages] = [$declared, [$package]];
             }
+
+            $candidates[] = new EntryPointCandidate(
+                WorkflowType::commands(),
+                // What answers, since no file of the project says it.
+                new EntryPoint('command', $command, $file, [] === $packages ? [] : ['class' => $class]),
+                $command,
+                structuralFiles: $services,
+                confidence: $confidence,
+                source: $source,
+                packages: $packages,
+            );
         }
 
         $messenger = [...$files->existing(['config/packages/messenger.yaml'], FileRole::Config), ...$files->declaring('messenger')];
