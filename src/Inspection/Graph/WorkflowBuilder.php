@@ -81,10 +81,12 @@ final readonly class WorkflowBuilder
                     $direct[$file->path] ??= $file;
                 }
 
-                foreach ($resolved->packages as $package) {
+                foreach ([...$resolved->packages, ...$member->packages] as $package) {
                     $packages[$package->name] ??= $package;
                 }
             }
+
+            ksort($packages, \SORT_STRING);
 
             $testFiles = [];
 
@@ -238,6 +240,8 @@ final readonly class WorkflowBuilder
                 // published". A project routinely has several, and their identifier is the message's
                 // (ADR-0003) — without this they would collide and each need an alias by hand.
                 'message-handler' === $candidate->entryPoint->kind && null !== $message => 'message:'.$candidate->type->name.':'.$message,
+                // A package's controller, routed by the project's file (ADR-0052): one action, like a method of its own.
+                isset($candidate->entryPoint->attributes['controller']) => 'controller:'.$candidate->type->name.':'.$candidate->entryPoint->declaredIn->path.'::'.$candidate->entryPoint->attributes['controller'],
                 null === $candidate->method => 'single:'.$candidate->entryPoint->kind.':'.$candidate->entryPoint->name,
                 default => 'method:'.$candidate->type->name.':'.$candidate->entryPoint->declaredIn->path.'::'.$candidate->method,
             };

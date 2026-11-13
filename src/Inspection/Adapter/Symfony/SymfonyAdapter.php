@@ -7,6 +7,7 @@ namespace Jul6Art\DevTools\Inspection\Adapter\Symfony;
 use Jul6Art\DevTools\Config\Config;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterInterface;
 use Jul6Art\DevTools\Inspection\Adapter\AdapterResult;
+use Jul6Art\DevTools\Inspection\Graph\ClassLocator;
 use Jul6Art\DevTools\Inspection\Graph\DecisionExtractor;
 use Jul6Art\DevTools\Inspection\Graph\EntryPointCandidate;
 use Jul6Art\DevTools\Inspection\Graph\MechanismAttachment;
@@ -19,6 +20,7 @@ use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
 use Jul6Art\DevTools\Inspection\Model\FileRole;
 use Jul6Art\DevTools\Inspection\Model\Mechanism;
+use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -82,16 +84,28 @@ final readonly class SymfonyAdapter implements AdapterInterface
         $routeConfiguration = [...$files->existing(['config/routes.yaml', 'config/routes.php'], FileRole::Config), ...$files->in('config/routes', FileRole::Config), ...$files->existing(['config/packages/security.yaml'], FileRole::Config)];
         $workflowConfiguration = $files->declaring('workflows');
 
+        $locator = null;
+
         foreach ($console instanceof ConsoleIntrospection ? $this->consoleRoutes($console) : $scanner->routes() as $route) {
             $file = $scanner->fileOf($route['class']);
+            $packages = [];
 
-            // Routes of vendor controllers (profiler, bundles) are not the project's workflows.
+            // The controller of a package is the project's workflow when the project routes it itself — its route
+            // file names it (ADR-0052). The routes a bundle declares (the profiler's, an imported resource) are not.
             if (!$file instanceof FileRef) {
-                continue;
+                $declared = $files->declaringRoute($route['name'], $route['class']);
+                $package = $declared instanceof FileRef ? ($locator ??= ClassLocator::for($root, $stack))->locate($route['class']) : null;
+
+                if (!$package instanceof PackageRef) {
+                    continue;
+                }
+
+                [$file, $packages] = [$declared, [$package]];
             }
 
-            $roles = array_values(array_unique([...$console instanceof ConsoleIntrospection ? self::accessControlRoles($console, $route['path']) : [], ...$scanner->grantedRoles($route['class'], $route['method'])]));
-            $states = $console instanceof ConsoleIntrospection
+            $ownController = [] === $packages;
+            $roles = array_values(array_unique([...$console instanceof ConsoleIntrospection ? self::accessControlRoles($console, $route['path']) : [], ...$ownController ? $scanner->grantedRoles($route['class'], $route['method']) : []]));
+            $states = $console instanceof ConsoleIntrospection && $ownController
                 ? self::stateMachine($console, $scanner->workflowParameters($route['class'], $route['method'])) ?? self::machineOfEntity($console, $extractor->extract($root->absolute($file), [$route['method']])->classes)
                 : null;
             $attributes = ['path' => $route['path']];
@@ -104,17 +118,24 @@ final readonly class SymfonyAdapter implements AdapterInterface
                 $attributes['security'] = implode(', ', $roles);
             }
 
+            // What answers, since no file of the project says it — and what groups its localized variants.
+            if (!$ownController) {
+                $attributes['controller'] = $route['class'].'::'.$route['method'];
+            }
+
             $candidates[] = new EntryPointCandidate(
                 type: WorkflowType::routes(),
                 entryPoint: new EntryPoint('route', $route['name'], $file, $attributes),
                 title: trim(('ANY' === $route['methods'] ? '' : $route['methods']).' '.$route['path']),
-                method: $route['method'],
+                // A route file is no PHP: no method to scope, no screen it leads to that devtools could read.
+                method: $ownController ? $route['method'] : null,
                 structuralFiles: [...$routeConfiguration, ...$services, ...($states instanceof StateMachine ? $workflowConfiguration : [])],
-                navigation: $this->navigation($root, $files, $extractor, $file, $route['method'], $route['name']),
+                navigation: $ownController ? $this->navigation($root, $files, $extractor, $file, $route['method'], $route['name']) : [],
                 states: $states,
                 extraTests: $files->testsRequesting($route['path']),
                 confidence: $confidence,
                 source: $source,
+                packages: $packages,
             );
         }
 

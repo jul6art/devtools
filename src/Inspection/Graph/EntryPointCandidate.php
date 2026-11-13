@@ -8,6 +8,7 @@ use Jul6Art\DevTools\Inspection\Model\Confidence;
 use Jul6Art\DevTools\Inspection\Model\Edge;
 use Jul6Art\DevTools\Inspection\Model\EntryPoint;
 use Jul6Art\DevTools\Inspection\Model\FileRef;
+use Jul6Art\DevTools\Inspection\Model\PackageRef;
 use Jul6Art\DevTools\Inspection\Model\StateMachine;
 use Jul6Art\DevTools\Inspection\Model\WorkflowSource;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -26,6 +27,8 @@ final readonly class EntryPointCandidate
      * @param list<EntryPoint> $dependsOn       entry points of workflows this one depends on
      * @param list<Edge>       $navigation
      * @param list<FileRef>    $extraTests      tests the adapter found by other means (a literal URL)
+     * @param list<PackageRef> $packages        packages the entry point runs that no file of it names: the controller of
+     *                                          a package, routed by the project's configuration (ADR-0052)
      */
     public function __construct(
         public WorkflowType $type,
@@ -39,6 +42,7 @@ final readonly class EntryPointCandidate
         public array $extraTests = [],
         public Confidence $confidence = Confidence::Medium,
         public WorkflowSource $source = new WorkflowSource('claude'),
+        public array $packages = [],
     ) {
     }
 
@@ -47,6 +51,6 @@ final readonly class EntryPointCandidate
      */
     public function withDependsOn(array $dependsOn): self
     {
-        return new self($this->type, $this->entryPoint, $this->title, $this->method, $this->structuralFiles, $dependsOn, $this->navigation, $this->states, $this->extraTests, $this->confidence, $this->source);
+        return new self($this->type, $this->entryPoint, $this->title, $this->method, $this->structuralFiles, $dependsOn, $this->navigation, $this->states, $this->extraTests, $this->confidence, $this->source, $this->packages);
     }
 }

@@ -7,7 +7,7 @@ Workflow cartography and feedback loop for projects built with Claude Code
 
 <p align="left">
     <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-    <img src="https://img.shields.io/static/v1?label=stable&message=v3.4.0&color=0ea5e9" alt="Version">
+    <img src="https://img.shields.io/static/v1?label=stable&message=v3.6.0&color=0ea5e9" alt="Version">
 </p>
 
 **DevTools** gives a project a `.devtools/` folder — versioned next to `.git` — in which Claude Code
@@ -574,6 +574,13 @@ For a PHP project, the files of a workflow are found by reading the code, never 
 - **through the templates rendered** with a literal name, and their `extends`, `include`, `embed`;
 - **through the files required or included** by a literal path — `require __DIR__.'/../lib/db.php'`;
 - **up to `<graph depth>` hops** (3 by default): controller → service → repository → entity.
+
+**A route the project declares to a package's controller is the project's** (ADR-0052): when its name is a key
+of the project's route files (`config/routes.yaml`, `config/routes/**`, `when@<env>:` included) and the key's
+block names that controller, the route gets its page — declared in that file, the controller's package a
+dependency, the controller an attribute. A route a bundle declares and the project imports (`resource:`), and the
+profiler's, stay out. Its page has no navigation, state machine or decisions: those are read in the controller's
+PHP, which is no file of the project.
 
 **A back-office has twenty routes per resource, and a menu of 233 entries is a list nobody reads.**
 `<routes group="controller"/>` groups them — and it groups the **navigation**, not the workflows: every
