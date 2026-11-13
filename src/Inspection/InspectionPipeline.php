@@ -957,6 +957,47 @@ final readonly class InspectionPipeline
                 new Filesystem()->remove($folder);
             }
         }
+
+        self::sweepAbandonedGroups($directory, $workflows, $groups, $kept, $options);
+    }
+
+    /**
+     * ⚠️ The group pages an earlier run left behind: before 3.7.1, a page that moved to another group left
+     * the README of the one it came from, and nothing remembers that move any more — the tracking file
+     * already names the new directory. Found on an application whose list routes had moved next to their
+     * export routes: four directories held nothing but a README linking to a page that was elsewhere.
+     *
+     * A directory holding nothing but a group page, that no workflow is written in, goes. Only a page
+     * DevTools wrote, recognised by its header: a README someone wrote by hand is none of its business.
+     *
+     * @param list<Workflow>                $workflows
+     * @param array<string, list<Workflow>> $groups    type and directory => the workflows written there
+     * @param array<string, true>           $kept      type and directory => an orphan kept there
+     */
+    private static function sweepAbandonedGroups(DevToolsDirectory $directory, array $workflows, array $groups, array $kept, InspectionOptions $options): void
+    {
+        $types = [];
+
+        foreach ($workflows as $workflow) {
+            if (null === $options->only || $options->only === $workflow->type->name) {
+                $types[$workflow->type->name] = $workflow->type;
+            }
+        }
+
+        foreach ($types as $type) {
+            foreach (glob($directory->groupPageFile($type, '*')) ?: [] as $readme) {
+                $folder = \dirname($readme);
+                $key = $type->name."\0".basename($folder);
+
+                if (isset($groups[$key]) || isset($kept[$key]) || ['README.md'] !== array_map(basename(...), glob($folder.'/*') ?: [])) {
+                    continue;
+                }
+
+                if (1 === preg_match('/\A# [^\n]*\n`[^`\n]+` · type: '.preg_quote($type->name, '/').' · /', (string) file_get_contents($readme))) {
+                    new Filesystem()->remove($folder);
+                }
+            }
+        }
     }
 
     /**

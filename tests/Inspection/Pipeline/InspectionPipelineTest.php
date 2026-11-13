@@ -340,6 +340,32 @@ final class InspectionPipelineTest extends TestCase
     }
 
     /**
+     * The groups an earlier version left: the tracking already names the new directory, so no move is seen
+     * any more. A directory holding nothing but a group page DevTools wrote goes; a README written by hand,
+     * or one beside a page, stays.
+     */
+    public function testTheGroupPagesAnEarlierRunLeftBehindAreSwept(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        self::groupByController($project);
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        $routes = $project.'/docs/workflows/routes';
+        // What 3.7.0 left after a move: the group page alone, under a directory no route is written in.
+        mkdir($routes.'/order.index');
+        copy($routes.'/order/README.md', $routes.'/order.index/README.md');
+        mkdir($routes.'/notes');
+        file_put_contents($routes.'/notes/README.md', "# Notes\n\nWritten by hand.\n");
+
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        self::assertDirectoryDoesNotExist($routes.'/order.index', 'The abandoned group page goes, with its directory.');
+        self::assertFileExists($routes.'/notes/README.md', 'A README DevTools did not write is left alone.');
+        self::assertFileExists($routes.'/order/README.md', 'A live group keeps its page.');
+        self::assertFileExists($routes.'/health/README.md');
+    }
+
+    /**
      * @return list<string> `README.md → page.md` for every link of a group page to a page that does not exist
      */
     private static function deadLinksOfGroupPages(string $project): array
