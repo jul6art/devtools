@@ -63,7 +63,7 @@ repli silencieux.
 | Type | Workflow par | Remarque |
 |---|---|---|
 | routes | route (ADR-0003 pour les satellites) | les routes de `vendor/` (profiler, bundles) sont exclues : contrôleur hors projet — sauf celles que le projet déclare lui-même dans ses fichiers de routes (ADR-0052) |
-| commands | commande du projet | |
+| commands | commande du projet | les commandes de `vendor/` sont exclues — sauf celles qui portent le nom du projet, `app:` (ADR-0053) |
 | async | handler Messenger ; tâche planifiée | |
 | events | listener/subscriber **du projet** | les listeners `kernel.*` du projet sont ajoutés en `dependsOn` de **chaque** route (§ 11) |
 | ui | composant Twig/Live | ⚠️ **écart § 4.2** : un formulaire n'est pas un workflow (il n'a pas de déclencheur propre) ; il apparaît dans les composants des routes qui l'utilisent |

@@ -72,6 +72,7 @@
 | [0050](0050-application-node-sans-framework.md) | Une application Node sans framework est une stack | MVP+ — Retours d'usage | Accepted | 2026-10-17 |
 | [0051](0051-api-platform-et-client-du-kit.md) | Les opérations d'API Platform, le client du kit, et un lien limité à un dossier | MVP+ — Retours d'usage | Accepted | 2026-11-09 |
 | [0052](0052-controleur-d-un-paquet-route-par-le-projet.md) | Le contrôleur d'un paquet, routé par le projet, est un workflow du projet | MVP+ — Retours d'usage | Accepted | 2026-11-13 |
+| [0053](0053-commande-d-un-paquet-au-nom-du-projet.md) | La commande d'un paquet, au nom du projet, est un workflow du projet | MVP+ — Retours d'usage | Accepted | 2026-11-13 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 
