@@ -302,6 +302,63 @@ final class InspectionPipelineTest extends TestCase
         self::assertFileExists($project.'/docs/workflows/routes/order/README.md', 'A controller that still has routes is left alone.');
     }
 
+    /**
+     * ⚠️ A controller whose every route MOVED — to a bundle's controller, to another file — kept its README,
+     * `--prune` or not: a move is not an orphan, so the pruning never saw the group it emptied. Found on an
+     * application whose sign-in routes went to admin-bundle: `security/README.md` linked to two dead pages.
+     */
+    public function testAControllerWhoseRoutesAllMovedLosesItsReadmeAndItsDirectory(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        self::groupByController($project);
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        self::assertFileExists($project.'/docs/workflows/routes/health/README.md');
+
+        $this->pipeline(new FakeAdapter(movedTo: ['app_health' => 'OrderController']))->run(new InspectionOptions($project));
+
+        self::assertFileDoesNotExist($project.'/docs/workflows/routes/health/README.md', 'The README of the emptied controller goes, without --prune: nothing was deleted.');
+        self::assertDirectoryDoesNotExist($project.'/docs/workflows/routes/health');
+        self::assertNotSame([], glob($project.'/docs/workflows/routes/*/health.md') ?: [], 'The page itself lives on, with its new controller.');
+        self::assertSame([], self::deadLinksOfGroupPages($project), 'No group page links to a page that is not there.');
+    }
+
+    /**
+     * The other half: a directory that still holds the page of an orphan — kept, since `--prune` was not
+     * asked — keeps the README that lists it, even when every other route of it moved away.
+     */
+    public function testAGroupStillHoldingAnOrphanKeepsItsReadme(): void
+    {
+        $project = $this->copyFixtureProject('symfony-minimal');
+        self::groupByController($project);
+        $this->pipeline()->run(new InspectionOptions($project));
+
+        $this->pipeline(new FakeAdapter(['app_order_show'], movedTo: ['app_order_new' => 'HealthController', 'app_order_index' => 'HealthController']))->run(new InspectionOptions($project));
+
+        self::assertFileExists($project.'/docs/workflows/routes/order/show.md', 'The orphan keeps its page without --prune…');
+        self::assertFileExists($project.'/docs/workflows/routes/order/README.md', '…and the README that lists it.');
+    }
+
+    /**
+     * @return list<string> `README.md → page.md` for every link of a group page to a page that does not exist
+     */
+    private static function deadLinksOfGroupPages(string $project): array
+    {
+        $dead = [];
+
+        foreach (glob($project.'/docs/workflows/*/*/README.md') ?: [] as $readme) {
+            preg_match_all('/\]\(([a-z0-9.\-]+\.md)\)/', (string) file_get_contents($readme), $links);
+
+            foreach ($links[1] as $link) {
+                if (!is_file(\dirname($readme).'/'.$link)) {
+                    $dead[] = substr($readme, \strlen($project) + 1).' → '.$link;
+                }
+            }
+        }
+
+        return $dead;
+    }
+
     public function testASecondRunOfAGroupedProjectRewritesNothing(): void
     {
         $project = $this->copyFixtureProject('symfony-minimal');

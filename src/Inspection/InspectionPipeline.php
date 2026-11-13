@@ -42,6 +42,7 @@ use Jul6Art\DevTools\Inspection\Model\InspectionResult;
 use Jul6Art\DevTools\Inspection\Model\InvalidModel;
 use Jul6Art\DevTools\Inspection\Model\Serialization\ModelXmlSerializer;
 use Jul6Art\DevTools\Inspection\Model\Workflow;
+use Jul6Art\DevTools\Inspection\Model\WorkflowGroup;
 use Jul6Art\DevTools\Inspection\Model\WorkflowId;
 use Jul6Art\DevTools\Inspection\Model\WorkflowIdCollision;
 use Jul6Art\DevTools\Inspection\Model\WorkflowType;
@@ -212,6 +213,8 @@ final readonly class InspectionPipeline
         $context = RenderingContext::of($workflows)->withLinks($links, $directory->docs);
         $documents = [];
         $written = static fn (Workflow|TrackingDocument $workflow): bool => !$options->dryRun && (null === $options->only || $options->only === $workflow->type->name);
+        // The group pages a moved page left: type and directory => README.
+        $vacated = [];
 
         $progress->stage('Rendering pages', \count($workflows));
 
@@ -297,6 +300,14 @@ final readonly class InspectionPipeline
 
                 if ($from !== $pageFile) {
                     new Filesystem()->remove([$from]);
+
+                    // ⚠️ …and the group it left may list nothing that is still there: a README whose every
+                    // link is dead. Found on an application whose sign-in routes moved to a bundle's
+                    // controller: `security/README.md` outlived its pages, `--prune` included — a move is not
+                    // an orphan, so the pruning never saw it.
+                    if ($old instanceof TrackingDocument && $old->group instanceof WorkflowGroup) {
+                        $vacated[$old->type->name."\0".$old->group->directory] = $directory->groupPageFile($old->type, $old->group->directory);
+                    }
                 }
 
                 if ($this->writer->write($pageFile, $page)) {
@@ -341,7 +352,7 @@ final readonly class InspectionPipeline
         }
 
         if (!$options->dryRun) {
-            $this->writeGroupPages($directory, $workflows, [...$orphans, ...$pruned], $options, $report);
+            $this->writeGroupPages($directory, $workflows, $orphans, $pruned, $vacated, $options, $report);
         }
 
         $progress->finish();
@@ -886,12 +897,15 @@ final readonly class InspectionPipeline
      * state machine of the resource, and the summary Claude wrote for it, kept across factual rewrites.
      *
      * A group whose last workflow disappeared loses its page with `--prune`, as its routes do: a directory
-     * holding nothing but a README is a link the menu no longer makes.
+     * holding nothing but a README is a link the menu no longer makes. A group whose last workflow MOVED to
+     * another directory loses it on every run, as the page itself did: nothing was deleted from the code.
      *
      * @param list<Workflow>         $workflows
-     * @param list<TrackingDocument> $orphans
+     * @param list<TrackingDocument> $orphans   kept with their pages: their group keeps its README
+     * @param list<TrackingDocument> $pruned    deleted with their pages, by `--prune`
+     * @param array<string, string>  $vacated   type and directory => README, of the groups a page moved out of
      */
-    private function writeGroupPages(DevToolsDirectory $directory, array $workflows, array $orphans, InspectionOptions $options, InspectionReport $report): void
+    private function writeGroupPages(DevToolsDirectory $directory, array $workflows, array $orphans, array $pruned, array $vacated, InspectionOptions $options, InspectionReport $report): void
     {
         $groups = [];
 
@@ -914,19 +928,24 @@ final readonly class InspectionPipeline
             }
         }
 
-        if (!$options->prune) {
-            return;
-        }
+        $dead = $vacated;
 
-        $dead = [];
-
-        foreach ($orphans as $orphan) {
-            if (null !== $orphan->group && (null === $options->only || $options->only === $orphan->type->name)) {
-                $dead[$orphan->type->name."\0".$orphan->group->directory] = $directory->groupPageFile($orphan->type, $orphan->group->directory);
+        foreach ($options->prune ? $pruned : [] as $gone) {
+            if (null !== $gone->group && (null === $options->only || $options->only === $gone->type->name)) {
+                $dead[$gone->type->name."\0".$gone->group->directory] = $directory->groupPageFile($gone->type, $gone->group->directory);
             }
         }
 
-        $files = array_values(array_diff_key($dead, $groups));
+        // An orphan kept without `--prune` still has its page in the directory: the README that lists it stays.
+        $kept = [];
+
+        foreach ($orphans as $orphan) {
+            if (null !== $orphan->group) {
+                $kept[$orphan->type->name."\0".$orphan->group->directory] = true;
+            }
+        }
+
+        $files = array_values(array_diff_key($dead, $groups, $kept));
         new Filesystem()->remove($files);
 
         // The directory of a group that lost every route goes with its README: an empty folder in the
