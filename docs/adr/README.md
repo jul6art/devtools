@@ -73,6 +73,7 @@
 | [0051](0051-api-platform-et-client-du-kit.md) | Les opérations d'API Platform, le client du kit, et un lien limité à un dossier | MVP+ — Retours d'usage | Accepted | 2026-11-09 |
 | [0052](0052-controleur-d-un-paquet-route-par-le-projet.md) | Le contrôleur d'un paquet, routé par le projet, est un workflow du projet | MVP+ — Retours d'usage | Accepted | 2026-11-13 |
 | [0053](0053-commande-d-un-paquet-au-nom-du-projet.md) | La commande d'un paquet, au nom du projet, est un workflow du projet | MVP+ — Retours d'usage | Accepted | 2026-11-13 |
+| [0054](0054-garde-de-taille-des-classes.md) | Une classe trop longue se voit là où on écrit le code : une garde PHPStan de taille | MVP+ — Retours d'usage | Accepted | 2026-11-14 |
 
 ## Les phases, et ce qu'on peut démontrer à la fin de chacune
 

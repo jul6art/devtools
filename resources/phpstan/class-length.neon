@@ -1,0 +1,27 @@
+# DevTools — a class-like declaration longer than the project accepts, as a PHPStan error (ADR-0054).
+#
+# Include it from the project's phpstan.neon, with or without extension.neon:
+#
+#     includes:
+#         - vendor/jul6art/devtools/resources/phpstan/class-length.neon
+#
+# The long classes a project already has go into a baseline, which can only shrink: PHPStan refuses an
+# ignore that no longer matches. The message names the class and the threshold, never the number of lines.
+parameters:
+    devtoolsClassLength:
+        max: 500
+        exclude:
+            - '*/Entity/*'
+            - '*/DataFixtures/*'
+
+parametersSchema:
+    devtoolsClassLength: structure([
+        max: int(),
+        exclude: listOf(string())
+    ])
+
+services:
+    -
+        factory: Jul6Art\DevTools\Bridge\PHPStan\ClassLengthRule::create(%devtoolsClassLength.max%, %devtoolsClassLength.exclude%)
+        tags:
+            - phpstan.rules.rule
