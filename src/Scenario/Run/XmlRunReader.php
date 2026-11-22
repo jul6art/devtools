@@ -32,7 +32,7 @@ final readonly class XmlRunReader
      */
     public function read(string $path): array
     {
-        $dom = new DomBuilder(XmlRunWriter::NAMESPACE);
+        $dom = new DomBuilder(XmlRunWriter::XML_NAMESPACE);
         $root = DomBuilder::root($this->loader->loadValidated(self::contentOf($path), $path, Resources::path('schemas/run.xsd'), 1));
         $scenarios = [];
 

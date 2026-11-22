@@ -18,7 +18,7 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/index/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/index/1';
 
     private const int SCHEMA_VERSION = 3;
 
@@ -29,7 +29,7 @@ final readonly class XmlIndexStore implements IndexReaderInterface, IndexWriterI
         private AtomicFileWriter $writer = new AtomicFileWriter(),
         private SafeXmlLoader $loader = new SafeXmlLoader(),
     ) {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     #[\Override]

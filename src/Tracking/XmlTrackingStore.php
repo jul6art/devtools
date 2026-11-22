@@ -32,7 +32,7 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/workflow-tracking/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/workflow-tracking/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -43,7 +43,7 @@ final readonly class XmlTrackingStore implements TrackingReaderInterface, Tracki
         private AtomicFileWriter $writer = new AtomicFileWriter(),
         private SafeXmlLoader $loader = new SafeXmlLoader(),
     ) {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     #[\Override]

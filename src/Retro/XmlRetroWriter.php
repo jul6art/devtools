@@ -13,13 +13,13 @@ use Jul6Art\DevTools\Xml\SafeXmlLoader;
  */
 final readonly class XmlRetroWriter
 {
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/retro/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/retro/1';
 
     private DomBuilder $dom;
 
     public function __construct(private SafeXmlLoader $loader = new SafeXmlLoader())
     {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     public function serialize(RetroReport $report): string

@@ -107,7 +107,7 @@ final readonly class VerificationCollector
      */
     private static function manifest(string $folder): array
     {
-        $dom = new DomBuilder(VerificationPreparer::NAMESPACE);
+        $dom = new DomBuilder(VerificationPreparer::XML_NAMESPACE);
         $manifest = $folder.'/manifest.xml';
         $root = DomBuilder::root(new SafeXmlLoader()->loadValidated((string) file_get_contents($manifest), $manifest, Resources::path('schemas/verification-brief.xsd'), 1));
         $pages = [];

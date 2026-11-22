@@ -17,7 +17,7 @@ final readonly class XmlFilesToWorkflowsStore implements FilesToWorkflowsReaderI
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/files-to-workflows/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/files-to-workflows/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -27,7 +27,7 @@ final readonly class XmlFilesToWorkflowsStore implements FilesToWorkflowsReaderI
         private AtomicFileWriter $writer = new AtomicFileWriter(),
         private SafeXmlLoader $loader = new SafeXmlLoader(),
     ) {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     #[\Override]

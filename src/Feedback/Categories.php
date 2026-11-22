@@ -15,7 +15,7 @@ use Jul6Art\DevTools\Xml\SafeXmlLoader;
  */
 final readonly class Categories
 {
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/feedback-categories/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/feedback-categories/1';
 
     /**
      * @var array<string, string> name => what it covers
@@ -31,7 +31,7 @@ final readonly class Categories
         $root = DomBuilder::root(new SafeXmlLoader()->loadValidated((string) file_get_contents($file), $file, Resources::path('schemas/feedback-categories.xsd'), 1));
         $all = [];
 
-        foreach (new DomBuilder(self::NAMESPACE)->children($root, 'category') as $category) {
+        foreach (new DomBuilder(self::XML_NAMESPACE)->children($root, 'category') as $category) {
             $all[$category->getAttribute('name')] = trim($category->textContent);
         }
 

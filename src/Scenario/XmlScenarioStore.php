@@ -21,7 +21,7 @@ final readonly class XmlScenarioStore
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/scenario/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/scenario/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -29,7 +29,7 @@ final readonly class XmlScenarioStore
 
     public function __construct(private SafeXmlLoader $loader = new SafeXmlLoader())
     {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     public function serialize(Scenario $scenario): string

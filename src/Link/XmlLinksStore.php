@@ -14,11 +14,11 @@ use Jul6Art\DevTools\Xml\SafeXmlLoader;
  */
 final readonly class XmlLinksStore
 {
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/links/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/links/1';
 
     public const string FILE = 'graph/links.xml';
 
-    public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader(), private DomBuilder $dom = new DomBuilder(self::NAMESPACE))
+    public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader(), private DomBuilder $dom = new DomBuilder(self::XML_NAMESPACE))
     {
     }
 

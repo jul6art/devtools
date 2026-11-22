@@ -19,7 +19,7 @@ final readonly class XmlAssertionStore
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/assertion/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/assertion/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -27,7 +27,7 @@ final readonly class XmlAssertionStore
 
     public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader())
     {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     public function write(string $path, Assertion $assertion): bool

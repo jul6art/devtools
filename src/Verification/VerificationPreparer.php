@@ -26,7 +26,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 final readonly class VerificationPreparer
 {
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/verification-brief/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/verification-brief/1';
 
     public function __construct(private Filesystem $filesystem = new Filesystem())
     {
@@ -88,7 +88,7 @@ final readonly class VerificationPreparer
         $result = array_last($runs);
         $run = null === $result ? [] : new XmlRunReader()->read($result);
 
-        $dom = new DomBuilder(self::NAMESPACE);
+        $dom = new DomBuilder(self::XML_NAMESPACE);
         $xml = $dom->document();
         $root = $dom->element($xml, 'verification-brief', array_filter(['schema-version' => '1', 'prepared-at' => $at->format(\DATE_ATOM), 'fingerprint' => self::fingerprint($directory->root, $changed), 'run' => null === $result ? null : basename(\dirname($result))], \is_string(...)));
 

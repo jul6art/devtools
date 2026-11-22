@@ -18,7 +18,7 @@ final readonly class XmlScenarioBriefStore
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/scenario-brief/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/scenario-brief/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -26,7 +26,7 @@ final readonly class XmlScenarioBriefStore
 
     public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader())
     {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     public function write(string $path, ScenarioBrief $brief): bool

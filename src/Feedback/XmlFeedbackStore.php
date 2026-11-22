@@ -18,7 +18,7 @@ final readonly class XmlFeedbackStore
 {
     use ReadsDocumentFiles;
 
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/feedback/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/feedback/1';
 
     private const int SCHEMA_VERSION = 1;
 
@@ -26,7 +26,7 @@ final readonly class XmlFeedbackStore
 
     public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader())
     {
-        $this->dom = new DomBuilder(self::NAMESPACE);
+        $this->dom = new DomBuilder(self::XML_NAMESPACE);
     }
 
     public function write(string $path, Feedback $feedback): bool

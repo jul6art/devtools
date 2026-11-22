@@ -14,9 +14,9 @@ use Jul6Art\DevTools\Xml\SafeXmlLoader;
  */
 final readonly class XmlGlossaryStore
 {
-    public const string NAMESPACE = 'https://github.com/jul6art/devtools/schema/glossary/1';
+    public const string XML_NAMESPACE = 'https://github.com/jul6art/devtools/schema/glossary/1';
 
-    public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader(), private DomBuilder $dom = new DomBuilder(self::NAMESPACE))
+    public function __construct(private AtomicFileWriter $writer = new AtomicFileWriter(), private SafeXmlLoader $loader = new SafeXmlLoader(), private DomBuilder $dom = new DomBuilder(self::XML_NAMESPACE))
     {
     }
 
