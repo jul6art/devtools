@@ -32,7 +32,7 @@ composer install
 bin/devtools list
 ```
 
-You need PHP **^8.5**, Composer 2 and git. There is nothing to boot: the core runs as a console
+You need PHP **^8.6**, Composer 2 and git. There is nothing to boot: the core runs as a console
 application, and the Symfony bridge is exercised through a test kernel the suite builds for you.
 
 ## The quality gate

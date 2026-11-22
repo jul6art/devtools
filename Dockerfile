@@ -5,7 +5,7 @@
 #
 # The phar is the release's own (devtools.phar, built by the release workflow); built locally:
 #     docker build --build-arg PHAR=build/devtools.phar -t devtools .
-FROM php:8.5-cli-alpine
+FROM php:8.6-cli-alpine
 
 ARG PHAR=build/devtools.phar
 

@@ -50,7 +50,7 @@ trait RecordsARun
         $artifacts = $project.'/.devtools/runs/'.self::RUN;
         $filesystem = new Filesystem();
         $filesystem->dumpFile($artifacts.'/'.self::CAPTURE.'.html', self::PAGE);
-        $filesystem->dumpFile($artifacts.'/'.self::CAPTURE.'.png', (string) base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', true));
+        $filesystem->dumpFile($artifacts.'/'.self::CAPTURE.'.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', true));
         $filesystem->dumpFile($artifacts.'/'.self::CAPTURE.'.diff.png', 'diff');
         $filesystem->dumpFile($artifacts.'/route.order.index/smoke/01-goto.png', 'failure');
         $filesystem->dumpFile($artifacts.'/route.order.index/smoke/01-goto.html', '<p>500</p>');
