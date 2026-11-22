@@ -9,7 +9,12 @@ FROM php:8.6-cli-alpine
 
 ARG PHAR=build/devtools.phar
 
-RUN apk add --no-cache git nodejs \
+# PHP 8.6's official images no longer build mbstring in (8.5's did): it is built here — the polyfill the phar carries
+# would do, slower — and oniguruma, which it links to, stays.
+RUN apk add --no-cache git nodejs oniguruma \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS oniguruma-dev \
+    && docker-php-ext-install mbstring \
+    && apk del .build-deps \
     && git config --system --add safe.directory '*'
 
 COPY ${PHAR} /usr/local/bin/devtools
