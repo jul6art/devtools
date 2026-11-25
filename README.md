@@ -1521,7 +1521,7 @@ jobs:
             - uses: actions/checkout@v4
               with: { fetch-depth: 0 }
             - uses: shivammathur/setup-php@v2
-              with: { php-version: '8.5' }
+              with: { php-version: '8.6' }
             - run: composer install --no-interaction
             - run: vendor/bin/devtools workflows:inspect
             - run: vendor/bin/devtools ai:run --max-tasks=20
