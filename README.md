@@ -1531,6 +1531,7 @@ jobs:
 ```
 
 Freshness keeps a merge that changed nothing documented from sending anything: no brief, no request.
+
 Knowledge of the stack
 ----------------------
 
@@ -1806,6 +1807,7 @@ rewritten — a rename it mentions is said.
 share at least 80 % of their files are proposed as a rename, with the command to run. Never applied on that
 guess alone — two histories merged by a false positive cannot be split again — unless you ask:
 `workflows:inspect --apply-renames`.
+
 Structure
 ---------
 
