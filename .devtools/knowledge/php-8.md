@@ -1,6 +1,6 @@
 # PHP 8
 
-## Cycle d'entrée
+## Entry cycle
 
 Without a framework, the web server maps a URL to a file: `public/orders/new.php` answers
 `/orders/new.php`. PHP runs that file top to bottom; superglobals (`$_GET`, `$_POST`, `$_SERVER`,
@@ -8,7 +8,7 @@ Without a framework, the web server maps a URL to a file: `public/orders/new.php
 `exit` ends the request. On the command line, `php bin/script.php` or an executable file with a
 `#!/usr/bin/env php` shebang runs the same way, with `$argv` for its arguments.
 
-## Mécanismes d'extension
+## Extension mechanisms
 
 - **`require` / `include`** — code shared between entry points is pulled in by path, usually
   `__DIR__.'/../lib/file.php'`; `_once` variants guard against double inclusion.
@@ -16,13 +16,13 @@ Without a framework, the web server maps a URL to a file: `public/orders/new.php
 - **Front controller** — a single `index.php` dispatching on the path, when a project grows one.
 - **`auto_prepend_file`** and `.htaccess` rewrites — configuration run before every script.
 
-## Injection de dépendances et conventions de nommage
+## Dependency injection and naming conventions
 
 No container: objects are built with `new` where they are needed, or by a bootstrap file that returns them.
 Functions shared through `require` are global. Classes follow PSR-4 (`Acme\OrderRepository` in
 `lib/OrderRepository.php`), one class per file.
 
-## Points d'entrée par type
+## Entry points by type
 
 ### routes
 Every `.php` file under the web directory (`public/`, `web/`, `www/`, `htdocs/`); a front controller makes
@@ -53,7 +53,7 @@ SQL migration files, or a migration library's classes.
 PHPUnit in `tests/`, run with `vendor/bin/phpunit`; code reached only through includes is tested by running
 it, or after moving it into classes.
 
-## Pièges connus
+## Known traps
 
 - `require` of a relative path resolves against the include path and the working directory, not the file:
   always prefix with `__DIR__`.
