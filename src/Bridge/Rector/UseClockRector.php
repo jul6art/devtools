@@ -7,6 +7,8 @@ namespace Jul6Art\DevTools\Bridge\Rector;
 use Jul6Art\DevTools\Bridge\PHPStan\TimeReading;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,8 +18,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\StaticVar;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
@@ -32,8 +36,9 @@ use Rector\Rector\AbstractRector;
  * - `sleep($s)` → `Clock::sleep($s)`; `usleep($us)` → `Clock::sleep($us / 1_000_000)`;
  * - `Symfony\Component\Clock\now(…)` → `Clock::now(…)`.
  *
- * What is left — `new \DateTime()`, `gmdate()`, `idate()`, `mktime()`, an incomplete format — the PHPStan rule
- * reports, and is done by hand. Run it on the code, not on the tests.
+ * What is left — `new \DateTime()`, `gmdate()`, `idate()`, `mktime()`, an incomplete format, and a `new` in a constant
+ * expression (a default value, an attribute argument, a static variable, a constant), where no call may go — the PHPStan
+ * rule reports, and is done by hand. Run it on the code, not on the tests.
  *
  * ```php
  * return RectorConfig::configure()->withConfiguredRule(UseClockRector::class, ['clock' => 'App\Clock']);
@@ -41,6 +46,9 @@ use Rector\Rector\AbstractRector;
  */
 final class UseClockRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /** Set on the nodes of a constant expression, which may hold a `new` but no call. */
+    private const string IN_CONSTANT_EXPRESSION = 'devtools_clock_in_constant_expression';
+
     private string $clock = TimeReading::DEFAULT_CLOCK;
 
     /**
@@ -64,15 +72,30 @@ final class UseClockRector extends AbstractRector implements ConfigurableRectorI
     #[\Override]
     public function getNodeTypes(): array
     {
-        return [New_::class, FuncCall::class];
+        return [Param::class, Attribute::class, StaticVar::class, Const_::class, New_::class, FuncCall::class];
     }
 
     /**
-     * @param New_|FuncCall $node
+     * @param Param|Attribute|StaticVar|Const_|New_|FuncCall $node
      */
     #[\Override]
     public function refactor(Node $node): ?Node
     {
+        // A constant expression is entered before what it holds: its readings are marked, and left.
+        if (!$node instanceof New_ && !$node instanceof FuncCall) {
+            $this->traverseNodesWithCallable($node, static function (Node $inner): null {
+                $inner->setAttribute(self::IN_CONSTANT_EXPRESSION, true);
+
+                return null;
+            });
+
+            return null;
+        }
+
+        if (true === $node->getAttribute(self::IN_CONSTANT_EXPRESSION)) {
+            return null;
+        }
+
         $args = $this->plainArgs($node);
 
         if (null === $args) {
