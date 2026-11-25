@@ -1,0 +1,32 @@
+# DevTools — a reading of the time that does not go through the project's clock, as a PHPStan error (ADR-0055).
+#
+# Include it from the project's phpstan.neon, with or without the other rules:
+#
+#     includes:
+#         - vendor/jul6art/devtools/resources/phpstan/clock.neon
+#
+# new \DateTimeImmutable(), time(), date('Y'), sleep()… read the system clock, which a test cannot freeze. The
+# message names the call, never a value: a reading a project keeps is frozen in a baseline, or ignored with
+# @phpstan-ignore devtools.clock and its reason.
+parameters:
+    devtoolsClock:
+        clock: Jul6Art\CoreBundle\Util\Clock
+        allowed:
+            - Jul6Art\CoreBundle\Util\Clock
+            - Jul6Art\CoreBundle\Test\ClockTestTrait
+        tests:
+            - '*/tests/*'
+            - '*/Tests/*'
+
+parametersSchema:
+    devtoolsClock: structure([
+        clock: string(),
+        allowed: listOf(string()),
+        tests: listOf(string())
+    ])
+
+services:
+    -
+        factory: Jul6Art\DevTools\Bridge\PHPStan\TimeReadingRule::create(%devtoolsClock.clock%, %devtoolsClock.allowed%, %devtoolsClock.tests%)
+        tags:
+            - phpstan.rules.rule

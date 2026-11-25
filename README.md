@@ -7,7 +7,7 @@ Workflow cartography and feedback loop for projects built with Claude Code
 
 <p align="left">
     <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-    <img src="https://img.shields.io/static/v1?label=stable&message=v3.9.0&color=0ea5e9" alt="Version">
+    <img src="https://img.shields.io/static/v1?label=stable&message=v3.10.0&color=0ea5e9" alt="Version">
 </p>
 
 **DevTools** gives a project a `.devtools/` folder — versioned next to `.git` — in which Claude Code
@@ -577,6 +577,68 @@ baseline (`vendor/bin/phpstan analyse --generate-baseline=phpstan-class-length-b
 compares messages: with the count in it, a frozen class would leave the list at every edit. With it out, the
 list can only shrink — PHPStan refuses an ignore that no longer matches, so a class brought under the
 threshold has to leave it. What the list does not do is cap a frozen class: it may still grow (ADR-0054).
+
+### PHPStan — the time read directly (3.10)
+
+`new \DateTimeImmutable()`, `time()`, `date('Y')` and `sleep()` read the system clock, which a test cannot
+freeze. The time is read through the project's clock — `Jul6Art\CoreBundle\Util\Clock` (core-bundle 3.14), which
+`ClockTestTrait` freezes — and a third rule, included on its own, reports any other reading:
+
+```neon
+# phpstan.neon
+includes:
+    - vendor/jul6art/devtools/resources/phpstan/clock.neon
+
+parameters:
+    devtoolsClock:
+        clock: Jul6Art\CoreBundle\Util\Clock    # the default: the class the tips send the reader to
+        allowed!:                               # `!` replaces the defaults: the clock and the test trait
+            - Jul6Art\CoreBundle\Util\Clock
+            - Jul6Art\CoreBundle\Test\ClockTestTrait
+            - App\Monitoring\Uptime
+        tests!:                                 # fnmatch() patterns on the path; the defaults: */tests/*, */Tests/*
+            - '*/tests/*'
+```
+
+```
+ ------ ---------------------------------------------------------------------
+  Line   src/Service/InvitationService.php
+ ------ ---------------------------------------------------------------------
+  42     new \DateTimeImmutable() reads the system clock.
+         🪪 devtools.clock
+         💡 Jul6Art\CoreBundle\Util\Clock::now() takes the same arguments and
+            gives the same date, from the clock a test can freeze.
+ ------ ---------------------------------------------------------------------
+```
+
+What it reports: `new \DateTime()` and `new \DateTimeImmutable()` given no string, `'now'` or a relative date —
+`'today'`, `'-14 days'`, `'-'.$interval`, `sprintf('-%d days', $n)` —; `time()`, `date()` and `gmdate()` without
+a timestamp, `idate()`, `getdate()`, `localtime()`, an incomplete `mktime()`, `strtotime()` and `date_create()`
+on a relative date; `sleep()` and its kin; a `createFromFormat()` whose literal format leaves fields out without
+`!` or `|` (PHP fills them with the current time); and Symfony Clock itself (`now()`, `Clock::get()`, `new
+DatePoint()`), which only the project's clock wraps. A value converted (`new \DateTimeImmutable($row['date'])`), a
+full date, a timestamp and a duration (`microtime()`, `hrtime()`) read no clock. In a test file, only the waits are
+reported: a test freezes the clock and moves it with `advanceClock()`.
+
+The message names the call, never a value: a reading a project keeps on purpose is frozen in a baseline, or
+ignored with `@phpstan-ignore devtools.clock` and its reason (ADR-0055).
+
+To move an existing project, `Jul6Art\DevTools\Bridge\Rector\UseClockRector` rewrites the readings the clock
+covers one for one — `new \DateTimeImmutable(…)`, `time()`, `date($format)`, a relative `strtotime()`, `sleep()`,
+`usleep()`, Symfony's `now()` — with the same result under the system clock. It leaves `new \DateTime()` (the
+clock gives immutable dates), `gmdate()`, `idate()`, `mktime()` and incomplete formats to the hand that the rule
+points to. Run it once, on the code and not on the tests, with a configuration of its own:
+
+```php
+// rector-clock.php
+return Rector\Config\RectorConfig::configure()
+    ->withRules([Jul6Art\DevTools\Bridge\Rector\UseClockRector::class])   // or withConfiguredRule(…, ['clock' => 'App\Clock'])
+    ->withImportNames(importShortClasses: false);
+```
+
+```shell
+vendor/bin/rector process src --config=rector-clock.php
+```
 
 ### `.devtools/config.xml`
 
