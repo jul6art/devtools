@@ -1923,6 +1923,13 @@ write an application skeleton into `src/`, which here is the core's own namespac
 Whatever you do, keep the code free of classes that exist on only one of the declared branches. A tool
 promising `^7.4 || ^8.0` has to hold both.
 
+Contributing
+------------
+
+Issues and pull requests are welcome. [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) says how to
+set the project up, run the quality gate and open a pull request; a vulnerability is reported privately,
+as [`.github/SECURITY.md`](.github/SECURITY.md) explains, never in a public issue.
+
 License
 -------
 
